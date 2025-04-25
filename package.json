@@ -1,7 +1,8 @@
 {
-  "name": "aurus-ui",
+  "name": "cad-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.1.0",
+  "description": "Aurus UI is a React component library for building user interfaces.",
   "type": "module",
   "scripts": {
     "dev": "vite",
