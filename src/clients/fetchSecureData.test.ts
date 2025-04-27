@@ -23,12 +23,12 @@ describe('fetchSecureData', () => {
             })
         ) as unknown as typeof fetch;
 
-        const result = await fetchSecureData();
+        const result = await fetchSecureData(mockToken); // 👈 Pasamos mockToken aquí
 
         expect(globalThis.fetch).toHaveBeenCalledWith(`${API_BASE}/api/v1/secure/data`, {
             method: 'GET',
             headers: {
-                Authorization: mockToken,
+                Authorization: `Bearer ${mockToken}`, // 👈 Ahora incluye Bearer
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
@@ -42,9 +42,10 @@ describe('fetchSecureData', () => {
             Promise.resolve({
                 ok: false,
                 status: 403,
+                statusText: 'Forbidden',
             })
         ) as unknown as typeof fetch;
 
-        await expect(fetchSecureData()).rejects.toThrow('HTTP error! status: 403');
+        await expect(fetchSecureData(mockToken)).rejects.toThrow('HTTP error! status: 403'); // 👈 Pasamos mockToken aquí
     });
 });

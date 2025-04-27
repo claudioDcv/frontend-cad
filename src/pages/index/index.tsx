@@ -10,9 +10,11 @@ const Index = () => {
 
     const handleFetchSecureData = async () => {
         try {
-            const result = await fetchSecureData();
+            const jwt = getToken();
+            const result = await fetchSecureData(jwt);
             setSecureDataResponse(result);
-        } catch (err) {
+            setError(null);
+        } catch (err: unknown) {
             setError(err instanceof Error ? err.message : String(err));
         }
     };
@@ -21,7 +23,8 @@ const Index = () => {
         try {
             const result = await fetchHealthCheck();
             setHealthCheckResponse(result);
-        } catch (err) {
+            setError(null);
+        } catch (err: unknown) {
             setError(err instanceof Error ? err.message : String(err));
         }
     };
