@@ -1,5 +1,5 @@
 # ---- Etapa de compilación ----
-    FROM node:18-alpine AS builder
+    FROM node:22-alpine AS builder
 
     WORKDIR /build
     
