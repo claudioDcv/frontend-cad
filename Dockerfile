@@ -10,22 +10,26 @@ COPY package*.json ./
 # Instalar dependencias
 RUN npm install
 
+# ⚠️ Instalar dependencias faltantes necesarias para el build
+RUN npm install --save-dev @testing-library/jest-dom vitest @vitejs/plugin-react && \
+    npm install --save vite
+
 # Copiar código fuente
 COPY . .
 
-# Construir la aplicación
+# Ejecutar build de Vite
 RUN npm run build
 
-# Etapa de producción
+# ---- Etapa de producción ----
 FROM nginx:alpine
 
-# Copiar la build desde la etapa anterior (cambiado de build a dist)
+# Copiar build desde la etapa anterior
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Configuración de nginx (opcional pero recomendado)
+# Configuración de nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Exponer puerto 80
+# Exponer el puerto de nginx
 EXPOSE 80
 
 # Comando para iniciar nginx
