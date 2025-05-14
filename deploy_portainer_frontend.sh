@@ -1,10 +1,23 @@
 #!/bin/bash
 
-# Configuración
-PORTAINER_HOST="172.16.22.240"
-PORTAINER_PORT="9000"
-PORTAINER_USER="usradmin"
-PORTAINER_PASS="adminkey.2025"
+# Cargar variables del archivo .env
+if [ -f .env ]; then
+  export $(grep -v '^#' .env | xargs)
+else
+  echo "❌ Archivo .env no encontrado."
+  exit 1
+fi
+
+# Validar que las variables requeridas estén definidas
+REQUIRED_VARS=("PORTAINER_HOST" "PORTAINER_PORT" "PORTAINER_USER" "PORTAINER_PASS")
+for var in "${REQUIRED_VARS[@]}"; do
+  if [ -z "${!var}" ]; then
+    echo "❌ Falta la variable $var en el archivo .env"
+    exit 1
+  fi
+done
+
+# Configuración específica de la imagen
 IMAGE_NAME="cad-ui/frontend:v1"
 TAR_FILE="cad-ui.tar"
 CONTAINER_NAME="cad-ui-container"
@@ -18,7 +31,7 @@ if [ $? -ne 0 ]; then echo "❌ Falló npm install."; exit 1; fi
 npm run build
 if [ $? -ne 0 ]; then echo "❌ Falló npm run build."; exit 1; fi
 
-# 2. Build de imagen Docker con plataforma especificada
+# 2. Build de imagen Docker
 echo "🛠️  Construyendo imagen Docker..."
 docker build --platform linux/amd64 -t $IMAGE_NAME .
 if [ $? -ne 0 ]; then echo "❌ Falló el build Docker."; exit 1; fi

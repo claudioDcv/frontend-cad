@@ -3,6 +3,9 @@ import { getToken } from '../../hooks/useJWTNotification';
 import { MaterialType } from '../../clients/get-all-material-types/types';
 import { fetchHealthCheck, fetchSecureData } from '../../clients';
 import client from '../../clients/get-all-material-types/client';
+import { Box } from '@mui/material';
+import { Table } from '../../components';
+import { columns } from './index.config';
 
 
 const Index = () => {
@@ -46,7 +49,7 @@ const Index = () => {
   };
 
   return (
-    <div>
+    <Box>
       <h1>Index-Daniel</h1>
       <div>
         <h2>jwt: {getToken().substring(0, 20)}...</h2>
@@ -88,7 +91,9 @@ const Index = () => {
           </ul>
         </div>
       )}
-    </div>
+
+      <Table columns={columns} rows={[]}/>
+    </Box>
   );
 };
 
