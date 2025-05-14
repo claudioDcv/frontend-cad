@@ -24,15 +24,22 @@ CONTAINER_NAME="cad-ui-container"
 APP_PORT="8182"
 
 # 1. Build de frontend (Vite)
-echo "🧪 Ejecutando npm install y build..."
+echo "🧪 Ejecutando limpieza y npm install..."
+
+# Eliminar instalaciones previas para forzar instalación limpia
+rm -rf node_modules package-lock.json
+
+# Instalar dependencias base
 npm install
 
-# 💡 Instalar dependencias necesarias para compilar correctamente
+# Instalar dependencias requeridas para compilar correctamente
 npm install --save-dev @testing-library/jest-dom vitest @vitejs/plugin-react
 npm install --save vite
 
 if [ $? -ne 0 ]; then echo "❌ Falló npm install o dependencias adicionales."; exit 1; fi
 
+# Ejecutar build
+echo "📦 Ejecutando build..."
 npm run build
 if [ $? -ne 0 ]; then echo "❌ Falló npm run build."; exit 1; fi
 
