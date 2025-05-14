@@ -1,0 +1,139 @@
+{
+  "index": {
+    "title": "Bienvenido a CAD",
+    "subtitle": "Sistema de Gestión de Inventario"
+  },
+  "admin": {
+    "documents": {
+      "title": "Administrador - Documentos"
+    },
+    "dashboard": {
+      "title": "Panel de Administrador",
+      "branchDetails": "Ver Detalle Sucursal",
+      "branchListButton": "Lista Sucursales",
+      "movements": "Ver Movimientos",
+      "inventory": "Ver Inventario",
+      "scrapInputTitle": "Ingreso de Material a Scrap",
+      "scrapInput": "Ingreso",
+      "scrapInputLabel": "Inventario",
+      "scrapOutputTitle": "Egreso de Material a Scrap",
+      "scrapOutput": "Egreso",
+      "scrapOutputLabel": "Cantidad",
+      "scrapMovementTitle": "Movimiento de Material",
+      "scrapMovement": "Movimiento",
+      "scrapMovementLabel": "Material",
+      "inventoryDelivery": "Proceso de Entrega de Inventario",
+      "distributionProcess": "Proceso de Distribución",
+      "branchList": {
+        "title": "Lista de Sucursales"
+      }
+    },
+    "document": {
+      "title": "Administrador - Detalle del Documento",
+      "notificationAprove": "La solicitud ha sido enviada con éxito",
+      "notificationAproveTitle": "Confirmación de Aprobación",
+      "notificationAproveText": "¿Está seguro que desea aprobar la cuenta por cobrar?",
+      "notificationReject": "La solicitud ha sido rechazada con éxito",
+      "notificationRejectTitle": "Confirmación de Rechazo",
+      "notificationRejectText": "¿Está seguro que desea rechazar la cuenta por cobrar?"
+    }
+  },
+  "zonal": {
+    "documents": {
+      "title": "Zonal - Documentos",
+      "upload": "Cargar",
+      "save": "Guardar",
+      "detailPacking": "Ver Detalle de Packing",
+      "detailPackingTitle": "Detalle de Packing",
+      "truckUpload": "Cargar documento desde Olimpo",
+      "truckSend": "Envio de Documento en Camion",
+      "securityBag": "Ingresar número de bolsa de seguridad",
+      "securityBagTitle": "Número de Bolsa de Seguridad"
+    },
+    "document": {
+      "title": "Zonal - Detalle del Documento",
+      "contract": "Ver Detalle del Contrato",
+      "contractTitle": "Detalle del Contrato",
+      "contractCheckbox": "Contrato",
+      "sendPr": "Enviar PR a CAD",
+      "sendPl": "Enviar PL a CAD",
+      "securityBag": "Agregar datos de la Bolsa de Seguridad",
+      "securityBagLabel": "Codigo"
+    }
+  },
+  "operator": {
+    "documents": {
+      "title": "Operador - Documentos",
+      "massUpload": "Cargar Masiva",
+      "normalUpload": "Cargar Normal",
+      "truckUpload": "Cargar documento desde Olimpo",
+      "truckTitle": "Recepcion de documento desde Camion",
+      "truckLabel": "Operador"
+    },
+    "document": {
+      "title": "Operador - Detalle del Documento",
+      "inventoryLoad": "Cargar documento desde Olimpo",
+      "inventoryLoadTitle": "Confirmacion de Envio a Inventarios",
+      "inventoryLoadText": "¿Esta seguro que desea enviar el documento?",
+      "massUpload": "Cargar Masiva",
+      "massUploadTitle": "Confirmacion carga Masiva",
+      "massUploadText": "¿Esta seguro que desea enviar el documento?",
+      "loadMassUploadDocuments": "Cargar Masiva de Documentos",
+      "loadMassUploadDocumentsLabel": "Carga Masiva Documento Numero 8237",
+      "distributeInv": "Distribuir Inventario",
+      "distributeInvLabel": "Distribuir Inventario",
+      "distributeInvCheckbox": "Distribuir",
+      "sendToInv": "Enviar a Inventario",
+      "sendToInvLabel": "Enviar a Inventario",
+      "sendToInvCheckbox": "Enviar",
+      "accountsReceivable": "Cuentas por Cobrar",
+      "accountsReceivableLabel": "Cuentas por Cobrar",
+      "accountsReceivableCheckbox": "Cobrar",
+      "newCPC": "Nueva CPC",
+      "newCPCTitle": "Nueva CPC",
+      "newCPCLabel": "Código CPC",
+      "detailCPC": "Detalle CPC",
+      "detailCPCTitle": "Detalle CPC",
+      "detailCPCLabel": "Código Detalle",
+      "confirmCPCTitle": "Confirmacion de Cuenta por Cobrar",
+      "confirmCPCText": "¿Esta seguro que desea enviar el documento?"
+    },
+    "dashboard": {
+      "title": "Panel de Operador",
+      "branchDetails": "Ver Detalle Sucursal",
+      "movements": "Ver Movimientos",
+      "inventory": "Ver Inventario",
+      "scrapInputTitle": "Ingreso de Material a Scrap",
+      "scrapInput": "Ingreso",
+      "scrapInputLabel": "Inventario",
+      "scrapOutputTitle": "Egreso de Material a Scrap",
+      "scrapOutput": "Egreso",
+      "scrapOutputLabel": "Cantidad",
+      "scrapMovementTitle": "Movimiento de Material",
+      "scrapMovement": "Movimiento",
+      "scrapMovementLabel": "Material",
+      "inventoryDelivery": "Proceso de Entrega de Inventario",
+      "distributionProcess": "Proceso de Distribución"
+    }
+  },
+  "common": {
+    "modals": "Modales",
+    "links": "Enlaces",
+    "accept": "Aceptar",
+    "cancel": "Cancelar",
+    "confirmationTitle": "Confirmación",
+    "confirmationText": "¿Está seguro que desea enviar?",
+    "confirmationYes": "Sí",
+    "confirmationNo": "No",
+    "successTitle": "Éxito",
+    "successText": "Enviado con éxito.",
+    "aprove": "Aprobar",
+    "reject": "Rechazar",
+    "checkBoxLabel": "Verficiar",
+    "clearFilters": "Limpiar Filtros",
+    "materialType": "Tipo de Material",
+    "status": "Estado",
+    "investment": "Inversión",
+    "branch": "Sucursal"
+  }
+}

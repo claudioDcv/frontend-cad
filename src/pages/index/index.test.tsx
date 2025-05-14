@@ -1,8 +1,8 @@
 import { describe, expect, it, Mock } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Index from './index';
-import { fetchSecureData } from '../../clients/fetchSecureData';
-import { fetchHealthCheck } from '../../clients/fetchHealthCheck';
+import { fetchSecureData } from '../../clients/secure-data/fetchSecureData';
+import { fetchHealthCheck } from '../../clients/health-check/fetchHealthCheck';
 
 vi.mock('../../clients/fetchSecureData', () => ({
     fetchSecureData: vi.fn(),

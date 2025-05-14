@@ -1,6 +1,6 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { fetchSecureData } from './fetchSecureData';
-import { API_BASE } from '../conf/http';
+import { API_BASE } from '../../conf/http';
 
 const mockToken = 'mock-token';
 

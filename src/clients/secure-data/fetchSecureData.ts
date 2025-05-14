@@ -1,12 +1,11 @@
-import { API_BASE } from '../conf/http';
-import { getToken } from '../hooks/useJWTNotification';
+import { API_BASE } from '../../conf/http';
 
-export const fetchHealthCheck = async () => {
-    const url = `${API_BASE}/api/v1/health`;
+export const fetchSecureData = async (jwt: string) => {
+    const url = `${API_BASE}/api/v1/secure/data`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
-            'Authorization': `${getToken()}`,
+            'Authorization': `${jwt}`, // 👉 ahora usamos el parámetro
             'Content-Type': 'application/json'
         },
         credentials: 'include'
@@ -16,5 +15,5 @@ export const fetchHealthCheck = async () => {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return response.text();
+    return response.json();
 };
