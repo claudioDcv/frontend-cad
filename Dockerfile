@@ -20,7 +20,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copiar la build desde la etapa anterior (cambiado de build a dist)
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Configuración de nginx (opcional pero recomendado)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
