@@ -26,7 +26,10 @@ APP_PORT="8182"
 # 1. Build de frontend (Vite)
 echo "🧪 Ejecutando limpieza y npm install..."
 
-# Eliminar instalaciones previas para forzar instalación limpia
+# Asegurar instalación de devDependencies
+unset NODE_ENV
+
+# Eliminar instalaciones previas
 rm -rf node_modules package-lock.json
 
 # Instalar dependencias base
