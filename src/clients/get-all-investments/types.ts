@@ -1,4 +1,11 @@
 export type Investment = {
-    label: string;
-    value: string;
-}
+  investmentId: number
+  investmentCode: string
+  investmentName: string
+  issuerRut: string | null
+  issuerBusinessName: string
+  issuerBusinessActivity: string | null
+  issuerAddress: string | null
+  economicActivity: string | null
+  };
+  

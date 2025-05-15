@@ -1,8 +1,10 @@
+import { Option } from "../../types";
+
 export interface FormModel {
-  materialType: string;
-  status: string;
-  investment: string;
-  branch: string;
+  materialType: Option;
+  status: Option;
+  investment: Option;
+  branch: Option;
   dateRange: [Date, Date];
 }
 

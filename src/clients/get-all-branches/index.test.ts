@@ -16,7 +16,7 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllBranches());
 
     await act(async () => {
-      await result.current.call();
+      await result.current.call({ investmentId: '123' });
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
@@ -31,7 +31,7 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllBranches());
 
     await act(async () => {
-      await result.current.call();
+      await result.current.call({ investmentId: '123' });
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);

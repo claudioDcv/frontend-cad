@@ -6,16 +6,12 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useId } from "react";
-
-type Item = {
-  value: string;
-  label: string;
-};
+import { Option } from "../../../types";
 
 export interface DropdownProps {
-  value?: Item;
-  onChange: (value: Item) => void;
-  options: Item[];
+  value?: Option;
+  onChange: (value: Option) => void;
+  options: Option[];
   label: string;
   required?: boolean;
 }
@@ -40,7 +36,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       <Select
         labelId={id}
         id={`select-${id}`}
-        value={value?.value || ''}
+        value={value?.value}
         label={label}
         onChange={handleChange}
         displayEmpty

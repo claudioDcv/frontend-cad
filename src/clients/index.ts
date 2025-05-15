@@ -3,5 +3,3 @@ export { default as useGetAllStatus } from './get-all-status';
 export { default as useGetAllInvestments } from './get-all-investments';
 export { default as useGetAllBranches } from './get-all-branches';
 export { default as useGetAllResolutions } from './get-all-resolutions';
-export { fetchSecureData } from './secure-data/fetchSecureData';
-export { fetchHealthCheck } from './health-check/fetchHealthCheck';

@@ -1,15 +1,12 @@
-import { sleep } from '../../utils';
 import { API_BASE } from '../../conf/http';
+import { getHeader } from '../utils';
 import { MaterialType } from './types';
 
-const client = async (jwt: string): Promise<MaterialType[]> => {
-  const url = `${API_BASE}/api/v1/material-categories`;
+const client = async (): Promise<MaterialType[]> => {
+  const url = `${API_BASE}/material-categories`;
   const response = await fetch(url, {
     method: 'GET',
-    headers: {
-      Authorization: `${jwt}`,
-      'Content-Type': 'application/json',
-    },
+    headers: getHeader(),
     credentials: 'include',
   });
 
@@ -17,11 +14,7 @@ const client = async (jwt: string): Promise<MaterialType[]> => {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  await sleep(2000);
-
-  const data: MaterialType[] = await response.json();
-
-  return data;
+  return response.json();
 };
 
 export default client;

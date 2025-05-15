@@ -15,3 +15,8 @@ export interface PreResolution {
     materialType: MaterialType;
     contracts: Contract[];
 }
+
+export interface Option {
+    label: string;
+    value: string;
+}
