@@ -10,7 +10,17 @@ describe('useGetAllStatus', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData = [{ value: 'approved', label: 'Accepted' }];
+    const mockData = [{
+      investmentId: 1,
+      investmentCode: 'IM',
+      investmentName: 'INVERSIÓN FICTICIA S.A.',
+      issuerRut: '12345678-9',
+      issuerBusinessName: 'INVERSIONES FICTICIAS S.A.',
+      issuerBusinessActivity: 'COMPRA Y VENTA DE ACTIVOS',
+      issuerAddress: 'AV. SIEMPRE VIVA 742',
+      economicActivity: '411010',
+    }];
+
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useGetAllInvestments());

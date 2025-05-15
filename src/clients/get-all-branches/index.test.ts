@@ -10,13 +10,25 @@ describe('useGetAllStatus', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData = [{ value: 'approved', label: 'Accepted' }];
+    const mockData = [
+      {
+        locationId: 1,
+        locationNumber: 101,
+        locationCode: 'LOC-001',
+        locationName: 'Sucursal Santiago Centro',
+        locationAlias: 'STGO-CENTRO',
+        locationAddress: 'Av. Libertador Bernardo O’Higgins 123',
+        locationManager: 'Juan Pérez',
+        managerEmail: 'juan.perez@empresa.cl',
+        managerPhone: '+56912345678',
+      },
+    ];
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useGetAllBranches());
 
     await act(async () => {
-      await result.current.call({ investmentId: '123' });
+      await result.current.call({ investmentId: '123', status: null });
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
@@ -31,7 +43,7 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllBranches());
 
     await act(async () => {
-      await result.current.call({ investmentId: '123' });
+      await result.current.call({ investmentId: '123', status: null });
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
