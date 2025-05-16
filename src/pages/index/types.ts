@@ -1,4 +1,4 @@
-import { Option } from "../../types";
+import { Option } from '../../types';
 
 export interface FormModel {
   materialType: Option;
@@ -9,13 +9,16 @@ export interface FormModel {
 }
 
 export type ResolutionModel = {
-  id: number;
-  number: number;
-  code: string;
-  name: string;
-  alias: string;
-  address: string | null;
-  manager: string | null;
-  email: string | null;
-  phone: string | null;
+  resolutionId: number;
+  resolutionNumber: number;
+  resolutionBarcode: string;
+  dispatchGuideNumber: number;
+  investmentName: string;
+  branchName: string;
+  closureDate: string; // o Date
+  contractQuantity: number;
+  jewelTotalCount: number;
+  categoryName: string;
+  stateName: string;
 };
+

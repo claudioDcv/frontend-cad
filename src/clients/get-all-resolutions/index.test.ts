@@ -11,19 +11,21 @@ describe('useGetAllStatus', () => {
 
   test('should return data and SUCCESS if the call is successful', async () => {
     const mockData = [
-        {
-          id: 1,
-          number: 1001,
-          code: '01-00',
-          name: 'Santiago',
-          alias: 'Santiago1',
-          address: 'Santiago, Chile',
-          manager: 'Juan',
-          email: 'john@example.com',
-          phone: '123456789',
-        },
-      ];
-      
+      {
+        resolutionId: 0,
+        resolutionNumber: 0,
+        resolutionBarcode: 'string',
+        dispatchGuideNumber: 0,
+        investmentName: 'string',
+        branchName: 'string',
+        closureDate: '2025-05-16T15:27:40.874Z',
+        contractQuantity: 0,
+        jewelTotalCount: 0,
+        categoryName: 'string',
+        stateName: 'string',
+      },
+    ];
+
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useGetAllResolutions());

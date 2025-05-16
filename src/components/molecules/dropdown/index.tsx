@@ -14,6 +14,7 @@ export interface DropdownProps {
   options: Option[];
   label: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -22,6 +23,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   options,
   label,
   required,
+  disabled = false,
 }) => {
   const id = useId();
 
@@ -31,7 +33,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   return (
-    <FormControl fullWidth size="small" variant="outlined" required={required}>
+    <FormControl fullWidth size="small" variant="outlined" required={required} disabled={disabled}>
       <InputLabel id={id}>{label}</InputLabel>
       <Select
         labelId={id}
@@ -40,6 +42,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         label={label}
         onChange={handleChange}
         displayEmpty
+        disabled={disabled}
       >
         {options.map((option) => (
           <MenuItem key={option.value} value={option.value}>

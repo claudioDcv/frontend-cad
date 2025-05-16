@@ -5,7 +5,7 @@ import client from './client';
 import { Option } from '../../types';
 import { remap } from './utils';
 
-const useGetAllBranches = () => {
+const useGetAllLocations = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<Option[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -26,4 +26,4 @@ const useGetAllBranches = () => {
   return { status, data, error, call };
 };
 
-export default useGetAllBranches;
+export default useGetAllLocations;

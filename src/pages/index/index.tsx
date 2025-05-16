@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
-  useGetAllBranches,
+  useGetAllLocations,
   useGetAllStatus,
   useGetAllResolutions,
   useGetAllMaterialTypes,
@@ -14,10 +14,11 @@ import {
   ButtonClear,
   Dropdown,
   MonthRangePicker,
+  Pagination,
   Table,
 } from '../../components';
 import { columns } from './index.config';
-import { FormModel, ResolutionModel } from './types';
+import { FormModel } from './types';
 import { toDay } from '../../utils';
 
 const Index = () => {
@@ -32,11 +33,9 @@ const Index = () => {
   });
 
   const { t } = useTranslation();
-  const [data, setData] = useState<ResolutionModel[]>([]);
   const [range, setRange] = useState<[Date, Date]>([toDay, toDay]);
-
   const getAllStatus = useGetAllStatus();
-  const getAllBranches = useGetAllBranches();
+  const getAllLocations = useGetAllLocations();
   const getAllResolutions = useGetAllResolutions();
   const getAllMaterialType = useGetAllMaterialTypes();
   const getAllInvestments = useGetAllInvestments();
@@ -44,29 +43,42 @@ const Index = () => {
   useEffect(() => {
     getAllMaterialType.call();
     getAllStatus.call();
-    getAllResolutions.call();
     getAllInvestments.call();
-  }, [getAllStatus, getAllBranches, getAllResolutions, getAllMaterialType, getAllInvestments]);
+  }, [getAllStatus, getAllMaterialType, getAllInvestments]);
 
   useEffect(() => {
-    if (getAllResolutions.status === 'success') {
-      setData(getAllResolutions.data);
+    console.log('Resolutions data:', getAllResolutions.data);
+    if (!getAllResolutions.data.resolutions.length) {
+      getAllResolutions.call({ page: 1 });
     }
-  }, [getAllResolutions.data, getAllResolutions.status]);
+  }, [getAllResolutions, getAllResolutions.data, getAllResolutions.status]);
 
   const handleClear = () => {
     reset({
+      materialType: { value: '', label: '' },
+      status: { value: '', label: '' },
+      investment: { value: '', label: '' },
+      branch: { value: '', label: '' },
       dateRange: [toDay, toDay],
     });
     setRange([toDay, toDay]);
   };
-  
-  const handleInvestmentChange = (onChange: (value: { value: string; label: string }) => void) => (value: { value: string; label: string }) => {
-    onChange(value);
-    if (value.value) {
-      getAllBranches.call({ investmentId: value.value, status: true });
-    }
-  }
+
+  const handleChangePage = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    getAllResolutions.call({ page: value });
+  };
+
+  const handleInvestmentChange =
+    (onChange: (value: { value: string; label: string }) => void) =>
+    (value: { value: string; label: string }) => {
+      onChange(value);
+      if (value.value) {
+        getAllLocations.call({ investmentId: value.value, status: true });
+      }
+    };
 
   return (
     <Box>
@@ -87,6 +99,7 @@ const Index = () => {
                 {...field}
                 options={getAllMaterialType.data}
                 label={t('common.materialType')}
+                disabled={getAllMaterialType.data.length === 0}
               />
             )}
           />
@@ -98,6 +111,7 @@ const Index = () => {
                 {...field}
                 options={getAllStatus.data}
                 label={t('common.status')}
+                disabled={getAllStatus.data.length === 0}
               />
             )}
           />
@@ -112,6 +126,7 @@ const Index = () => {
                 label={t('common.investment')}
                 value={field.value}
                 onChange={handleInvestmentChange(field.onChange)}
+                disabled={getAllInvestments.data.length === 0}
               />
             )}
           />
@@ -122,9 +137,10 @@ const Index = () => {
             render={({ field }) => (
               <Dropdown
                 {...field}
-                options={getAllBranches.data}
+                options={getAllLocations.data}
                 label={t('common.branch')}
                 value={field.value}
+                disabled={getAllLocations.data.length === 0}
               />
             )}
           />
@@ -135,7 +151,15 @@ const Index = () => {
         </Box>
       </form>
 
-      <Table columns={columns} rows={data} />
+      <Table columns={columns} rows={getAllResolutions.data.resolutions} />
+
+      <Box display="flex" justifyContent="flex-end" mt={2}>
+        <Pagination
+          count={getAllResolutions.data.meta.count}
+          page={getAllResolutions.data.meta.page}
+          onChange={handleChangePage}
+        />
+      </Box>
     </Box>
   );
 };

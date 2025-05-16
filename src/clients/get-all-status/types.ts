@@ -1,4 +1,4 @@
 export type Status = {
-    label: string;
-    value: string;
+    name: string;
+    id: string;
 }
