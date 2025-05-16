@@ -10,7 +10,7 @@ describe('useGetAllStatus', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData = [{ value: 'approved', label: 'Accepted' }];
+    const mockData = [{ id: 'approved', name: 'Accepted' }];
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useGetAllStatus());
