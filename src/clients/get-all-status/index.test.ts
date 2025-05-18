@@ -3,6 +3,7 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
 import { FetchStatus } from '../../utils';
 import useGetAllStatus from '.';
+import { remap } from './utils';
 
 describe('useGetAllStatus', () => {
   beforeEach(() => {
@@ -20,7 +21,7 @@ describe('useGetAllStatus', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(mockData);
+    expect(result.current.data).toEqual(remap(mockData));
     expect(result.current.error).toBe(null);
   });
 

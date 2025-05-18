@@ -23,7 +23,13 @@ const useGetAllLocations = () => {
     }
   }, []);
 
-  return { status, data, error, call };
+  const clearData = () => {
+    setData([]);
+    setStatus(FetchStatus.IDLE);
+    setError(null);
+  };
+
+  return { status, data, error, call, clearData };
 };
 
 export default useGetAllLocations;

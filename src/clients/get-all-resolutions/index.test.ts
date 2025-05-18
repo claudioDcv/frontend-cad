@@ -4,6 +4,7 @@ import * as clientModule from './client';
 import { FetchStatus } from '../../utils';
 import useGetAllResolutions from '.';
 import { PageResponse } from './types';
+import { remap } from './utils';
 
 describe('useGetAllStatus', () => {
   beforeEach(() => {
@@ -41,17 +42,17 @@ describe('useGetAllStatus', () => {
         sort: {
           sorted: false,
           empty: false,
-          unsorted: false
+          unsorted: false,
         },
         offset: 0,
         paged: undefined,
-        unpaged: undefined
+        unpaged: undefined,
       },
       sort: {
         sorted: false,
         empty: false,
-        unsorted: false
-      }
+        unsorted: false,
+      },
     };
 
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
@@ -63,7 +64,7 @@ describe('useGetAllStatus', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(mockData);
+    expect(result.current.data).toEqual(remap(mockData));
     expect(result.current.error).toBe(null);
   });
 
@@ -78,7 +79,10 @@ describe('useGetAllStatus', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
-    expect(result.current.data).toEqual([]);
+    expect(result.current.data).toEqual({
+      resolutions: [],
+      meta: { page: 0, count: 0 },
+    });
     expect(result.current.error).toBe('API call failed');
   });
 
@@ -86,7 +90,10 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllResolutions());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
-    expect(result.current.data).toEqual([]);
+    expect(result.current.data).toEqual({
+      resolutions: [],
+      meta: { page: 0, count: 0 },
+    });
     expect(result.current.error).toBe(null);
   });
 });

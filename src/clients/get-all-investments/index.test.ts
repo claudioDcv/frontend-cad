@@ -10,29 +10,39 @@ describe('useGetAllStatus', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData = [{
-      investmentId: 1,
-      investmentCode: 'IM',
-      investmentName: 'INVERSIÓN FICTICIA S.A.',
-      issuerRut: '12345678-9',
-      issuerBusinessName: 'INVERSIONES FICTICIAS S.A.',
-      issuerBusinessActivity: 'COMPRA Y VENTA DE ACTIVOS',
-      issuerAddress: 'AV. SIEMPRE VIVA 742',
-      economicActivity: '411010',
-    }];
-
-    vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
-
+    const mockRawData = [
+      {
+        investmentId: 1,
+        investmentCode: 'IM',
+        investmentName: 'INVERSIÓN FICTICIA S.A.',
+        issuerRut: '12345678-9',
+        issuerBusinessName: 'INVERSIONES FICTICIAS S.A.',
+        issuerBusinessActivity: 'COMPRA Y VENTA DE ACTIVOS',
+        issuerAddress: 'AV. SIEMPRE VIVA 742',
+        economicActivity: '411010',
+      },
+    ];
+  
+    const expectedTransformedData = [
+      {
+        label: 'INVERSIÓN FICTICIA S.A.',
+        value: '1',
+      },
+    ];
+  
+    vi.spyOn(clientModule, 'default').mockResolvedValue(mockRawData);
+  
     const { result } = renderHook(() => useGetAllInvestments());
-
+  
     await act(async () => {
       await result.current.call();
     });
-
+  
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(mockData);
+    expect(result.current.data).toEqual(expectedTransformedData);
     expect(result.current.error).toBe(null);
   });
+  
 
   test('should return error and ERROR status if the call fails', async () => {
     const mockError = new Error('API call failed');

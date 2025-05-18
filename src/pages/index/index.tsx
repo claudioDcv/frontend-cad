@@ -47,21 +47,15 @@ const Index = () => {
   }, [getAllStatus, getAllMaterialType, getAllInvestments]);
 
   useEffect(() => {
-    console.log('Resolutions data:', getAllResolutions.data);
     if (!getAllResolutions.data.resolutions.length) {
       getAllResolutions.call({ page: 1 });
     }
   }, [getAllResolutions, getAllResolutions.data, getAllResolutions.status]);
 
   const handleClear = () => {
-    reset({
-      materialType: { value: '', label: '' },
-      status: { value: '', label: '' },
-      investment: { value: '', label: '' },
-      branch: { value: '', label: '' },
-      dateRange: [toDay, toDay],
-    });
+    reset();
     setRange([toDay, toDay]);
+    getAllLocations.clearData();
   };
 
   const handleChangePage = (
