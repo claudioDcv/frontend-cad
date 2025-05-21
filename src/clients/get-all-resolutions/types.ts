@@ -55,4 +55,6 @@ export type ResolutionPaginated = {
 
 export type Props = {
   page: number;
+  size?: number;
+  sort?: string;
 }
