@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
 import { FetchStatus } from '../../utils';
-import useGetAllStatus from '.';
+import useGetAllMaterialTypes from '.';
 import { remap } from './utils';
 
 describe('useGetAllStatus', () => {
@@ -11,10 +11,20 @@ describe('useGetAllStatus', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData = [{ id: 'approved', name: 'Accepted', statusName: 'Accepted', statusId: 'approved' }];
+    const mockData = [
+      {
+        value: 'approved',
+        label: 'Accepted',
+        categoryId: 1,
+        categoryCode: 'CAT001',
+        categoryName: 'Category Name',
+        measurementUnit: 'kg',
+        minimumProfitMargin: 10,
+      },
+    ];
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
-    const { result } = renderHook(() => useGetAllStatus());
+    const { result } = renderHook(() => useGetAllMaterialTypes());
 
     await act(async () => {
       await result.current.call();
@@ -29,7 +39,7 @@ describe('useGetAllStatus', () => {
     const mockError = new Error('API call failed');
     vi.spyOn(clientModule, 'default').mockRejectedValue(mockError);
 
-    const { result } = renderHook(() => useGetAllStatus());
+    const { result } = renderHook(() => useGetAllMaterialTypes());
 
     await act(async () => {
       await result.current.call();
@@ -41,7 +51,7 @@ describe('useGetAllStatus', () => {
   });
 
   test('should have IDLE status initially', () => {
-    const { result } = renderHook(() => useGetAllStatus());
+    const { result } = renderHook(() => useGetAllMaterialTypes());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
     expect(result.current.data).toEqual([]);
