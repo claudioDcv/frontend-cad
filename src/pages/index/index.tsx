@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -17,12 +17,12 @@ import {
   Pagination,
   Table,
 } from '../../components';
-import { columns } from './index.config';
+import { columnsResolutions, columnsPackinglist } from './index.config';
 import { FormModel } from './types';
-import { toDay } from '../../utils';
+import { FetchStatus, toDay } from '../../utils';
 
 const Index = () => {
-  const { reset, control } = useForm<FormModel>({
+  const { reset, control, watch } = useForm<FormModel>({
     defaultValues: {
       materialType: { value: '', label: '' },
       status: { value: '', label: '' },
@@ -32,8 +32,11 @@ const Index = () => {
     },
   });
 
+  const investment = watch('investment');
   const { t } = useTranslation();
+  const [tabIndex, setTabIndex] = useState(0);
   const [range, setRange] = useState<[Date, Date]>([toDay, toDay]);
+
   const getAllStatus = useGetAllStatus();
   const getAllLocations = useGetAllLocations();
   const getAllResolutions = useGetAllResolutions();
@@ -44,13 +47,25 @@ const Index = () => {
     getAllMaterialType.call();
     getAllStatus.call();
     getAllInvestments.call();
-  }, [getAllStatus, getAllMaterialType, getAllInvestments]);
+  }, [getAllInvestments, getAllMaterialType, getAllStatus]);
 
   useEffect(() => {
-    if (!getAllResolutions.data.resolutions.length) {
+    if (
+      getAllResolutions.status === FetchStatus.IDLE &&
+      (!getAllResolutions.data || !getAllResolutions.data.resolutions?.length)
+    ) {
       getAllResolutions.call({ page: 1 });
     }
-  }, [getAllResolutions, getAllResolutions.data, getAllResolutions.status]);
+  }, [getAllResolutions.status, getAllResolutions.data]); 
+
+  useEffect(() => {
+    const filters = {
+      page: 1,
+      investmentId: investment?.value ? Number(investment.value) : undefined,
+    };
+
+    getAllResolutions.call(filters);
+  }, [ investment]);
 
   const handleClear = () => {
     reset();
@@ -62,7 +77,14 @@ const Index = () => {
     _event: React.ChangeEvent<unknown>,
     value: number
   ) => {
-    getAllResolutions.call({ page: value });
+    getAllResolutions.call({
+      page: value,
+      investmentId: investment?.value ? Number(investment.value) : undefined,
+    });
+  };
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setTabIndex(newValue);
   };
 
   const handleInvestmentChange =
@@ -71,89 +93,120 @@ const Index = () => {
       onChange(value);
       if (value.value) {
         getAllLocations.call({ investmentId: value.value, status: true });
+      } else {
+        getAllLocations.clearData();
       }
     };
 
   return (
     <Box>
-      <form>
-        <Box
-          mb={2}
-          mt={2}
-          flexWrap="nowrap"
-          display="flex"
-          alignItems="center"
-          gap={2}
-        >
-          <Controller
-            name="materialType"
-            control={control}
-            render={({ field }) => (
-              <Dropdown
-                {...field}
-                options={getAllMaterialType.data}
-                label={t('common.materialType')}
-                disabled={getAllMaterialType.data.length === 0}
+      <Tabs value={tabIndex} onChange={handleTabChange}>
+        <Tab label={t('common.resolutions')} />
+        <Tab label={t('common.packingList')} />
+      </Tabs>
+
+      {tabIndex === 0 && (
+        <Box>
+          <form>
+            <Box
+              mb={2}
+              mt={2}
+              flexWrap="nowrap"
+              display="flex"
+              alignItems="center"
+              gap={2}
+            >
+              <Controller
+                name="materialType"
+                control={control}
+                render={({ field }) => (
+                  <Dropdown
+                    {...field}
+                    options={getAllMaterialType.data}
+                    label={t('common.materialType')}
+                    disabled={
+                      !getAllMaterialType.data ||
+                      getAllMaterialType.data.length === 0
+                    }
+                  />
+                )}
               />
-            )}
-          />
-          <Controller
-            name="status"
-            control={control}
-            render={({ field }) => (
-              <Dropdown
-                {...field}
-                options={getAllStatus.data}
-                label={t('common.status')}
-                disabled={getAllStatus.data.length === 0}
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <Dropdown
+                    {...field}
+                    options={getAllStatus.data}
+                    label={t('common.status')}
+                    disabled={
+                      !getAllStatus.data || getAllStatus.data.length === 0
+                    }
+                  />
+                )}
               />
-            )}
+
+              <Controller
+                name="investment"
+                control={control}
+                render={({ field }) => (
+                  <Dropdown
+                    {...field}
+                    options={getAllInvestments.data}
+                    label={t('common.investment')}
+                    onChange={handleInvestmentChange(field.onChange)}
+                    disabled={
+                      !getAllInvestments.data ||
+                      getAllInvestments.data.length === 0
+                    }
+                  />
+                )}
+              />
+
+              <Controller
+                name="branch"
+                control={control}
+                render={({ field }) => (
+                  <Dropdown
+                    {...field} // mejor mantener control uniforme
+                    options={getAllLocations.data}
+                    label={t('common.branch')}
+                    disabled={
+                      !getAllLocations.data || getAllLocations.data.length === 0
+                    }
+                  />
+                )}
+              />
+
+              <MonthRangePicker value={range} onChange={setRange} />
+
+              <ButtonClear
+                onClick={handleClear}
+                label={t('common.clearFilters')}
+              />
+            </Box>
+          </form>
+
+          <Table
+            columns={columnsResolutions}
+            rows={getAllResolutions.data?.resolutions || []}
           />
 
-          <Controller
-            name="investment"
-            control={control}
-            render={({ field }) => (
-              <Dropdown
-                {...field}
-                options={getAllInvestments.data}
-                label={t('common.investment')}
-                value={field.value}
-                onChange={handleInvestmentChange(field.onChange)}
-                disabled={getAllInvestments.data.length === 0}
-              />
-            )}
-          />
-
-          <Controller
-            name="branch"
-            control={control}
-            render={({ field }) => (
-              <Dropdown
-                {...field}
-                options={getAllLocations.data}
-                label={t('common.branch')}
-                value={field.value}
-                disabled={getAllLocations.data.length === 0}
-              />
-            )}
-          />
-
-          <MonthRangePicker value={range} onChange={setRange} />
-
-          <ButtonClear onClick={handleClear} label={t('common.clearFilters')} />
+          <Box display="flex" justifyContent="flex-end" mt={2}>
+            <Pagination
+              count={getAllResolutions.data?.meta?.count || 0}
+              page={getAllResolutions.data?.meta?.page || 1}
+              onChange={handleChangePage}
+            />
+          </Box>
         </Box>
-      </form>
+      )}
 
-      <Table columns={columns} rows={getAllResolutions.data.resolutions} />
-
-      <Box display="flex" justifyContent="flex-end" mt={2}>
-        <Pagination
-          count={getAllResolutions.data.meta.count}
-          page={getAllResolutions.data.meta.page}
-          onChange={handleChangePage}
-        />
-      </Box>
+      {tabIndex === 1 && (
+        <Box>
+          <Table columns={columnsPackinglist} rows={[]} />
+        </Box>
+      )}
     </Box>
   );
 };

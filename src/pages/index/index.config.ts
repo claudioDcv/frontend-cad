@@ -1,4 +1,4 @@
-export const columns = [
+export const columnsResolutions = [
   { id: 'resolutionNumber', label: 'N° Resolución' },
   { id: 'resolutionBarcode', label: 'Código de Barras' },
   { id: 'dispatchGuideNumber', label: 'Guía Despacho' },
@@ -9,4 +9,10 @@ export const columns = [
   { id: 'jewelTotalCount', label: 'Joyas Totales' },
   { id: 'categoryName', label: 'Categoría' },
   { id: 'stateName', label: 'Estado' },
+];
+
+export const columnsPackinglist = [
+  { id: 'resolutionNumber', label: 'Paquete' },
+  { id: 'resolutionBarcode', label: 'Código de Barras' },
+  { id: 'dispatchGuideNumber', label: 'Guía Despacho' },
 ];

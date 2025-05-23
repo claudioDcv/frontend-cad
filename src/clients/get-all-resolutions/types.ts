@@ -57,4 +57,5 @@ export type Props = {
   page: number;
   size?: number;
   sort?: string;
+  investmentId?: number;
 }
