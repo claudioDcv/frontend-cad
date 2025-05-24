@@ -58,4 +58,7 @@ export type Props = {
   size?: number;
   sort?: string;
   investmentId?: number;
+  locationId?: number;
+  categoryId?: number;
+  stateId?: number;
 }

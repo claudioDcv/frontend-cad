@@ -4,7 +4,7 @@ export interface FormModel {
   materialType: Option;
   status: Option;
   investment: Option;
-  branch: Option;
+  location: Option;
   dateRange: [Date, Date];
 }
 

@@ -12,7 +12,11 @@ const useGetAllInvestments = () => {
   const call = useCallback(async () => {
     setStatus(FetchStatus.LOADING);
     try {
-      if (status === FetchStatus.LOADING || status === FetchStatus.SUCCESS || data.length) {
+      if (
+        status === FetchStatus.LOADING ||
+        status === FetchStatus.SUCCESS ||
+        data.length
+      ) {
         setStatus(FetchStatus.SUCCESS);
         setError(null);
         return;
@@ -27,7 +31,13 @@ const useGetAllInvestments = () => {
     }
   }, [status, data]);
 
-  return { status, data, error, call };
+  const clearData = () => {
+    setData([]);
+    setStatus(FetchStatus.IDLE);
+    setError(null);
+  };
+
+  return { status, data, error, call, clearData };
 };
 
 export default useGetAllInvestments;

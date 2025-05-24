@@ -21,18 +21,22 @@ import { columnsResolutions, columnsPackinglist } from './index.config';
 import { FormModel } from './types';
 import { FetchStatus, toDay } from '../../utils';
 
+const emptyOption = { value: '', label: '' };
+const defaultFormValues: FormModel = {
+  materialType: emptyOption,
+  status: emptyOption,
+  investment: emptyOption,
+  location: emptyOption,
+  dateRange: [toDay, toDay],
+};
+
 const Index = () => {
   const { reset, control, watch } = useForm<FormModel>({
-    defaultValues: {
-      materialType: { value: '', label: '' },
-      status: { value: '', label: '' },
-      investment: { value: '', label: '' },
-      branch: { value: '', label: '' },
-      dateRange: [toDay, toDay],
-    },
+    defaultValues: defaultFormValues,
   });
 
-  const investment = watch('investment');
+  const { investment, location, materialType, status } = watch();
+
   const { t } = useTranslation();
   const [tabIndex, setTabIndex] = useState(0);
   const [range, setRange] = useState<[Date, Date]>([toDay, toDay]);
@@ -42,6 +46,16 @@ const Index = () => {
   const getAllResolutions = useGetAllResolutions();
   const getAllMaterialType = useGetAllMaterialTypes();
   const getAllInvestments = useGetAllInvestments();
+
+  const fetchResolutions = (page: number) => {
+    getAllResolutions.call({
+      page,
+      investmentId: investment?.value ? Number(investment.value) : undefined,
+      locationId: location?.value ? Number(location.value) : undefined,
+      categoryId: materialType?.value ? Number(materialType.value) : undefined,
+      stateId: status?.value ? Number(status.value) : undefined,
+    });
+  };
 
   useEffect(() => {
     getAllMaterialType.call();
@@ -56,31 +70,25 @@ const Index = () => {
     ) {
       getAllResolutions.call({ page: 1 });
     }
-  }, [getAllResolutions.status, getAllResolutions.data]); 
+  }, [getAllResolutions.status, getAllResolutions.data]);
 
   useEffect(() => {
-    const filters = {
-      page: 1,
-      investmentId: investment?.value ? Number(investment.value) : undefined,
-    };
-
-    getAllResolutions.call(filters);
-  }, [ investment]);
+    fetchResolutions(1);
+  }, [location, investment, materialType, status]);
 
   const handleClear = () => {
-    reset();
+    reset(defaultFormValues);
+
     setRange([toDay, toDay]);
     getAllLocations.clearData();
+    getAllInvestments.clearData();
   };
 
   const handleChangePage = (
     _event: React.ChangeEvent<unknown>,
     value: number
   ) => {
-    getAllResolutions.call({
-      page: value,
-      investmentId: investment?.value ? Number(investment.value) : undefined,
-    });
+    fetchResolutions(value);
   };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -91,6 +99,12 @@ const Index = () => {
     (onChange: (value: { value: string; label: string }) => void) =>
     (value: { value: string; label: string }) => {
       onChange(value);
+
+      reset((prev) => ({
+        ...prev,
+        location: { value: '', label: '' },
+      }));
+
       if (value.value) {
         getAllLocations.call({ investmentId: value.value, status: true });
       } else {
@@ -164,13 +178,13 @@ const Index = () => {
               />
 
               <Controller
-                name="branch"
+                name="location"
                 control={control}
                 render={({ field }) => (
                   <Dropdown
-                    {...field} // mejor mantener control uniforme
+                    {...field}
                     options={getAllLocations.data}
-                    label={t('common.branch')}
+                    label={t('common.location')}
                     disabled={
                       !getAllLocations.data || getAllLocations.data.length === 0
                     }
@@ -187,10 +201,16 @@ const Index = () => {
             </Box>
           </form>
 
-          <Table
-            columns={columnsResolutions}
-            rows={getAllResolutions.data?.resolutions || []}
-          />
+          {getAllResolutions.data?.resolutions?.length ? (
+            <Table
+              columns={columnsResolutions}
+              rows={getAllResolutions.data?.resolutions || []}
+            />
+          ) : (
+            <Box textAlign="center" mt={4}>
+              {t('common.noData')}
+            </Box>
+          )}
 
           <Box display="flex" justifyContent="flex-end" mt={2}>
             <Pagination

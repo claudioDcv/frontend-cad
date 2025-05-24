@@ -18,7 +18,9 @@ const useGetAllResolutions = () => {
       const isSameFilter =
         lastProps &&
         lastProps.page === props.page &&
-        lastProps.investmentId === props.investmentId;
+        lastProps.investmentId === props.investmentId &&
+        lastProps.locationId === props.locationId &&
+        lastProps.categoryId === props.categoryId 
 
       if (status === FetchStatus.LOADING || isSameFilter) {
         setStatus(FetchStatus.SUCCESS); 

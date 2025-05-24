@@ -134,8 +134,9 @@
     "materialType": "Tipo de Material",
     "status": "Estado",
     "investment": "Inversión",
-    "branch": "Sucursal",
+    "location": "Sucursal",
     "resolutions": "Resoluciones",
-    "packingList": "Packing List"
+    "packingList": "Packing List",
+    "noData": "No hay datos"
   }
 }
