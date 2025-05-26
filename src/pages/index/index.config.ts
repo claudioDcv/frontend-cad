@@ -1,3 +1,8 @@
+import { toDay } from "../../utils";
+import { FormModel } from "./types";
+
+const emptyOption = { value: '', label: '' };
+
 export const columnsResolutions = [
   { id: 'resolutionNumber', label: 'N° Resolución' },
   { id: 'resolutionBarcode', label: 'Código de Barras' },
@@ -16,3 +21,11 @@ export const columnsPackinglist = [
   { id: 'resolutionBarcode', label: 'Código de Barras' },
   { id: 'dispatchGuideNumber', label: 'Guía Despacho' },
 ];
+
+export const defaultFormValues: FormModel = {
+  materialType: emptyOption,
+  status: emptyOption,
+  investment: emptyOption,
+  location: emptyOption,
+  dateRange: [toDay, toDay],
+};

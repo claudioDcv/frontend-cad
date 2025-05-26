@@ -17,18 +17,9 @@ import {
   Pagination,
   Table,
 } from '../../components';
-import { columnsResolutions, columnsPackinglist } from './index.config';
+import { columnsResolutions, columnsPackinglist, defaultFormValues } from './index.config';
 import { FormModel } from './types';
 import { FetchStatus, toDay } from '../../utils';
-
-const emptyOption = { value: '', label: '' };
-const defaultFormValues: FormModel = {
-  materialType: emptyOption,
-  status: emptyOption,
-  investment: emptyOption,
-  location: emptyOption,
-  dateRange: [toDay, toDay],
-};
 
 const Index = () => {
   const { reset, control, watch } = useForm<FormModel>({
