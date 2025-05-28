@@ -1,4 +1,7 @@
+export const STATUS_RESOLUTION = 14;
+
 export const toDay = new Date();
+export const toEndMonth = new Date(toDay.getFullYear(), toDay.getMonth() + 1, 0);
 
 export const emptyOption = { value: '', label: '' };
 

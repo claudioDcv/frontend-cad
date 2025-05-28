@@ -1,9 +1,18 @@
 import { API_BASE } from '../../conf/http';
+import { PropsStatus } from '../types';
 import { getHeader } from '../utils';
 import { Status } from './types';
 
-const client = async (): Promise<Status[]> => {
-  const url = `${API_BASE}/status`;
+const client = async (props: PropsStatus): Promise<Status[]> => {
+  const params: Record<string, string> = {};
+
+  if (props.tableId !== undefined && props.tableId !== null) {
+    params.tableId = props.tableId.toString();
+  }
+
+  const query = new URLSearchParams(params).toString();
+  const url = `${API_BASE}/status?${query}`;
+
   const response = await fetch(url, {
     method: 'GET',
     headers: getHeader(),

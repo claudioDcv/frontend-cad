@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -22,9 +22,8 @@ import {
   columnsPackinglist,
   defaultFormValues,
 } from './index.config';
-import { FormModel } from './types';
-import { FetchStatus, toDay } from '../../utils';
-import { PropsResolution } from '../../types';
+import { FormModel, PropsResolution } from './types';
+import { STATUS_RESOLUTION, toEndMonth } from '../../utils';
 
 const Index = () => {
   const { reset, control, watch } = useForm<FormModel>({
@@ -32,10 +31,9 @@ const Index = () => {
   });
 
   const { investment, location, materialType, status } = watch();
-
   const { t } = useTranslation();
   const [tabIndex, setTabIndex] = useState(0);
-  const [range, setRange] = useState<[Date, Date]>([toDay, toDay]);
+  const [range, setRange] = useState<[Date, Date]>([toEndMonth, toEndMonth]);
 
   const getAllStatus = useGetAllStatus();
   const getAllLocations = useGetAllLocations();
@@ -43,48 +41,46 @@ const Index = () => {
   const getAllMaterialType = useGetAllMaterialTypes();
   const getAllInvestments = useGetAllInvestments();
 
-  const fetchResolutions = (page: number) => {
-    const params: PropsResolution = {
-      page,
-      investmentId: investment?.value ? Number(investment.value) : undefined,
-      locationId: location?.value ? Number(location.value) : undefined,
-      categoryId: materialType?.value ? Number(materialType.value) : undefined,
-      stateId: status?.value ? Number(status.value) : undefined,
-      endDate: range[1].toISOString().split('.')[0],
-    };
+  const fetchResolutions = useCallback(
+    (page: number) => {
+      const params: PropsResolution = {
+        page,
+        investmentId: investment?.value ? Number(investment.value) : undefined,
+        locationId: location?.value ? Number(location.value) : undefined,
+        categoryId: materialType?.value
+          ? Number(materialType.value)
+          : undefined,
+        stateId: status?.value ? Number(status.value) : undefined,
+        endDate: range[1].toISOString().split('.')[0],
+      };
 
-    if (range[0].toDateString() !== range[1].toDateString()) {
-      params.startDate = range[0].toISOString().split('.')[0];
-    }
+      if (range[0].toDateString() !== range[1].toDateString()) {
+        params.startDate = range[0].toISOString().split('.')[0];
+      }
 
-    getAllResolutions.call(params);
-  };
+      getAllResolutions.call(params);
+    },
+    [investment, location, materialType, status, range, getAllResolutions]
+  );
 
   useEffect(() => {
     getAllMaterialType.call();
-    getAllStatus.call();
+    getAllStatus.call({ tableId: STATUS_RESOLUTION });
     getAllInvestments.call();
   }, [getAllInvestments, getAllMaterialType, getAllStatus]);
-
-  useEffect(() => {
-    if (
-      getAllResolutions.status === FetchStatus.IDLE &&
-      (!getAllResolutions.data || !getAllResolutions.data.resolutions?.length)
-    ) {
-      getAllResolutions.call({ page: 1 });
-    }
-  }, [getAllResolutions.status, getAllResolutions.data]);
 
   useEffect(() => {
     if (tabIndex === 0) {
       fetchResolutions(1);
     }
-  }, [location, investment, materialType, status, range, tabIndex]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [investment, location, materialType, status, range, tabIndex]);
+  
 
   const handleClear = () => {
     reset(defaultFormValues);
 
-    setRange([toDay, toDay]);
+    setRange([toEndMonth, toEndMonth]);
     getAllLocations.clearData();
     getAllInvestments.clearData();
   };

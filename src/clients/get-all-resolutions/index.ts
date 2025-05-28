@@ -3,7 +3,7 @@ import { FetchStatus } from '../../utils';
 import client from './client';
 import { remap } from './utils';
 import { ResolutionPaginated } from './types';
-import { PropsResolution } from '../../types';
+import { PropsResolution } from '../types';
 
 const useGetAllResolutions = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -27,7 +27,7 @@ const useGetAllResolutions = () => {
         lastProps.endDate === props.endDate;
 
       if (status === FetchStatus.LOADING || isSameFilter) {
-        setStatus(FetchStatus.SUCCESS); 
+        setStatus(FetchStatus.SUCCESS);
         setError(null);
         return;
       }
