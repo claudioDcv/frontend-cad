@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '../../utils';
 import client from './client';
-import { Option } from '../../types';
 import { remap } from './utils';
+import { Option } from '../../types';
 
 const useGetAllStatus = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -12,13 +12,17 @@ const useGetAllStatus = () => {
   const call = useCallback(async () => {
     setStatus(FetchStatus.LOADING);
     try {
-      if (status === FetchStatus.LOADING || status === FetchStatus.SUCCESS || data.length) {
+      if (
+        status === FetchStatus.LOADING ||
+        status === FetchStatus.SUCCESS ||
+        data.length
+      ) {
         setStatus(FetchStatus.SUCCESS);
         setError(null);
         return;
       }
       const result = await client();
-      const model = remap(result)
+      const model = remap(result);
       setData(model);
       setStatus(FetchStatus.SUCCESS);
     } catch (err) {

@@ -2,7 +2,8 @@ import { useCallback, useState } from 'react';
 import { FetchStatus } from '../../utils';
 import client from './client';
 import { remap } from './utils';
-import { Props, ResolutionPaginated } from './types';
+import { ResolutionPaginated } from './types';
+import { PropsResolution } from '../../types';
 
 const useGetAllResolutions = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -11,16 +12,19 @@ const useGetAllResolutions = () => {
     meta: { page: 0, count: 0 },
   });
   const [error, setError] = useState<string | null>(null);
-  const [lastProps, setLastProps] = useState<Props | null>(null);
+  const [lastProps, setLastProps] = useState<PropsResolution | null>(null);
 
   const call = useCallback(
-    async (props: Props) => {
+    async (props: PropsResolution) => {
       const isSameFilter =
         lastProps &&
         lastProps.page === props.page &&
         lastProps.investmentId === props.investmentId &&
         lastProps.locationId === props.locationId &&
-        lastProps.categoryId === props.categoryId 
+        lastProps.categoryId === props.categoryId &&
+        lastProps.stateId === props.stateId &&
+        lastProps.startDate === props.startDate &&
+        lastProps.endDate === props.endDate;
 
       if (status === FetchStatus.LOADING || isSameFilter) {
         setStatus(FetchStatus.SUCCESS); 

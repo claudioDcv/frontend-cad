@@ -1,12 +1,12 @@
 import { API_BASE } from '../../conf/http';
+import { PropsResolution } from '../../types';
 import { getHeader } from '../utils';
-import { PageResponse, Props } from './types';
+import { PageResponse } from './types';
 
-const client = async (props: Props): Promise<PageResponse> => {
+const client = async (props: PropsResolution): Promise<PageResponse> => {
   const params: Record<string, string> = {
     page: props.page.toString(),
   };
-
   if (props.investmentId !== undefined && props.investmentId !== null) {
     params.investmentId = props.investmentId.toString();
   }
@@ -18,6 +18,12 @@ const client = async (props: Props): Promise<PageResponse> => {
   }
   if (props.stateId !== undefined && props.stateId !== null) {
     params.stateId = props.stateId.toString();
+  }
+  if (props.startDate) {
+    params.startDate = props.startDate;
+  }
+  if (props.endDate) {
+    params.endDate = props.endDate;
   }
 
   const query = new URLSearchParams(params).toString();

@@ -17,9 +17,14 @@ import {
   Pagination,
   Table,
 } from '../../components';
-import { columnsResolutions, columnsPackinglist, defaultFormValues } from './index.config';
+import {
+  columnsResolutions,
+  columnsPackinglist,
+  defaultFormValues,
+} from './index.config';
 import { FormModel } from './types';
 import { FetchStatus, toDay } from '../../utils';
+import { PropsResolution } from '../../types';
 
 const Index = () => {
   const { reset, control, watch } = useForm<FormModel>({
@@ -39,13 +44,20 @@ const Index = () => {
   const getAllInvestments = useGetAllInvestments();
 
   const fetchResolutions = (page: number) => {
-    getAllResolutions.call({
+    const params: PropsResolution = {
       page,
       investmentId: investment?.value ? Number(investment.value) : undefined,
       locationId: location?.value ? Number(location.value) : undefined,
       categoryId: materialType?.value ? Number(materialType.value) : undefined,
       stateId: status?.value ? Number(status.value) : undefined,
-    });
+      endDate: range[1].toISOString().split('.')[0],
+    };
+
+    if (range[0].toDateString() !== range[1].toDateString()) {
+      params.startDate = range[0].toISOString().split('.')[0];
+    }
+
+    getAllResolutions.call(params);
   };
 
   useEffect(() => {
@@ -64,8 +76,10 @@ const Index = () => {
   }, [getAllResolutions.status, getAllResolutions.data]);
 
   useEffect(() => {
-    fetchResolutions(1);
-  }, [location, investment, materialType, status]);
+    if (tabIndex === 0) {
+      fetchResolutions(1);
+    }
+  }, [location, investment, materialType, status, range, tabIndex]);
 
   const handleClear = () => {
     reset(defaultFormValues);
@@ -84,6 +98,7 @@ const Index = () => {
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
+    console.log(newValue);
   };
 
   const handleInvestmentChange =
@@ -136,6 +151,7 @@ const Index = () => {
                   />
                 )}
               />
+
               <Controller
                 name="status"
                 control={control}

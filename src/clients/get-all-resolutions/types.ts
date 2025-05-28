@@ -5,7 +5,7 @@ export type Resolution = {
   dispatchGuideNumber: number;
   investmentName: string;
   branchName: string;
-  closureDate: string; // revisar el Date
+  closureDate: string; 
   contractQuantity: number;
   jewelTotalCount: number;
   categoryName: string;
@@ -51,14 +51,4 @@ export type ResolutionPaginated = {
     page: number;
     count: number;
   }
-}
-
-export type Props = {
-  page: number;
-  size?: number;
-  sort?: string;
-  investmentId?: number;
-  locationId?: number;
-  categoryId?: number;
-  stateId?: number;
 }

@@ -15,7 +15,7 @@ export type ResolutionModel = {
   dispatchGuideNumber: number;
   investmentName: string;
   branchName: string;
-  closureDate: string; // o Date
+  closureDate: string;
   contractQuantity: number;
   jewelTotalCount: number;
   categoryName: string;

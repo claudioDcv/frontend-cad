@@ -1,7 +1,5 @@
-import { toDay } from "../../utils";
+import { emptyOption, toDay } from "../../utils";
 import { FormModel } from "./types";
-
-const emptyOption = { value: '', label: '' };
 
 export const columnsResolutions = [
   { id: 'resolutionNumber', label: 'N° Resolución' },
@@ -17,10 +15,21 @@ export const columnsResolutions = [
 ];
 
 export const columnsPackinglist = [
-  { id: 'resolutionNumber', label: 'Paquete' },
-  { id: 'resolutionBarcode', label: 'Código de Barras' },
-  { id: 'dispatchGuideNumber', label: 'Guía Despacho' },
+  { id: 'packinglistId', label: 'Paquete' },
+  { id: 'barcode', label: 'Código de Barras' },
+  { id: 'dispatchNumber', label: 'Guía de Despacho' },
+  { id: 'investmentName', label: 'Nombre Inversión' },
+  { id: 'originBranch', label: 'Sucursal Origen' },
+  { id: 'destinyBranch', label: 'Sucursal Destino' },
+  { id: 'creationDate', label: 'Fecha de Creación' },
+  { id: 'totalQuantity', label: 'Cantidad Total' },
+  { id: 'totalGrams', label: 'Gramos Totales' },
+  { id: 'documentType', label: 'Tipo Documento' },
+  { id: 'statusId', label: 'ID Estado' },
+  { id: 'statusName', label: 'Estado' },
+  { id: 'category', label: 'Categoría' },
 ];
+
 
 export const defaultFormValues: FormModel = {
   materialType: emptyOption,
