@@ -17,7 +17,7 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllStatus());
 
     await act(async () => {
-      await result.current.call();
+      await result.current.call({ tableId: 14 }); 
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
@@ -32,7 +32,7 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllStatus());
 
     await act(async () => {
-      await result.current.call();
+      await result.current.call({ tableId: 14 });
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
