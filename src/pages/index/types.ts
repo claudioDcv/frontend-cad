@@ -1,11 +1,15 @@
 import { Option } from '../../types';
 
-export interface FormModel {
+export interface ResolutionFormModel {
   materialType: Option;
   status: Option;
   investment: Option;
   location: Option;
   dateRange: [Date, Date];
+}
+
+export interface PackingListFormModel {
+  status: Option;
 }
 
 export type ResolutionModel = {
@@ -32,4 +36,16 @@ export type PropsResolution = {
   stateId?: number;
   startDate?: string;
   endDate?: string;
+};
+
+export type PropsPackingList = {
+  page: number;
+  size?: number;
+  sort?: string;
+  startDate?: string;
+  endDate?: string;
+  originCcId?: number;
+  destinyCcId?: number;
+  categoryId?: number;
+  statusId?: number;
 };

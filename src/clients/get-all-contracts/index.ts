@@ -2,29 +2,23 @@ import { useCallback, useState } from 'react';
 import { FetchStatus } from '../../utils';
 import client from './client';
 import { remap } from './utils';
-import { ResolutionPaginated } from './types';
-import { PropsResolution } from './types';
+import { ContractPaginated, PropsContract } from './types';
 
-const useGetAllResolutions = () => {
+const useGetAllContracts = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<ResolutionPaginated>({
-    resolutions: [],
+  const [data, setData] = useState<ContractPaginated>({
+    contracts: [],
     meta: { page: 0, count: 0 },
   });
   const [error, setError] = useState<string | null>(null);
-  const [lastProps, setLastProps] = useState<PropsResolution | null>(null);
+  const [lastProps, setLastProps] = useState<PropsContract | null>(null);
 
   const call = useCallback(
-    async (props: PropsResolution) => {
+    async (props: PropsContract) => {
       const isSameFilter =
         lastProps &&
         lastProps.page === props.page &&
-        lastProps.investmentId === props.investmentId &&
-        lastProps.locationId === props.locationId &&
-        lastProps.categoryId === props.categoryId &&
-        lastProps.stateId === props.stateId &&
-        lastProps.startDate === props.startDate &&
-        lastProps.endDate === props.endDate;
+        lastProps.resolutionId === props.resolutionId;
 
       if (status === FetchStatus.LOADING || isSameFilter) {
         setStatus(FetchStatus.SUCCESS);
@@ -51,4 +45,4 @@ const useGetAllResolutions = () => {
   return { status, data, error, call };
 };
 
-export default useGetAllResolutions;
+export default useGetAllContracts;

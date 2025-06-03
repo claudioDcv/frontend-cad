@@ -1,5 +1,5 @@
 import { API_BASE } from '../../conf/http';
-import { PropsResolution } from '../types';
+import { PropsResolution } from './types';
 import { getHeader } from '../utils';
 import { PageResponse } from './types';
 

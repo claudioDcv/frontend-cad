@@ -1,4 +1,5 @@
 export const STATUS_RESOLUTION = 14;
+export const STATUS_PACKING_LIST = 32;
 
 export const toDay = new Date();
 export const toEndMonth = new Date(toDay.getFullYear(), toDay.getMonth() + 1, 0);

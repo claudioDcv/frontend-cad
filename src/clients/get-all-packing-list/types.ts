@@ -1,15 +1,17 @@
-export type Resolution = {
-  resolutionId: number;
-  resolutionNumber: number;
-  resolutionBarcode: string;
-  dispatchGuideNumber: number;
+export type PackingList = {
+  packinglistId: number;
+  barcode: string;
+  dispatchNumber: string;
   investmentName: string;
-  branchName: string;
-  closureDate: string;
-  contractQuantity: number;
-  jewelTotalCount: number;
-  categoryName: string;
-  stateName: string;
+  originBranch: string;
+  destinyBranch: string;
+  creationDate: string;
+  totalQuantity: number;
+  totalGrams: number;
+  documentType: string;
+  statusId: number;
+  statusName: string;
+  category: string;
 };
 
 type Pageable = {
@@ -32,7 +34,7 @@ type Sort = {
 };
 
 export type PageResponse = {
-  content: Resolution[];
+  content: PackingList[];
   empty: boolean;
   first: boolean;
   last: boolean;
@@ -45,22 +47,22 @@ export type PageResponse = {
   totalPages: number;
 };
 
-export type ResolutionPaginated = {
-  resolutions: Resolution[];
+export type PropsPackingList = {
+  page: number;
+  size?: number;
+  sort?: string;
+  startDate?: string;
+  endDate?: string;
+  originCcId?: number;
+  destinyCcId?: number;
+  categoryId?: number;
+  statusId?: string;
+};
+
+export type PackingListPaginated = {
+  packingList: PackingList[];
   meta: {
     page: number;
     count: number;
   };
-};
-
-export type PropsResolution = {
-  page: number;
-  size?: number;
-  sort?: string;
-  investmentId?: number;
-  locationId?: number;
-  categoryId?: number;
-  stateId?: number;
-  startDate?: string;
-  endDate?: string;
 };
