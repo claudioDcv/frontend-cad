@@ -116,6 +116,18 @@
       "distributionProcess": "Proceso de Distribución"
     }
   },
+  "resolution": {
+    "resolutionNumber": "N° Resolución",
+    "barcode": "Código de Barras",
+    "dispatchGuide": "Guía Despacho",
+    "investment": "Inversión",
+    "location": "Sucursal",
+    "closeDate": "Fecha de Cierre",
+    "contractCount": "Cantidad Contratada",
+    "totalJewels": "Joyas Totales",
+    "category": "Categoría",
+    "status": "Estado"
+  },
   "common": {
     "modals": "Modales",
     "links": "Enlaces",
@@ -137,6 +149,9 @@
     "location": "Sucursal",
     "resolutions": "Resoluciones",
     "packingList": "Packing List",
-    "noData": "No hay datos"
+    "noData": "No hay datos",
+    "actions": "Acciones",
+    "viewContracts": "Ver Contratos",
+    "error": "Error"
   }
 }

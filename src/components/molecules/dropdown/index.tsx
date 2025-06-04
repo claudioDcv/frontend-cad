@@ -41,7 +41,6 @@ const Dropdown: React.FC<DropdownProps> = ({
         value={value?.value}
         label={label}
         onChange={handleChange}
-        displayEmpty
         disabled={disabled}
       >
         {options.map((option) => (

@@ -57,10 +57,10 @@ export type PropsResolution = {
   page: number;
   size?: number;
   sort?: string;
-  investmentId?: number;
-  locationId?: number;
-  categoryId?: number;
-  stateId?: number;
+  investmentId?: string;
+  locationId?: string;
+  categoryId?: string;
+  stateId?: string;
   startDate?: string;
   endDate?: string;
 };

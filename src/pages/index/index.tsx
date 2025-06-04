@@ -1,8 +1,16 @@
 import { useState } from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import {
+  Box,
+  Link,
+  ListItemButton,
+  ListItemText,
+  Tab,
+  Tabs,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import PackingList from './components/packing-list';
 import Resolutions from './components/resolutions';
+import routes from '../../conf/routes';
 
 const Index = () => {
   const { t } = useTranslation();
@@ -14,6 +22,15 @@ const Index = () => {
 
   return (
     <Box>
+      <Link
+        href={routes.contracts.link}
+        style={{ textDecoration: 'none', color: 'inherit' }}
+      >
+        <ListItemButton>
+          <ListItemText primary={routes.contracts.label} />
+        </ListItemButton>
+      </Link>
+
       <Tabs value={tabIndex} onChange={handleTabChange}>
         <Tab label={t('common.resolutions')} />
         <Tab label={t('common.packingList')} />

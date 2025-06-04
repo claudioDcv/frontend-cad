@@ -1,28 +1,22 @@
 import { API_BASE } from '../../conf/http';
-import { getHeader } from '../utils';
+import { getHeader, clearProp, clearAllProps } from '../utils';
 import { PageResponse, PropsPackingList } from './types';
 
 const client = async (props: PropsPackingList): Promise<PageResponse> => {
   const params: Record<string, string> = {
-    page: props.page.toString(),
+    page: clearProp(props.page),
+    size: clearProp(props.size),
+    sort: clearProp(props.sort),
+    startDate: clearProp(props.startDate),
+    endDate: clearProp(props.endDate),
+    originCcId: clearProp(props.originCcId),
+    destinyCcId: clearProp(props.destinyCcId),
+    categoryId: clearProp(props.categoryId),
+    statusId: clearProp(props.statusId),
   };
 
-  if (props.size !== undefined) params.size = props.size.toString();
-  if (props.sort) params.sort = props.sort;
-  if (props.startDate) params.startDate = props.startDate;
-  if (props.endDate) params.endDate = props.endDate;
-  if (props.originCcId !== undefined)
-    params.originCcId = props.originCcId.toString();
-  if (props.destinyCcId !== undefined)
-    params.destinyCcId = props.destinyCcId.toString();
-  if (props.categoryId !== undefined)
-    params.categoryId = props.categoryId.toString();
-  if (props.statusId !== undefined) params.statusId = props.statusId.toString();
-
-  const query = new URLSearchParams(params).toString();
+  const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/packinglist?${query}`;
-
-  console.log('URL:', url);
 
   const response = await fetch(url, {
     method: 'GET',

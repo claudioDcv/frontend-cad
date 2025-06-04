@@ -1,6 +1,8 @@
-import { PropsResolution } from './types';
+import { PropsResolution } from '../../clients/get-all-resolutions/types';
+import { emptyOption, toDay } from '../../utils';
+import { PackingListFormModel, ResolutionFormModel } from './types';
 
-export function ResolutionParams(
+export function resolutionParams(
   page: number,
   filters: {
     investment?: { value: string };
@@ -14,10 +16,10 @@ export function ResolutionParams(
 
   const params: PropsResolution = {
     page,
-    investmentId: investment?.value ? Number(investment.value) : undefined,
-    locationId: location?.value ? Number(location.value) : undefined,
-    categoryId: materialType?.value ? Number(materialType.value) : undefined,
-    stateId: status?.value ? Number(status.value) : undefined,
+    investmentId: investment?.value,
+    locationId: location?.value,
+    categoryId: materialType?.value,
+    stateId: status?.value,
     endDate: range[1].toISOString().split('.')[0],
   };
 
@@ -27,3 +29,20 @@ export function ResolutionParams(
 
   return params;
 }
+
+export const defaultResolutionsFormValues: ResolutionFormModel = {
+  materialType: emptyOption,
+  status: emptyOption,
+  investment: emptyOption,
+  location: emptyOption,
+  dateRange: [toDay, toDay],
+};
+
+export const defaultPackingListFormValues: PackingListFormModel = {
+  status: emptyOption,
+};
+
+export const addOptionAll = (
+  options: Array<{ label: string; value: string }>,
+  allOption: { label: string; value: string } = emptyOption
+) => [allOption, ...options];

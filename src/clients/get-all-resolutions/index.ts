@@ -14,6 +14,11 @@ const useGetAllResolutions = () => {
   const [error, setError] = useState<string | null>(null);
   const [lastProps, setLastProps] = useState<PropsResolution | null>(null);
 
+  const onResetError = () => {
+    setData({ resolutions: [], meta: { page: 0, count: 0 } });
+    setError(null);
+  }
+
   const call = useCallback(
     async (props: PropsResolution) => {
       const isSameFilter =
@@ -25,6 +30,10 @@ const useGetAllResolutions = () => {
         lastProps.stateId === props.stateId &&
         lastProps.startDate === props.startDate &&
         lastProps.endDate === props.endDate;
+
+      if (status === FetchStatus.ERROR) {
+        return;
+      }
 
       if (status === FetchStatus.LOADING || isSameFilter) {
         setStatus(FetchStatus.SUCCESS);
@@ -41,14 +50,14 @@ const useGetAllResolutions = () => {
         setStatus(FetchStatus.SUCCESS);
         setLastProps(props);
       } catch (err) {
-        setError((err as Error).message);
+        setError((err as Error).message || 'An error occurred while fetching resolutions');
         setStatus(FetchStatus.ERROR);
       }
     },
     [lastProps, status]
   );
 
-  return { status, data, error, call };
+  return { status, data, error, call, onResetError };
 };
 
 export default useGetAllResolutions;

@@ -6,7 +6,7 @@ import { STATUS_PACKING_LIST } from '../../../../utils';
 import { Dropdown, Pagination, Table } from '../../../../components';
 import { useGetAllPackingList, useGetAllStatus } from '../../../../clients';
 import { PackingListFormModel } from '../../types';
-import { defaultPackingListFormValues } from '../../index.config';
+import { defaultPackingListFormValues } from '../../utils';
 
 const PackingList = () => {
   const { control, watch } = useForm<PackingListFormModel>({

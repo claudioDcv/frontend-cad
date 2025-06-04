@@ -10,6 +10,7 @@ const useGetAllMaterialTypes = () => {
   const [error, setError] = useState<string | null>(null);
 
   const call = useCallback(async () => {
+    
     setStatus(FetchStatus.LOADING);
     try {
       if (status === FetchStatus.LOADING || status === FetchStatus.SUCCESS || data.length) {

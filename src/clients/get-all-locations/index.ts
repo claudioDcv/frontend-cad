@@ -10,18 +10,34 @@ const useGetAllLocations = () => {
   const [data, setData] = useState<Option[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const call = useCallback(async (props: Props) => {
-    setStatus(FetchStatus.LOADING);
-    try {
-      const result = await client(props);
-      const model = remap(result);
-      setData(model);
-      setStatus(FetchStatus.SUCCESS);
-    } catch (err) {
-      setError((err as Error).message);
-      setStatus(FetchStatus.ERROR);
-    }
-  }, []);
+  const call = useCallback(
+    async (props: Props) => {
+      if (status === FetchStatus.ERROR) {
+        return;
+      }
+
+      if (status === FetchStatus.LOADING) {
+        setStatus(FetchStatus.SUCCESS);
+        setError(null);
+        return;
+      }
+      
+      setStatus(FetchStatus.LOADING);
+      try {
+        const result = await client(props);
+        const model = remap(result);
+        setData(model);
+        setStatus(FetchStatus.SUCCESS);
+      } catch (err) {
+        setError(
+          (err as Error).message ||
+            'An error occurred while fetching resolutions'
+        );
+        setStatus(FetchStatus.ERROR);
+      }
+    },
+    [status]
+  );
 
   const clearData = () => {
     setData([]);
