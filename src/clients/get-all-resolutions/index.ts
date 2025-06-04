@@ -17,7 +17,7 @@ const useGetAllResolutions = () => {
   const onResetError = () => {
     setData({ resolutions: [], meta: { page: 0, count: 0 } });
     setError(null);
-  }
+  };
 
   const call = useCallback(
     async (props: PropsResolution) => {
@@ -50,7 +50,10 @@ const useGetAllResolutions = () => {
         setStatus(FetchStatus.SUCCESS);
         setLastProps(props);
       } catch (err) {
-        setError((err as Error).message || 'An error occurred while fetching resolutions');
+        setError(
+          (err as Error).message ||
+            'An error occurred while fetching resolutions'
+        );
         setStatus(FetchStatus.ERROR);
       }
     },

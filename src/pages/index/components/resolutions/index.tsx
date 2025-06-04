@@ -34,6 +34,14 @@ const Resolutions = () => {
   const { t } = useTranslation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
   const { investment, location, materialType, status } = watch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filters, setFilters] = useState({
+    investment,
+    location,
+    materialType,
+    status,
+    range,
+  });
 
   const getAllResolutions = useGetAllResolutions();
   const getAllStatus = useGetAllStatus();
@@ -42,17 +50,11 @@ const Resolutions = () => {
   const getAllInvestments = useGetAllInvestments();
 
   const fetchResolutions = useCallback(
-    (page: number = 1) => {
-      const params = resolutionParams(page, {
-        investment,
-        location,
-        materialType,
-        status,
-        range,
-      });
+    (page: number = 0) => {
+      const params = resolutionParams(page, filters);
       getAllResolutions.call(params);
     },
-    [investment, location, materialType, status, range, getAllResolutions]
+    [filters, getAllResolutions]
   );
 
   const handleInvestmentChange =
@@ -74,7 +76,7 @@ const Resolutions = () => {
 
   const handleClear = () => {
     reset(defaultResolutionsFormValues);
-    setRange([new Date(), new Date()]);
+    setRange([defaultStartDate, new Date()]);
     getAllLocations.clearData();
     getAllInvestments.clearData();
   };
@@ -87,17 +89,27 @@ const Resolutions = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      fetchResolutions(1);
+      setFilters({
+        investment,
+        location,
+        materialType,
+        status,
+        range,
+      });
+      setCurrentPage(0);
     }, 200);
-
     return () => clearTimeout(timeout);
-  }, [investment, location, materialType, status, range, fetchResolutions]);
+  }, [investment, location, materialType, status, range]);
+
+  useEffect(() => {
+    fetchResolutions(currentPage);
+  }, [filters, currentPage, fetchResolutions]);
 
   const handleChangePage = (
     _event: React.ChangeEvent<unknown>,
     value: number
   ) => {
-    fetchResolutions(value);
+    setCurrentPage(value - 1);
   };
 
   return (
@@ -206,7 +218,7 @@ const Resolutions = () => {
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
             count={getAllResolutions.data?.meta?.count || 0}
-            page={getAllResolutions.data?.meta?.page || 1}
+            page={currentPage + 1}
             onChange={handleChangePage}
           />
         </Box>

@@ -11,30 +11,38 @@ const useGetAllStatus = () => {
   const [error, setError] = useState<string | null>(null);
   const [lastProps, setLastProps] = useState<PropsStatus | null>(null);
 
-  const call = useCallback(async (props: PropsStatus) => {
-    const isSameFilter =
-      lastProps &&
-      lastProps.tableId === props.tableId;
+  const call = useCallback(
+    async (props: PropsStatus) => {
+      const isSameFilter = lastProps && lastProps.tableId === props.tableId;
 
-    if (status === FetchStatus.LOADING || isSameFilter) {
-      setStatus(FetchStatus.SUCCESS);
-      setError(null);
-      return;
-    }
+      if (status === FetchStatus.ERROR) {
+        return;
+      }
 
-    setStatus(FetchStatus.LOADING);
+      if (status === FetchStatus.LOADING || isSameFilter) {
+        setStatus(FetchStatus.SUCCESS);
+        setError(null);
+        return;
+      }
 
-    try {
-      const result = await client(props);
-      const model = remap(result);
-      setData(model);
-      setStatus(FetchStatus.SUCCESS);
-      setLastProps(props);
-    } catch (err) {
-      setError((err as Error).message);
-      setStatus(FetchStatus.ERROR);
-    }
-  }, [lastProps, status]);
+      setStatus(FetchStatus.LOADING);
+
+      try {
+        const result = await client(props);
+        const model = remap(result);
+        setData(model);
+        setStatus(FetchStatus.SUCCESS);
+        setLastProps(props);
+      } catch (err) {
+        setError(
+          (err as Error).message ||
+            'An error occurred while fetching resolutions'
+        );
+        setStatus(FetchStatus.ERROR);
+      }
+    },
+    [lastProps, status]
+  );
 
   return { status, data, error, call };
 };

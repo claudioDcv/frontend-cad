@@ -4,15 +4,14 @@
     "subtitle": "Sistema de Gestión de Inventario"
   },
   "admin": {
-    "documents": {
-      "title": "Administrador - Documentos"
-    },
     "dashboard": {
       "title": "Panel de Administrador",
       "branchDetails": "Ver Detalle Sucursal",
       "branchListButton": "Lista Sucursales",
       "movements": "Ver Movimientos",
       "inventory": "Ver Inventario",
+      "inventoryDelivery": "Proceso de Entrega de Inventario",
+      "distributionProcess": "Proceso de Distribución",
       "scrapInputTitle": "Ingreso de Material a Scrap",
       "scrapInput": "Ingreso",
       "scrapInputLabel": "Inventario",
@@ -22,20 +21,21 @@
       "scrapMovementTitle": "Movimiento de Material",
       "scrapMovement": "Movimiento",
       "scrapMovementLabel": "Material",
-      "inventoryDelivery": "Proceso de Entrega de Inventario",
-      "distributionProcess": "Proceso de Distribución",
       "branchList": {
         "title": "Lista de Sucursales"
       }
     },
+    "documents": {
+      "title": "Administrador - Documentos"
+    },
     "document": {
       "title": "Administrador - Detalle del Documento",
-      "notificationAprove": "La solicitud ha sido enviada con éxito",
       "notificationAproveTitle": "Confirmación de Aprobación",
       "notificationAproveText": "¿Está seguro que desea aprobar la cuenta por cobrar?",
-      "notificationReject": "La solicitud ha sido rechazada con éxito",
+      "notificationAprove": "La solicitud ha sido enviada con éxito",
       "notificationRejectTitle": "Confirmación de Rechazo",
-      "notificationRejectText": "¿Está seguro que desea rechazar la cuenta por cobrar?"
+      "notificationRejectText": "¿Está seguro que desea rechazar la cuenta por cobrar?",
+      "notificationReject": "La solicitud ha sido rechazada con éxito"
     }
   },
   "zonal": {
@@ -62,6 +62,23 @@
     }
   },
   "operator": {
+    "dashboard": {
+      "title": "Panel de Operador",
+      "branchDetails": "Ver Detalle Sucursal",
+      "movements": "Ver Movimientos",
+      "inventory": "Ver Inventario",
+      "inventoryDelivery": "Proceso de Entrega de Inventario",
+      "distributionProcess": "Proceso de Distribución",
+      "scrapInputTitle": "Ingreso de Material a Scrap",
+      "scrapInput": "Ingreso",
+      "scrapInputLabel": "Inventario",
+      "scrapOutputTitle": "Egreso de Material a Scrap",
+      "scrapOutput": "Egreso",
+      "scrapOutputLabel": "Cantidad",
+      "scrapMovementTitle": "Movimiento de Material",
+      "scrapMovement": "Movimiento",
+      "scrapMovementLabel": "Material"
+    },
     "documents": {
       "title": "Operador - Documentos",
       "massUpload": "Cargar Masiva",
@@ -97,23 +114,6 @@
       "detailCPCLabel": "Código Detalle",
       "confirmCPCTitle": "Confirmacion de Cuenta por Cobrar",
       "confirmCPCText": "¿Esta seguro que desea enviar el documento?"
-    },
-    "dashboard": {
-      "title": "Panel de Operador",
-      "branchDetails": "Ver Detalle Sucursal",
-      "movements": "Ver Movimientos",
-      "inventory": "Ver Inventario",
-      "scrapInputTitle": "Ingreso de Material a Scrap",
-      "scrapInput": "Ingreso",
-      "scrapInputLabel": "Inventario",
-      "scrapOutputTitle": "Egreso de Material a Scrap",
-      "scrapOutput": "Egreso",
-      "scrapOutputLabel": "Cantidad",
-      "scrapMovementTitle": "Movimiento de Material",
-      "scrapMovement": "Movimiento",
-      "scrapMovementLabel": "Material",
-      "inventoryDelivery": "Proceso de Entrega de Inventario",
-      "distributionProcess": "Proceso de Distribución"
     }
   },
   "resolution": {
@@ -139,6 +139,8 @@
     "confirmationNo": "No",
     "successTitle": "Éxito",
     "successText": "Enviado con éxito.",
+    "error": "Error",
+    "unknownError": "Error desconocido",
     "aprove": "Aprobar",
     "reject": "Rechazar",
     "checkBoxLabel": "Verficiar",
@@ -151,7 +153,6 @@
     "packingList": "Packing List",
     "noData": "No hay datos",
     "actions": "Acciones",
-    "viewContracts": "Ver Contratos",
-    "error": "Error"
+    "viewContracts": "Ver Contratos"
   }
 }

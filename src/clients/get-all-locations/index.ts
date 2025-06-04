@@ -21,8 +21,9 @@ const useGetAllLocations = () => {
         setError(null);
         return;
       }
-      
+
       setStatus(FetchStatus.LOADING);
+
       try {
         const result = await client(props);
         const model = remap(result);

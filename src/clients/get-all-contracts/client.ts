@@ -17,7 +17,6 @@ const client = async (props: PropsContract): Promise<PageResponse> => {
   console.log('URL:', url);
 
   const response = await fetch(url, {
-    method: 'GET',
     headers: getHeader(),
     credentials: 'include',
   });

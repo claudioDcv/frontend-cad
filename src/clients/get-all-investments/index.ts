@@ -10,17 +10,20 @@ const useGetAllInvestments = () => {
   const [error, setError] = useState<string | null>(null);
 
   const call = useCallback(async () => {
+    if (status === FetchStatus.ERROR) {
+      return;
+    }
+    if (
+      status === FetchStatus.LOADING ||
+      status === FetchStatus.SUCCESS ||
+      data.length
+    ) {
+      setStatus(FetchStatus.SUCCESS);
+      setError(null);
+      return;
+    }
     setStatus(FetchStatus.LOADING);
     try {
-      if (
-        status === FetchStatus.LOADING ||
-        status === FetchStatus.SUCCESS ||
-        data.length
-      ) {
-        setStatus(FetchStatus.SUCCESS);
-        setError(null);
-        return;
-      }
       const result = await client();
       const model = remap(result);
       setData(model);
