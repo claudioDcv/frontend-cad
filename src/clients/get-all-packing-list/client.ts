@@ -3,7 +3,7 @@ import { getHeader, clearProp, clearAllProps } from '../utils';
 import { PageResponse, PropsPackingList } from './types';
 
 const client = async (props: PropsPackingList): Promise<PageResponse> => {
-  const params: Record<string, string> = {
+  const params = {
     page: clearProp(props.page),
     size: clearProp(props.size),
     sort: clearProp(props.sort),
@@ -19,13 +19,12 @@ const client = async (props: PropsPackingList): Promise<PageResponse> => {
   const url = `${API_BASE}/packinglist?${query}`;
 
   const response = await fetch(url, {
-    method: 'GET',
     headers: getHeader(),
     credentials: 'include',
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error(response.statusText);
   }
 
   return response.json();

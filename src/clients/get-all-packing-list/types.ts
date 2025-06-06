@@ -1,3 +1,5 @@
+import { Pageable, Sort } from "../types";
+
 export type PackingList = {
   packinglistId: number;
   barcode: string;
@@ -12,26 +14,7 @@ export type PackingList = {
   statusId: number;
   statusName: string;
   category: string;
-};
-
-type Pageable = {
-  pageNumber: number;
-  pageSize: number;
-  sort: {
-    sorted: boolean;
-    empty: boolean;
-    unsorted: boolean;
-  };
-  offset: number;
-  paged?: boolean;
-  unpaged?: boolean;
-};
-
-type Sort = {
-  sorted: boolean;
-  empty: boolean;
-  unsorted: boolean;
-};
+}; 
 
 export type PageResponse = {
   content: PackingList[];

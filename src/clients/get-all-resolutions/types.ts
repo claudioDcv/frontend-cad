@@ -1,3 +1,5 @@
+import { Pageable, Sort } from "../types";
+
 export type Resolution = {
   resolutionId: number;
   resolutionNumber: number;
@@ -10,25 +12,6 @@ export type Resolution = {
   jewelTotalCount: number;
   categoryName: string;
   stateName: string;
-};
-
-type Pageable = {
-  pageNumber: number;
-  pageSize: number;
-  sort: {
-    sorted: boolean;
-    empty: boolean;
-    unsorted: boolean;
-  };
-  offset: number;
-  paged?: boolean;
-  unpaged?: boolean;
-};
-
-type Sort = {
-  sorted: boolean;
-  empty: boolean;
-  unsorted: boolean;
 };
 
 export type PageResponse = {

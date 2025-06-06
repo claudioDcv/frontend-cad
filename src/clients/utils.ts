@@ -1,4 +1,5 @@
 import { getToken } from '../hooks/useJWTNotification';
+import { PaginationMeta } from './types';
 
 export const getHeader = () => {
   const key = getToken();
@@ -24,3 +25,12 @@ export const clearAllProps = (props: Record<string, string>) => {
   });
   return clearedProps;
 };
+
+export function mapMeta<T extends { number: number; totalPages: number }>(
+  data: T
+): PaginationMeta {
+  return {
+    page: data.number,
+    count: data.totalPages,
+  };
+}

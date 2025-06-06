@@ -3,7 +3,7 @@ import { getHeader, clearProp, clearAllProps } from '../utils';
 import { Location, Props } from './types';
 
 const client = async (props: Props): Promise<Location[]> => {
-  const params: Record<string, string> = {
+  const params = {
     investmentId: clearProp(props.investmentId),
     status: clearProp(props.status),
   };

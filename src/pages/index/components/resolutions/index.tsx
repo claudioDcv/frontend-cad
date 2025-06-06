@@ -22,7 +22,7 @@ import {
   defaultResolutionsFormValues,
   resolutionParams,
 } from '../../utils';
-import { defaultStartDate, STATUS_RESOLUTION, toDay } from '../../../../utils';
+import { defaultStartDate, FIRST_PAGE, STATUS_RESOLUTION, toDay } from '../../../../utils';
 import Notification from '../../../../components/molecules/notification';
 
 const Resolutions = () => {
@@ -33,7 +33,7 @@ const Resolutions = () => {
   const { t } = useTranslation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
   const { investment, location, materialType, status } = watch();
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
   const [filters, setFilters] = useState({
     investment,
     location,
@@ -47,6 +47,19 @@ const Resolutions = () => {
   const getAllLocations = useGetAllLocations();
   const getAllMaterialType = useGetAllMaterialTypes();
   const getAllInvestments = useGetAllInvestments();
+
+  const materialTypeOptions = addOptionAll(getAllMaterialType.data);
+  const statusOptions = addOptionAll(getAllStatus.data);
+  const investmentOptions = addOptionAll(getAllInvestments.data);
+  const locationOptions = addOptionAll(getAllLocations.data);
+
+  const isMaterialTypeDisabled = getAllMaterialType.data.length === 0;
+  const isStatusDisabled = getAllStatus.data.length === 0;
+  const isInvestmentDisabled = getAllInvestments.data.length === 0;
+  const isLocationDisabled = getAllLocations.data.length === 0;
+
+  const resolutionRows = getAllResolutions.data?.resolutions || [];
+  const paginationCount = getAllResolutions.data?.meta?.count || 0;
 
   const fetchResolutions = useCallback(
     (page: number = 0) => {
@@ -129,9 +142,9 @@ const Resolutions = () => {
               render={({ field }) => (
                 <Dropdown
                   {...field}
-                  options={addOptionAll(getAllMaterialType.data)}
+                  options={materialTypeOptions}
                   label={t('common.materialType')}
-                  disabled={getAllMaterialType.data.length === 0}
+                  disabled={isMaterialTypeDisabled}
                 />
               )}
             />
@@ -142,9 +155,9 @@ const Resolutions = () => {
               render={({ field }) => (
                 <Dropdown
                   {...field}
-                  options={addOptionAll(getAllStatus.data)}
+                  options={statusOptions}
                   label={t('common.status')}
-                  disabled={getAllStatus.data.length === 0}
+                  disabled={isStatusDisabled}
                 />
               )}
             />
@@ -155,10 +168,10 @@ const Resolutions = () => {
               render={({ field }) => (
                 <Dropdown
                   {...field}
-                  options={addOptionAll(getAllInvestments.data)}
+                  options={investmentOptions}
                   label={t('common.investment')}
                   onChange={handleInvestmentChange(field.onChange)}
-                  disabled={getAllInvestments.data.length === 0}
+                  disabled={isInvestmentDisabled}
                 />
               )}
             />
@@ -169,9 +182,9 @@ const Resolutions = () => {
               render={({ field }) => (
                 <Dropdown
                   {...field}
-                  options={addOptionAll(getAllLocations.data)}
+                  options={locationOptions}
                   label={t('common.location')}
-                  disabled={getAllLocations.data.length === 0}
+                  disabled={isLocationDisabled}
                 />
               )}
             />
@@ -197,12 +210,12 @@ const Resolutions = () => {
             { id: 'categoryName', label: t('resolution.category') },
             { id: 'stateName', label: t('resolution.status') },
           ]}
-          rows={getAllResolutions.data?.resolutions || []}
+          rows={resolutionRows}
           messageVoidData={t('common.noData')}
         />
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
-            count={getAllResolutions.data?.meta?.count || 0}
+            count={paginationCount}
             page={currentPage + 1}
             onChange={handleChangePage}
           />

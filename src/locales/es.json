@@ -128,6 +128,22 @@
     "category": "Categoría",
     "status": "Estado"
   },
+
+  "packinglist": {
+    "packinglistId": "Paquete",
+    "barcode": "Código de Barras",
+    "dispatchNumber": "Guía de Despacho",
+    "investmentName": "Nombre Inversión",
+    "originBranch": "Sucursal Origen",
+    "destinyBranch": "Sucursal Destino",
+    "creationDate": "Fecha de Creación",
+    "totalQuantity": "Cantidad Total",
+    "totalGrams": "Gramos Totales",
+    "documentType": "Tipo Documento",
+    "statusId": "ID Estado",
+    "statusName": "Estado",
+    "category": "Categoría"
+  },
   "common": {
     "modals": "Modales",
     "links": "Enlaces",
@@ -153,6 +169,7 @@
     "packingList": "Packing List",
     "noData": "No hay datos",
     "actions": "Acciones",
-    "viewContracts": "Ver Contratos"
+    "viewContracts": "Ver Contratos",
+    "404Error": "Error 404 - Página no encontrada"
   }
 }
