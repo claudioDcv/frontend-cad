@@ -19,11 +19,17 @@ import {
 } from '../../../../components';
 import {
   addOptionAll,
-  defaultResolutionsFormValues,
-  resolutionParams,
+  isEmpty,
 } from '../../utils';
-import { defaultStartDate, emptyOption, FIRST_PAGE, STATUS_RESOLUTION, toDay } from '../../../../utils';
+import {
+  defaultStartDate,
+  emptyOption,
+  FIRST_PAGE,
+  STATUS_RESOLUTION,
+  toDay,
+} from '../../../../utils';
 import Notification from '../../../../components/molecules/notification';
+import { defaultResolutionsFormValues, resolutionParams } from './utils';
 
 const Resolutions = () => {
   const { control, reset, watch } = useForm<ResolutionFormModel>({
@@ -34,13 +40,6 @@ const Resolutions = () => {
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
   const { investment, location, materialType, status } = watch();
   const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
-  const [filters, setFilters] = useState({
-    investment,
-    location,
-    materialType,
-    status,
-    range,
-  });
 
   const getAllResolutions = useGetAllResolutions();
   const getAllStatus = useGetAllStatus();
@@ -53,27 +52,33 @@ const Resolutions = () => {
   const investmentOptions = addOptionAll(getAllInvestments.data);
   const locationOptions = addOptionAll(getAllLocations.data);
 
-  const isMaterialTypeDisabled = getAllMaterialType.data.length === 0;
-  const isStatusDisabled = getAllStatus.data.length === 0;
-  const isInvestmentDisabled = getAllInvestments.data.length === 0;
-  const isLocationDisabled = getAllLocations.data.length === 0;
+  const isMaterialTypeDisabled = isEmpty(getAllMaterialType.data);
+  const isStatusDisabled = isEmpty(getAllStatus.data);
+  const isInvestmentDisabled = isEmpty(getAllInvestments.data);
+  const isLocationDisabled = isEmpty(getAllLocations.data);
 
   const resolutionRows = getAllResolutions.data?.resolutions || [];
   const paginationCount = getAllResolutions.data?.meta?.count || 0;
 
   const fetchResolutions = useCallback(
     (page: number = 0) => {
+      const filters = {
+        investment,
+        location,
+        materialType,
+        status,
+        range,
+      };
       const params = resolutionParams(page, filters);
       getAllResolutions.call(params);
     },
-    [filters, getAllResolutions]
+    [investment, location, materialType, status, range, getAllResolutions]
   );
 
   const handleInvestmentChange =
     (onChange: (value: { value: string; label: string }) => void) =>
     (value: { value: string; label: string }) => {
       onChange(value);
-
       reset((prev) => ({
         ...prev,
         location: emptyOption,
@@ -100,22 +105,12 @@ const Resolutions = () => {
   }, [getAllInvestments, getAllMaterialType, getAllStatus]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setFilters({
-        investment,
-        location,
-        materialType,
-        status,
-        range,
-      });
-      setCurrentPage(0);
-    }, 200);
-    return () => clearTimeout(timeout);
+    setCurrentPage(0);
   }, [investment, location, materialType, status, range]);
 
   useEffect(() => {
     fetchResolutions(currentPage);
-  }, [filters, currentPage, fetchResolutions]);
+  }, [currentPage, fetchResolutions]);
 
   const handleChangePage = (
     _event: React.ChangeEvent<unknown>,
