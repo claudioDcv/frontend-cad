@@ -20,7 +20,11 @@ const client = async (props: Props): Promise<Location[]> => {
     throw new Error(response.statusText);
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new Error('Failed to parse JSON response');
+  }
 };
 
 export default client;

@@ -54,13 +54,16 @@ const Resolutions = () => {
 
   const [, navigate] = useLocation();
 
-  const fetchResolutions = useCallback(
-    (page: number = 0) => {
-      const params = resolutionParams(page, filters);
-      getAllResolutions.call(params);
-    },
-    [filters, getAllResolutions]
-  );
+  const fetchResolutions = useCallback(async (page: number = 0) => {
+    const params = resolutionParams(page, filters);
+  
+    try {
+      await getAllResolutions.call(params);
+    } catch (error) {
+      console.error('Error al obtener resoluciones:', error);
+    }
+  }, [filters, getAllResolutions]);
+  
 
   const handleInvestmentChange =
     (onChange: (value: { value: string; label: string }) => void) =>

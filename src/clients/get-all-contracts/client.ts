@@ -3,9 +3,7 @@ import { clearAllProps, clearProp, getHeader } from '../utils';
 import { PageResponse, PropsContract } from './types';
 
 const client = async (props: PropsContract): Promise<PageResponse> => {
-  const params: Record<string, string> = {
-    page: clearProp(props.page),
-  };
+  const params: Record<string, string> = {};
 
   params.resolutionId = clearProp(props.resolutionId);
 
@@ -23,7 +21,11 @@ const client = async (props: PropsContract): Promise<PageResponse> => {
     throw new Error(response.statusText);
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new Error('Failed to parse JSON response');
+  }
 };
 
 export default client;

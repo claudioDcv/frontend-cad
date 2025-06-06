@@ -8,13 +8,12 @@ const useGetAllContracts = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<ContractPaginated>({
     contracts: [],
-    meta: { page: 0, count: 0 },
   });
   const [error, setError] = useState<string | null>(null);
   const [lastProps, setLastProps] = useState<PropsContract | null>(null);
 
   const onResetError = () => {
-    setData({ contracts: [], meta: { page: 0, count: 0 } });
+    setData({ contracts: []});
     setError(null);
   };
 
@@ -22,7 +21,6 @@ const useGetAllContracts = () => {
     async (props: PropsContract) => {
       const isSameFilter =
         lastProps &&
-        lastProps.page === props.page &&
         lastProps.resolutionId === props.resolutionId;
 
       if (status === FetchStatus.ERROR) {

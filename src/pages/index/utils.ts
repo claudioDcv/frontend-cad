@@ -45,7 +45,6 @@ export const defaultResolutionsFormValues: ResolutionFormModel = {
 };
 
 export function contractParams(
-  page: number,
   filters: {
     resolutionId?: { value: string };
     clientRut?: string;
@@ -58,7 +57,6 @@ export function contractParams(
     filters;
 
   const params: PropsContract = {
-    page,
     resolutionId: resolutionId?.value,
     clientRut: clientRut || undefined,
     responsible,

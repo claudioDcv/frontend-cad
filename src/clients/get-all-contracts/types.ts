@@ -1,9 +1,6 @@
 import { Pageable, Sort } from "../types";
 
 export type PropsContract = {
-  page: number;
-  size?: number;
-  sort?: string;
   resolutionId?: string;
   clientRut?: string;
   responsible?: string;
@@ -27,10 +24,6 @@ export type Contract = {
 
 export type ContractPaginated = {
   contracts: Contract[];
-  meta: {
-    page: number;
-    count: number;
-  };
 };
 
 export type PageResponse = {

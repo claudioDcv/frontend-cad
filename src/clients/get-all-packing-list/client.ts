@@ -27,7 +27,11 @@ const client = async (props: PropsPackingList): Promise<PageResponse> => {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new Error('Failed to parse JSON response');
+  }
 };
 
 export default client;
