@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+//import { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { STATUS_PACKING_LIST } from '../../../../utils';
+//import { STATUS_PACKING_LIST } from '../../../../utils';
 import { Dropdown, Pagination, Table } from '../../../../components';
 import { useGetAllPackingList, useGetAllStatus } from '../../../../clients';
 import { PackingListFormModel } from '../../types';
@@ -18,7 +18,7 @@ const PackingList = () => {
 
   const getAllStatus = useGetAllStatus();
   const getAllPackingList = useGetAllPackingList();
-
+/*
   useEffect(() => {
     getAllStatus.call({ tableId: STATUS_PACKING_LIST });
   }, [getAllStatus]);
@@ -28,7 +28,7 @@ const PackingList = () => {
 
     getAllPackingList.call({ statusId: status.value, page: 1 });
   }, [status, getAllPackingList]);
-
+  */
   const handleChangePage = (
     _event: React.ChangeEvent<unknown>,
     value: number
@@ -37,6 +37,7 @@ const PackingList = () => {
 
     getAllPackingList.call({ statusId: status.value, page: value });
   };
+
 
   return (
     <Box>

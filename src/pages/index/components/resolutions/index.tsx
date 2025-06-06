@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Box, Button, Pagination } from '@mui/material';
+import { Box, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ResolutionFormModel, ResolutionModel } from '../../types';
+import { ResolutionFormModel } from '../../types';
 import {
   useGetAllInvestments,
   useGetAllLocations,
@@ -23,7 +23,6 @@ import {
   resolutionParams,
 } from '../../utils';
 import { defaultStartDate, STATUS_RESOLUTION, toDay } from '../../../../utils';
-import IconList from '../../../../components/molecules/icon';
 import Notification from '../../../../components/molecules/notification';
 
 const Resolutions = () => {
@@ -197,20 +196,6 @@ const Resolutions = () => {
             { id: 'totalJewels', label: t('resolution.totalJewels') },
             { id: 'categoryName', label: t('resolution.category') },
             { id: 'stateName', label: t('resolution.status') },
-            {
-              id: 'actions',
-              label: t('common.actions'),
-              render: (row: ResolutionModel) => (
-                <Button
-                  onClick={() =>
-                    console.log('Resolution ID:', row.resolutionId)
-                  }
-                >
-                  {t('common.viewContracts')}
-                  <IconList name="visualize" />
-                </Button>
-              ),
-            },
           ]}
           rows={getAllResolutions.data?.resolutions || []}
           messageVoidData={t('common.noData')}
