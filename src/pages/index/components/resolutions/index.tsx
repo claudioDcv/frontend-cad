@@ -22,7 +22,7 @@ import {
   defaultResolutionsFormValues,
   resolutionParams,
 } from '../../utils';
-import { defaultStartDate, FIRST_PAGE, STATUS_RESOLUTION, toDay } from '../../../../utils';
+import { defaultStartDate, emptyOption, FIRST_PAGE, STATUS_RESOLUTION, toDay } from '../../../../utils';
 import Notification from '../../../../components/molecules/notification';
 
 const Resolutions = () => {
@@ -76,7 +76,7 @@ const Resolutions = () => {
 
       reset((prev) => ({
         ...prev,
-        location: { value: 'all', label: 'TODOS' },
+        location: emptyOption,
       }));
 
       if (value.value) {

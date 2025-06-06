@@ -1,18 +1,24 @@
+import { useTranslation } from 'react-i18next';
+
 const prefix = import.meta.env.VITE_URL_PREFIX || '';
 
 const appendPrefix = (path: string) => {
-    return prefix + path;
+  return prefix + path;
 };
 
-const routes = {
+const useRoutes = () => {
+  const { t } = useTranslation();
+
+  return {
     index: {
-        link: appendPrefix('/'),
-        label: 'Home',
+      link: appendPrefix('/'),
+      label: t('routes.home'),
     },
     contracts: {
-        link: appendPrefix('/contract-detail/:id'),
-        label: 'Lista de Contratos',
+      link: appendPrefix('/contracts/:id'),
+      label: t('routes.contracts'),
     },
-}
+  };
+};
 
-export default routes;
+export default useRoutes;

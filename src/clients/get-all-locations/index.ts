@@ -4,8 +4,11 @@ import { Props } from './types';
 import client from './client';
 import { Option } from '../../types';
 import { remap } from './utils';
+import { useTranslation } from 'react-i18next';
 
 const useGetAllLocations = () => {
+  const { t } = useTranslation();
+
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<Option[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -31,13 +34,12 @@ const useGetAllLocations = () => {
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         setError(
-          (err as Error).message ||
-            'An error occurred while fetching resolutions'
+          (err as Error).message || t('error.genericHttpError')
         );
         setStatus(FetchStatus.ERROR);
       }
     },
-    [status]
+    [status, t]
   );
 
   const clearData = () => {

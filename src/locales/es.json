@@ -169,7 +169,14 @@
     "packingList": "Packing List",
     "noData": "No hay datos",
     "actions": "Acciones",
-    "viewContracts": "Ver Contratos",
-    "404Error": "Error 404 - Página no encontrada"
+    "viewContracts": "Ver Contratos"
+  },
+  "routes": {
+    "home": "Inicio",
+    "contracts": "Lista de Contratos"
+  },
+  "error": {
+    "404Error": "Error 404 - Página no encontrada",
+    "genericHttpError": "Error HTTP genérico"
   }
 }

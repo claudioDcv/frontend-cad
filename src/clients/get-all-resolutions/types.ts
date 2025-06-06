@@ -1,4 +1,5 @@
-import { Pageable, Sort } from "../types";
+import { Pageable, Sort } from '../types';
+import { Option } from '../../types';
 
 export type Resolution = {
   resolutionId: number;
@@ -46,4 +47,12 @@ export type PropsResolution = {
   stateId?: string;
   startDate?: string;
   endDate?: string;
+};
+
+export type ResolutionFilters = {
+  investment?: Option;
+  location?: Option;
+  materialType?: Option;
+  status?: Option;
+  range: [Date, Date];
 };

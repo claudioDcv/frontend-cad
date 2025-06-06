@@ -1,16 +1,11 @@
-import { PropsResolution } from '../../clients/get-all-resolutions/types';
+import { PropsResolution, ResolutionFilters } from '../../clients/get-all-resolutions/types';
 import { emptyOption, toDay } from '../../utils';
 import { PackingListFormModel, ResolutionFormModel } from './types';
+import { Option } from '../../types';
 
 export function resolutionParams(
   page: number,
-  filters: {
-    investment?: { value: string };
-    location?: { value: string };
-    materialType?: { value: string };
-    status?: { value: string };
-    range: [Date, Date];
-  }
+  filters: ResolutionFilters
 ): PropsResolution {
   const { investment, location, materialType, status, range } = filters;
 
@@ -43,6 +38,6 @@ export const defaultPackingListFormValues: PackingListFormModel = {
 };
 
 export const addOptionAll = (
-  options: Array<{ label: string; value: string }>,
-  allOption: { label: string; value: string } = emptyOption
+  options: Option[],
+  allOption: Option = emptyOption
 ) => [allOption, ...options];

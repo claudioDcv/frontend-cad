@@ -5,7 +5,7 @@ const NotFound = () => {
     
     return (
         <div>
-            <h1>{t('common.404Error')}</h1>
+            <h1>{t('error.404Error')}</h1>
         </div>
     );
 };

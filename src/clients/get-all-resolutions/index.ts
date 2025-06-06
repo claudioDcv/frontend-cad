@@ -4,8 +4,11 @@ import client from './client';
 import { remap } from './utils';
 import { ResolutionPaginated } from './types';
 import { PropsResolution } from './types';
+import { useTranslation } from 'react-i18next';
 
 const useGetAllResolutions = () => {
+  const { t } = useTranslation();
+  
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<ResolutionPaginated>({
     resolutions: [],
@@ -51,13 +54,12 @@ const useGetAllResolutions = () => {
         setLastProps(props);
       } catch (err) {
         setError(
-          (err as Error).message ||
-            'An error occurred while fetching resolutions'
+          (err as Error).message || t('error.genericHttpError')
         );
         setStatus(FetchStatus.ERROR);
       }
     },
-    [lastProps, status]
+    [lastProps, status, t]
   );
 
   return { status, data, error, call, onResetError };
