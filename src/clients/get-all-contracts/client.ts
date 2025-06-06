@@ -1,17 +1,15 @@
 import { API_BASE } from '../../conf/http';
-import { getHeader } from '../utils';
+import { clearAllProps, clearProp, getHeader } from '../utils';
 import { PageResponse, PropsContract } from './types';
 
 const client = async (props: PropsContract): Promise<PageResponse> => {
   const params: Record<string, string> = {
-    page: props.page.toString(),
+    page: clearProp(props.page),
   };
 
-  if (props.resolutionId) {
-    params.resolutionId = props.resolutionId.toString();
-  }
+  params.resolutionId = clearProp(props.resolutionId);
 
-  const query = new URLSearchParams(params).toString();
+  const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/contracts?${query}`;
 
   console.log('URL:', url);
@@ -22,7 +20,7 @@ const client = async (props: PropsContract): Promise<PageResponse> => {
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error(response.statusText);
   }
 
   return response.json();

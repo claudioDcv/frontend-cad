@@ -2,8 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'wouter';
 
-import { ResolutionFormModel, ResolutionModel } from '../../types';
+import { ResolutionFormModel } from '../../types';
 import {
   useGetAllInvestments,
   useGetAllLocations,
@@ -25,6 +26,7 @@ import {
 import { defaultStartDate, STATUS_RESOLUTION, toDay } from '../../../../utils';
 import IconList from '../../../../components/molecules/icon';
 import Notification from '../../../../components/molecules/notification';
+import { Resolution } from '../../../../clients/get-all-resolutions/types';
 
 const Resolutions = () => {
   const { control, reset, watch } = useForm<ResolutionFormModel>({
@@ -34,7 +36,7 @@ const Resolutions = () => {
   const { t } = useTranslation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
   const { investment, location, materialType, status } = watch();
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [filters, setFilters] = useState({
     investment,
     location,
@@ -48,6 +50,8 @@ const Resolutions = () => {
   const getAllLocations = useGetAllLocations();
   const getAllMaterialType = useGetAllMaterialTypes();
   const getAllInvestments = useGetAllInvestments();
+
+  const [, navigate] = useLocation();
 
   const fetchResolutions = useCallback(
     (page: number = 0) => {
@@ -81,6 +85,17 @@ const Resolutions = () => {
     getAllInvestments.clearData();
   };
 
+  const handleChangePage = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCurrentPage(value - 1);
+  };
+
+  const handleViewContracts = (resolutionId: string) => {
+    navigate(`/contracts/${resolutionId}`);
+  }
+
   useEffect(() => {
     getAllMaterialType.call();
     getAllInvestments.call();
@@ -104,13 +119,6 @@ const Resolutions = () => {
   useEffect(() => {
     fetchResolutions(currentPage);
   }, [filters, currentPage, fetchResolutions]);
-
-  const handleChangePage = (
-    _event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value - 1);
-  };
 
   return (
     <div>
@@ -149,7 +157,6 @@ const Resolutions = () => {
                 />
               )}
             />
-
             <Controller
               name="investment"
               control={control}
@@ -163,7 +170,6 @@ const Resolutions = () => {
                 />
               )}
             />
-
             <Controller
               name="location"
               control={control}
@@ -200,12 +206,8 @@ const Resolutions = () => {
             {
               id: 'actions',
               label: t('common.actions'),
-              render: (row: ResolutionModel) => (
-                <Button
-                  onClick={() =>
-                    console.log('Resolution ID:', row.resolutionId)
-                  }
-                >
+              render: (row: Resolution) => (
+                <Button onClick={handleViewContracts.bind(null, row.resolutionId.toString())}>
                   {t('common.viewContracts')}
                   <IconList name="visualize" />
                 </Button>

@@ -5,7 +5,7 @@ export const remap = (data: PageResponse): ContractPaginated => {
         contracts: data.content,
         meta: {
             page: data.number,
-            count: data.totalPages - 1,
+            count: data.totalPages,
         },
   };
 }

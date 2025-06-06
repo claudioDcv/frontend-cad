@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 import { FetchStatus } from '../../utils';
 import client from './client';
 import { remap } from './utils';
-import { ResolutionPaginated } from './types';
-import { PropsResolution } from './types';
+import { PropsResolution, ResolutionPaginated } from './types';
+
 
 const useGetAllResolutions = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);

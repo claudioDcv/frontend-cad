@@ -1,6 +1,12 @@
+import { PropsContract } from '../../clients/get-all-contracts/types';
 import { PropsResolution } from '../../clients/get-all-resolutions/types';
 import { emptyOption, toDay } from '../../utils';
-import { PackingListFormModel, ResolutionFormModel } from './types';
+import { ContractFormModel, PackingListFormModel, ResolutionFormModel } from './types';
+
+export const addOptionAll = (
+  options: Array<{ label: string; value: string }>,
+  allOption: { label: string; value: string } = emptyOption
+) => [allOption, ...options];
 
 export function resolutionParams(
   page: number,
@@ -38,11 +44,39 @@ export const defaultResolutionsFormValues: ResolutionFormModel = {
   dateRange: [toDay, toDay],
 };
 
+export function contractParams(
+  page: number,
+  filters: {
+    resolutionId?: { value: string };
+    clientRut?: string;
+    responsible?: string;
+    expirationBefore?: Date;
+    contractId?: { value: string };
+  }
+): PropsContract {
+  const { resolutionId, clientRut, responsible, expirationBefore, contractId } =
+    filters;
+
+  const params: PropsContract = {
+    page,
+    resolutionId: resolutionId?.value,
+    clientRut: clientRut || undefined,
+    responsible,
+    expirationBefore: expirationBefore?.toISOString().split('T')[0],
+    contractId: contractId?.value,
+  };
+
+  return params;
+}
+
+export const defaultContractsFormValues: ContractFormModel = {
+  resolutionId: emptyOption,
+  clientRut: '',
+  responsible: '',
+  expirationBefore: toDay,
+  contractId: emptyOption,
+};
+
 export const defaultPackingListFormValues: PackingListFormModel = {
   status: emptyOption,
 };
-
-export const addOptionAll = (
-  options: Array<{ label: string; value: string }>,
-  allOption: { label: string; value: string } = emptyOption
-) => [allOption, ...options];

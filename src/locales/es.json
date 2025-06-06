@@ -128,6 +128,20 @@
     "category": "Categoría",
     "status": "Estado"
   },
+  "contracts": {
+    "contractId": "ID Contrato",
+    "contractNumber": "Número de Contrato",
+    "securityBagCode": "Código de Bolsa de Seguridad",
+    "jewelQuantity": "Cantidad de Joyas",
+    "totalContractValue": "Valor Total del Contrato",
+    "averagePurchaseValue": "Valor Promedio de Compra",
+    "totalWeight": "Peso Total",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Término",
+    "responsibleName": "Responsable",
+    "clientName": "Nombre del Cliente",
+    "clientRut": "RUT del Cliente"
+  },
   "common": {
     "modals": "Modales",
     "links": "Enlaces",

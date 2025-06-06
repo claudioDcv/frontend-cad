@@ -10,7 +10,7 @@ const routes = {
         label: 'Home',
     },
     contracts: {
-        link: appendPrefix('/contract-detail/:id'),
+        link: appendPrefix('/contracts/:id'),
         label: 'Lista de Contratos',
     },
 }

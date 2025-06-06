@@ -1,11 +1,14 @@
+import { Pageable, Sort } from "../types";
+
 export type PropsContract = {
   page: number;
   size?: number;
   sort?: string;
-  resolutionId?: number;
+  resolutionId?: string;
   clientRut?: string;
   responsible?: string;
   expirationBefore?: string;
+  contractId?: string;
 };
 
 export type Contract = {
@@ -42,23 +45,4 @@ export type PageResponse = {
   sort: Sort;
   totalElements: number;
   totalPages: number;
-};
-
-type Pageable = {
-  pageNumber: number;
-  pageSize: number;
-  sort: {
-    sorted: boolean;
-    empty: boolean;
-    unsorted: boolean;
-  };
-  offset: number;
-  paged?: boolean;
-  unpaged?: boolean;
-};
-
-type Sort = {
-  sorted: boolean;
-  empty: boolean;
-  unsorted: boolean;
 };
