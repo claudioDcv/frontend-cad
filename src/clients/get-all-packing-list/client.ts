@@ -19,7 +19,6 @@ const client = async (props: PropsPackingList): Promise<PageResponse> => {
   const url = `${API_BASE}/packinglist?${query}`;
 
   const response = await fetch(url, {
-    method: 'GET',
     headers: getHeader(),
     credentials: 'include',
   });

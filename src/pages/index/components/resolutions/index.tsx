@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Button, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -44,6 +44,7 @@ const Resolutions = () => {
     status,
     range,
   });
+  const previousFiltersRef = useRef(filters);
 
   const getAllResolutions = useGetAllResolutions();
   const getAllStatus = useGetAllStatus();
@@ -104,17 +105,20 @@ const Resolutions = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setFilters({
-        investment,
-        location,
-        materialType,
-        status,
-        range,
-      });
-      setCurrentPage(0);
-    }, 200);
+      const newFilters = { investment, location, materialType, status, range };
+  
+      const hasChanged = JSON.stringify(previousFiltersRef.current) !== JSON.stringify(newFilters);
+  
+      if (hasChanged) {
+        previousFiltersRef.current = newFilters;
+        setFilters(newFilters);
+        setCurrentPage(0);
+      }
+    }, 300);
+  
     return () => clearTimeout(timeout);
   }, [investment, location, materialType, status, range]);
+  
 
   useEffect(() => {
     fetchResolutions(currentPage);

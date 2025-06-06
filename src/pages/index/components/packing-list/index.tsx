@@ -1,3 +1,4 @@
+/*
 import { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
@@ -7,8 +8,14 @@ import { Dropdown, Pagination, Table } from '../../../../components';
 import { useGetAllPackingList, useGetAllStatus } from '../../../../clients';
 import { PackingListFormModel } from '../../types';
 import { defaultPackingListFormValues } from '../../utils';
-
+*/
 const PackingList = () => {
+  return(
+  <div>
+    TEST
+  </div>
+  )
+  /*
   const { control, watch } = useForm<PackingListFormModel>({
     defaultValues: defaultPackingListFormValues,
   });
@@ -78,11 +85,13 @@ const PackingList = () => {
         />
       </Box>
     </Box>
+    
   );
+  */
 };
 
 export default PackingList;
-
+/*
 const columnsPackinglist = [
   { id: 'packinglistId', label: 'Paquete' },
   { id: 'barcode', label: 'Código de Barras' },
@@ -98,3 +107,4 @@ const columnsPackinglist = [
   { id: 'statusName', label: 'Estado' },
   { id: 'category', label: 'Categoría' },
 ];
+*/
