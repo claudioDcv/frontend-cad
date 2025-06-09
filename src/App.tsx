@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import useJWTNotification from './hooks/useJWTNotification'
-import Index from './pages/index';
+import { Container } from '@mui/material';
+import Router from './Router';
+import useJWTNotification from './hooks/useJWTNotification';
 
 function App() {
   const jwtNotification = useJWTNotification();
@@ -10,10 +11,12 @@ function App() {
   }, [jwtNotification]);
 
   return jwtNotification.token ? (
-    <Index />
+    <Container maxWidth="xl">
+      <Router />
+    </Container>
   ) : (
     <div>waiting for JWT...</div>
   );
 }
 
-export default App
+export default App;

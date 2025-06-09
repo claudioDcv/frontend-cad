@@ -2,7 +2,8 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
 import { FetchStatus } from '../../utils';
-import useGetAllBranches from '.';
+import useGetAllMaterialTypes from '.';
+import { remap } from './utils';
 
 describe('useGetAllStatus', () => {
   beforeEach(() => {
@@ -12,27 +13,25 @@ describe('useGetAllStatus', () => {
   test('should return data and SUCCESS if the call is successful', async () => {
     const mockData = [
       {
-        locationId: 1,
-        locationNumber: 101,
-        locationCode: 'LOC-001',
-        locationName: 'Sucursal Santiago Centro',
-        locationAlias: 'STGO-CENTRO',
-        locationAddress: 'Av. Libertador Bernardo O’Higgins 123',
-        locationManager: 'Juan Pérez',
-        managerEmail: 'juan.perez@empresa.cl',
-        managerPhone: '+56912345678',
+        value: 'approved',
+        label: 'Accepted',
+        categoryId: 1,
+        categoryCode: 'CAT001',
+        categoryName: 'Category Name',
+        measurementUnit: 'kg',
+        minimumProfitMargin: 10,
       },
     ];
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
-    const { result } = renderHook(() => useGetAllBranches());
+    const { result } = renderHook(() => useGetAllMaterialTypes());
 
     await act(async () => {
-      await result.current.call({ investmentId: '123', status: null });
+      await result.current.call();
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(mockData);
+    expect(result.current.data).toEqual(remap(mockData));
     expect(result.current.error).toBe(null);
   });
 
@@ -40,10 +39,10 @@ describe('useGetAllStatus', () => {
     const mockError = new Error('API call failed');
     vi.spyOn(clientModule, 'default').mockRejectedValue(mockError);
 
-    const { result } = renderHook(() => useGetAllBranches());
+    const { result } = renderHook(() => useGetAllMaterialTypes());
 
     await act(async () => {
-      await result.current.call({ investmentId: '123', status: null });
+      await result.current.call();
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
@@ -52,7 +51,7 @@ describe('useGetAllStatus', () => {
   });
 
   test('should have IDLE status initially', () => {
-    const { result } = renderHook(() => useGetAllBranches());
+    const { result } = renderHook(() => useGetAllMaterialTypes());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
     expect(result.current.data).toEqual([]);

@@ -3,6 +3,8 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
 import { FetchStatus } from '../../utils';
 import useGetAllResolutions from '.';
+import { PageResponse } from './types';
+import { remap } from './utils';
 
 describe('useGetAllStatus', () => {
   beforeEach(() => {
@@ -10,30 +12,59 @@ describe('useGetAllStatus', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData = [
+    const mockData: PageResponse = {
+      content: [
         {
-          id: 1,
-          number: 1001,
-          code: '01-00',
-          name: 'Santiago',
-          alias: 'Santiago1',
-          address: 'Santiago, Chile',
-          manager: 'Juan',
-          email: 'john@example.com',
-          phone: '123456789',
+          resolutionId: 0,
+          resolutionNumber: 0,
+          resolutionBarcode: 'string',
+          dispatchGuideNumber: 0,
+          investmentName: 'string',
+          branchName: 'string',
+          closureDate: '2025-05-16T15:27:40.874Z',
+          contractQuantity: 0,
+          jewelTotalCount: 0,
+          categoryName: 'string',
+          stateName: 'string',
         },
-      ];
-      
+      ],
+      totalElements: 1,
+      totalPages: 1,
+      number: 0,
+      size: 10,
+      first: true,
+      last: true,
+      empty: false,
+      numberOfElements: 0,
+      pageable: {
+        pageNumber: 0,
+        pageSize: 0,
+        sort: {
+          sorted: false,
+          empty: false,
+          unsorted: false,
+        },
+        offset: 0,
+        paged: undefined,
+        unpaged: undefined,
+      },
+      sort: {
+        sorted: false,
+        empty: false,
+        unsorted: false,
+      },
+    };
+
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useGetAllResolutions());
 
     await act(async () => {
-      await result.current.call();
+      await result.current.call({ page: 1 });
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(mockData);
+    expect(result.current.data).toEqual(remap(mockData));
     expect(result.current.error).toBe(null);
   });
 
@@ -44,11 +75,14 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllResolutions());
 
     await act(async () => {
-      await result.current.call();
+      await result.current.call({ page: 1 });
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
-    expect(result.current.data).toEqual([]);
+    expect(result.current.data).toEqual({
+      resolutions: [],
+      meta: { page: 0, count: 0 },
+    });
     expect(result.current.error).toBe('API call failed');
   });
 
@@ -56,7 +90,10 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllResolutions());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
-    expect(result.current.data).toEqual([]);
+    expect(result.current.data).toEqual({
+      resolutions: [],
+      meta: { page: 0, count: 0 },
+    });
     expect(result.current.error).toBe(null);
   });
 });

@@ -59,7 +59,10 @@ describe('Dropdown component', () => {
     userEvent.click(option);
 
     await waitFor(() => {
-      expect(handleChange).toHaveBeenCalledWith('gold'); 
+      expect(handleChange).toHaveBeenCalledWith({
+        label: 'Oro',
+        value: 'gold',
+      });
     });
   });
 });

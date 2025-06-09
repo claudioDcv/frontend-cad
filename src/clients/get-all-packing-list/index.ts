@@ -2,42 +2,34 @@ import { useCallback, useState } from 'react';
 import { FetchStatus } from '../../utils';
 import client from './client';
 import { remap } from './utils';
-import { ResolutionPaginated } from './types';
-import { PropsResolution } from './types';
+import { PackingListPaginated, PropsPackingList } from './types';
 import { useTranslation } from 'react-i18next';
 
-const useGetAllResolutions = () => {
+const useGetAllPackingList = () => {
   const { t } = useTranslation();
   
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<ResolutionPaginated>({
-    resolutions: [],
+  const [data, setData] = useState<PackingListPaginated>({
+    packingList: [],
     meta: { page: 0, count: 0 },
   });
   const [error, setError] = useState<string | null>(null);
-  const [lastProps, setLastProps] = useState<PropsResolution | null>(null);
-
-  const onResetError = () => {
-    setData({ resolutions: [], meta: { page: 0, count: 0 } });
-    setError(null);
-  };
+  const [lastProps, setLastProps] = useState<PropsPackingList | null>(null);
 
   const call = useCallback(
-    async (props: PropsResolution) => {
-      const isSameFilter =
+    async (props: PropsPackingList) => {
+        const isSameFilter =
         lastProps &&
         lastProps.page === props.page &&
-        lastProps.investmentId === props.investmentId &&
-        lastProps.locationId === props.locationId &&
-        lastProps.categoryId === props.categoryId &&
-        lastProps.stateId === props.stateId &&
+        lastProps.size === props.size &&
+        lastProps.sort === props.sort &&
         lastProps.startDate === props.startDate &&
-        lastProps.endDate === props.endDate;
-
-      if (status === FetchStatus.ERROR) {
-        return;
-      }
-
+        lastProps.endDate === props.endDate &&
+        lastProps.originCcId === props.originCcId &&
+        lastProps.destinyCcId === props.destinyCcId &&
+        lastProps.categoryId === props.categoryId &&
+        lastProps.statusId === props.statusId;
+    
       if (status === FetchStatus.LOADING || isSameFilter) {
         setStatus(FetchStatus.SUCCESS);
         setError(null);
@@ -62,7 +54,7 @@ const useGetAllResolutions = () => {
     [lastProps, status, t]
   );
 
-  return { status, data, error, call, onResetError };
+  return { status, data, error, call };
 };
 
-export default useGetAllResolutions;
+export default useGetAllPackingList;

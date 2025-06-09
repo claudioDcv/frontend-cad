@@ -3,6 +3,7 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
 import { FetchStatus } from '../../utils';
 import useGetAllStatus from '.';
+import { remap } from './utils';
 
 describe('useGetAllStatus', () => {
   beforeEach(() => {
@@ -10,17 +11,17 @@ describe('useGetAllStatus', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData = [{ value: 'approved', label: 'Accepted' }];
+    const mockData = [{ id: 5, name: 'Accepted', statusName: 'Accepted', statusId: 1 }];
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useGetAllStatus());
 
     await act(async () => {
-      await result.current.call();
+      await result.current.call({ tableId: 14 }); 
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(mockData);
+    expect(result.current.data).toEqual(remap(mockData));
     expect(result.current.error).toBe(null);
   });
 
@@ -31,7 +32,7 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllStatus());
 
     await act(async () => {
-      await result.current.call();
+      await result.current.call({ tableId: 14 });
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);

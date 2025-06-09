@@ -1,0 +1,233 @@
+import { useCallback, useEffect, useState } from 'react';
+import { Box, Pagination } from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import { ResolutionFormModel } from '../../types';
+import {
+  useGetAllInvestments,
+  useGetAllLocations,
+  useGetAllMaterialTypes,
+  useGetAllResolutions,
+  useGetAllStatus,
+} from '../../../../clients';
+import {
+  Dropdown,
+  MonthRangePicker,
+  ButtonClear,
+  Table,
+} from '../../../../components';
+import {
+  addOptionAll,
+  isEmpty,
+} from '../../utils';
+import {
+  defaultStartDate,
+  emptyOption,
+  FIRST_PAGE,
+  STATUS_RESOLUTION,
+  toDay,
+} from '../../../../utils';
+import Notification from '../../../../components/molecules/notification';
+import { defaultResolutionsFormValues, resolutionParams } from './utils';
+
+const Resolutions = () => {
+  const { control, reset, watch } = useForm<ResolutionFormModel>({
+    defaultValues: defaultResolutionsFormValues,
+  });
+
+  const { t } = useTranslation();
+  const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
+  const { investment, location, materialType, status } = watch();
+  const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
+
+  const getAllResolutions = useGetAllResolutions();
+  const getAllStatus = useGetAllStatus();
+  const getAllLocations = useGetAllLocations();
+  const getAllMaterialType = useGetAllMaterialTypes();
+  const getAllInvestments = useGetAllInvestments();
+
+  const materialTypeOptions = addOptionAll(getAllMaterialType.data);
+  const statusOptions = addOptionAll(getAllStatus.data);
+  const investmentOptions = addOptionAll(getAllInvestments.data);
+  const locationOptions = addOptionAll(getAllLocations.data);
+
+  const isMaterialTypeDisabled = isEmpty(getAllMaterialType.data);
+  const isStatusDisabled = isEmpty(getAllStatus.data);
+  const isInvestmentDisabled = isEmpty(getAllInvestments.data);
+  const isLocationDisabled = isEmpty(getAllLocations.data);
+
+  const resolutionRows = getAllResolutions.data?.resolutions || [];
+  const paginationCount = getAllResolutions.data?.meta?.count || 0;
+
+  const fetchResolutions = useCallback(
+    (page: number = 0) => {
+      const filters = {
+        investment,
+        location,
+        materialType,
+        status,
+        range,
+      };
+      const params = resolutionParams(page, filters);
+      getAllResolutions.call(params);
+    },
+    [investment, location, materialType, status, range, getAllResolutions]
+  );
+
+  const handleInvestmentChange =
+    (onChange: (value: { value: string; label: string }) => void) =>
+    (value: { value: string; label: string }) => {
+      onChange(value);
+      reset((prev) => ({
+        ...prev,
+        location: emptyOption,
+      }));
+
+      if (value.value) {
+        getAllLocations.call({ investmentId: value.value, status: true });
+      } else {
+        getAllLocations.clearData();
+      }
+    };
+
+  const handleClear = () => {
+    reset(defaultResolutionsFormValues);
+    setRange([defaultStartDate, new Date()]);
+    getAllLocations.clearData();
+    getAllInvestments.clearData();
+  };
+
+  useEffect(() => {
+    getAllMaterialType.call();
+    getAllInvestments.call();
+    getAllStatus.call({ tableId: STATUS_RESOLUTION });
+  }, [getAllInvestments, getAllMaterialType, getAllStatus]);
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [investment, location, materialType, status, range]);
+
+  useEffect(() => {
+    fetchResolutions(currentPage);
+  }, [currentPage, fetchResolutions]);
+
+  const handleChangePage = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCurrentPage(value - 1);
+  };
+
+  return (
+    <div>
+      <Box>
+        <form>
+          <Box
+            mb={2}
+            mt={2}
+            flexWrap="nowrap"
+            display="flex"
+            alignItems="center"
+            gap={2}
+          >
+            <Controller
+              name="materialType"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  {...field}
+                  options={materialTypeOptions}
+                  label={t('common.materialType')}
+                  disabled={isMaterialTypeDisabled}
+                />
+              )}
+            />
+
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  {...field}
+                  options={statusOptions}
+                  label={t('common.status')}
+                  disabled={isStatusDisabled}
+                />
+              )}
+            />
+
+            <Controller
+              name="investment"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  {...field}
+                  options={investmentOptions}
+                  label={t('common.investment')}
+                  onChange={handleInvestmentChange(field.onChange)}
+                  disabled={isInvestmentDisabled}
+                />
+              )}
+            />
+
+            <Controller
+              name="location"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  {...field}
+                  options={locationOptions}
+                  label={t('common.location')}
+                  disabled={isLocationDisabled}
+                />
+              )}
+            />
+
+            <MonthRangePicker value={range} onChange={setRange} />
+
+            <ButtonClear
+              onClick={handleClear}
+              label={t('common.clearFilters')}
+            />
+          </Box>
+        </form>
+        <Table
+          columns={[
+            { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
+            { id: 'barcode', label: t('resolution.barcode') },
+            { id: 'dispatchGuide', label: t('resolution.dispatchGuide') },
+            { id: 'investmentName', label: t('resolution.investment') },
+            { id: 'locationName', label: t('resolution.location') },
+            { id: 'closeDate', label: t('resolution.closeDate') },
+            { id: 'contractCount', label: t('resolution.contractCount') },
+            { id: 'totalJewels', label: t('resolution.totalJewels') },
+            { id: 'categoryName', label: t('resolution.category') },
+            { id: 'stateName', label: t('resolution.status') },
+          ]}
+          rows={resolutionRows}
+          messageVoidData={t('common.noData')}
+        />
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Pagination
+            count={paginationCount}
+            page={currentPage + 1}
+            onChange={handleChangePage}
+          />
+        </Box>
+      </Box>
+
+      <Notification
+        open={!!getAllResolutions.error}
+        onClose={getAllResolutions.onResetError}
+        severity="error"
+        i18n={{
+          title: t('common.error'),
+          text: getAllResolutions.error || t('common.unknownError'),
+        }}
+      />
+    </div>
+  );
+};
+
+export default Resolutions;
