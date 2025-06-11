@@ -1,7 +1,13 @@
-const NotFound = () => (
-    <div>
-        <h1>404 - Not Found!</h1>
-    </div>
-);
+import { useTranslation } from "react-i18next";
+
+const NotFound = () => {
+    const { t } = useTranslation();
+    
+    return (
+        <div>
+            <h1>{t('error.404Error')}</h1>
+        </div>
+    );
+};
 
 export default NotFound;

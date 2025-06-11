@@ -4,9 +4,9 @@ import { clearAllProps, clearProp, getHeader } from '../utils';
 import { Status } from './types';
 
 const client = async (props: PropsStatus): Promise<Status[]> => {
-  const params: Record<string, string> = {};
-
-  params.tableId = clearProp(props.tableId);
+  const params = {
+    tableId: clearProp(props.tableId)
+  };
 
   const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/status?${query}`;

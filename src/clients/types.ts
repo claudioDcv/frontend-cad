@@ -1,3 +1,8 @@
+export interface PaginationMeta {
+  page: number;
+  count: number;
+}
+
 export type PropsStatus = {
   tableId?: number;
 };

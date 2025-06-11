@@ -7,8 +7,8 @@ import NotFound from './pages/not-found';
 
 const Router = () => (
   <Switch>
-    <Route path={routes.index.link} component={Index} />
-    <Route path={routes.contracts.link} component={Contracts} />
+    <Route path={routes().index.link} component={Index} />
+    <Route path={routes().contracts.link} component={Contracts} />
     <Route>
       <NotFound />
     </Route>

@@ -1,12 +1,16 @@
+import { emptyOption } from '../../utils';
+import { Option } from '../../types';
 import { PropsContract } from '../../clients/get-all-contracts/types';
 import { PropsResolution } from '../../clients/get-all-resolutions/types';
-import { emptyOption, toDay } from '../../utils';
+import { toDay } from '../../utils';
 import { ContractFormModel, PackingListFormModel, ResolutionFormModel } from './types';
 
 export const addOptionAll = (
-  options: Array<{ label: string; value: string }>,
-  allOption: { label: string; value: string } = emptyOption
+  options: Option[],
+  allOption: Option = emptyOption
 ) => [allOption, ...options];
+
+export const isEmpty = (data?: unknown[]) => !data || data.length === 0;
 
 export function resolutionParams(
   page: number,
@@ -78,3 +82,5 @@ export const defaultContractsFormValues: ContractFormModel = {
 export const defaultPackingListFormValues: PackingListFormModel = {
   status: emptyOption,
 };
+
+

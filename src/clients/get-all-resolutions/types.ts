@@ -1,16 +1,5 @@
-import { Pageable, Sort } from "../types";
-
-export type PropsResolution = {
-  page: number;
-  size?: number;
-  sort?: string;
-  investmentId?: string;
-  locationId?: string;
-  categoryId?: string;
-  stateId?: string;
-  startDate?: string;
-  endDate?: string;
-};
+import { Pageable, Sort } from '../types';
+import { Option } from '../../types';
 
 export type Resolution = {
   resolutionId: number;
@@ -46,4 +35,24 @@ export type ResolutionPaginated = {
     page: number;
     count: number;
   };
+};
+
+export type PropsResolution = {
+  page: number;
+  size?: number;
+  sort?: string;
+  investmentId?: string;
+  locationId?: string;
+  categoryId?: string;
+  stateId?: string;
+  startDate?: string;
+  endDate?: string;
+};
+
+export type ResolutionFilters = {
+  investment?: Option;
+  location?: Option;
+  materialType?: Option;
+  status?: Option;
+  range: [Date, Date];
 };

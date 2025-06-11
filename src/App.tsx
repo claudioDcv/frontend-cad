@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Container } from '@mui/material';
 import Router from './Router';
-
 import useJWTNotification from './hooks/useJWTNotification';
 
 function App() {

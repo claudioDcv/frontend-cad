@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Box, Button, Pagination } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
+import { Box, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'wouter';
@@ -20,13 +20,17 @@ import {
 } from '../../../../components';
 import {
   addOptionAll,
-  defaultResolutionsFormValues,
-  resolutionParams,
+  isEmpty,
 } from '../../utils';
-import { defaultStartDate, STATUS_RESOLUTION, toDay } from '../../../../utils';
-import IconList from '../../../../components/molecules/icon';
+import {
+  defaultStartDate,
+  emptyOption,
+  FIRST_PAGE,
+  STATUS_RESOLUTION,
+  toDay,
+} from '../../../../utils';
 import Notification from '../../../../components/molecules/notification';
-import { Resolution } from '../../../../clients/get-all-resolutions/types';
+import { defaultResolutionsFormValues, resolutionParams } from './utils';
 
 const Resolutions = () => {
   const { control, reset, watch } = useForm<ResolutionFormModel>({
@@ -36,15 +40,7 @@ const Resolutions = () => {
   const { t } = useTranslation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
   const { investment, location, materialType, status } = watch();
-  const [currentPage, setCurrentPage] = useState(0);
-  const [filters, setFilters] = useState({
-    investment,
-    location,
-    materialType,
-    status,
-    range,
-  });
-  const previousFiltersRef = useRef(filters);
+  const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
 
   const getAllResolutions = useGetAllResolutions();
   const getAllStatus = useGetAllStatus();
@@ -52,27 +48,41 @@ const Resolutions = () => {
   const getAllMaterialType = useGetAllMaterialTypes();
   const getAllInvestments = useGetAllInvestments();
 
-  const [, navigate] = useLocation();
+  const materialTypeOptions = addOptionAll(getAllMaterialType.data);
+  const statusOptions = addOptionAll(getAllStatus.data);
+  const investmentOptions = addOptionAll(getAllInvestments.data);
+  const locationOptions = addOptionAll(getAllLocations.data);
 
-  const fetchResolutions = useCallback(async (page: number = 0) => {
-    const params = resolutionParams(page, filters);
-  
-    try {
-      await getAllResolutions.call(params);
-    } catch (error) {
-      console.error('Error al obtener resoluciones:', error);
-    }
-  }, [filters, getAllResolutions]);
-  
+  const isMaterialTypeDisabled = isEmpty(getAllMaterialType.data);
+  const isStatusDisabled = isEmpty(getAllStatus.data);
+  const isInvestmentDisabled = isEmpty(getAllInvestments.data);
+  const isLocationDisabled = isEmpty(getAllLocations.data);
+
+  const resolutionRows = getAllResolutions.data?.resolutions || [];
+  const paginationCount = getAllResolutions.data?.meta?.count || 0;
+
+  const fetchResolutions = useCallback(
+    (page: number = 0) => {
+      const filters = {
+        investment,
+        location,
+        materialType,
+        status,
+        range,
+      };
+      const params = resolutionParams(page, filters);
+      getAllResolutions.call(params);
+    },
+    [investment, location, materialType, status, range, getAllResolutions]
+  );
 
   const handleInvestmentChange =
     (onChange: (value: { value: string; label: string }) => void) =>
     (value: { value: string; label: string }) => {
       onChange(value);
-
       reset((prev) => ({
         ...prev,
-        location: { value: 'all', label: 'TODOS' },
+        location: emptyOption,
       }));
 
       if (value.value) {
@@ -107,25 +117,20 @@ const Resolutions = () => {
   }, [getAllInvestments, getAllMaterialType, getAllStatus]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      const newFilters = { investment, location, materialType, status, range };
-  
-      const hasChanged = JSON.stringify(previousFiltersRef.current) !== JSON.stringify(newFilters);
-  
-      if (hasChanged) {
-        previousFiltersRef.current = newFilters;
-        setFilters(newFilters);
-        setCurrentPage(0);
-      }
-    }, 300);
-  
-    return () => clearTimeout(timeout);
+    setCurrentPage(0);
   }, [investment, location, materialType, status, range]);
   
 
   useEffect(() => {
     fetchResolutions(currentPage);
-  }, [filters, currentPage, fetchResolutions]);
+  }, [currentPage, fetchResolutions]);
+
+  const handleChangePage = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCurrentPage(value - 1);
+  };
 
   return (
     <div>
@@ -145,9 +150,9 @@ const Resolutions = () => {
               render={({ field }) => (
                 <Dropdown
                   {...field}
-                  options={addOptionAll(getAllMaterialType.data)}
+                  options={materialTypeOptions}
                   label={t('common.materialType')}
-                  disabled={getAllMaterialType.data.length === 0}
+                  disabled={isMaterialTypeDisabled}
                 />
               )}
             />
@@ -158,9 +163,9 @@ const Resolutions = () => {
               render={({ field }) => (
                 <Dropdown
                   {...field}
-                  options={addOptionAll(getAllStatus.data)}
+                  options={statusOptions}
                   label={t('common.status')}
-                  disabled={getAllStatus.data.length === 0}
+                  disabled={isStatusDisabled}
                 />
               )}
             />
@@ -170,10 +175,10 @@ const Resolutions = () => {
               render={({ field }) => (
                 <Dropdown
                   {...field}
-                  options={addOptionAll(getAllInvestments.data)}
+                  options={investmentOptions}
                   label={t('common.investment')}
                   onChange={handleInvestmentChange(field.onChange)}
-                  disabled={getAllInvestments.data.length === 0}
+                  disabled={isInvestmentDisabled}
                 />
               )}
             />
@@ -183,9 +188,9 @@ const Resolutions = () => {
               render={({ field }) => (
                 <Dropdown
                   {...field}
-                  options={addOptionAll(getAllLocations.data)}
+                  options={locationOptions}
                   label={t('common.location')}
-                  disabled={getAllLocations.data.length === 0}
+                  disabled={isLocationDisabled}
                 />
               )}
             />
@@ -210,23 +215,13 @@ const Resolutions = () => {
             { id: 'totalJewels', label: t('resolution.totalJewels') },
             { id: 'categoryName', label: t('resolution.category') },
             { id: 'stateName', label: t('resolution.status') },
-            {
-              id: 'actions',
-              label: t('common.actions'),
-              render: (row: Resolution) => (
-                <Button onClick={handleViewContracts.bind(null, row.resolutionId.toString())}>
-                  {t('common.viewContracts')}
-                  <IconList name="visualize" />
-                </Button>
-              ),
-            },
           ]}
-          rows={getAllResolutions.data?.resolutions || []}
+          rows={resolutionRows}
           messageVoidData={t('common.noData')}
         />
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
-            count={getAllResolutions.data?.meta?.count || 0}
+            count={paginationCount}
             page={currentPage + 1}
             onChange={handleChangePage}
           />

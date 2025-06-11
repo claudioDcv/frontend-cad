@@ -3,8 +3,11 @@ import { FetchStatus } from '../../utils';
 import client from './client';
 import { remap } from './utils';
 import { PackingListPaginated, PropsPackingList } from './types';
+import { useTranslation } from 'react-i18next';
 
 const useGetAllPackingList = () => {
+  const { t } = useTranslation();
+  
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<PackingListPaginated>({
     packingList: [],
@@ -42,11 +45,13 @@ const useGetAllPackingList = () => {
         setStatus(FetchStatus.SUCCESS);
         setLastProps(props);
       } catch (err) {
-        setError((err as Error).message);
+        setError(
+          (err as Error).message || t('error.genericHttpError')
+        );
         setStatus(FetchStatus.ERROR);
       }
     },
-    [lastProps, status]
+    [lastProps, status, t]
   );
 
   return { status, data, error, call };

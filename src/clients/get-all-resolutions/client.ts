@@ -4,16 +4,15 @@ import { clearAllProps, clearProp, getHeader } from '../utils';
 import { PageResponse } from './types';
 
 const client = async (props: PropsResolution): Promise<PageResponse> => {
-  const params: Record<string, string> = {
+  const params = {
     page: clearProp(props.page),
+    investmentId: clearProp(props.investmentId),
+    locationId: clearProp(props.locationId),
+    categoryId: clearProp(props.categoryId),
+    stateId: clearProp(props.stateId),
+    startDate: clearProp(props.startDate),
+    endDate: clearProp(props.endDate),
   };
-
-  params.investmentId = clearProp(props.investmentId);
-  params.locationId = clearProp(props.locationId);
-  params.categoryId = clearProp(props.categoryId);
-  params.stateId = clearProp(props.stateId);
-  params.startDate = clearProp(props.startDate);
-  params.endDate = clearProp(props.endDate);
 
   const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/resolutions?${query}`;
