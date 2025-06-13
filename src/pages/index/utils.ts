@@ -45,7 +45,7 @@ export const defaultResolutionsFormValues: ResolutionFormModel = {
   status: emptyOption,
   investment: emptyOption,
   location: emptyOption,
-  dateRange: [toDay, toDay],
+  range: [toDay, toDay],
 };
 
 export function contractParams(

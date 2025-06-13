@@ -16,7 +16,7 @@ const Index = () => {
 
   return (
     <div>
-      <Breadcrumb items={[routes.index]} />
+      <Breadcrumb items={[routes().index]} />
       <Box>
         <Tabs value={tabIndex} onChange={handleTabChange}>
           <Tab label={t('common.resolutions')} />

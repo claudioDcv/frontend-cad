@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'wouter';
+import { debounce } from 'lodash';
 
 import { ResolutionFormModel } from '../../types';
 import {
@@ -18,10 +18,7 @@ import {
   ButtonClear,
   Table,
 } from '../../../../components';
-import {
-  addOptionAll,
-  isEmpty,
-} from '../../utils';
+import { addOptionAll, isEmpty } from '../../utils';
 import {
   defaultStartDate,
   emptyOption,
@@ -31,6 +28,7 @@ import {
 } from '../../../../utils';
 import Notification from '../../../../components/molecules/notification';
 import { defaultResolutionsFormValues, resolutionParams } from './utils';
+import { Option } from '../../../../types';
 
 const Resolutions = () => {
   const { control, reset, watch } = useForm<ResolutionFormModel>({
@@ -61,24 +59,28 @@ const Resolutions = () => {
   const resolutionRows = getAllResolutions.data?.resolutions || [];
   const paginationCount = getAllResolutions.data?.meta?.count || 0;
 
-  const fetchResolutions = useCallback(
-    (page: number = 0) => {
-      const filters = {
-        investment,
-        location,
-        materialType,
-        status,
-        range,
-      };
-      const params = resolutionParams(page, filters);
-      getAllResolutions.call(params);
-    },
-    [investment, location, materialType, status, range, getAllResolutions]
+  const debouncedFetchResolutions = useRef(
+    debounce(
+      (page: number, filters: ResolutionFormModel) => {
+        const params = resolutionParams(page, filters);
+        getAllResolutions.call(params);
+      },
+      1000
+    )
   );
+  
+  useEffect(() => {
+    const timers = [
+      setTimeout(() => getAllMaterialType.call(), 0),
+      setTimeout(() => getAllInvestments.call(), 200),
+      setTimeout(() => getAllStatus.call({ tableId: STATUS_RESOLUTION }), 400),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [getAllInvestments, getAllMaterialType, getAllStatus]);
 
   const handleInvestmentChange =
-    (onChange: (value: { value: string; label: string }) => void) =>
-    (value: { value: string; label: string }) => {
+    (onChange: (value: Option) => void) =>
+    (value: Option) => {
       onChange(value);
       reset((prev) => ({
         ...prev,
@@ -99,37 +101,36 @@ const Resolutions = () => {
     getAllInvestments.clearData();
   };
 
-  const handleChangePage = (
-    _event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value - 1);
-  };
-
-  const handleViewContracts = (resolutionId: string) => {
-    navigate(`/contracts/${resolutionId}`);
-  }
-
-  useEffect(() => {
-    getAllMaterialType.call();
-    getAllInvestments.call();
-    getAllStatus.call({ tableId: STATUS_RESOLUTION });
-  }, [getAllInvestments, getAllMaterialType, getAllStatus]);
-
   useEffect(() => {
     setCurrentPage(0);
+    debouncedFetchResolutions.current(0, {
+      investment,
+      location,
+      materialType,
+      status,
+      range,
+    });
   }, [investment, location, materialType, status, range]);
-  
 
   useEffect(() => {
-    fetchResolutions(currentPage);
-  }, [currentPage, fetchResolutions]);
+    const debouncedFetch = debouncedFetchResolutions.current;
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, []);
 
   const handleChangePage = (
     _event: React.ChangeEvent<unknown>,
     value: number
   ) => {
     setCurrentPage(value - 1);
+    debouncedFetchResolutions.current(value - 1, {
+      investment,
+      location,
+      materialType,
+      status,
+      range,
+    });
   };
 
   return (
@@ -169,6 +170,7 @@ const Resolutions = () => {
                 />
               )}
             />
+
             <Controller
               name="investment"
               control={control}
@@ -182,6 +184,7 @@ const Resolutions = () => {
                 />
               )}
             />
+
             <Controller
               name="location"
               control={control}
@@ -203,6 +206,7 @@ const Resolutions = () => {
             />
           </Box>
         </form>
+
         <Table
           columns={[
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
@@ -219,6 +223,7 @@ const Resolutions = () => {
           rows={resolutionRows}
           messageVoidData={t('common.noData')}
         />
+
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
             count={paginationCount}

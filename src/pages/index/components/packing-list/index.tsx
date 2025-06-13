@@ -1,26 +1,42 @@
-/*
-import { useEffect } from 'react';
-import { Box } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import { Box, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Dropdown, Pagination, Table } from '../../../../components';
+import { debounce } from 'lodash';
+import { Dropdown, Table } from '../../../../components';
 import { useGetAllPackingList, useGetAllStatus } from '../../../../clients';
 import { PackingListFormModel } from '../../types';
 import { defaultPackingListFormValues } from '../../utils';
-*/
+import { STATUS_PACKING_LIST } from '../../../../utils';
+
+const columnsPackinglist = [
+  { id: 'packinglistId', label: 'Paquete' },
+  { id: 'barcode', label: 'Código de Barras' },
+  { id: 'dispatchNumber', label: 'Guía de Despacho' },
+  { id: 'investmentName', label: 'Nombre Inversión' },
+  { id: 'originBranch', label: 'Sucursal Origen' },
+  { id: 'destinyBranch', label: 'Sucursal Destino' },
+  { id: 'creationDate', label: 'Fecha de Creación' },
+  { id: 'totalQuantity', label: 'Cantidad Total' },
+  { id: 'totalGrams', label: 'Gramos Totales' },
+  { id: 'documentType', label: 'Tipo Documento' },
+  { id: 'statusId', label: 'ID Estado' },
+  { id: 'statusName', label: 'Estado' },
+  { id: 'category', label: 'Categoría' },
+];
+
+const FIRST_PAGE = 1;
+
 const PackingList = () => {
-  return(
-  <div>
-    TEST
-  </div>
-  )
-  /*
   const { control, watch } = useForm<PackingListFormModel>({
     defaultValues: defaultPackingListFormValues,
   });
 
-  const { status } = watch();
   const { t } = useTranslation();
+
+  const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
+
+  const status = watch('status');
 
   const getAllStatus = useGetAllStatus();
   const getAllPackingList = useGetAllPackingList();
@@ -28,15 +44,46 @@ const PackingList = () => {
   const isStatusDisabled = !getAllStatus.data || getAllStatus.data.length === 0;
   const packingListRows = getAllPackingList.data?.packingList || [];
   const paginationCount = getAllPackingList.data?.meta?.count || 0;
-  const paginationPage = getAllPackingList.data?.meta?.page || 1;
 
+  const debouncedFetchPackingList = useRef(
+    debounce((page: number, filters: PackingListFormModel) => {
+      if (!filters.status?.value) return;
+
+      getAllPackingList.call({
+        statusId: filters.status.value,
+        page,
+      });
+    }, 1000)
+  );
+
+  useEffect(() => {
+    const timers = [
+      setTimeout(() => {
+        getAllStatus.call({ tableId: STATUS_PACKING_LIST });
+      }, 400),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [getAllStatus]);
+
+  useEffect(() => {
+    setCurrentPage(FIRST_PAGE);
+    debouncedFetchPackingList.current(FIRST_PAGE, { status });
+  }, [status]);
+
+  useEffect(() => {
+    const debouncedFetch = debouncedFetchPackingList.current;
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, []);
+
+  // Cuando cambias página con paginador
   const handleChangePage = (
     _event: React.ChangeEvent<unknown>,
     value: number
   ) => {
-    if (!status?.value) return;
-
-    getAllPackingList.call({ statusId: status.value, page: value });
+    setCurrentPage(value);
+    debouncedFetchPackingList.current(value, { status });
   };
 
   return (
@@ -56,7 +103,7 @@ const PackingList = () => {
             render={({ field }) => (
               <Dropdown
                 {...field}
-                options={getAllStatus.data}
+                options={getAllStatus.data || []}
                 label={t('common.status')}
                 disabled={isStatusDisabled}
               />
@@ -66,21 +113,7 @@ const PackingList = () => {
       </form>
 
       <Table
-        columns={[
-          { id: 'packinglistId', label: t('packinglist.packinglistId') },
-          { id: 'barcode', label: t('packinglist.barcode') },
-          { id: 'dispatchNumber', label: t('packinglist.dispatchNumber') },
-          { id: 'investmentName', label: t('packinglist.investmentName') },
-          { id: 'originBranch', label: t('packinglist.originBranch') },
-          { id: 'destinyBranch', label: t('packinglist.destinyBranch') },
-          { id: 'creationDate', label: t('packinglist.creationDate') },
-          { id: 'totalQuantity', label: t('packinglist.totalQuantity') },
-          { id: 'totalGrams', label: t('packinglist.totalGrams') },
-          { id: 'documentType', label: t('packinglist.documentType') },
-          { id: 'statusId', label: t('packinglist.statusId') },
-          { id: 'statusName', label: t('packinglist.statusName') },
-          { id: 'category', label: t('packinglist.category') },
-        ]}
+        columns={columnsPackinglist}
         rows={packingListRows}
         messageVoidData={t('common.noData')}
       />
@@ -88,31 +121,12 @@ const PackingList = () => {
       <Box display="flex" justifyContent="flex-end" mt={2}>
         <Pagination
           count={paginationCount}
-          page={paginationPage}
+          page={currentPage}
           onChange={handleChangePage}
         />
       </Box>
     </Box>
-    
   );
-  */
 };
 
 export default PackingList;
-/*
-const columnsPackinglist = [
-  { id: 'packinglistId', label: 'Paquete' },
-  { id: 'barcode', label: 'Código de Barras' },
-  { id: 'dispatchNumber', label: 'Guía de Despacho' },
-  { id: 'investmentName', label: 'Nombre Inversión' },
-  { id: 'originBranch', label: 'Sucursal Origen' },
-  { id: 'destinyBranch', label: 'Sucursal Destino' },
-  { id: 'creationDate', label: 'Fecha de Creación' },
-  { id: 'totalQuantity', label: 'Cantidad Total' },
-  { id: 'totalGrams', label: 'Gramos Totales' },
-  { id: 'documentType', label: 'Tipo Documento' },
-  { id: 'statusId', label: 'ID Estado' },
-  { id: 'statusName', label: 'Estado' },
-  { id: 'category', label: 'Categoría' },
-];
-*/

@@ -5,7 +5,7 @@ export interface ResolutionFormModel {
   status: Option;
   investment: Option;
   location: Option;
-  dateRange: [Date, Date];
+  range: [Date, Date];
 }
 
 export interface ContractFormModel {
