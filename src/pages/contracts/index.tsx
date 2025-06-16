@@ -5,8 +5,12 @@ import { debounce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumb, Pagination, Table } from '../../components';
 import routes from '../../conf/routes';
-import useGetAllContracts from '../../clients/get-all-contracts';
 import { FIRST_PAGE } from '../../utils';
+import useGetAllContracts from '../../clients/get-all-contracts';
+import useGetResolution from '../../clients/get-resolution';
+import { MaterialType } from '../../components/molecules/material-type';
+import { Material } from '../../components/molecules/material-type/types';
+import { getMaterialFromLabel } from './utils';
 
 const Contracts = ({ params }: { params: { id: string } }) => {
   const resolutionId = params.id;
@@ -14,6 +18,8 @@ const Contracts = ({ params }: { params: { id: string } }) => {
   const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
 
   const getAllContracts = useGetAllContracts();
+  const getResolution = useGetResolution();
+  const materialValue = getMaterialFromLabel(getResolution.data?.categoryName);
 
   const contractRows = getAllContracts.data?.contracts || [];
   const paginationCount = getAllContracts.data?.meta?.count || 0;
@@ -25,24 +31,34 @@ const Contracts = ({ params }: { params: { id: string } }) => {
   );
 
   useEffect(() => {
+    if (!resolutionId) return;
+    if (getResolution.data) return;
+  
+    getResolution.call(resolutionId);
+  }, [resolutionId, getResolution]);
+  
+  useEffect(() => {
     const debouncedFetch = debouncedFetchContracts.current;
     return () => {
       debouncedFetch.cancel();
     };
-  });
+  }, []);
 
   useEffect(() => {
     debouncedFetchContracts.current(currentPage);
   }, [resolutionId, currentPage]);
 
-  const handleChangePage = () => {
-    console.log('handleChangePage', setCurrentPage);
+  const handleChangePage = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCurrentPage(value - 1);
+    debouncedFetchContracts.current(value - 1);
   };
 
   return (
     <div>
       <Breadcrumb items={[routes().index, routes().contracts]} />
-
       <Box
         mb={3}
         border={1}
@@ -50,12 +66,12 @@ const Contracts = ({ params }: { params: { id: string } }) => {
         borderRadius={1}
         overflow="hidden"
       >
-        <Box bgcolor="grey.100" p={2}>
+        <Box bgcolor="grey.100" p={2} gap={2} alignItems={'center'} display="flex">
+          <MaterialType material={materialValue as Material} />
           <Typography variant="h6" fontWeight="bold">
-            Resolución {resolutionId} - Oro
+            Resolución {resolutionId}
           </Typography>
         </Box>
-
         <Box
           bgcolor="white"
           p={2}
@@ -65,43 +81,48 @@ const Contracts = ({ params }: { params: { id: string } }) => {
         >
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Dato 1
+              Código: {getResolution.data?.resolutionNumber}
             </Typography>
-            <Typography variant="body2">1</Typography>
+            <Typography variant="body2" fontWeight="bold">
+              Guia de despacho
+            </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Dato 2
+              N de contrato
             </Typography>
-            <Typography variant="body2">2</Typography>
+            <Typography variant="body2" fontWeight="bold">
+              Tipo: {getResolution.data?.categoryName}
+            </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Dato 3
+              Bolsa de seguridad:
             </Typography>
-            <Typography variant="body2">3</Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Dato 4
+              Sucursal
             </Typography>
-            <Typography variant="body2">4</Typography>
+            <Typography variant="body2" fontWeight="bold">
+              Direccion
+            </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Dato 5
+              Inversion
             </Typography>
-            <Typography variant="body2">5</Typography>
+            <Typography variant="body2" fontWeight="bold">
+              RUT: 
+            </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Dato 6
+              Fecha de Cierre:
             </Typography>
-            <Typography variant="body2">6</Typography>
           </Box>
         </Box>
       </Box>
-
       <form>
         <Box
           mb={2}
@@ -111,6 +132,9 @@ const Contracts = ({ params }: { params: { id: string } }) => {
           alignItems="center"
           gap={2}
         ></Box>
+        <Box sx={{ mb: 2, mt: 2, display: 'flex', alignItems: 'center' }}>
+          <Typography>Contratos</Typography>
+        </Box>
         <Table
           columns={[
             { id: 'contractNumber', label: t('contract.contractNumber') },

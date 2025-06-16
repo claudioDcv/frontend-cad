@@ -1,6 +1,6 @@
 import { Contract } from '../../../types';
 
-export type Material = 'Gold' | 'Silver' | 'ExclusiveBrand' | 'Collected';
+export type Material = string;
 
 export interface I18N {
   label: string;

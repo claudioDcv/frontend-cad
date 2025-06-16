@@ -22,8 +22,6 @@ const client = async (props: PropsResolution): Promise<PageResponse> => {
     credentials: 'include',
   });
 
-  console.log('URL:', url);
-
   if (!response.ok) {
     throw new Error(response.statusText);
   }
