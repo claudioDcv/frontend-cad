@@ -15,6 +15,26 @@ export type Resolution = {
   stateName: string;
 };
 
+export type PropsResolution = {
+  page: number;
+  size?: number;
+  sort?: string;
+  investmentId?: string;
+  locationId?: string;
+  categoryId?: string;
+  stateId?: string;
+  startDate?: string;
+  endDate?: string;
+};
+
+export type ResolutionPaginated = {
+  resolutions: Resolution[];
+  meta: {
+    page: number;
+    count: number;
+  };
+};
+
 export type PageResponse = {
   content: Resolution[];
   empty: boolean;
@@ -27,26 +47,6 @@ export type PageResponse = {
   sort: Sort;
   totalElements: number;
   totalPages: number;
-};
-
-export type ResolutionPaginated = {
-  resolutions: Resolution[];
-  meta: {
-    page: number;
-    count: number;
-  };
-};
-
-export type PropsResolution = {
-  page: number;
-  size?: number;
-  sort?: string;
-  investmentId?: string;
-  locationId?: string;
-  categoryId?: string;
-  stateId?: string;
-  startDate?: string;
-  endDate?: string;
 };
 
 export type ResolutionFilters = {

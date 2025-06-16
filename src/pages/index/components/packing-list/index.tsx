@@ -3,29 +3,16 @@ import { Box, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash';
-import { Dropdown, Table } from '../../../../components';
+import { Dropdown, Table, MonthRangePicker } from '../../../../components';
 import { useGetAllPackingList, useGetAllStatus } from '../../../../clients';
 import { PackingListFormModel } from '../../types';
 import { defaultPackingListFormValues } from '../../utils';
-import { STATUS_PACKING_LIST } from '../../../../utils';
-
-const columnsPackinglist = [
-  { id: 'packinglistId', label: 'Paquete' },
-  { id: 'barcode', label: 'Código de Barras' },
-  { id: 'dispatchNumber', label: 'Guía de Despacho' },
-  { id: 'investmentName', label: 'Nombre Inversión' },
-  { id: 'originBranch', label: 'Sucursal Origen' },
-  { id: 'destinyBranch', label: 'Sucursal Destino' },
-  { id: 'creationDate', label: 'Fecha de Creación' },
-  { id: 'totalQuantity', label: 'Cantidad Total' },
-  { id: 'totalGrams', label: 'Gramos Totales' },
-  { id: 'documentType', label: 'Tipo Documento' },
-  { id: 'statusId', label: 'ID Estado' },
-  { id: 'statusName', label: 'Estado' },
-  { id: 'category', label: 'Categoría' },
-];
-
-const FIRST_PAGE = 1;
+import {
+  FIRST_PAGE,
+  STATUS_PACKING_LIST,
+  defaultStartDate,
+  toDay,
+} from '../../../../utils';
 
 const PackingList = () => {
   const { control, watch } = useForm<PackingListFormModel>({
@@ -33,8 +20,8 @@ const PackingList = () => {
   });
 
   const { t } = useTranslation();
-
   const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
+  const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
 
   const status = watch('status');
 
@@ -46,29 +33,26 @@ const PackingList = () => {
   const paginationCount = getAllPackingList.data?.meta?.count || 0;
 
   const debouncedFetchPackingList = useRef(
-    debounce((page: number, filters: PackingListFormModel) => {
+    debounce((page: number, filters: PackingListFormModel, range: [Date, Date]) => {
       if (!filters.status?.value) return;
 
       getAllPackingList.call({
         statusId: filters.status.value,
         page,
+        startDate: range[0].toISOString(),
+        endDate: range[1].toISOString(),
       });
     }, 1000)
   );
 
   useEffect(() => {
-    const timers = [
-      setTimeout(() => {
-        getAllStatus.call({ tableId: STATUS_PACKING_LIST });
-      }, 400),
-    ];
-    return () => timers.forEach(clearTimeout);
+    getAllStatus.call({ tableId: STATUS_PACKING_LIST });
   }, [getAllStatus]);
 
   useEffect(() => {
     setCurrentPage(FIRST_PAGE);
-    debouncedFetchPackingList.current(FIRST_PAGE, { status });
-  }, [status]);
+    debouncedFetchPackingList.current(FIRST_PAGE, { status }, range);
+  }, [status, range]);
 
   useEffect(() => {
     const debouncedFetch = debouncedFetchPackingList.current;
@@ -77,13 +61,9 @@ const PackingList = () => {
     };
   }, []);
 
-  // Cuando cambias página con paginador
-  const handleChangePage = (
-    _event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
+  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
-    debouncedFetchPackingList.current(value, { status });
+    debouncedFetchPackingList.current(value, { status }, range);
   };
 
   return (
@@ -109,11 +89,27 @@ const PackingList = () => {
               />
             )}
           />
+
+          <MonthRangePicker value={range} onChange={setRange} />
         </Box>
       </form>
 
       <Table
-        columns={columnsPackinglist}
+        columns={[
+          { id: 'packinglistId', label: 'Paquete' },
+          { id: 'barcode', label: 'Código de Barras' },
+          { id: 'dispatchNumber', label: 'Guía de Despacho' },
+          { id: 'investmentName', label: 'Nombre Inversión' },
+          { id: 'originBranch', label: 'Sucursal Origen' },
+          { id: 'destinyBranch', label: 'Sucursal Destino' },
+          { id: 'creationDate', label: 'Fecha de Creación' },
+          { id: 'totalQuantity', label: 'Cantidad Total' },
+          { id: 'totalGrams', label: 'Gramos Totales' },
+          { id: 'documentType', label: 'Tipo Documento' },
+          { id: 'statusId', label: 'ID Estado' },
+          { id: 'statusName', label: 'Estado' },
+          { id: 'category', label: 'Categoría' },
+        ]}
         rows={packingListRows}
         messageVoidData={t('common.noData')}
       />

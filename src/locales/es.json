@@ -128,21 +128,19 @@
     "category": "Categoría",
     "status": "Estado"
   },
-  "contracts": {
-    "contractId": "ID Contrato",
-    "contractNumber": "Número de Contrato",
-    "securityBagCode": "Código de Bolsa de Seguridad",
-    "jewelQuantity": "Cantidad de Joyas",
-    "totalContractValue": "Valor Total del Contrato",
+  "contract": {
     "averagePurchaseValue": "Valor Promedio de Compra",
-    "totalWeight": "Peso Total",
-    "startDate": "Fecha de Inicio",
-    "endDate": "Fecha de Término",
-    "responsibleName": "Responsable",
     "clientName": "Nombre del Cliente",
-    "clientRut": "RUT del Cliente"
+    "clientRut": "RUT del Cliente",
+    "contractNumber": "Número de Contrato",
+    "endDate": "Fecha de Término",
+    "jewelQuantity": "Cantidad de Joyas",
+    "responsibleName": "Nombre del Responsable",
+    "securityBagCode": "Código de Bolsa de Seguridad",
+    "startDate": "Fecha de Inicio",
+    "totalContractValue": "Valor Total del Contrato",
+    "totalWeight": "Peso Total"
   },
-
   "packinglist": {
     "packinglistId": "Paquete",
     "barcode": "Código de Barras",

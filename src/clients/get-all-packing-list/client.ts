@@ -1,14 +1,15 @@
 import { API_BASE } from '../../conf/http';
 import { getHeader, clearProp, clearAllProps } from '../utils';
 import { PageResponse, PropsPackingList } from './types';
+import { cleanDate } from './utils';
 
 const client = async (props: PropsPackingList): Promise<PageResponse> => {
   const params = {
     page: clearProp(props.page),
     size: clearProp(props.size),
     sort: clearProp(props.sort),
-    startDate: clearProp(props.startDate),
-    endDate: clearProp(props.endDate),
+    startDate: cleanDate(props.startDate),
+    endDate: cleanDate(props.endDate),
     originCcId: clearProp(props.originCcId),
     destinyCcId: clearProp(props.destinyCcId),
     categoryId: clearProp(props.categoryId),

@@ -3,9 +3,10 @@ import { clearAllProps, clearProp, getHeader } from '../utils';
 import { PageResponse, PropsContract } from './types';
 
 const client = async (props: PropsContract): Promise<PageResponse> => {
-  const params: Record<string, string> = {};
-
-  params.resolutionId = clearProp(props.resolutionId);
+  const params = {
+    page: clearProp(props.page),
+    resolutionId: clearProp(props.resolutionId)
+  }
 
   const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/contracts?${query}`;

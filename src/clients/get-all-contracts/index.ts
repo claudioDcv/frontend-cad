@@ -1,27 +1,33 @@
 import { useCallback, useState } from 'react';
+import { remap } from './utils';
 import { FetchStatus } from '../../utils';
 import client from './client';
-import { remap } from './utils';
 import { ContractPaginated, PropsContract } from './types';
+import { useTranslation } from 'react-i18next';
 
 const useGetAllContracts = () => {
+  const { t } = useTranslation();
+
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<ContractPaginated>({
     contracts: [],
+    meta: {
+      page: 0,
+      count: 0,
+    },
   });
   const [error, setError] = useState<string | null>(null);
   const [lastProps, setLastProps] = useState<PropsContract | null>(null);
 
   const onResetError = () => {
-    setData({ contracts: []});
+    setData({ contracts: [], meta: { page: 0, count: 0 } });
     setError(null);
   };
 
   const call = useCallback(
     async (props: PropsContract) => {
       const isSameFilter =
-        lastProps &&
-        lastProps.resolutionId === props.resolutionId;
+        lastProps && lastProps.resolutionId === props.resolutionId;
 
       if (status === FetchStatus.ERROR) {
         return;
@@ -42,14 +48,11 @@ const useGetAllContracts = () => {
         setStatus(FetchStatus.SUCCESS);
         setLastProps(props);
       } catch (err) {
-        setError(
-          (err as Error).message ||
-            'An error occurred while fetching resolutions'
-        );
+        setError((err as Error).message || t('error.genericHttpError'));
         setStatus(FetchStatus.ERROR);
       }
     },
-    [lastProps, status]
+    [lastProps, status, t]
   );
 
   return { status, data, error, call, onResetError };

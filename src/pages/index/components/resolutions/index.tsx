@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Box, Pagination } from '@mui/material';
+import { Box, Button, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash';
@@ -29,11 +29,18 @@ import {
 import Notification from '../../../../components/molecules/notification';
 import { defaultResolutionsFormValues, resolutionParams } from './utils';
 import { Option } from '../../../../types';
+import IconList from '../../../../components/molecules/icon';
+import { Resolution } from '../../../../clients/get-all-resolutions/types';
+import { useLocation } from 'wouter';
+import useRoutes from '../../../../conf/routes';
 
 const Resolutions = () => {
   const { control, reset, watch } = useForm<ResolutionFormModel>({
     defaultValues: defaultResolutionsFormValues,
   });
+
+  const [, navigate] = useLocation();
+  const routes = useRoutes();
 
   const { t } = useTranslation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
@@ -60,15 +67,12 @@ const Resolutions = () => {
   const paginationCount = getAllResolutions.data?.meta?.count || 0;
 
   const debouncedFetchResolutions = useRef(
-    debounce(
-      (page: number, filters: ResolutionFormModel) => {
-        const params = resolutionParams(page, filters);
-        getAllResolutions.call(params);
-      },
-      1000
-    )
+    debounce((page: number, filters: ResolutionFormModel) => {
+      const params = resolutionParams(page, filters);
+      getAllResolutions.call(params);
+    }, 1000)
   );
-  
+
   useEffect(() => {
     const timers = [
       setTimeout(() => getAllMaterialType.call(), 0),
@@ -77,10 +81,9 @@ const Resolutions = () => {
     ];
     return () => timers.forEach(clearTimeout);
   }, [getAllInvestments, getAllMaterialType, getAllStatus]);
-
+  
   const handleInvestmentChange =
-    (onChange: (value: Option) => void) =>
-    (value: Option) => {
+    (onChange: (value: Option) => void) => (value: Option) => {
       onChange(value);
       reset((prev) => ({
         ...prev,
@@ -118,6 +121,10 @@ const Resolutions = () => {
       debouncedFetch.cancel();
     };
   }, []);
+
+  const handleViewContracts = (resolutionId: string) => {
+    navigate(routes.contracts.path(resolutionId));
+  };
 
   const handleChangePage = (
     _event: React.ChangeEvent<unknown>,
@@ -219,6 +226,21 @@ const Resolutions = () => {
             { id: 'totalJewels', label: t('resolution.totalJewels') },
             { id: 'categoryName', label: t('resolution.category') },
             { id: 'stateName', label: t('resolution.status') },
+            {
+              id: 'actions',
+              label: t('common.actions'),
+              render: (row: Resolution) => (
+                <Button
+                  onClick={handleViewContracts.bind(
+                    null,
+                    row.resolutionId.toString()
+                  )}
+                >
+                  <IconList name="visualize" />
+                  {t('common.viewContracts')}
+                </Button>
+              ),
+            },
           ]}
           rows={resolutionRows}
           messageVoidData={t('common.noData')}
