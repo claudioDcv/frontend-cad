@@ -17,5 +17,9 @@ export interface ContractFormModel {
 }
 
 export interface PackingListFormModel {
+  materialType: Option;
   status: Option;
+  investment: Option;
+  location: Option;
+  range: [Date, Date];
 }

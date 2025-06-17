@@ -16,6 +16,30 @@ export const addOptionAll = (
 
 export const isEmpty = (data?: unknown[]) => !data || data.length === 0;
 
+export const defaultResolutionsFormValues: ResolutionFormModel = {
+  materialType: emptyOption,
+  status: emptyOption,
+  investment: emptyOption,
+  location: emptyOption,
+  range: [toDay, toDay],
+};
+
+export const defaultPackingListFormValues: PackingListFormModel = {
+  materialType: emptyOption,
+  status: emptyOption,
+  investment: emptyOption,
+  location: emptyOption,
+  range: [toDay, toDay],
+};
+
+export const defaultContractsFormValues: ContractFormModel = {
+  resolutionId: emptyOption,
+  clientRut: '',
+  responsible: '',
+  expirationBefore: toDay,
+  contractId: emptyOption,
+};
+
 export function resolutionParams(
   page: number,
   filters: {
@@ -44,14 +68,6 @@ export function resolutionParams(
   return params;
 }
 
-export const defaultResolutionsFormValues: ResolutionFormModel = {
-  materialType: emptyOption,
-  status: emptyOption,
-  investment: emptyOption,
-  location: emptyOption,
-  range: [toDay, toDay],
-};
-
 export function contractParams(
   page: number,
   filters: {
@@ -76,15 +92,3 @@ export function contractParams(
 
   return params;
 }
-
-export const defaultContractsFormValues: ContractFormModel = {
-  resolutionId: emptyOption,
-  clientRut: '',
-  responsible: '',
-  expirationBefore: toDay,
-  contractId: emptyOption,
-};
-
-export const defaultPackingListFormValues: PackingListFormModel = {
-  status: emptyOption,
-};

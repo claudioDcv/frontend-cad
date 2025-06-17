@@ -3,19 +3,38 @@ import { Box, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash';
-import { Dropdown, Table, MonthRangePicker } from '../../../../components';
-import { useGetAllPackingList, useGetAllStatus } from '../../../../clients';
+import {
+  Dropdown,
+  Table,
+  MonthRangePicker,
+  ButtonClear,
+} from '../../../../components';
+import {
+  useGetAllInvestments,
+  useGetAllLocations,
+  useGetAllMaterialTypes,
+  useGetAllPackingList,
+  useGetAllStatus,
+} from '../../../../clients';
 import { PackingListFormModel } from '../../types';
-import { defaultPackingListFormValues } from '../../utils';
+import {
+  addOptionAll,
+  defaultPackingListFormValues,
+  isEmpty,
+} from '../../utils';
 import {
   FIRST_PAGE,
   STATUS_PACKING_LIST,
   defaultStartDate,
+  emptyOption,
   toDay,
 } from '../../../../utils';
+import { Option } from '../../../../types';
+import { packingListParams } from './utils';
+import Notification from '../../../../components/molecules/notification';
 
 const PackingList = () => {
-  const { control, watch } = useForm<PackingListFormModel>({
+  const { control, reset, watch } = useForm<PackingListFormModel>({
     defaultValues: defaultPackingListFormValues,
   });
 
@@ -23,36 +42,77 @@ const PackingList = () => {
   const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
 
-  const status = watch('status');
+  const { status, materialType, investment, location } = watch();
 
-  const getAllStatus = useGetAllStatus();
   const getAllPackingList = useGetAllPackingList();
+  const getAllStatus = useGetAllStatus();
+  const getAllLocations = useGetAllLocations();
+  const getAllMaterialType = useGetAllMaterialTypes();
+  const getAllInvestments = useGetAllInvestments();
 
-  const isStatusDisabled = !getAllStatus.data || getAllStatus.data.length === 0;
+  const statusOptions = addOptionAll(getAllStatus.data);
+  const materialTypeOptions = addOptionAll(getAllMaterialType.data);
+  const investmentOptions = addOptionAll(getAllInvestments.data);
+  const locationOptions = addOptionAll(getAllLocations.data);
+
+  const isStatusDisabled = isEmpty(getAllStatus.data);
+  const isMaterialTypeDisabled = isEmpty(getAllMaterialType.data);
+  const isInvestmentDisabled = isEmpty(getAllInvestments.data);
+  const isLocationDisabled = isEmpty(getAllLocations.data);
+
   const packingListRows = getAllPackingList.data?.packingList || [];
   const paginationCount = getAllPackingList.data?.meta?.count || 0;
 
   const debouncedFetchPackingList = useRef(
-    debounce((page: number, filters: PackingListFormModel, range: [Date, Date]) => {
-      if (!filters.status?.value) return;
-
-      getAllPackingList.call({
-        statusId: filters.status.value,
-        page,
-        startDate: range[0].toISOString(),
-        endDate: range[1].toISOString(),
-      });
+    debounce((page: number, filters: PackingListFormModel) => {
+      const params = packingListParams(page, filters);
+      getAllPackingList.call(params);
     }, 1000)
   );
+  const handleClear = () => {
+    reset(defaultPackingListFormValues);
+    setRange([defaultStartDate, new Date()]);
+    getAllLocations.clearData();
+    getAllInvestments.clearData();
+  };
 
   useEffect(() => {
-    getAllStatus.call({ tableId: STATUS_PACKING_LIST });
-  }, [getAllStatus]);
+    const timers = [
+      setTimeout(() => getAllMaterialType.call(), 0),
+      setTimeout(
+        () => getAllStatus.call({ tableId: STATUS_PACKING_LIST }),
+        200
+      ),
+      setTimeout(() => getAllInvestments.call(), 400),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [getAllInvestments, getAllMaterialType, getAllStatus]);
 
   useEffect(() => {
     setCurrentPage(FIRST_PAGE);
-    debouncedFetchPackingList.current(FIRST_PAGE, { status }, range);
-  }, [status, range]);
+    debouncedFetchPackingList.current(FIRST_PAGE, {
+      status,
+      materialType,
+      investment,
+      location,
+      range,
+    });
+  }, [status, range, materialType, investment, location]);
+
+  const handleInvestmentChange =
+    (onChange: (value: Option) => void) => (value: Option) => {
+      onChange(value);
+      reset((prev) => ({
+        ...prev,
+        location: emptyOption,
+      }));
+
+      if (value.value) {
+        getAllLocations.call({ investmentId: value.value, status: true });
+      } else {
+        getAllLocations.clearData();
+      }
+    };
 
   useEffect(() => {
     const debouncedFetch = debouncedFetchPackingList.current;
@@ -61,67 +121,126 @@ const PackingList = () => {
     };
   }, []);
 
-  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setCurrentPage(value);
-    debouncedFetchPackingList.current(value, { status }, range);
+  const handleChangePage = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCurrentPage(value - 1);
+    debouncedFetchPackingList.current(value - 1, {
+      materialType,
+      status,
+      investment,
+      location,
+      range,
+    });
   };
 
   return (
-    <Box>
-      <form>
-        <Box
-          mb={2}
-          mt={2}
-          flexWrap="nowrap"
-          display="flex"
-          alignItems="center"
-          gap={2}
-        >
-          <Controller
-            name="status"
-            control={control}
-            render={({ field }) => (
-              <Dropdown
-                {...field}
-                options={getAllStatus.data || []}
-                label={t('common.status')}
-                disabled={isStatusDisabled}
-              />
-            )}
-          />
-
-          <MonthRangePicker value={range} onChange={setRange} />
-        </Box>
-      </form>
-
-      <Table
-        columns={[
-          { id: 'packinglistId', label: 'Paquete' },
-          { id: 'barcode', label: 'Código de Barras' },
-          { id: 'dispatchNumber', label: 'Guía de Despacho' },
-          { id: 'investmentName', label: 'Nombre Inversión' },
-          { id: 'originBranch', label: 'Sucursal Origen' },
-          { id: 'destinyBranch', label: 'Sucursal Destino' },
-          { id: 'creationDate', label: 'Fecha de Creación' },
-          { id: 'totalQuantity', label: 'Cantidad Total' },
-          { id: 'totalGrams', label: 'Gramos Totales' },
-          { id: 'documentType', label: 'Tipo Documento' },
-          { id: 'statusId', label: 'ID Estado' },
-          { id: 'statusName', label: 'Estado' },
-          { id: 'category', label: 'Categoría' },
-        ]}
-        rows={packingListRows}
-        messageVoidData={t('common.noData')}
-      />
-
-      <Box display="flex" justifyContent="flex-end" mt={2}>
-        <Pagination
-          count={paginationCount}
-          page={currentPage}
-          onChange={handleChangePage}
+    <div>
+      <Box>
+        <form>
+          <Box
+            mb={2}
+            mt={2}
+            flexWrap="nowrap"
+            display="flex"
+            alignItems="center"
+            gap={2}
+          >
+            <Controller
+              name="materialType"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  {...field}
+                  options={materialTypeOptions}
+                  label={t('common.materialType')}
+                  disabled={isMaterialTypeDisabled}
+                />
+              )}
+            />
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  {...field}
+                  options={statusOptions}
+                  label={t('common.status')}
+                  disabled={isStatusDisabled}
+                />
+              )}
+            />
+            <Controller
+              name="investment"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  {...field}
+                  options={investmentOptions}
+                  label={t('common.investment')}
+                  onChange={handleInvestmentChange(field.onChange)}
+                  disabled={isInvestmentDisabled}
+                />
+              )}
+            />
+            <Controller
+              name="location"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  {...field}
+                  options={locationOptions}
+                  label={t('common.location')}
+                  disabled={isLocationDisabled}
+                />
+              )}
+            />
+            <MonthRangePicker value={range} onChange={setRange} />
+            <ButtonClear
+              onClick={handleClear}
+              label={t('common.clearFilters')}
+            />
+          </Box>
+        </form>
+        <Table
+          columns={[
+            { id: 'statusName', label: 'Estado' },
+            { id: 'packinglistId', label: 'Paquete' },
+            { id: 'barcode', label: 'Código de Barras' },
+            { id: 'dispatchNumber', label: 'Guía de Despacho' },
+            { id: 'originLocation', label: 'Sucursal Origen' },
+            { id: 'destinyLocation', label: 'Sucursal Destino' },
+            { id: 'investmentName', label: 'Inversión' },
+            { id: 'creationDate', label: 'Fecha de Creación' },
+            { id: 'statusId', label: 'ID Estado' },
+            { id: 'categoryName', label: 'Categoría' },
+            { id: 'totalGrams', label: 'Gramos Totales' },
+            { id: 'totalQuantity', label: 'Cantidad Total' },
+            { id: 'documentType', label: 'Tipo Documento' },
+          ]}
+          rows={packingListRows}
+          messageVoidData={t('common.noData')}
         />
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Pagination
+            count={paginationCount}
+            page={currentPage + 1}
+            onChange={handleChangePage}
+          />
+        </Box>
       </Box>
-    </Box>
+
+      <Notification
+        open={!!getAllPackingList.error}
+        onClose={getAllPackingList.onResetError}
+        severity="error"
+        i18n={{
+          title: t('common.error'),
+          text: getAllPackingList.error || t('common.unknownError'),
+        }}
+      />
+    </div>
   );
 };
 

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 const useGetAllPackingList = () => {
   const { t } = useTranslation();
-  
+
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<PackingListPaginated>({
     packingList: [],
@@ -16,20 +16,25 @@ const useGetAllPackingList = () => {
   const [error, setError] = useState<string | null>(null);
   const [lastProps, setLastProps] = useState<PropsPackingList | null>(null);
 
+  const onResetError = () => {
+    setData({ packingList: [], meta: { page: 0, count: 0 } });
+    setError(null);
+  };
+
   const call = useCallback(
     async (props: PropsPackingList) => {
-        const isSameFilter =
+      const isSameFilter =
         lastProps &&
         lastProps.page === props.page &&
         lastProps.size === props.size &&
         lastProps.sort === props.sort &&
-        lastProps.startDate === props.startDate &&
-        lastProps.endDate === props.endDate &&
-        lastProps.originCcId === props.originCcId &&
-        lastProps.destinyCcId === props.destinyCcId &&
         lastProps.categoryId === props.categoryId &&
-        lastProps.statusId === props.statusId;
-    
+        lastProps.statusId === props.statusId &&
+        lastProps.investmentId === props.investmentId &&
+        lastProps.locationId === props.locationId &&
+        lastProps.startDate === props.startDate &&
+        lastProps.endDate === props.endDate;
+
       if (status === FetchStatus.LOADING || isSameFilter) {
         setStatus(FetchStatus.SUCCESS);
         setError(null);
@@ -45,16 +50,14 @@ const useGetAllPackingList = () => {
         setStatus(FetchStatus.SUCCESS);
         setLastProps(props);
       } catch (err) {
-        setError(
-          (err as Error).message || t('error.genericHttpError')
-        );
+        setError((err as Error).message || t('error.genericHttpError'));
         setStatus(FetchStatus.ERROR);
       }
     },
     [lastProps, status, t]
   );
 
-  return { status, data, error, call };
+  return { status, data, error, call, onResetError };
 };
 
 export default useGetAllPackingList;

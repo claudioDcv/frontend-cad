@@ -33,10 +33,10 @@ const Contracts = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (!resolutionId) return;
     if (getResolution.data) return;
-  
+
     getResolution.call(resolutionId);
   }, [resolutionId, getResolution]);
-  
+
   useEffect(() => {
     const debouncedFetch = debouncedFetchContracts.current;
     return () => {
@@ -69,7 +69,7 @@ const Contracts = ({ params }: { params: { id: string } }) => {
         <Box bgcolor="grey.100" p={2} gap={2} alignItems={'center'} display="flex">
           <MaterialType material={materialValue as Material} />
           <Typography variant="h6" fontWeight="bold">
-            Resolución {resolutionId}
+            {t('common.resolution')} {resolutionId}
           </Typography>
         </Box>
         <Box
@@ -81,44 +81,44 @@ const Contracts = ({ params }: { params: { id: string } }) => {
         >
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Código: {getResolution.data?.resolutionNumber}
+              {t('common.code')}: {getResolution.data?.resolutionNumber}
             </Typography>
             <Typography variant="body2" fontWeight="bold">
-              Guia de despacho
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="body2" fontWeight="bold">
-              N de contrato
-            </Typography>
-            <Typography variant="body2" fontWeight="bold">
-              Tipo: {getResolution.data?.categoryName}
+              {t('common.dispatchGuide')}
             </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Bolsa de seguridad:
+              {t('common.contractNumberLabel')}:
+            </Typography>
+            <Typography variant="body2" fontWeight="bold">
+              {t('common.type')}: {getResolution.data?.categoryName}
             </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Sucursal
-            </Typography>
-            <Typography variant="body2" fontWeight="bold">
-              Direccion
+              {t('common.securityBag')}:
             </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Inversion
+              {t('common.branch')}: {getResolution.data?.branchName}
             </Typography>
             <Typography variant="body2" fontWeight="bold">
-              RUT: 
+              {t('common.address')}
             </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              Fecha de Cierre:
+              {t('common.investment')}
+            </Typography>
+            <Typography variant="body2" fontWeight="bold">
+              {t('common.rut')}:
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="body2" fontWeight="bold">
+              {t('common.closureDate')}: {getResolution.data?.closureDate}
             </Typography>
           </Box>
         </Box>
@@ -133,7 +133,7 @@ const Contracts = ({ params }: { params: { id: string } }) => {
           gap={2}
         ></Box>
         <Box sx={{ mb: 2, mt: 2, display: 'flex', alignItems: 'center' }}>
-          <Typography>Contratos</Typography>
+          <Typography>{t('common.contracts')}</Typography>
         </Box>
         <Table
           columns={[

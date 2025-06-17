@@ -6,14 +6,12 @@ import { cleanDate } from './utils';
 const client = async (props: PropsPackingList): Promise<PageResponse> => {
   const params = {
     page: clearProp(props.page),
-    size: clearProp(props.size),
-    sort: clearProp(props.sort),
     startDate: cleanDate(props.startDate),
     endDate: cleanDate(props.endDate),
-    originCcId: clearProp(props.originCcId),
-    destinyCcId: clearProp(props.destinyCcId),
     categoryId: clearProp(props.categoryId),
     statusId: clearProp(props.statusId),
+    investmentId: clearProp(props.investmentId),
+    locationId: clearProp(props.locationId),
   };
 
   const query = new URLSearchParams(clearAllProps(params));

@@ -11,8 +11,6 @@ const client = async (props: PropsContract): Promise<PageResponse> => {
   const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/contracts?${query}`;
 
-  console.log('URL:', url);
-
   const response = await fetch(url, {
     headers: getHeader(),
     credentials: 'include',

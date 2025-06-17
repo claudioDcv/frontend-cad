@@ -171,7 +171,7 @@
     "unknownError": "Error desconocido",
     "aprove": "Aprobar",
     "reject": "Rechazar",
-    "checkBoxLabel": "Verficiar",
+    "checkBoxLabel": "Verificar",
     "clearFilters": "Limpiar Filtros",
     "materialType": "Tipo de Material",
     "status": "Estado",
@@ -181,8 +181,20 @@
     "packingList": "Packing List",
     "noData": "No hay datos",
     "actions": "Acciones",
-    "viewContracts": "Ver Contratos"
+    "viewContracts": "Ver Contratos",
+    "resolution": "Resolución",
+    "code": "Código",
+    "dispatchGuide": "Guía de despacho",
+    "contractNumberLabel": "N° de contrato",
+    "type": "Tipo",
+    "securityBag": "Bolsa de seguridad",
+    "branch": "Sucursal",
+    "address": "Dirección",
+    "rut": "RUT",
+    "closureDate": "Fecha de Cierre",
+    "contracts": "Contratos"
   },
+
   "routes": {
     "home": "Inicio",
     "contracts": "Lista de Contratos"

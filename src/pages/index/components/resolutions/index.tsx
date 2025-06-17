@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { Box, Button, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'wouter';
 
-import { ResolutionFormModel } from '../../types';
+import useRoutes from '../../../../conf/routes';
+
 import {
   useGetAllInvestments,
   useGetAllLocations,
@@ -18,6 +21,11 @@ import {
   ButtonClear,
   Table,
 } from '../../../../components';
+import Notification from '../../../../components/molecules/notification';
+import IconList from '../../../../components/molecules/icon';
+
+import { ResolutionFormModel } from '../../types';
+import { Resolution } from '../../../../clients/get-all-resolutions/types';
 import { addOptionAll, isEmpty } from '../../utils';
 import {
   defaultStartDate,
@@ -26,13 +34,9 @@ import {
   STATUS_RESOLUTION,
   toDay,
 } from '../../../../utils';
-import Notification from '../../../../components/molecules/notification';
-import { defaultResolutionsFormValues, resolutionParams } from './utils';
 import { Option } from '../../../../types';
-import IconList from '../../../../components/molecules/icon';
-import { Resolution } from '../../../../clients/get-all-resolutions/types';
-import { useLocation } from 'wouter';
-import useRoutes from '../../../../conf/routes';
+import { defaultResolutionsFormValues, resolutionParams } from './utils';
+
 
 const Resolutions = () => {
   const { control, reset, watch } = useForm<ResolutionFormModel>({
@@ -43,9 +47,10 @@ const Resolutions = () => {
   const routes = useRoutes();
 
   const { t } = useTranslation();
-  const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
-  const { investment, location, materialType, status } = watch();
   const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
+  const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
+
+  const { investment, location, materialType, status } = watch();
 
   const getAllResolutions = useGetAllResolutions();
   const getAllStatus = useGetAllStatus();
@@ -73,15 +78,33 @@ const Resolutions = () => {
     }, 1000)
   );
 
+  const handleClear = () => {
+    reset(defaultResolutionsFormValues);
+    setRange([defaultStartDate, new Date()]);
+    getAllLocations.clearData();
+    getAllInvestments.clearData();
+  };
+
   useEffect(() => {
     const timers = [
       setTimeout(() => getAllMaterialType.call(), 0),
-      setTimeout(() => getAllInvestments.call(), 200),
-      setTimeout(() => getAllStatus.call({ tableId: STATUS_RESOLUTION }), 400),
+      setTimeout(() => getAllStatus.call({ tableId: STATUS_RESOLUTION }), 200),
+      setTimeout(() => getAllInvestments.call(), 400),
     ];
     return () => timers.forEach(clearTimeout);
   }, [getAllInvestments, getAllMaterialType, getAllStatus]);
   
+  useEffect(() => {
+    setCurrentPage(FIRST_PAGE);
+    debouncedFetchResolutions.current(FIRST_PAGE, {
+      investment,
+      location,
+      materialType,
+      status,
+      range,
+    });
+  }, [investment, location, materialType, status, range]);
+
   const handleInvestmentChange =
     (onChange: (value: Option) => void) => (value: Option) => {
       onChange(value);
@@ -96,24 +119,6 @@ const Resolutions = () => {
         getAllLocations.clearData();
       }
     };
-
-  const handleClear = () => {
-    reset(defaultResolutionsFormValues);
-    setRange([defaultStartDate, new Date()]);
-    getAllLocations.clearData();
-    getAllInvestments.clearData();
-  };
-
-  useEffect(() => {
-    setCurrentPage(0);
-    debouncedFetchResolutions.current(0, {
-      investment,
-      location,
-      materialType,
-      status,
-      range,
-    });
-  }, [investment, location, materialType, status, range]);
 
   useEffect(() => {
     const debouncedFetch = debouncedFetchResolutions.current;
@@ -164,7 +169,6 @@ const Resolutions = () => {
                 />
               )}
             />
-
             <Controller
               name="status"
               control={control}
@@ -177,7 +181,6 @@ const Resolutions = () => {
                 />
               )}
             />
-
             <Controller
               name="investment"
               control={control}
@@ -191,7 +194,6 @@ const Resolutions = () => {
                 />
               )}
             />
-
             <Controller
               name="location"
               control={control}
@@ -204,16 +206,13 @@ const Resolutions = () => {
                 />
               )}
             />
-
             <MonthRangePicker value={range} onChange={setRange} />
-
             <ButtonClear
               onClick={handleClear}
               label={t('common.clearFilters')}
             />
           </Box>
         </form>
-
         <Table
           columns={[
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
@@ -245,7 +244,6 @@ const Resolutions = () => {
           rows={resolutionRows}
           messageVoidData={t('common.noData')}
         />
-
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
             count={paginationCount}
@@ -254,7 +252,6 @@ const Resolutions = () => {
           />
         </Box>
       </Box>
-
       <Notification
         open={!!getAllResolutions.error}
         onClose={getAllResolutions.onResetError}
