@@ -22,12 +22,14 @@ export type PropsPackingList = {
   size?: number;
   sort?: string;
   investmentId?: string;
-  locationId?: string;
+  originLocationId?: string;
+  destinyLocationId?: string;
   categoryId?: string;
   statusId?: string;
   startDate?: string;
   endDate?: string;
 };
+
 
 export type PackingListPaginated = {
   packingList: PackingList[];

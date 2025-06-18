@@ -11,9 +11,10 @@ const client = async (props: PropsPackingList): Promise<PageResponse> => {
     categoryId: clearProp(props.categoryId),
     statusId: clearProp(props.statusId),
     investmentId: clearProp(props.investmentId),
-    locationId: clearProp(props.locationId),
+    originLocationId: clearProp(props.originLocationId),   
+    destinyLocationId: clearProp(props.destinyLocationId),
   };
-
+  
   const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/packinglist?${query}`;
 

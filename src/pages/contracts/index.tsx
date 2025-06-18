@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { debounce } from 'lodash';
-
 import { useTranslation } from 'react-i18next';
+
 import { Breadcrumb, Pagination, Table } from '../../components';
-import routes from '../../conf/routes';
-import { FIRST_PAGE } from '../../utils';
-import useGetAllContracts from '../../clients/get-all-contracts';
-import useGetResolution from '../../clients/get-resolution';
 import { MaterialType } from '../../components/molecules/material-type';
 import { Material } from '../../components/molecules/material-type/types';
+
+import useGetAllContracts from '../../clients/get-all-contracts';
+import useGetResolution from '../../clients/get-resolution';
+
+import routes from '../../conf/routes';
+import { FIRST_PAGE } from '../../utils';
 import { getMaterialFromLabel } from './utils';
 
 const Contracts = ({ params }: { params: { id: string } }) => {

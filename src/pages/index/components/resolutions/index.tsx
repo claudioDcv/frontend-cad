@@ -218,7 +218,7 @@ const Resolutions = () => {
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
             { id: 'barcode', label: t('resolution.barcode') },
             { id: 'dispatchGuide', label: t('resolution.dispatchGuide') },
-            { id: 'investmentName', label: t('resolution.investment') },
+            { id: 'investmentName', label: t('common.investment') },
             { id: 'locationName', label: t('resolution.location') },
             { id: 'closeDate', label: t('resolution.closeDate') },
             { id: 'contractCount', label: t('resolution.contractCount') },

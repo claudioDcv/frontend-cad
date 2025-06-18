@@ -24,16 +24,15 @@ const useGetAllPackingList = () => {
   const call = useCallback(
     async (props: PropsPackingList) => {
       const isSameFilter =
-        lastProps &&
-        lastProps.page === props.page &&
-        lastProps.size === props.size &&
-        lastProps.sort === props.sort &&
-        lastProps.categoryId === props.categoryId &&
-        lastProps.statusId === props.statusId &&
-        lastProps.investmentId === props.investmentId &&
-        lastProps.locationId === props.locationId &&
-        lastProps.startDate === props.startDate &&
-        lastProps.endDate === props.endDate;
+      lastProps &&
+      lastProps.page === props.page &&
+      lastProps.investmentId === props.investmentId &&
+      lastProps.originLocationId === props.originLocationId &&
+      lastProps.destinyLocationId === props.destinyLocationId &&
+      lastProps.categoryId === props.categoryId &&
+      lastProps.statusId === props.statusId &&
+      lastProps.startDate === props.startDate &&
+      lastProps.endDate === props.endDate;
 
       if (status === FetchStatus.LOADING || isSameFilter) {
         setStatus(FetchStatus.SUCCESS);

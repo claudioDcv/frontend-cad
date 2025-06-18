@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { Box, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash';
+import { Box, Pagination } from '@mui/material';
+
 import {
   Dropdown,
   Table,
   MonthRangePicker,
   ButtonClear,
 } from '../../../../components';
+import Notification from '../../../../components/molecules/notification';
+
 import {
   useGetAllInvestments,
   useGetAllLocations,
@@ -16,12 +19,10 @@ import {
   useGetAllPackingList,
   useGetAllStatus,
 } from '../../../../clients';
+
+import { Option } from '../../../../types';
 import { PackingListFormModel } from '../../types';
-import {
-  addOptionAll,
-  defaultPackingListFormValues,
-  isEmpty,
-} from '../../utils';
+
 import {
   FIRST_PAGE,
   STATUS_PACKING_LIST,
@@ -29,9 +30,12 @@ import {
   emptyOption,
   toDay,
 } from '../../../../utils';
-import { Option } from '../../../../types';
+import {
+  addOptionAll,
+  defaultPackingListFormValues,
+  isEmpty,
+} from '../../utils';
 import { packingListParams } from './utils';
-import Notification from '../../../../components/molecules/notification';
 
 const PackingList = () => {
   const { control, reset, watch } = useForm<PackingListFormModel>({
@@ -191,7 +195,7 @@ const PackingList = () => {
                 <Dropdown
                   {...field}
                   options={locationOptions}
-                  label={t('common.location')}
+                  label= {t('packinglist.originBranch')}
                   disabled={isLocationDisabled}
                 />
               )}
@@ -205,19 +209,19 @@ const PackingList = () => {
         </form>
         <Table
           columns={[
-            { id: 'statusName', label: 'Estado' },
-            { id: 'packinglistId', label: 'Paquete' },
-            { id: 'barcode', label: 'Código de Barras' },
-            { id: 'dispatchNumber', label: 'Guía de Despacho' },
-            { id: 'originLocation', label: 'Sucursal Origen' },
-            { id: 'destinyLocation', label: 'Sucursal Destino' },
-            { id: 'investmentName', label: 'Inversión' },
-            { id: 'creationDate', label: 'Fecha de Creación' },
-            { id: 'statusId', label: 'ID Estado' },
-            { id: 'categoryName', label: 'Categoría' },
-            { id: 'totalGrams', label: 'Gramos Totales' },
-            { id: 'totalQuantity', label: 'Cantidad Total' },
-            { id: 'documentType', label: 'Tipo Documento' },
+            { id: 'statusName', label: t('packinglist.statusName') },
+            { id: 'packinglistId', label: t('packinglist.packinglistId') },
+            { id: 'barcode', label: t('packinglist.barcode') },
+            { id: 'dispatchNumber', label: t('packinglist.dispatchNumber') },
+            { id: 'originLocation', label: t('packinglist.originBranch') },
+            { id: 'destinyLocation', label: t('packinglist.destinyBranch') },
+            { id: 'investmentName', label: t('common.investment') },
+            { id: 'creationDate', label: t('packinglist.creationDate') },
+            { id: 'statusId', label: t('packinglist.statusId') },
+            { id: 'categoryName', label: t('packinglist.category') },
+            { id: 'totalGrams', label: t('packinglist.totalGrams') },
+            { id: 'totalQuantity', label: t('packinglist.totalQuantity') },
+            { id: 'documentType', label: t('packinglist.documentType') },
           ]}
           rows={packingListRows}
           messageVoidData={t('common.noData')}
@@ -230,7 +234,6 @@ const PackingList = () => {
           />
         </Box>
       </Box>
-
       <Notification
         open={!!getAllPackingList.error}
         onClose={getAllPackingList.onResetError}

@@ -12,8 +12,6 @@ const client = async (id: string): Promise<Resolution | null> => {
     credentials: 'include',
   });
 
-  console.log('url', url.toString());
-
   if (!response.ok) {
     throw new Error(response.statusText);
   }

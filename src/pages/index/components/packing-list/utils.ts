@@ -6,12 +6,14 @@ export function packingListParams(
   page: number,
   filters: PackingListFilters
 ): PropsPackingList {
-  const { status, materialType, range } = filters;
+  const { status, materialType, range, investment, location } = filters;
 
   const params: PropsPackingList = {
     page,
     statusId: status?.value,
     categoryId: materialType?.value,
+    investmentId: investment?.value,
+    originLocationId: location?.value,
     endDate: range[1].toISOString().split('.')[0],
   };
 
