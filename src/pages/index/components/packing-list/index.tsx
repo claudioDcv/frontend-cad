@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'lodash';
 import { Box, Pagination } from '@mui/material';
 
 import {
@@ -9,8 +8,9 @@ import {
   Table,
   MonthRangePicker,
   ButtonClear,
+  Input,
+  Notification,
 } from '../../../../components';
-import Notification from '../../../../components/molecules/notification';
 
 import {
   useGetAllInvestments,
@@ -26,6 +26,7 @@ import { PackingListFormModel } from '../../types';
 import {
   FIRST_PAGE,
   STATUS_PACKING_LIST,
+  debounce,
   defaultStartDate,
   emptyOption,
   toDay,
@@ -46,7 +47,7 @@ const PackingList = () => {
   const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
 
-  const { status, materialType, investment, location } = watch();
+  const { status, materialType, investment, location, docNumber } = watch();
 
   const getAllPackingList = useGetAllPackingList();
   const getAllStatus = useGetAllStatus();
@@ -73,6 +74,7 @@ const PackingList = () => {
       getAllPackingList.call(params);
     }, 1000)
   );
+  
   const handleClear = () => {
     reset(defaultPackingListFormValues);
     setRange([defaultStartDate, new Date()]);
@@ -100,8 +102,9 @@ const PackingList = () => {
       investment,
       location,
       range,
+      docNumber,
     });
-  }, [status, range, materialType, investment, location]);
+  }, [status, range, materialType, investment, location, docNumber]);
 
   const handleInvestmentChange =
     (onChange: (value: Option) => void) => (value: Option) => {
@@ -136,6 +139,7 @@ const PackingList = () => {
       investment,
       location,
       range,
+      docNumber,
     });
   };
 
@@ -151,6 +155,13 @@ const PackingList = () => {
             alignItems="center"
             gap={2}
           >
+            <Controller
+              name="docNumber"
+              control={control}
+              render={({ field }) => (
+                <Input label={t('common.numDoc')} {...field} />
+              )}
+            />
             <Controller
               name="materialType"
               control={control}
@@ -195,7 +206,7 @@ const PackingList = () => {
                 <Dropdown
                   {...field}
                   options={locationOptions}
-                  label= {t('packinglist.originBranch')}
+                  label={t('packinglist.originBranch')}
                   disabled={isLocationDisabled}
                 />
               )}

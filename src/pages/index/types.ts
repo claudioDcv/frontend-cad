@@ -22,4 +22,5 @@ export interface PackingListFormModel {
   investment: Option;
   location: Option;
   range: [Date, Date];
+  docNumber: string;
 }

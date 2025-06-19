@@ -2,7 +2,7 @@ import { Pageable, Sort } from "../types";
 import { Option } from '../../types';
 
 export type PackingList = {
-  packinglistId: number;
+  packinglistId: string;
   barcode: string;
   dispatchNumber: string;
   investmentName: string;
@@ -21,6 +21,7 @@ export type PropsPackingList = {
   page: number;
   size?: number;
   sort?: string;
+  packinglistId?: string;
   investmentId?: string;
   originLocationId?: string;
   destinyLocationId?: string;
@@ -54,6 +55,7 @@ export type PageResponse = {
 };
 
 export type PackingListFilters = {
+  investmentId?: string;
   investment?: Option;
   location?: Option;
   materialType?: Option;

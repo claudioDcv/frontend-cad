@@ -141,7 +141,7 @@
     "totalWeight": "Peso Total"
   },
   "packinglist": {
-    "packinglistId": "Paquete",
+    "packinglistId": "Numero",
     "barcode": "Código de Barras",
     "dispatchNumber": "Guía de Despacho",
     "originBranch": "Sucursal Origen",
@@ -177,6 +177,7 @@
     "materialType": "Tipo de Material",
     "modals": "Modales",
     "noData": "No hay datos",
+    "numDoc": "Número de Documento",
     "packingList": "Packing List",
     "reject": "Rechazar",
     "resolution": "Resolución",

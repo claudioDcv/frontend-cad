@@ -1,6 +1,4 @@
 import { PackingListFilters, PropsPackingList } from '../../../../clients/get-all-packing-list/types';
-import { emptyOption, toDay } from '../../../../utils';
-import { PackingListFormModel } from '../../types';
 
 export function packingListParams(
   page: number,
@@ -10,6 +8,7 @@ export function packingListParams(
 
   const params: PropsPackingList = {
     page,
+    packinglistId: '',
     statusId: status?.value,
     categoryId: materialType?.value,
     investmentId: investment?.value,
@@ -23,11 +22,3 @@ export function packingListParams(
 
   return params;
 }
-
-export const defaultPackingListFormValues: PackingListFormModel = {
-  materialType: emptyOption,
-  status: emptyOption,
-  investment: emptyOption,
-  location: emptyOption,
-  range: [toDay, toDay],
-};

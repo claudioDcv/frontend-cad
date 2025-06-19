@@ -18,3 +18,28 @@ export enum FetchStatus {
   SUCCESS = 'success',
   ERROR = 'error',
 }
+
+export function debounce<A extends unknown[]>(
+  func: (...args: A) => void,
+  wait: number
+) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  const debounced = (...args: A) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
+
+  debounced.cancel = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+  };
+
+  return debounced;
+}
+
+

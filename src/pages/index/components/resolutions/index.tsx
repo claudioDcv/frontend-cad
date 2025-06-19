@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Box, Button, Pagination } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import { debounce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'wouter';
 
@@ -28,6 +27,7 @@ import { ResolutionFormModel } from '../../types';
 import { Resolution } from '../../../../clients/get-all-resolutions/types';
 import { addOptionAll, isEmpty } from '../../utils';
 import {
+  debounce,
   defaultStartDate,
   emptyOption,
   FIRST_PAGE,

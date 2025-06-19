@@ -26,6 +26,7 @@ const useGetAllPackingList = () => {
       const isSameFilter =
       lastProps &&
       lastProps.page === props.page &&
+      lastProps.packinglistId === props.packinglistId &&
       lastProps.investmentId === props.investmentId &&
       lastProps.originLocationId === props.originLocationId &&
       lastProps.destinyLocationId === props.destinyLocationId &&

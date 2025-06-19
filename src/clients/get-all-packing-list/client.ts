@@ -6,6 +6,7 @@ import { cleanDate } from './utils';
 const client = async (props: PropsPackingList): Promise<PageResponse> => {
   const params = {
     page: clearProp(props.page),
+    packinglistId: clearProp(props.packinglistId),
     startDate: cleanDate(props.startDate),
     endDate: cleanDate(props.endDate),
     categoryId: clearProp(props.categoryId),
