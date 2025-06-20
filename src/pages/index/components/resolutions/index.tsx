@@ -37,7 +37,6 @@ import {
 import { Option } from '../../../../types';
 import { defaultResolutionsFormValues, resolutionParams } from './utils';
 
-
 const Resolutions = () => {
   const { control, reset, watch } = useForm<ResolutionFormModel>({
     defaultValues: defaultResolutionsFormValues,
@@ -93,7 +92,7 @@ const Resolutions = () => {
     ];
     return () => timers.forEach(clearTimeout);
   }, [getAllInvestments, getAllMaterialType, getAllStatus]);
-  
+
   useEffect(() => {
     setCurrentPage(FIRST_PAGE);
     debouncedFetchResolutions.current(FIRST_PAGE, {

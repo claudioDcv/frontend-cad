@@ -1,7 +1,8 @@
 import { Option } from '../../types';
 
 export interface ResolutionFormModel {
-  materialType: Option;
+  page: number;
+  categoryId: Option;
   status: Option;
   investment: Option;
   location: Option;

@@ -17,13 +17,13 @@ const client = async (props: PropsStatus): Promise<Status[]> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error('error.getAllStatusFetch');
   }
 
   try {
     return await response.json();
   } catch {
-    throw new Error('Failed to parse JSON response');
+    throw new Error('error.jsonError');
   }
 };
 

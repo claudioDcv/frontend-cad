@@ -3,19 +3,18 @@ import { FetchStatus } from '../../utils';
 import client from './client';
 import { remap } from './utils';
 import { ResolutionPaginated } from './types';
-import { PropsResolution } from './types';
 import { useTranslation } from 'react-i18next';
+import { ResolutionFormModel } from '../../pages/index/types';
 
 const useGetAllResolutions = () => {
   const { t } = useTranslation();
-  
+
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<ResolutionPaginated>({
     resolutions: [],
     meta: { page: 0, count: 0 },
   });
   const [error, setError] = useState<string | null>(null);
-  const [lastProps, setLastProps] = useState<PropsResolution | null>(null);
 
   const onResetError = () => {
     setData({ resolutions: [], meta: { page: 0, count: 0 } });
@@ -23,22 +22,12 @@ const useGetAllResolutions = () => {
   };
 
   const call = useCallback(
-    async (props: PropsResolution) => {
-      const isSameFilter =
-        lastProps &&
-        lastProps.page === props.page &&
-        lastProps.investmentId === props.investmentId &&
-        lastProps.locationId === props.locationId &&
-        lastProps.categoryId === props.categoryId &&
-        lastProps.stateId === props.stateId &&
-        lastProps.startDate === props.startDate &&
-        lastProps.endDate === props.endDate;
-
+    async (props: ResolutionFormModel) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
 
-      if (status === FetchStatus.LOADING || isSameFilter) {
+      if (status === FetchStatus.LOADING) {
         setStatus(FetchStatus.SUCCESS);
         setError(null);
         return;
@@ -47,19 +36,21 @@ const useGetAllResolutions = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client(props);
+        const result = await client({
+          page: props.page,
+          stateId: props?.status?.value || undefined,
+          categoryId: props?.categoryId?.value || undefined,
+        });
         const model = remap(result);
         setData(model);
         setStatus(FetchStatus.SUCCESS);
-        setLastProps(props);
       } catch (err) {
-        setError(
-          (err as Error).message || t('error.genericHttpError')
-        );
+        const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
+        setError(t(messageKey));
         setStatus(FetchStatus.ERROR);
       }
     },
-    [lastProps, status, t]
+    [status, t]
   );
 
   return { status, data, error, call, onResetError };

@@ -12,10 +12,10 @@ const client = async (props: PropsPackingList): Promise<PageResponse> => {
     categoryId: clearProp(props.categoryId),
     statusId: clearProp(props.statusId),
     investmentId: clearProp(props.investmentId),
-    originLocationId: clearProp(props.originLocationId),   
+    originLocationId: clearProp(props.originLocationId),
     destinyLocationId: clearProp(props.destinyLocationId),
   };
-  
+
   const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/packinglist?${query}`;
 
@@ -25,13 +25,13 @@ const client = async (props: PropsPackingList): Promise<PageResponse> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error('error.getAllPackingListFetch');
   }
 
   try {
     return await response.json();
   } catch {
-    throw new Error('Failed to parse JSON response');
+    throw new Error('error.jsonError');
   }
 };
 

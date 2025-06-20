@@ -1,4 +1,4 @@
-import { emptyOption } from '../../utils';
+import { emptyOption, FIRST_PAGE } from '../../utils';
 import { Option } from '../../types';
 import { PropsContract } from '../../clients/get-all-contracts/types';
 import { PropsResolution } from '../../clients/get-all-resolutions/types';
@@ -17,7 +17,8 @@ export const addOptionAll = (
 export const isEmpty = (data?: unknown[]) => !data || data.length === 0;
 
 export const defaultResolutionsFormValues: ResolutionFormModel = {
-  materialType: emptyOption,
+  page: FIRST_PAGE,
+  categoryId: emptyOption,
   status: emptyOption,
   investment: emptyOption,
   location: emptyOption,

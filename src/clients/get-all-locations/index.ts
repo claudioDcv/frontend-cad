@@ -33,9 +33,8 @@ const useGetAllLocations = () => {
         setData(model);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
-        setError(
-          (err as Error).message || t('error.genericHttpError')
-        );
+        const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
+        setError(t(messageKey));
         setStatus(FetchStatus.ERROR);
       }
     },

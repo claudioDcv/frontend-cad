@@ -4,11 +4,13 @@ import routes from './conf/routes';
 import Index from './pages/index';
 import Contracts from './pages/contracts';
 import NotFound from './pages/not-found';
+import Test from './pages/test';
 
 const Router = () => (
   <Switch>
     <Route path={routes().index.link} component={Index} />
     <Route path={routes().contracts.link} component={Contracts} />
+    <Route path={routes().test.link} component={Test} />
     <Route>
       <NotFound />
     </Route>

@@ -2,7 +2,7 @@ import {
   PropsResolution,
   ResolutionFilters,
 } from '../../../../clients/get-all-resolutions/types';
-import { emptyOption, toDay } from '../../../../utils';
+import { emptyOption, FIRST_PAGE, toDay } from '../../../../utils';
 import { ResolutionFormModel } from '../../types';
 
 export function resolutionParams(
@@ -28,7 +28,8 @@ export function resolutionParams(
 }
 
 export const defaultResolutionsFormValues: ResolutionFormModel = {
-  materialType: emptyOption,
+  page: FIRST_PAGE,
+  categoryId: emptyOption,
   status: emptyOption,
   investment: emptyOption,
   location: emptyOption,

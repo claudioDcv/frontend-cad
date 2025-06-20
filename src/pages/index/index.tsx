@@ -5,6 +5,7 @@ import PackingList from './components/packing-list';
 import Resolutions from './components/resolutions';
 import { Breadcrumb } from '../../components';
 import routes from '../../conf/routes';
+import Test from '../test';
 
 const Index = () => {
   const { t } = useTranslation();
@@ -21,9 +22,11 @@ const Index = () => {
         <Tabs value={tabIndex} onChange={handleTabChange}>
           <Tab label={t('common.resolutions')} />
           <Tab label={t('common.packingList')} />
+          <Tab label={t('common.test')} />
         </Tabs>
         {tabIndex === 0 && <Resolutions />}
         {tabIndex === 1 && <PackingList />}
+        {tabIndex === 2 && <Test />}
       </Box>
     </div>
   );

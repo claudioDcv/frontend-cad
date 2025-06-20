@@ -5,7 +5,7 @@ import { PageResponse } from './types';
 
 const client = async (props: PropsResolution): Promise<PageResponse> => {
   const params = {
-    page: clearProp(props.page),
+    page: clearProp(props.page - 1),
     investmentId: clearProp(props.investmentId),
     locationId: clearProp(props.locationId),
     categoryId: clearProp(props.categoryId),
@@ -23,13 +23,13 @@ const client = async (props: PropsResolution): Promise<PageResponse> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error('error.getAllResolutionsFetch');
   }
 
   try {
     return await response.json();
   } catch {
-    throw new Error('Failed to parse JSON response');
+    throw new Error('error.jsonError');
   }
 };
 

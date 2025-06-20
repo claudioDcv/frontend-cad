@@ -13,19 +13,13 @@ const client = async (id: string): Promise<Resolution | null> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error('error.getResolutionFetch');
   }
 
   try {
-    const data = await response.json();
-
-    if (data.content && data.content.length > 0) {
-      return data.content[0];
-    }
-
-    return null;
+    return await response.json();
   } catch {
-    throw new Error('Failed to parse JSON response');
+    throw new Error('error.jsonError');
   }
 };
 
