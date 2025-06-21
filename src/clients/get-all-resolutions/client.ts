@@ -1,6 +1,6 @@
 import { API_BASE } from '../../conf/http';
-import { PropsResolution } from './types';
 import { clearAllProps, clearProp, getHeader } from '../utils';
+import { PropsResolution } from './types';
 import { PageResponse } from './types';
 
 const client = async (props: PropsResolution): Promise<PageResponse> => {

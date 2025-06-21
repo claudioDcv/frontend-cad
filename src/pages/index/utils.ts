@@ -1,7 +1,6 @@
-import { emptyOption, FIRST_PAGE } from '../../utils';
+import { defaultStartDate, emptyOption, FIRST_PAGE } from '../../utils';
 import { Option } from '../../types';
 import { PropsContract } from '../../clients/get-all-contracts/types';
-import { PropsResolution } from '../../clients/get-all-resolutions/types';
 import { toDay } from '../../utils';
 import {
   ContractFormModel,
@@ -22,11 +21,12 @@ export const defaultResolutionsFormValues: ResolutionFormModel = {
   status: emptyOption,
   investment: emptyOption,
   location: emptyOption,
-  range: [toDay, toDay],
+  range: [defaultStartDate, toDay],
 };
 
 export const defaultPackingListFormValues: PackingListFormModel = {
-  materialType: emptyOption,
+  page: FIRST_PAGE,
+  categoryId: emptyOption,
   status: emptyOption,
   investment: emptyOption,
   location: emptyOption,
@@ -41,34 +41,6 @@ export const defaultContractsFormValues: ContractFormModel = {
   expirationBefore: toDay,
   contractId: emptyOption,
 };
-
-export function resolutionParams(
-  page: number,
-  filters: {
-    investment?: { value: string };
-    location?: { value: string };
-    materialType?: { value: string };
-    status?: { value: string };
-    range: [Date, Date];
-  }
-): PropsResolution {
-  const { investment, location, materialType, status, range } = filters;
-
-  const params: PropsResolution = {
-    page,
-    investmentId: investment?.value,
-    locationId: location?.value,
-    categoryId: materialType?.value,
-    stateId: status?.value,
-    endDate: range[1].toISOString().split('.')[0],
-  };
-
-  if (range[0].toDateString() !== range[1].toDateString()) {
-    params.startDate = range[0].toISOString().split('.')[0];
-  }
-
-  return params;
-}
 
 export function contractParams(
   page: number,

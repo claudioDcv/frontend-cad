@@ -14,7 +14,6 @@ const useGetAllPackingList = () => {
     meta: { page: 0, count: 0 },
   });
   const [error, setError] = useState<string | null>(null);
-  const [lastProps, setLastProps] = useState<PropsPackingList | null>(null);
 
   const onResetError = () => {
     setData({ packingList: [], meta: { page: 0, count: 0 } });
@@ -23,19 +22,11 @@ const useGetAllPackingList = () => {
 
   const call = useCallback(
     async (props: PropsPackingList) => {
-      const isSameFilter =
-      lastProps &&
-      lastProps.page === props.page &&
-      lastProps.packinglistId === props.packinglistId &&
-      lastProps.investmentId === props.investmentId &&
-      lastProps.originLocationId === props.originLocationId &&
-      lastProps.destinyLocationId === props.destinyLocationId &&
-      lastProps.categoryId === props.categoryId &&
-      lastProps.statusId === props.statusId &&
-      lastProps.startDate === props.startDate &&
-      lastProps.endDate === props.endDate;
+      if (status === FetchStatus.ERROR) {
+        return;
+      }
 
-      if (status === FetchStatus.LOADING || isSameFilter) {
+      if (status === FetchStatus.LOADING ) {
         setStatus(FetchStatus.SUCCESS);
         setError(null);
         return;
@@ -44,18 +35,19 @@ const useGetAllPackingList = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client(props);
+        const result = await client({
+          page: props.page
+        });
         const model = remap(result);
         setData(model);
         setStatus(FetchStatus.SUCCESS);
-        setLastProps(props);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
         setError(t(messageKey));
         setStatus(FetchStatus.ERROR);
       } 
     },
-    [lastProps, status, t]
+    [status, t]
   );
 
   return { status, data, error, call, onResetError };

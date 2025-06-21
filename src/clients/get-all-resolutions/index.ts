@@ -40,6 +40,10 @@ const useGetAllResolutions = () => {
           page: props.page,
           stateId: props?.status?.value || undefined,
           categoryId: props?.categoryId?.value || undefined,
+          investmentId: props?.investment?.value || undefined,
+          locationId: props?.location?.value || undefined,
+          startDate: props?.range?.[0]?.toISOString() || undefined,
+          endDate: props?.range?.[1]?.toISOString() || undefined,
         });
         const model = remap(result);
         setData(model);

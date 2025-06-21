@@ -4,7 +4,7 @@ import routes from './conf/routes';
 import Index from './pages/index';
 import Contracts from './pages/contracts';
 import NotFound from './pages/not-found';
-import Test from './pages/test';
+import Test from './pages/index/components/resolutions';
 
 const Router = () => (
   <Switch>

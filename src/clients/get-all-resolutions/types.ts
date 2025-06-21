@@ -4,49 +4,48 @@ import { Option } from '../../types';
 export type Resolution = {
   resolutionId: number;
   resolutionNumber: number;
-  resolutionBarcode: string;
-  dispatchGuideNumber: number;
+  barcode: string;
+  dispatchGuide: number;
   investmentName: string;
-  branchName: string;
-  closureDate: string;
-  contractQuantity: number;
-  jewelTotalCount: number;
+  locationName: string;
+  closeDate: string;
+  contractCount: number;
+  totalJewels: number;
   categoryName: string;
   stateName: string;
+  locationAddress: string;
+  investmentRut: string;
+  securityBag: string;
 };
 
 export type PropsResolution = {
-  page: number;
-  size?: number;
-  sort?: string;
+  resolutionId?: number;
+  resolutionNumber?: number;
+  barcode?: string;
+  dispatchGuide?: number;
   investmentId?: string;
   locationId?: string;
   categoryId?: string;
   stateId?: string;
   startDate?: string;
   endDate?: string;
-};
-
-export type ResolutionPaginated = {
-  resolutions: Resolution[];
-  meta: {
-    page: number;
-    count: number;
-  };
+  page: number;
+  size?: number;
+  sort?: string;
 };
 
 export type PageResponse = {
-  content: Resolution[];
-  empty: boolean;
-  first: boolean;
-  last: boolean;
-  number: number;
-  numberOfElements: number;
+  totalPages: number;
+  totalElements: number;
   pageable: Pageable;
   size: number;
-  sort: Sort;
-  totalElements: number;
-  totalPages: number;
+  content: Resolution[];
+  number: number;
+  sort: Sort[];
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
 };
 
 export type ResolutionFilters = {
@@ -55,4 +54,13 @@ export type ResolutionFilters = {
   materialType?: Option;
   status?: Option;
   range: [Date, Date];
+};
+
+
+export type ResolutionPaginated = {
+  resolutions: Resolution[];
+  meta: {
+    page: number;
+    count: number;
+  };
 };

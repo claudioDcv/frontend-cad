@@ -5,8 +5,18 @@ import { FetchStatus } from '../../utils';
 import useGetAllResolutions from '.';
 import { PageResponse } from './types';
 import { remap } from './utils';
+import { ResolutionFormModel } from '../../pages/index/types';
 
-describe('useGetAllStatus', () => {
+const mockFilters: ResolutionFormModel = {
+  page: 1,
+  categoryId: { label: 'TODOS', value: 'all' },
+  status: { label: 'TODOS', value: 'all' },
+  investment: { label: 'TODOS', value: 'all' },
+  location: { label: 'TODOS', value: 'all' },
+  range: [new Date(), new Date()] as [Date, Date],
+};
+
+describe('useGetAllResolutions', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
@@ -17,15 +27,18 @@ describe('useGetAllStatus', () => {
         {
           resolutionId: 0,
           resolutionNumber: 0,
-          resolutionBarcode: 'string',
-          dispatchGuideNumber: 0,
+          barcode: 'string',
+          dispatchGuide: 0,
           investmentName: 'string',
-          branchName: 'string',
-          closureDate: '2025-05-16T15:27:40.874Z',
-          contractQuantity: 0,
-          jewelTotalCount: 0,
+          locationName: 'string',
+          closeDate: '2025-05-16T15:27:40.874Z',
+          contractCount: 0,
+          totalJewels: 0,
           categoryName: 'string',
           stateName: 'string',
+          locationAddress: 'string',
+          investmentRut: 'string',
+          securityBag: 'string',
         },
       ],
       totalElements: 1,
@@ -48,11 +61,13 @@ describe('useGetAllStatus', () => {
         paged: undefined,
         unpaged: undefined,
       },
-      sort: {
-        sorted: false,
-        empty: false,
-        unsorted: false,
-      },
+      sort: [
+        {
+          sorted: true,
+          empty: true,
+          unsorted: false,
+        },
+      ],
     };
 
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
@@ -60,7 +75,7 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllResolutions());
 
     await act(async () => {
-      await result.current.call({ page: 1 });
+      await result.current.call(mockFilters);
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
@@ -75,7 +90,7 @@ describe('useGetAllStatus', () => {
     const { result } = renderHook(() => useGetAllResolutions());
 
     await act(async () => {
-      await result.current.call({ page: 1 });
+      await result.current.call(mockFilters);
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);

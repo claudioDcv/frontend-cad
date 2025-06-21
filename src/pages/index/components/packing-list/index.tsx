@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Pagination } from '@mui/material';
 
@@ -10,23 +10,14 @@ import {
   ButtonClear,
   Input,
   Notification,
+  InputController,
 } from '../../../../components';
-
-import {
-  useGetAllInvestments,
-  useGetAllLocations,
-  useGetAllMaterialTypes,
-  useGetAllPackingList,
-  useGetAllStatus,
-} from '../../../../clients';
 
 import { Option } from '../../../../types';
 import { PackingListFormModel } from '../../types';
 
 import {
   FIRST_PAGE,
-  STATUS_PACKING_LIST,
-  debounce,
   defaultStartDate,
   emptyOption,
   toDay,
@@ -36,111 +27,94 @@ import {
   defaultPackingListFormValues,
   isEmpty,
 } from '../../utils';
-import { packingListParams } from './utils';
+import useServices from './hooks/useServices';
 
 const PackingList = () => {
-  const { control, reset, watch } = useForm<PackingListFormModel>({
-    defaultValues: defaultPackingListFormValues,
-  });
+  const { control, reset, getValues, setValue } = useForm<PackingListFormModel>(
+    {
+      defaultValues: defaultPackingListFormValues,
+    }
+  );
+
+  const services = useServices();
 
   const { t } = useTranslation();
-  const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
 
-  const { status, materialType, investment, location, docNumber } = watch();
+  const statusOptions = addOptionAll(services.getAllStatus.data);
+  const materialTypeOptions = addOptionAll(services.getAllMaterialType.data);
+  const investmentOptions = addOptionAll(services.getAllInvestments.data);
+  const locationOptions = addOptionAll(services.getAllLocations.data);
 
-  const getAllPackingList = useGetAllPackingList();
-  const getAllStatus = useGetAllStatus();
-  const getAllLocations = useGetAllLocations();
-  const getAllMaterialType = useGetAllMaterialTypes();
-  const getAllInvestments = useGetAllInvestments();
+  const isStatusDisabled = isEmpty(services.getAllStatus.data);
+  const isMaterialTypeDisabled = isEmpty(services.getAllMaterialType.data);
+  const isInvestmentDisabled = isEmpty(services.getAllInvestments.data);
+  const isLocationDisabled = isEmpty(services.getAllLocations.data);
 
-  const statusOptions = addOptionAll(getAllStatus.data);
-  const materialTypeOptions = addOptionAll(getAllMaterialType.data);
-  const investmentOptions = addOptionAll(getAllInvestments.data);
-  const locationOptions = addOptionAll(getAllLocations.data);
+  const packingListRows = services.getAllPackingList.data?.packingList || [];
+  const paginationCount = services.getAllPackingList.data?.meta?.count || 0;
 
-  const isStatusDisabled = isEmpty(getAllStatus.data);
-  const isMaterialTypeDisabled = isEmpty(getAllMaterialType.data);
-  const isInvestmentDisabled = isEmpty(getAllInvestments.data);
-  const isLocationDisabled = isEmpty(getAllLocations.data);
-
-  const packingListRows = getAllPackingList.data?.packingList || [];
-  const paginationCount = getAllPackingList.data?.meta?.count || 0;
-
-  const debouncedFetchPackingList = useRef(
-    debounce((page: number, filters: PackingListFormModel) => {
-      const params = packingListParams(page, filters);
-      getAllPackingList.call(params);
-    }, 1000)
-  );
-  
   const handleClear = () => {
     reset(defaultPackingListFormValues);
     setRange([defaultStartDate, new Date()]);
-    getAllLocations.clearData();
-    getAllInvestments.clearData();
+    services.getAllLocations.clearData();
+    services.getAllInvestments.clearData();
   };
 
-  useEffect(() => {
-    const timers = [
-      setTimeout(() => getAllMaterialType.call(), 0),
-      setTimeout(
-        () => getAllStatus.call({ tableId: STATUS_PACKING_LIST }),
-        200
-      ),
-      setTimeout(() => getAllInvestments.call(), 400),
-    ];
-    return () => timers.forEach(clearTimeout);
-  }, [getAllInvestments, getAllMaterialType, getAllStatus]);
+  const handleChangeStatus =
+    (field: ControllerRenderProps<PackingListFormModel>) => (value: Option) => {
+      field.onChange(value);
+      const newFilters = { ...getValues(), status: value, page: FIRST_PAGE };
+      services.getAllPackingList.call(newFilters);
+    };
 
-  useEffect(() => {
-    setCurrentPage(FIRST_PAGE);
-    debouncedFetchPackingList.current(FIRST_PAGE, {
-      status,
-      materialType,
-      investment,
-      location,
-      range,
-      docNumber,
-    });
-  }, [status, range, materialType, investment, location, docNumber]);
+  const handleChangeMaterialType =
+    (field: ControllerRenderProps<PackingListFormModel>) => (value: Option) => {
+      field.onChange(value);
+      const newFilters = {
+        ...getValues(),
+        categoryId: value,
+        page: FIRST_PAGE,
+      };
+      services.getAllPackingList.call(newFilters);
+    };
 
-  const handleInvestmentChange =
-    (onChange: (value: Option) => void) => (value: Option) => {
-      onChange(value);
-      reset((prev) => ({
-        ...prev,
-        location: emptyOption,
-      }));
+  const handleChangeLocation =
+    (field: ControllerRenderProps<PackingListFormModel>) => (value: Option) => {
+      field.onChange(value);
+      const newFilters = {
+        ...getValues(),
+        location: value,
+        page: FIRST_PAGE,
+      };
+      services.getAllPackingList.call(newFilters);
+    };
 
-      if (value.value) {
-        getAllLocations.call({ investmentId: value.value, status: true });
+  const handleChangeInvestment =
+    (field: ControllerRenderProps<PackingListFormModel>) => (value: Option) => {
+      field.onChange(value);
+      setValue('location', emptyOption);
+      if (value?.value) {
+        services.getAllLocations.call({
+          investmentId: value.value,
+          status: true,
+        });
       } else {
-        getAllLocations.clearData();
+        services.getAllLocations.clearData();
       }
+      const newFilters = {
+        ...getValues(),
+        investment: value,
+        location: emptyOption,
+        page: FIRST_PAGE,
+      };
+      services.getAllPackingList.call(newFilters);
     };
 
-  useEffect(() => {
-    const debouncedFetch = debouncedFetchPackingList.current;
-    return () => {
-      debouncedFetch.cancel();
-    };
-  }, []);
-
-  const handleChangePage = (
-    _event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value - 1);
-    debouncedFetchPackingList.current(value - 1, {
-      materialType,
-      status,
-      investment,
-      location,
-      range,
-      docNumber,
-    });
+  const handleChangePage = (_p: unknown, page: number) => {
+    const newFilters = { ...getValues(), page };
+    setValue('page', page);
+    services.getAllPackingList.call(newFilters);
   };
 
   return (
@@ -162,54 +136,37 @@ const PackingList = () => {
                 <Input label={t('common.numDoc')} {...field} />
               )}
             />
-            <Controller
-              name="materialType"
+            <InputController
+              onChange={handleChangeMaterialType}
+              disabled={isMaterialTypeDisabled}
+              options={materialTypeOptions}
+              label="common.materialType"
+              name="categoryId"
               control={control}
-              render={({ field }) => (
-                <Dropdown
-                  {...field}
-                  options={materialTypeOptions}
-                  label={t('common.materialType')}
-                  disabled={isMaterialTypeDisabled}
-                />
-              )}
             />
-            <Controller
+            <InputController
+              onChange={handleChangeStatus}
+              disabled={isStatusDisabled}
+              options={statusOptions}
+              label="common.status"
               name="status"
               control={control}
-              render={({ field }) => (
-                <Dropdown
-                  {...field}
-                  options={statusOptions}
-                  label={t('common.status')}
-                  disabled={isStatusDisabled}
-                />
-              )}
             />
-            <Controller
+            <InputController
+              onChange={handleChangeInvestment}
+              disabled={isInvestmentDisabled}
+              options={investmentOptions}
+              label="common.investment"
               name="investment"
               control={control}
-              render={({ field }) => (
-                <Dropdown
-                  {...field}
-                  options={investmentOptions}
-                  label={t('common.investment')}
-                  onChange={handleInvestmentChange(field.onChange)}
-                  disabled={isInvestmentDisabled}
-                />
-              )}
             />
-            <Controller
+            <InputController
+              onChange={handleChangeLocation}
+              disabled={isLocationDisabled}
+              options={locationOptions}
+              label="common.originBranch"
               name="location"
               control={control}
-              render={({ field }) => (
-                <Dropdown
-                  {...field}
-                  options={locationOptions}
-                  label={t('packinglist.originBranch')}
-                  disabled={isLocationDisabled}
-                />
-              )}
             />
             <MonthRangePicker value={range} onChange={setRange} />
             <ButtonClear
@@ -240,18 +197,18 @@ const PackingList = () => {
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
             count={paginationCount}
-            page={currentPage + 1}
+            page={getValues().page}
             onChange={handleChangePage}
           />
         </Box>
       </Box>
       <Notification
-        open={!!getAllPackingList.error}
-        onClose={getAllPackingList.onResetError}
+        open={!!services.getAllPackingList.error}
+        onClose={services.getAllPackingList.onResetError}
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: getAllPackingList.error || t('common.unknownError'),
+          text: services.getAllPackingList.error || t('common.unknownError'),
         }}
       />
     </div>

@@ -1,22 +1,25 @@
 import { useEffect } from 'react';
 import {
+  useGetAllInvestments,
+  useGetAllLocations,
   useGetAllMaterialTypes,
   useGetAllResolutions,
   useGetAllStatus,
-} from '../../../clients';
-import { FetchStatus, FIRST_PAGE, STATUS_RESOLUTION } from '../../../utils';
-import { defaultResolutionsFormValues } from '../../index/utils';
+} from '../../../../../clients';
+import { FetchStatus, STATUS_RESOLUTION } from '../../../../../utils';
+import { defaultResolutionsFormValues } from '../../../utils';
 
 const useServices = () => {
   const getAllResolutions = useGetAllResolutions();
   const getAllStatus = useGetAllStatus();
   const getAllMaterialType = useGetAllMaterialTypes();
+  const getAllLocations = useGetAllLocations();
+  const getAllInvestments = useGetAllInvestments();
 
   useEffect(() => {
     if (getAllResolutions.status === FetchStatus.IDLE) {
       getAllResolutions.call({
         ...defaultResolutionsFormValues,
-        page: FIRST_PAGE,
       });
     }
     if (getAllStatus.status === FetchStatus.IDLE) {
@@ -25,9 +28,12 @@ const useServices = () => {
     if (getAllMaterialType.status === FetchStatus.IDLE) {
       getAllMaterialType.call();
     }
-  }, [getAllMaterialType, getAllResolutions, getAllStatus]);
+    if (getAllInvestments.status === FetchStatus.IDLE) {
+      getAllInvestments.call();
+    }
+  }, [getAllInvestments, getAllMaterialType, getAllResolutions, getAllStatus]);
 
-  return { getAllMaterialType, getAllResolutions, getAllStatus };
+  return { getAllMaterialType, getAllResolutions, getAllStatus, getAllInvestments, getAllLocations };
 };
 
 export default useServices;
