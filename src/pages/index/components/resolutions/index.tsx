@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-
-import { navigate } from 'wouter/use-browser-location';
+import { useLocation } from 'wouter';
 
 import {
   ButtonClear,
@@ -31,9 +30,9 @@ import {
 
 import { ResolutionFormModel } from '../../types';
 import useServices from './hooks/useServices';
+import useRoutes from '../../../../conf/routes';
 
 import { Option } from '../../../../types';
-import routes from '../../../../conf/routes';
 
 import { Resolution } from '../../../../clients/get-all-resolutions/types';
 
@@ -44,6 +43,7 @@ const Resolutions = () => {
   });
 
   const services = useServices();
+  const routes = useRoutes();
 
   const materialTypeOptions = addOptionAll(services.getAllMaterialType.data);
   const statusOptions = addOptionAll(services.getAllStatus.data);
@@ -56,17 +56,14 @@ const Resolutions = () => {
   const isLocationDisabled = isEmpty(services.getAllLocations.data);
 
   const { t } = useTranslation();
+  const [, navigate] = useLocation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
 
   const resolutionRows = services.getAllResolutions.data?.resolutions || [];
   const paginationCount = services.getAllResolutions.data?.meta?.count || 0;
 
   const renderContracts = (row: Resolution) => (
-    <Button
-      onClick={() =>
-        navigate(routes().contracts.path(row.resolutionId.toString()))
-      }
-    >
+    <Button onClick={() => navigate(routes.contracts.path(row.resolutionId.toString()))}>
       <IconList name="visualize" />
       {t('common.viewContracts')}
     </Button>
@@ -207,7 +204,9 @@ const Resolutions = () => {
             { id: 'barcode', label: t('resolution.barcode') },
             { id: 'dispatchGuide', label: t('resolution.dispatchGuide') },
             { id: 'investmentName', label: t('common.investment') },
+            { id: 'investmentRut', label: t('resolution.investmentRut') },
             { id: 'locationName', label: t('resolution.location') },
+            { id: 'locationAddress', label: t('resolution.locationAddress') }, 
             { id: 'closeDate', label: t('resolution.closeDate') },
             { id: 'contractCount', label: t('resolution.contractCount') },
             { id: 'totalJewels', label: t('resolution.totalJewels') },

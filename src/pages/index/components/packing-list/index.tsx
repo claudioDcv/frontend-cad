@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Box, Pagination } from '@mui/material';
 
 import {
-  Dropdown,
   Table,
   MonthRangePicker,
   ButtonClear,

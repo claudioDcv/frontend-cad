@@ -122,6 +122,8 @@
     "dispatchGuide": "Guía Despacho",
     "location": "Sucursal",
     "closeDate": "Fecha de Cierre",
+    "locationAddress": "Dirección",        
+    "investmentRut": "RUT de la inversión",                   
     "contractCount": "Cantidad Contratada",
     "totalJewels": "Joyas Totales",
     "category": "Categoría",

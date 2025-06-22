@@ -2,8 +2,9 @@ import { useCallback, useState } from 'react';
 import { FetchStatus } from '../../utils';
 import client from './client';
 import { remap } from './utils';
-import { PackingListPaginated, PropsPackingList } from './types';
+import { PackingListPaginated } from './types';
 import { useTranslation } from 'react-i18next';
+import { PackingListFormModel } from '../../pages/index/types';
 
 const useGetAllPackingList = () => {
   const { t } = useTranslation();
@@ -21,7 +22,7 @@ const useGetAllPackingList = () => {
   };
 
   const call = useCallback(
-    async (props: PropsPackingList) => {
+    async (props: PackingListFormModel) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -36,8 +37,10 @@ const useGetAllPackingList = () => {
 
       try {
         const result = await client({
-          page: props.page
+          page: props.page,
+          packinglistId: props.docNumber || undefined,
         });
+        
         const model = remap(result);
         setData(model);
         setStatus(FetchStatus.SUCCESS);

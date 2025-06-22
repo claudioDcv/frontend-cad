@@ -31,7 +31,6 @@ export type PropsPackingList = {
   endDate?: string;
 };
 
-
 export type PackingListPaginated = {
   packingList: PackingList[];
   meta: {

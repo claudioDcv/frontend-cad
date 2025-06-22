@@ -14,10 +14,6 @@ const useRoutes = () => {
       link: appendPrefix('/'),
       label: t('routes.home'),
     },
-    test: {
-      link: appendPrefix('/test'),
-      label: t('routes.test'),
-    },
     contracts: {
       link: appendPrefix('/contracts/:id'),
       path: (id: string) => appendPrefix(`/contracts/${id}`),
