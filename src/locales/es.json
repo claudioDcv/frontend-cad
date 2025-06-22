@@ -146,7 +146,6 @@
     "packinglistId": "Numero",
     "barcode": "Código de Barras",
     "dispatchNumber": "Guía de Despacho",
-    "originBranch": "Sucursal Origen",
     "destinyBranch": "Sucursal Destino",
     "creationDate": "Fecha de Creación",
     "totalQuantity": "Cantidad Total",
@@ -189,6 +188,7 @@
     "status": "Estado",
     "successText": "Enviado con éxito.",
     "successTitle": "Éxito",
+    "originBranch": "Sucursal Origen",
     "type": "Tipo",
     "viewContracts": "Ver Contratos",
     "closureDate": "Fecha de Cierre"

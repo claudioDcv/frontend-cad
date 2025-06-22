@@ -1,60 +1,35 @@
-import { useEffect, useRef, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+
+import useServices from './hooks/useServices';
 
 import { Breadcrumb, Pagination, Table } from '../../components';
 import { MaterialType } from '../../components/molecules/material-type';
 import { Material } from '../../components/molecules/material-type/types';
 
-import useGetAllContracts from '../../clients/get-all-contracts';
-import useGetResolution from '../../clients/get-resolution';
-
 import routes from '../../conf/routes';
-import { debounce, FIRST_PAGE } from '../../utils';
-import { getMaterialFromLabel } from './utils';
+
+import { ContractFormModel } from '../index/types';
+import { useForm } from 'react-hook-form';
+import { defaultContractsFormValues } from '../index/utils';
 
 const Contracts = ({ params }: { params: { id: string } }) => {
+  const { getValues, setValue } = useForm<ContractFormModel>({
+    defaultValues: defaultContractsFormValues,
+  });
   const resolutionId = params.id;
+
+  const services = useServices(resolutionId);
+
   const { t } = useTranslation();
-  const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
 
-  const getAllContracts = useGetAllContracts();
-  const getResolution = useGetResolution();
-  const materialValue = getMaterialFromLabel(getResolution.data?.categoryName);
+  const contractRows = services.getAllContracts.data?.contracts || [];
+  const paginationCount = services.getAllContracts.data?.meta?.count || 0;
 
-  const contractRows = getAllContracts.data?.contracts || [];
-  const paginationCount = getAllContracts.data?.meta?.count || 0;
-
-  const debouncedFetchContracts = useRef(
-    debounce((page: number) => {
-      getAllContracts.call({ resolutionId, page });
-    }, 1000)
-  );
-
-  useEffect(() => {
-    if (!resolutionId) return;
-    if (getResolution.data) return;
-
-    getResolution.call(resolutionId);
-  }, [resolutionId, getResolution]);
-
-  useEffect(() => {
-    const debouncedFetch = debouncedFetchContracts.current;
-    return () => {
-      debouncedFetch.cancel();
-    };
-  }, []);
-
-  useEffect(() => {
-    debouncedFetchContracts.current(currentPage);
-  }, [resolutionId, currentPage]);
-
-  const handleChangePage = (
-    _event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value - 1);
-    debouncedFetchContracts.current(value - 1);
+  const handleChangePage = (_p: unknown, page: number) => {
+    const newFilters = { ...getValues(), page };
+    setValue('page', page);
+    services.getAllContracts.call(newFilters);
   };
 
   return (
@@ -67,8 +42,14 @@ const Contracts = ({ params }: { params: { id: string } }) => {
         borderRadius={1}
         overflow="hidden"
       >
-        <Box bgcolor="grey.100" p={2} gap={2} alignItems={'center'} display="flex">
-          <MaterialType material={materialValue as Material} />
+        <Box
+          bgcolor="grey.100"
+          p={2}
+          gap={2}
+          alignItems={'center'}
+          display="flex"
+        >
+          <MaterialType material={services.materialValue as Material} />
           <Typography variant="h6" fontWeight="bold">
             {t('common.resolution')} {resolutionId}
           </Typography>
@@ -82,7 +63,8 @@ const Contracts = ({ params }: { params: { id: string } }) => {
         >
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.code')}: {getResolution.data?.resolutionNumber}
+              {t('common.code')}:{' '}
+              {services.getResolution.data?.resolutionNumber}
             </Typography>
             <Typography variant="body2" fontWeight="bold">
               {t('common.dispatchGuide')}
@@ -93,7 +75,7 @@ const Contracts = ({ params }: { params: { id: string } }) => {
               {t('common.contractNumberLabel')}:
             </Typography>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.type')}: {getResolution.data?.categoryName}
+              {t('common.type')}: {services.getResolution.data?.categoryName}
             </Typography>
           </Box>
           <Box>
@@ -103,7 +85,7 @@ const Contracts = ({ params }: { params: { id: string } }) => {
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.branch')}: {getResolution.data?.branchName}
+              {t('common.branch')}: {services.getResolution.data?.branchName}
             </Typography>
             <Typography variant="body2" fontWeight="bold">
               {t('common.address')}
@@ -119,7 +101,8 @@ const Contracts = ({ params }: { params: { id: string } }) => {
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.closureDate')}: {getResolution.data?.closureDate}
+              {t('common.closureDate')}:{' '}
+              {services.getResolution.data?.closureDate}
             </Typography>
           </Box>
         </Box>
@@ -163,7 +146,7 @@ const Contracts = ({ params }: { params: { id: string } }) => {
       <Box>
         <Pagination
           count={paginationCount}
-          page={currentPage + 1}
+          page={getValues().page}
           onChange={handleChangePage}
         />
       </Box>

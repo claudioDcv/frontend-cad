@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Pagination } from '@mui/material';
@@ -17,6 +17,7 @@ import { PackingListFormModel } from '../../types';
 
 import {
   FIRST_PAGE,
+  debounce,
   defaultStartDate,
   emptyOption,
   toDay,
@@ -53,11 +54,26 @@ const PackingList = () => {
   const packingListRows = services.getAllPackingList.data?.packingList || [];
   const paginationCount = services.getAllPackingList.data?.meta?.count || 0;
 
+  const debouncedSearchRef = useRef(
+    debounce((docNumber: string) => {
+      const newFilters = {
+        ...getValues(),
+        packinglistId: docNumber,
+        page: FIRST_PAGE,
+      };
+      services.getAllPackingList.call(newFilters);
+    }, 2000)
+  );
+
   const handleClear = () => {
     reset(defaultPackingListFormValues);
     setRange([defaultStartDate, new Date()]);
     services.getAllLocations.clearData();
     services.getAllInvestments.clearData();
+
+    services.getAllPackingList.call({
+      ...defaultPackingListFormValues,
+    });
   };
 
   const handleChangeStatus =
@@ -110,6 +126,25 @@ const PackingList = () => {
       services.getAllPackingList.call(newFilters);
     };
 
+  const handleChangeRange = (newRange: [Date, Date]) => {
+    setRange(newRange);
+    const newFilters = {
+      ...getValues(),
+      range: newRange,
+      page: FIRST_PAGE,
+    };
+    setValue('range', newRange);
+    services.getAllPackingList.call(newFilters);
+  };
+
+  const handleDocNumberChange =
+    (field: ControllerRenderProps<PackingListFormModel>) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      field.onChange(value);
+      debouncedSearchRef.current(value);
+    };
+
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page };
     setValue('page', page);
@@ -132,7 +167,11 @@ const PackingList = () => {
               name="docNumber"
               control={control}
               render={({ field }) => (
-                <Input label={t('common.numDoc')} {...field} />
+                <Input
+                  label={t('common.numDoc')}
+                  value={field.value}
+                  onChange={handleDocNumberChange(field)}
+                />
               )}
             />
             <InputController
@@ -167,7 +206,7 @@ const PackingList = () => {
               name="location"
               control={control}
             />
-            <MonthRangePicker value={range} onChange={setRange} />
+            <MonthRangePicker value={range} onChange={handleChangeRange} />
             <ButtonClear
               onClick={handleClear}
               label={t('common.clearFilters')}
@@ -192,6 +231,7 @@ const PackingList = () => {
           ]}
           rows={packingListRows}
           messageVoidData={t('common.noData')}
+          size="small"
         />
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination

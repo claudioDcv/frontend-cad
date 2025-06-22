@@ -30,11 +30,12 @@ export const defaultPackingListFormValues: PackingListFormModel = {
   status: emptyOption,
   investment: emptyOption,
   location: emptyOption,
-  range: [toDay, toDay],
-  docNumber: ''
+  range: [defaultStartDate, toDay],
+  docNumber: '',
 };
 
 export const defaultContractsFormValues: ContractFormModel = {
+  page: FIRST_PAGE,
   resolutionId: emptyOption,
   clientRut: '',
   responsible: '',

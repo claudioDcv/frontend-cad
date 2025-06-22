@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '../../utils';
-import client from './client';
 import { remap } from './utils';
+import client from './client';
 import { PackingListPaginated } from './types';
 import { useTranslation } from 'react-i18next';
 import { PackingListFormModel } from '../../pages/index/types';
@@ -27,7 +27,7 @@ const useGetAllPackingList = () => {
         return;
       }
 
-      if (status === FetchStatus.LOADING ) {
+      if (status === FetchStatus.LOADING) {
         setStatus(FetchStatus.SUCCESS);
         setError(null);
         return;
@@ -39,8 +39,14 @@ const useGetAllPackingList = () => {
         const result = await client({
           page: props.page,
           packinglistId: props.docNumber || undefined,
+          categoryId: props.categoryId?.value || undefined,
+          statusId: props.status?.value || undefined,
+          investmentId: props.investment?.value || undefined,
+          originLocationId: props.location?.value || undefined,
+          startDate: props.range?.[0]?.toISOString().split('T')[0] || undefined,
+          endDate: props.range?.[1]?.toISOString().split('T')[0] || undefined,
         });
-        
+
         const model = remap(result);
         setData(model);
         setStatus(FetchStatus.SUCCESS);
@@ -48,7 +54,7 @@ const useGetAllPackingList = () => {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
         setError(t(messageKey));
         setStatus(FetchStatus.ERROR);
-      } 
+      }
     },
     [status, t]
   );
