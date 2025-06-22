@@ -9,7 +9,7 @@ import { ContractFormModel } from '../../pages/index/types';
 
 const mockFilters: ContractFormModel = {
   page: 1,
-  resolutionId: { label: 'Resolución 1', value: '1' },
+  resolutionId: '1',
   clientRut: '11111111-1',
   responsible: 'Juan Pérez',
 };

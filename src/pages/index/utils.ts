@@ -1,6 +1,5 @@
 import { defaultStartDate, emptyOption, FIRST_PAGE } from '../../utils';
 import { Option } from '../../types';
-import { PropsContract } from '../../clients/get-all-contracts/types';
 import { toDay } from '../../utils';
 import {
   ContractFormModel,
@@ -36,34 +35,9 @@ export const defaultPackingListFormValues: PackingListFormModel = {
 
 export const defaultContractsFormValues: ContractFormModel = {
   page: FIRST_PAGE,
-  resolutionId: emptyOption,
+  resolutionId: '',
   clientRut: '',
   responsible: '',
   expirationBefore: toDay,
-  contractId: emptyOption,
+  contractId: '',
 };
-
-export function contractParams(
-  page: number,
-  filters: {
-    resolutionId?: { value: string };
-    clientRut?: string;
-    responsible?: string;
-    expirationBefore?: Date;
-    contractId?: { value: string };
-  }
-): PropsContract {
-  const { resolutionId, clientRut, responsible, expirationBefore, contractId } =
-    filters;
-
-  const params: PropsContract = {
-    page,
-    resolutionId: resolutionId?.value,
-    clientRut: clientRut || undefined,
-    responsible,
-    expirationBefore: expirationBefore?.toISOString().split('T')[0],
-    contractId: contractId?.value,
-  };
-
-  return params;
-}

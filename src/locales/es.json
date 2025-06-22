@@ -117,16 +117,16 @@
     }
   },
   "resolution": {
-    "resolutionNumber": "N° Resolución",
-    "barcode": "Código de Barras",
+    "resolutionNumber": "Numero",
+    "barcode": "COD Barra",
     "dispatchGuide": "Guía Despacho",
     "location": "Sucursal",
     "closeDate": "Fecha de Cierre",
     "locationAddress": "Dirección",        
     "investmentRut": "RUT de la inversión",                   
-    "contractCount": "Cantidad Contratada",
+    "contractCount": "Contratos",
     "totalJewels": "Joyas Totales",
-    "category": "Categoría",
+    "category": "Tipo",
     "status": "Estado"
   },
   "contract": {
@@ -144,7 +144,7 @@
   },
   "packinglist": {
     "packinglistId": "Numero",
-    "barcode": "Código de Barras",
+    "barcode": "COD Barra",
     "dispatchNumber": "Guía de Despacho",
     "destinyBranch": "Sucursal Destino",
     "creationDate": "Fecha de Creación",
@@ -153,7 +153,8 @@
     "documentType": "Tipo Documento",
     "statusId": "ID Estado",
     "statusName": "Estado",
-    "category": "Categoría"
+    "category": "Categoría",
+    "originBranch": "Sucursal Origen"
   },
   "common": {
     "accept": "Aceptar",
@@ -164,7 +165,7 @@
     "cancel": "Cancelar",
     "checkBoxLabel": "Verificar",
     "code": "Código",
-    "clearFilters": "Limpiar Filtros",
+    "clearFilters": "Limpiar",
     "confirmationNo": "No",
     "confirmationText": "¿Está seguro que desea enviar?",
     "confirmationTitle": "Confirmación",
@@ -188,9 +189,8 @@
     "status": "Estado",
     "successText": "Enviado con éxito.",
     "successTitle": "Éxito",
-    "originBranch": "Sucursal Origen",
     "type": "Tipo",
-    "viewContracts": "Ver Contratos",
+    "viewContracts": "Ver",
     "closureDate": "Fecha de Cierre"
   },
   "routes": {

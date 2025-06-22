@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
+
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import { Box, Pagination } from '@mui/material';
 
 import {
@@ -12,6 +14,8 @@ import {
   InputController,
 } from '../../../../components';
 
+import useServices from './hooks/useServices';
+
 import { Option } from '../../../../types';
 import { PackingListFormModel } from '../../types';
 
@@ -20,14 +24,15 @@ import {
   debounce,
   defaultStartDate,
   emptyOption,
+  formatToDDMMYYYY,
   toDay,
 } from '../../../../utils';
+
 import {
   addOptionAll,
   defaultPackingListFormValues,
   isEmpty,
 } from '../../utils';
-import useServices from './hooks/useServices';
 
 const PackingList = () => {
   const { control, reset, getValues, setValue } = useForm<PackingListFormModel>(
@@ -202,7 +207,7 @@ const PackingList = () => {
               onChange={handleChangeLocation}
               disabled={isLocationDisabled}
               options={locationOptions}
-              label="common.originBranch"
+              label="packinglist.originBranch"
               name="location"
               control={control}
             />
@@ -222,8 +227,7 @@ const PackingList = () => {
             { id: 'originLocation', label: t('packinglist.originBranch') },
             { id: 'destinyLocation', label: t('packinglist.destinyBranch') },
             { id: 'investmentName', label: t('common.investment') },
-            { id: 'creationDate', label: t('packinglist.creationDate') },
-            { id: 'statusId', label: t('packinglist.statusId') },
+            { id: 'creationDate', label: t('packinglist.creationDate'), render: ({ creationDate }) => formatToDDMMYYYY(creationDate), },
             { id: 'categoryName', label: t('packinglist.category') },
             { id: 'totalGrams', label: t('packinglist.totalGrams') },
             { id: 'totalQuantity', label: t('packinglist.totalQuantity') },

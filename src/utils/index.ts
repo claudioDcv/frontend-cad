@@ -41,3 +41,35 @@ export function debounce<A extends unknown[]>(
 
   return debounced;
 }
+
+export function formatToDDMMYYYY(dateInput: string | undefined ) {
+  if (!dateInput) return '';
+
+  const date = new Date(dateInput);
+
+  if (isNaN(date.getTime())) {
+      console.error("Fecha inválida proporcionada:", dateInput);
+      return ""; 
+  }
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); 
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+export function formatNumberWithGr(value: string | number) {
+  // Verifica si el valor de entrada es un número válido.
+  if (typeof value !== 'number' || isNaN(value)) {
+      console.error("Entrada inválida. Se esperaba un número:", value);
+      return ""; // Devuelve una cadena vacía o maneja el error como prefieras.
+  }
+
+  // Formatea el número con el separador de miles (punto).
+  // Usamos 'es-ES' (español de España) para asegurar que el separador de miles sea un punto.
+  const formattedNumber = value.toLocaleString('es-ES');
+
+  // Agrega el sufijo " gr" al número formateado.
+  return `${formattedNumber} gr`;
+}

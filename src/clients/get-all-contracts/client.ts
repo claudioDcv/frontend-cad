@@ -4,8 +4,9 @@ import { PageResponse, PropsContract } from './types';
 
 const client = async (props: PropsContract): Promise<PageResponse> => {
   const params = {
-    page: clearProp(props.page),
-    resolutionId: clearProp(props.resolutionId)
+    page: clearProp(props.page - 1),
+    resolutionId: clearProp(props.resolutionId),
+    contractId: clearProp(props.contractId),
   }
 
   const query = new URLSearchParams(clearAllProps(params));

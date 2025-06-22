@@ -12,6 +12,9 @@ export type Contract = {
   jewelTotalCount: number;
   categoryName: string;
   stateName: string;
+  totalWeight: string;
+  startDate: string;
+  endDate: string;
 };
 
 export type PropsContract = {

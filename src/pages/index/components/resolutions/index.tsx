@@ -7,7 +7,6 @@ import { useLocation } from 'wouter';
 
 import {
   ButtonClear,
-  IconList,
   InputController,
   MonthRangePicker,
   Pagination,
@@ -19,6 +18,7 @@ import {
   defaultStartDate,
   emptyOption,
   FIRST_PAGE,
+  formatToDDMMYYYY,
   toDay,
 } from '../../../../utils';
 
@@ -28,6 +28,7 @@ import {
   isEmpty,
 } from '../../utils';
 
+import { Visibility } from '@mui/icons-material';
 import { ResolutionFormModel } from '../../types';
 import useServices from './hooks/useServices';
 import useRoutes from '../../../../conf/routes';
@@ -35,7 +36,6 @@ import useRoutes from '../../../../conf/routes';
 import { Option } from '../../../../types';
 
 import { Resolution } from '../../../../clients/get-all-resolutions/types';
-
 
 const Resolutions = () => {
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
@@ -63,8 +63,12 @@ const Resolutions = () => {
   const paginationCount = services.getAllResolutions.data?.meta?.count || 0;
 
   const renderContracts = (row: Resolution) => (
-    <Button onClick={() => navigate(routes.contracts.path(row.resolutionId.toString()))}>
-      <IconList name="visualize" />
+    <Button
+      endIcon={<Visibility />}
+      onClick={() =>
+        navigate(routes.contracts.path(row.resolutionId.toString()))
+      }
+    >
       {t('common.viewContracts')}
     </Button>
   );
@@ -200,18 +204,19 @@ const Resolutions = () => {
         </form>
         <Table
           columns={[
+            { id: 'stateName', label: t('resolution.status') },
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
             { id: 'barcode', label: t('resolution.barcode') },
             { id: 'dispatchGuide', label: t('resolution.dispatchGuide') },
             { id: 'investmentName', label: t('common.investment') },
-            { id: 'investmentRut', label: t('resolution.investmentRut') },
             { id: 'locationName', label: t('resolution.location') },
-            { id: 'locationAddress', label: t('resolution.locationAddress') }, 
-            { id: 'closeDate', label: t('resolution.closeDate') },
+            {
+              id: 'closeDate',
+              label: t('resolution.closeDate'),
+              render: ({ closeDate }) => formatToDDMMYYYY(closeDate),
+            },
             { id: 'contractCount', label: t('resolution.contractCount') },
-            { id: 'totalJewels', label: t('resolution.totalJewels') },
             { id: 'categoryName', label: t('resolution.category') },
-            { id: 'stateName', label: t('resolution.status') },
             {
               id: 'actions',
               label: t('common.actions'),

@@ -1,22 +1,36 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import useServices from './hooks/useServices';
 
-import { Breadcrumb, Pagination, Table } from '../../components';
+import {
+  Breadcrumb,
+  Pagination,
+  Table,
+  Notification,
+  Input,
+} from '../../components';
 import { MaterialType } from '../../components/molecules/material-type';
 import { Material } from '../../components/molecules/material-type/types';
 
 import routes from '../../conf/routes';
 
 import { ContractFormModel } from '../index/types';
-import { useForm } from 'react-hook-form';
+import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { defaultContractsFormValues } from '../index/utils';
+import { useRef } from 'react';
+import {
+  debounce,
+  FIRST_PAGE,
+  formatNumberWithGr,
+  formatToDDMMYYYY,
+} from '../../utils';
 
 const Contracts = ({ params }: { params: { id: string } }) => {
-  const { getValues, setValue } = useForm<ContractFormModel>({
+  const { control, getValues, setValue } = useForm<ContractFormModel>({
     defaultValues: defaultContractsFormValues,
   });
+
   const resolutionId = params.id;
 
   const services = useServices(resolutionId);
@@ -26,8 +40,28 @@ const Contracts = ({ params }: { params: { id: string } }) => {
   const contractRows = services.getAllContracts.data?.contracts || [];
   const paginationCount = services.getAllContracts.data?.meta?.count || 0;
 
+  const debouncedSearchRef = useRef(
+    debounce((contractNumber: string) => {
+      const newFilters = {
+        ...getValues(),
+        contractId: contractNumber,
+        resolutionId,
+        page: FIRST_PAGE,
+      };
+      services.getAllContracts.call(newFilters);
+    }, 2000)
+  );
+
+  const handleContractNumberChange =
+    (field: ControllerRenderProps<ContractFormModel>) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      field.onChange(value);
+      debouncedSearchRef.current(value);
+    };
+
   const handleChangePage = (_p: unknown, page: number) => {
-    const newFilters = { ...getValues(), page };
+    const newFilters = { ...getValues(), page, resolutionId };
     setValue('page', page);
     services.getAllContracts.call(newFilters);
   };
@@ -35,44 +69,28 @@ const Contracts = ({ params }: { params: { id: string } }) => {
   return (
     <div>
       <Breadcrumb items={[routes().index, routes().contracts]} />
-      <Box
-        mb={3}
-        border={1}
-        borderColor="#000"
-        borderRadius={1}
-        overflow="hidden"
-      >
-        <Box
-          bgcolor="grey.100"
-          p={2}
-          gap={2}
-          alignItems={'center'}
-          display="flex"
-        >
-          <MaterialType material={services.materialValue as Material} />
-          <Typography variant="h6" fontWeight="bold">
-            {t('common.resolution')} {resolutionId}
-          </Typography>
-        </Box>
-        <Box
-          bgcolor="white"
-          p={2}
-          display="grid"
-          gridTemplateColumns="repeat(3, 1fr)"
-          gap={2}
-        >
+      <Card>
+        <CardContent>
+          <MaterialType
+            material={services.materialValue as Material}
+            label={`${t('common.resolution')} ${resolutionId}`}
+          />
+        </CardContent>
+        <Box p={2} display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
           <Box>
             <Typography variant="body2" fontWeight="bold">
               {t('common.code')}:{' '}
               {services.getResolution.data?.resolutionNumber}
             </Typography>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.dispatchGuide')}
+              {t('common.dispatchGuide')}:{' '}
+              {services.getResolution.data?.dispatchGuide}
             </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.contractNumberLabel')}:
+              {t('common.contractNumberLabel')}:{' '}
+              {services.getResolution.data?.contractCount}
             </Typography>
             <Typography variant="body2" fontWeight="bold">
               {t('common.type')}: {services.getResolution.data?.categoryName}
@@ -80,33 +98,36 @@ const Contracts = ({ params }: { params: { id: string } }) => {
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.securityBag')}:
+              {t('common.securityBag')}:{' '}
+              {services.getResolution.data?.securityBag}
             </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.branch')}: {services.getResolution.data?.branchName}
+              {t('common.branch')}: {services.getResolution.data?.locationName}
             </Typography>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.address')}
+              {t('common.address')}:{' '}
+              {services.getResolution.data?.locationAddress}
             </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.investment')}
+              {t('common.investment')}:{' '}
+              {services.getResolution.data?.investmentName}
             </Typography>
             <Typography variant="body2" fontWeight="bold">
-              {t('common.rut')}:
+              {t('common.rut')}: {services.getResolution.data?.investmentRut}
             </Typography>
           </Box>
           <Box>
             <Typography variant="body2" fontWeight="bold">
               {t('common.closureDate')}:{' '}
-              {services.getResolution.data?.closureDate}
+              {formatToDDMMYYYY(services.getResolution.data?.closeDate)}
             </Typography>
           </Box>
         </Box>
-      </Box>
+      </Card>
       <form>
         <Box
           mb={2}
@@ -116,9 +137,20 @@ const Contracts = ({ params }: { params: { id: string } }) => {
           alignItems="center"
           gap={2}
         ></Box>
-        <Box sx={{ mb: 2, mt: 2, display: 'flex', alignItems: 'center' }}>
-          <Typography>{t('common.contracts')}</Typography>
+        <Box>
+          <Controller
+            name="contractId"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={t('contract.contractNumber')}
+                value={field.value ?? ''}
+                onChange={handleContractNumberChange(field)}
+              />
+            )}
+          />
         </Box>
+        <Divider sx={{ mb: 2 }} />
         <Table
           columns={[
             { id: 'contractNumber', label: t('contract.contractNumber') },
@@ -132,15 +164,17 @@ const Contracts = ({ params }: { params: { id: string } }) => {
               id: 'averagePurchaseValue',
               label: t('contract.averagePurchaseValue'),
             },
-            { id: 'totalWeight', label: t('contract.totalWeight') },
-            { id: 'startDate', label: t('contract.startDate') },
-            { id: 'endDate', label: t('contract.endDate') },
-            { id: 'responsibleName', label: t('contract.responsibleName') },
-            { id: 'clientName', label: t('contract.clientName') },
-            { id: 'clientRut', label: t('contract.clientRut') },
+            {
+              id: 'totalWeight',
+              label: t('contract.totalWeight'),
+              render: ({ totalWeight }) => formatNumberWithGr(totalWeight),
+            },
+            { id: 'startDate', label: t('contract.startDate'), render: ({ startDate }) => formatToDDMMYYYY(startDate), },
+            { id: 'endDate', label: t('contract.endDate'), render: ({ endDate }) => formatToDDMMYYYY(endDate), },
           ]}
           rows={contractRows}
           messageVoidData={t('common.noData')}
+          size="small"
         />
       </form>
       <Box>
@@ -150,6 +184,15 @@ const Contracts = ({ params }: { params: { id: string } }) => {
           onChange={handleChangePage}
         />
       </Box>
+      <Notification
+        open={!!services.getAllContracts.error}
+        onClose={services.getAllContracts.onResetError}
+        severity="error"
+        i18n={{
+          title: t('common.error'),
+          text: services.getAllContracts.error || t('common.unknownError'),
+        }}
+      />
     </div>
   );
 };

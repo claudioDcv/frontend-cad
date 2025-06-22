@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
 
-import useGetResolution from '../../../clients/get-resolution';
-import { getMaterialFromLabel } from '../utils';
-import { useGetAllContracts } from '../../../clients';
 import { FetchStatus } from '../../../utils';
+
+import useGetResolution from '../../../clients/get-resolution';
+import { useGetAllContracts } from '../../../clients';
+
 import { defaultContractsFormValues } from '../../index/utils';
+
+import { getMaterialFromLabel } from '../utils';
+
 
 const useServices = (resolutionId: string) => {
   const getAllContracts = useGetAllContracts();
@@ -21,6 +25,7 @@ const useServices = (resolutionId: string) => {
     if (getAllContracts.status === FetchStatus.IDLE) {
       getAllContracts.call({
         ...defaultContractsFormValues,
+        resolutionId,
       });
     }
   }, [getAllContracts, getResolution, resolutionId]);

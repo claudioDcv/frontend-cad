@@ -4,7 +4,6 @@ import { Resolution } from './types';
 
 const client = async (id: string): Promise<Resolution | null> => {
   const url = new URL(`${API_BASE}/resolutions`);
-
   url.searchParams.append('resolutionId', id);
 
   const response = await fetch(url.toString(), {
@@ -17,10 +16,13 @@ const client = async (id: string): Promise<Resolution | null> => {
   }
 
   try {
-    return await response.json();
+    const result = await response.json();
+    const resolution = result?.content?.[0] ?? null;
+    return resolution;
   } catch {
     throw new Error('error.jsonError');
   }
 };
+
 
 export default client;
