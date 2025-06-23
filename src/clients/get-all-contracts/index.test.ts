@@ -34,6 +34,9 @@ describe('useGetAllContracts', () => {
           jewelTotalCount: 100,
           categoryName: 'Categoría A',
           stateName: 'Cerrado',
+          totalWeight: '',
+          startDate: '',
+          endDate: ''
         },
       ],
       totalElements: 1,
