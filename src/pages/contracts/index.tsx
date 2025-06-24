@@ -144,7 +144,7 @@ const Contracts = ({ params }: ContractsProps) => {
             control={control}
             render={({ field }) => (
               <Input
-                label={t('contract.contractNumber')}
+                label={t('common.numDoc')}
                 value={field.value ?? ''}
                 onChange={handleContractNumberChange(field)}
               />
