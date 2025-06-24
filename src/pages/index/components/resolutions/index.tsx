@@ -84,6 +84,7 @@ const Resolutions = () => {
       onClick={() =>
         navigate(routes.contracts.path(row.resolutionId))
       }
+      size="small"
     >
       {t('common.viewContracts')}
     </Button>
@@ -256,7 +257,10 @@ const Resolutions = () => {
               render: ({ closeDate }) => formatToDDMMYYYY(closeDate),
             },
             { id: 'contractCount', label: t('resolution.contractCount') },
-            { id: 'categoryName', label: t('common.category'), render: ({ categoryName, categoryId }) => getMaterialType(categoryName, categoryId) },
+            {
+              id: 'categoryName',
+              label: t('common.category'),
+              render: ({ categoryName, categoryId }) => getMaterialType(categoryName, categoryId, 'small') },
             {
               id: 'actions',
               label: t('common.actions'),

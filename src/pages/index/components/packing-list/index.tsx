@@ -240,7 +240,7 @@ const PackingList = () => {
               render: ({ creationDate }) => formatToDDMMYYYY(creationDate),
             },
             { id: 'totalQuantity', label: t('packinglist.totalQuantity') },
-            { id: 'categoryName', label: t('common.category'), render: ({ categoryName, categoryId }) => getMaterialType(categoryName, categoryId) },
+            { id: 'categoryName', label: t('common.category'), render: ({ categoryName, categoryId }) => getMaterialType(categoryName, categoryId, 'small') },
             { id: 'documentType', label: t('packinglist.documentType') },
           ]}
           rows={packingListRows}

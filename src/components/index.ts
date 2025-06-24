@@ -8,3 +8,4 @@ export { default as IconList} from './molecules/icon';
 export { default as MonthRangePicker } from './organisms/month-range-picker'
 export { default as Table } from './organisms/table';
 export { default as InputController} from './organisms/input-controller';
+export { default as DisplayData} from './atoms/display-data';

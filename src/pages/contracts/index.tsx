@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
+import { Box, Card, CardContent, Divider } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import useServices from './hooks/useServices';
@@ -9,6 +9,7 @@ import {
   Table,
   Notification,
   Input,
+  DisplayData,
 } from '../../components';
 
 import routes from '../../conf/routes';
@@ -79,65 +80,61 @@ const Contracts = ({ params }: ContractsProps) => {
         </CardContent>
         <Box p={2} display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
           <Box>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.code')}:{' '}
-              {services.getResolution.data?.resolutionNumber}
-            </Typography>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.dispatchGuide')}:{' '}
-              {services.getResolution.data?.dispatchGuide}
-            </Typography>
+            <DisplayData
+              label={t('common.code')}
+              value={services.getResolution.data?.resolutionNumber}
+            />
+            <DisplayData
+              label={t('common.dispatchGuide')}
+              value={services.getResolution.data?.dispatchGuide}
+            />
           </Box>
           <Box>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.contractNumberLabel')}:{' '}
-              {services.getResolution.data?.contractCount}
-            </Typography>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.type')}: {services.getResolution.data?.categoryName}
-            </Typography>
+            <DisplayData
+              label={t('common.contractNumberLabel')}
+              value={services.getResolution.data?.contractCount}
+            />
+            <DisplayData
+              label={t('common.type')}
+              value={services.getResolution.data?.resolutionNumber}
+            />
           </Box>
           <Box>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.securityBag')}:{' '}
-              {services.getResolution.data?.securityBag}
-            </Typography>
+            <DisplayData
+              label={t('common.securityBag')}
+              value={services.getResolution.data?.securityBag}
+            />
           </Box>
           <Box>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.branch')}: {services.getResolution.data?.locationName}
-            </Typography>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.address')}:{' '}
-              {services.getResolution.data?.locationAddress}
-            </Typography>
+            <DisplayData
+              label={t('common.branch')}
+              value={services.getResolution.data?.locationName}
+            />
+            <DisplayData
+              label={t('common.address')}
+              value={services.getResolution.data?.locationAddress}
+            />
           </Box>
           <Box>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.investment')}:{' '}
-              {services.getResolution.data?.investmentName}
-            </Typography>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.rut')}: {services.getResolution.data?.investmentRut}
-            </Typography>
+            <DisplayData
+              label={t('common.investment')}
+              value={services.getResolution.data?.investmentName}
+            />
+            <DisplayData
+              label={t('common.rut')}
+              value={services.getResolution.data?.investmentRut}
+            />
           </Box>
           <Box>
-            <Typography variant="body2" fontWeight="bold">
-              {t('common.closureDate')}:{' '}
-              {formatToDDMMYYYY(services.getResolution.data?.closeDate)}
-            </Typography>
+            <DisplayData
+              label={t('common.closureDate')}
+              value={formatToDDMMYYYY(services.getResolution.data?.closeDate)}
+            />
           </Box>
         </Box>
       </Card>
+      <Divider sx={{ mb: 2 }} />
       <form>
-        <Box
-          mb={2}
-          mt={2}
-          flexWrap="nowrap"
-          display="flex"
-          alignItems="center"
-          gap={2}
-        ></Box>
         <Box>
           <Controller
             name="contractNumber"
@@ -154,7 +151,7 @@ const Contracts = ({ params }: ContractsProps) => {
         <Divider sx={{ mb: 2 }} />
         <Table
           columns={[
-            { id: 'contractNumber', label: t('contract.contractNumber') },
+            { id: 'contractNumber', label: t('common.numDoc') },
             { id: 'securityBagCode', label: t('contract.securityBagCode') },
             { id: 'jewelQuantity', label: t('contract.jewelQuantity') },
             {

@@ -3,7 +3,7 @@ import { statusToKeyMap } from '../constants';
 import Token from '../tokens';
 import { icons } from '../components/molecules/icon/icons';
 import { MaterialType } from '../components/molecules/material-type';
-import { Material } from '../components/molecules/material-type/types';
+import { Material, Size } from '../components/molecules/material-type/types';
 
 export const STATUS_RESOLUTION = 14;
 export const STATUS_PACKING_LIST = 32;
@@ -126,11 +126,12 @@ export const getStatusIcon = (statusId: number, statusName?: string) => {
 
 export const getMaterialType = (
   label: string,
-  categoryId: string
+  categoryId: string,
+  size: Size = 'medium',
 ): React.ReactNode => {
   const material = materialMap[categoryId];
 
   if (!material) return label;
 
-  return <MaterialType material={material} label={label} />;
+  return <MaterialType material={material} label={label} size={size} />;
 };
