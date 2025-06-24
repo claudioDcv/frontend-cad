@@ -1,4 +1,4 @@
-import { Pageable, Sort } from "../types";
+import { Pageable, Sort } from '../types';
 
 export type Contract = {
   resolutionId: number;
@@ -11,13 +11,16 @@ export type Contract = {
   contractQuantity: number;
   jewelTotalCount: number;
   categoryName: string;
-  stateName: string;
+  statusName: string;
   totalWeight: string;
   startDate: string;
   endDate: string;
+  contractNumber: string;
+  totalContractValue: number;
+  averagePurchaseValue: number;
 };
 
-export type PropsContract = {
+export type ContractQuery = {
   page: number;
   size?: number;
   sort?: string;
@@ -25,7 +28,7 @@ export type PropsContract = {
   clientRut?: string;
   responsible?: string;
   expirationBefore?: string;
-  contractId?: string;
+  contractNumber?: string;
 };
 
 export type ContractPaginated = {

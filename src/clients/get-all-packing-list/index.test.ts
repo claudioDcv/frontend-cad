@@ -39,6 +39,7 @@ describe('useGetAllPackingList', () => {
           statusId: 1,
           statusName: 'Enviado',
           categoryName: 'Cat 1',
+          categoryId: ''
         },
       ],
       totalElements: 1,

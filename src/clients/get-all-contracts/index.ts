@@ -42,7 +42,7 @@ const useGetAllContracts = () => {
         const result = await client({
           page: props.page,
           resolutionId: props.resolutionId,
-          contractId: props.contractId
+          contractNumber: props.contractNumber
         });
 
         const model = remap(result);

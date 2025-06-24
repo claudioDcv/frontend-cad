@@ -1,12 +1,12 @@
 import { API_BASE } from '../../conf/http';
 import { clearAllProps, clearProp, getHeader } from '../utils';
-import { PageResponse, PropsContract } from './types';
+import { PageResponse, ContractQuery } from './types';
 
-const client = async (props: PropsContract): Promise<PageResponse> => {
+const client = async (props: ContractQuery): Promise<PageResponse> => {
   const params = {
     page: clearProp(props.page - 1),
     resolutionId: clearProp(props.resolutionId),
-    contractId: clearProp(props.contractId),
+    contractNumber: clearProp(props.contractNumber),
   }
 
   const query = new URLSearchParams(clearAllProps(params));

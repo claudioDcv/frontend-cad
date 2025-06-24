@@ -22,6 +22,7 @@ import { useRef } from 'react';
 import {
   debounce,
   FIRST_PAGE,
+  formatCurrency,
   formatNumberWithGr,
   formatToDDMMYYYY,
 } from '../../utils';
@@ -44,7 +45,7 @@ const Contracts = ({ params }: { params: { id: string } }) => {
     debounce((contractNumber: string) => {
       const newFilters = {
         ...getValues(),
-        contractId: contractNumber,
+        contractNumber: contractNumber,
         resolutionId,
         page: FIRST_PAGE,
       };
@@ -139,7 +140,7 @@ const Contracts = ({ params }: { params: { id: string } }) => {
         ></Box>
         <Box>
           <Controller
-            name="contractId"
+            name="contractNumber"
             control={control}
             render={({ field }) => (
               <Input
@@ -159,18 +160,30 @@ const Contracts = ({ params }: { params: { id: string } }) => {
             {
               id: 'totalContractValue',
               label: t('contract.totalContractValue'),
+              render: ({ totalContractValue }) =>
+                formatCurrency(totalContractValue),
             },
             {
               id: 'averagePurchaseValue',
               label: t('contract.averagePurchaseValue'),
+              render: ({ averagePurchaseValue }) =>
+                formatCurrency(averagePurchaseValue),
             },
             {
               id: 'totalWeight',
               label: t('contract.totalWeight'),
               render: ({ totalWeight }) => formatNumberWithGr(totalWeight),
             },
-            { id: 'startDate', label: t('contract.startDate'), render: ({ startDate }) => formatToDDMMYYYY(startDate), },
-            { id: 'endDate', label: t('contract.endDate'), render: ({ endDate }) => formatToDDMMYYYY(endDate), },
+            {
+              id: 'startDate',
+              label: t('contract.startDate'),
+              render: ({ startDate }) => formatToDDMMYYYY(startDate),
+            },
+            {
+              id: 'endDate',
+              label: t('contract.endDate'),
+              render: ({ endDate }) => formatToDDMMYYYY(endDate),
+            },
           ]}
           rows={contractRows}
           messageVoidData={t('common.noData')}

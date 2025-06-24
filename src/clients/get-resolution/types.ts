@@ -1,5 +1,5 @@
 export type Resolution = {
-  resolutionId: number;
+  resolutionId: string;
   resolutionNumber: number;
   barcode: string;
   dispatchGuide: number;
@@ -9,7 +9,7 @@ export type Resolution = {
   contractCount: number;
   totalJewels: number;
   categoryName: string;
-  stateName: string;
+  statusName: string;
   locationAddress: string;
   investmentRut: string;
   securityBag: string;

@@ -1,9 +1,8 @@
 import { Pageable, Sort } from '../types';
-import { Option } from '../../types';
 
 export type Resolution = {
-  resolutionId: number;
-  resolutionNumber: number;
+  resolutionId: string;
+  resolutionNumber: string;
   barcode: string;
   dispatchGuide: number;
   investmentName: string;
@@ -12,26 +11,37 @@ export type Resolution = {
   contractCount: number;
   totalJewels: number;
   categoryName: string;
-  stateName: string;
+  categoryId: string;
+  statusName: string;
+  statusId: number;
   locationAddress: string;
   investmentRut: string;
   securityBag: string;
 };
 
-export type PropsResolution = {
-  resolutionId?: number;
-  resolutionNumber?: number;
+export type ResolutionQuery = {
+  resolutionId?: string;
+  resolutionNumber?: string;
   barcode?: string;
   dispatchGuide?: number;
   investmentId?: string;
   locationId?: string;
   categoryId?: string;
-  stateId?: string;
+  statusId?: string;
+  statusName?: string;
   startDate?: string;
   endDate?: string;
   page: number;
   size?: number;
   sort?: string;
+};
+
+export type ResolutionPaginated = {
+  resolutions: Resolution[];
+  meta: {
+    page: number;
+    count: number;
+  };
 };
 
 export type PageResponse = {
@@ -48,19 +58,3 @@ export type PageResponse = {
   empty: boolean;
 };
 
-export type ResolutionFilters = {
-  investment?: Option;
-  location?: Option;
-  materialType?: Option;
-  status?: Option;
-  range: [Date, Date];
-};
-
-
-export type ResolutionPaginated = {
-  resolutions: Resolution[];
-  meta: {
-    page: number;
-    count: number;
-  };
-};

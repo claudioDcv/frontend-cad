@@ -14,6 +14,7 @@ const mockFilters: ResolutionFormModel = {
   investment: { label: 'TODOS', value: 'all' },
   location: { label: 'TODOS', value: 'all' },
   range: [new Date(), new Date()] as [Date, Date],
+  resolutionNumber: ''
 };
 
 describe('useGetAllResolutions', () => {
@@ -25,8 +26,8 @@ describe('useGetAllResolutions', () => {
     const mockData: PageResponse = {
       content: [
         {
-          resolutionId: 0,
-          resolutionNumber: 0,
+          resolutionId: '',
+          resolutionNumber: '',
           barcode: 'string',
           dispatchGuide: 0,
           investmentName: 'string',
@@ -35,10 +36,12 @@ describe('useGetAllResolutions', () => {
           contractCount: 0,
           totalJewels: 0,
           categoryName: 'string',
-          stateName: 'string',
+          statusName: 'string',
+          statusId: 0,
           locationAddress: 'string',
           investmentRut: 'string',
           securityBag: 'string',
+          categoryId: ''
         },
       ],
       totalElements: 1,

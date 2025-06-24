@@ -1,5 +1,4 @@
 import { Pageable, Sort } from "../types";
-import { Option } from '../../types';
 
 export type PackingList = {
   packinglistId: string;
@@ -15,9 +14,10 @@ export type PackingList = {
   statusId: number;
   statusName: string;
   categoryName: string;  
+  categoryId: string;
 };
 
-export type PropsPackingList = {
+export type PackingListQuery = {
   page: number;
   size?: number;
   sort?: string;
@@ -51,13 +51,4 @@ export type PageResponse = {
   sort: Sort;
   totalElements: number;
   totalPages: number;
-};
-
-export type PackingListFilters = {
-  investmentId?: string;
-  investment?: Option;
-  location?: Option;
-  materialType?: Option;
-  status?: Option;
-  range: [Date, Date];
 };

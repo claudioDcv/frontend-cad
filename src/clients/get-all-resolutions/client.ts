@@ -1,15 +1,17 @@
 import { API_BASE } from '../../conf/http';
 import { clearAllProps, clearProp, getHeader } from '../utils';
-import { PropsResolution } from './types';
+import { ResolutionQuery } from './types';
 import { PageResponse } from './types';
 
-const client = async (props: PropsResolution): Promise<PageResponse> => {
+const client = async (props: ResolutionQuery): Promise<PageResponse> => {
   const params = {
     page: clearProp(props.page - 1),
+    resolutionNumber: clearProp(props.resolutionNumber),
+    resolutionId: clearProp(props.resolutionId),
     investmentId: clearProp(props.investmentId),
     locationId: clearProp(props.locationId),
     categoryId: clearProp(props.categoryId),
-    stateId: clearProp(props.stateId),
+    statusId: clearProp(props.statusId),
     startDate: clearProp(props.startDate),
     endDate: clearProp(props.endDate),
   };

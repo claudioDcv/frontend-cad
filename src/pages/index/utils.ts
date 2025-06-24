@@ -21,6 +21,7 @@ export const defaultResolutionsFormValues: ResolutionFormModel = {
   investment: emptyOption,
   location: emptyOption,
   range: [defaultStartDate, toDay],
+  resolutionNumber: ''
 };
 
 export const defaultPackingListFormValues: PackingListFormModel = {
@@ -39,5 +40,5 @@ export const defaultContractsFormValues: ContractFormModel = {
   clientRut: '',
   responsible: '',
   expirationBefore: toDay,
-  contractId: '',
+  contractNumber: '',
 };

@@ -126,7 +126,6 @@
     "investmentRut": "RUT de la inversión",                   
     "contractCount": "Contratos",
     "totalJewels": "Joyas Totales",
-    "category": "Tipo",
     "status": "Estado"
   },
   "contract": {
@@ -148,12 +147,11 @@
     "dispatchNumber": "Guía de Despacho",
     "destinyBranch": "Sucursal Destino",
     "creationDate": "Fecha de Creación",
-    "totalQuantity": "Cantidad Total",
+    "totalQuantity": "Joyas",
     "totalGrams": "Gramos Totales",
     "documentType": "Tipo Documento",
     "statusId": "ID Estado",
     "statusName": "Estado",
-    "category": "Categoría",
     "originBranch": "Sucursal Origen"
   },
   "common": {
@@ -163,6 +161,7 @@
     "aprove": "Aprobar",
     "branch": "Sucursal",
     "cancel": "Cancelar",
+    "category": "Tipo",
     "checkBoxLabel": "Verificar",
     "code": "Código",
     "clearFilters": "Limpiar",
@@ -176,10 +175,10 @@
     "error": "Error",
     "investment": "Inversión",
     "location": "Sucursal",
-    "materialType": "Tipo de Material",
+    "materialType": "Tipo",
     "modals": "Modales",
     "noData": "No hay datos",
-    "numDoc": "Número de Documento",
+    "numDoc": "Número de DOC",
     "packingList": "Packing List",
     "reject": "Rechazar",
     "resolution": "Resolución",

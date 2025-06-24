@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
+import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import client from './client';
 import { remap } from './utils';
 import { ResolutionPaginated } from './types';
-import { useTranslation } from 'react-i18next';
+
+import { FetchStatus } from '../../utils';
 import { ResolutionFormModel } from '../../pages/index/types';
 
 const useGetAllResolutions = () => {
@@ -38,12 +40,13 @@ const useGetAllResolutions = () => {
       try {
         const result = await client({
           page: props.page,
-          stateId: props?.status?.value || undefined,
+          statusId: props?.status?.value || undefined,
           categoryId: props?.categoryId?.value || undefined,
           investmentId: props?.investment?.value || undefined,
           locationId: props?.location?.value || undefined,
           startDate: props?.range?.[0]?.toISOString() || undefined,
           endDate: props?.range?.[1]?.toISOString() || undefined,
+          resolutionNumber: props?.resolutionNumber || undefined,
         });
         const model = remap(result);
         setData(model);

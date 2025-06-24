@@ -1,6 +1,5 @@
 import { Contract } from '../../../types';
-
-export type Material = string;
+import { Material } from '../../molecules/material-type/types';
 
 export interface I18N {
   label: string;

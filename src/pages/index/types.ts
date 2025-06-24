@@ -7,6 +7,7 @@ export interface ResolutionFormModel {
   investment: Option;
   location: Option;
   range: [Date, Date];
+  resolutionNumber: string;
 }
 
 export interface PackingListFormModel {
@@ -25,5 +26,5 @@ export interface ContractFormModel {
   clientRut?: string;
   responsible?: string;
   expirationBefore?: Date;
-  contractId?: string;
+  contractNumber?: string;
 }

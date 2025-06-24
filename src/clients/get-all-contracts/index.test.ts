@@ -33,10 +33,13 @@ describe('useGetAllContracts', () => {
           contractQuantity: 10,
           jewelTotalCount: 100,
           categoryName: 'Categoría A',
-          stateName: 'Cerrado',
+          statusName: 'Cerrado',
           totalWeight: '',
           startDate: '',
-          endDate: ''
+          endDate: '',
+          contractNumber: '',
+          totalContractValue: 0,
+          averagePurchaseValue: 0
         },
       ],
       totalElements: 1,

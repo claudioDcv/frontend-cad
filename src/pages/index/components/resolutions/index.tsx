@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Box, Button } from '@mui/material';
-import { ControllerRenderProps, useForm } from 'react-hook-form';
+import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'wouter';
 
@@ -12,13 +12,18 @@ import {
   Pagination,
   Table,
   Notification,
+  Input,
 } from '../../../../components';
 
 import {
+  debounce,
   defaultStartDate,
   emptyOption,
   FIRST_PAGE,
   formatToDDMMYYYY,
+  getMaterialType,
+  getStatusIcon,
+  LOCATION_ACTIVE,
   toDay,
 } from '../../../../utils';
 
@@ -61,6 +66,17 @@ const Resolutions = () => {
 
   const resolutionRows = services.getAllResolutions.data?.resolutions || [];
   const paginationCount = services.getAllResolutions.data?.meta?.count || 0;
+
+  const debouncedSearchRef = useRef(
+    debounce((resolutionNumber: string) => {
+      const newFilters = {
+        ...getValues(),
+        resolutionNumber: resolutionNumber,
+        page: FIRST_PAGE,
+      };
+      services.getAllResolutions.call(newFilters);
+    }, 2000)
+  );
 
   const renderContracts = (row: Resolution) => (
     <Button
@@ -109,7 +125,7 @@ const Resolutions = () => {
       if (value?.value) {
         services.getAllLocations.call({
           investmentId: value.value,
-          status: true,
+          status: LOCATION_ACTIVE,
         });
       } else {
         services.getAllLocations.clearData();
@@ -145,6 +161,14 @@ const Resolutions = () => {
     services.getAllResolutions.call(newFilters);
   };
 
+  const handleDocNumberChange =
+    (field: ControllerRenderProps<ResolutionFormModel>) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      field.onChange(value);
+      debouncedSearchRef.current(value);
+    };
+
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page };
     setValue('page', page);
@@ -163,6 +187,17 @@ const Resolutions = () => {
             alignItems="center"
             gap={2}
           >
+            <Controller
+              name="resolutionNumber"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  label={t('common.numDoc')}
+                  value={field.value}
+                  onChange={handleDocNumberChange(field)}
+                />
+              )}
+            />
             <InputController
               onChange={handleChangeMaterialType}
               disabled={isMaterialTypeDisabled}
@@ -204,7 +239,12 @@ const Resolutions = () => {
         </form>
         <Table
           columns={[
-            { id: 'stateName', label: t('resolution.status') },
+            {
+              id: 'statusName',
+              label: t('resolution.status'),
+              render: ({ statusId, statusName }) =>
+                getStatusIcon(statusId, statusName),
+            },
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
             { id: 'barcode', label: t('resolution.barcode') },
             { id: 'dispatchGuide', label: t('resolution.dispatchGuide') },
@@ -216,7 +256,7 @@ const Resolutions = () => {
               render: ({ closeDate }) => formatToDDMMYYYY(closeDate),
             },
             { id: 'contractCount', label: t('resolution.contractCount') },
-            { id: 'categoryName', label: t('resolution.category') },
+            { id: 'categoryName', label: t('common.category'), render: ({ categoryName, categoryId }) => getMaterialType(categoryName, categoryId) },
             {
               id: 'actions',
               label: t('common.actions'),

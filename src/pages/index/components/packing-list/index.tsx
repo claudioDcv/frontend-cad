@@ -21,10 +21,13 @@ import { PackingListFormModel } from '../../types';
 
 import {
   FIRST_PAGE,
+  LOCATION_ACTIVE,
   debounce,
   defaultStartDate,
   emptyOption,
   formatToDDMMYYYY,
+  getMaterialType,
+  getStatusIcon,
   toDay,
 } from '../../../../utils';
 
@@ -117,7 +120,7 @@ const PackingList = () => {
       if (value?.value) {
         services.getAllLocations.call({
           investmentId: value.value,
-          status: true,
+          status: LOCATION_ACTIVE,
         });
       } else {
         services.getAllLocations.clearData();
@@ -220,17 +223,24 @@ const PackingList = () => {
         </form>
         <Table
           columns={[
-            { id: 'statusName', label: t('packinglist.statusName') },
+            {
+              id: 'statusName',
+              label: t('packinglist.statusName'),
+              render: ({ statusId, statusName }) =>
+                getStatusIcon(statusId, statusName),
+            },
             { id: 'packinglistId', label: t('packinglist.packinglistId') },
             { id: 'barcode', label: t('packinglist.barcode') },
             { id: 'dispatchNumber', label: t('packinglist.dispatchNumber') },
-            { id: 'originLocation', label: t('packinglist.originBranch') },
-            { id: 'destinyLocation', label: t('packinglist.destinyBranch') },
             { id: 'investmentName', label: t('common.investment') },
-            { id: 'creationDate', label: t('packinglist.creationDate'), render: ({ creationDate }) => formatToDDMMYYYY(creationDate), },
-            { id: 'categoryName', label: t('packinglist.category') },
-            { id: 'totalGrams', label: t('packinglist.totalGrams') },
+            { id: 'originLocation', label: t('packinglist.originBranch') },
+            {
+              id: 'creationDate',
+              label: t('packinglist.creationDate'),
+              render: ({ creationDate }) => formatToDDMMYYYY(creationDate),
+            },
             { id: 'totalQuantity', label: t('packinglist.totalQuantity') },
+            { id: 'categoryName', label: t('common.category'), render: ({ categoryName, categoryId }) => getMaterialType(categoryName, categoryId) },
             { id: 'documentType', label: t('packinglist.documentType') },
           ]}
           rows={packingListRows}
