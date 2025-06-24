@@ -82,7 +82,7 @@ const Resolutions = () => {
     <Button
       endIcon={<Visibility />}
       onClick={() =>
-        navigate(routes.contracts.path(row.resolutionId.toString()))
+        navigate(routes.contracts.path(row.resolutionId))
       }
     >
       {t('common.viewContracts')}

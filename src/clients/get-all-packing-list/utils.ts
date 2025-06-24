@@ -13,3 +13,11 @@ export const cleanDate = (date?: string | Date): string => {
   const d = typeof date === 'string' ? new Date(date) : date;
   return d.toISOString().split('T')[0];
 };
+
+export const initialPackingListData: PackingListPaginated = {
+  packingList: [],
+  meta: {
+    page: 0,
+    count: 0,
+  },
+};

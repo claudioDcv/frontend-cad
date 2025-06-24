@@ -7,3 +7,11 @@ export const remap = (data: PageResponse): ContractPaginated => {
     meta: mapMeta(data),
   };
 };
+
+export const initialContractData: ContractPaginated = {
+  contracts: [],
+  meta: {
+    page: 0,
+    count: 0,
+  },
+};

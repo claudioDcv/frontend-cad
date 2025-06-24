@@ -7,3 +7,11 @@ export const remap = (data: PageResponse): ResolutionPaginated => {
     meta: mapMeta(data),
   };
 };
+
+export const initialResolutiontData: ResolutionPaginated = {
+  resolutions: [],
+  meta: {
+    page: 0,
+    count: 0,
+  },
+};

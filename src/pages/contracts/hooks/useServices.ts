@@ -7,14 +7,9 @@ import { useGetAllContracts } from '../../../clients';
 
 import { defaultContractsFormValues } from '../../index/utils';
 
-import { getMaterialFromLabel } from '../utils';
-
-
 const useServices = (resolutionId: string) => {
   const getAllContracts = useGetAllContracts();
   const getResolution = useGetResolution();
-
-  const materialValue = getMaterialFromLabel(getResolution.data?.categoryName);
 
   useEffect(() => {
     if (!resolutionId) return;
@@ -30,7 +25,7 @@ const useServices = (resolutionId: string) => {
     }
   }, [getAllContracts, getResolution, resolutionId]);
 
-  return { getAllContracts, getResolution, materialValue };
+  return { getAllContracts, getResolution };
 };
 
 export default useServices;

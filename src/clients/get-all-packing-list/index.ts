@@ -1,23 +1,22 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
-import { remap } from './utils';
-import client from './client';
-import { PackingListPaginated } from './types';
 import { useTranslation } from 'react-i18next';
+
+import client from './client';
+import { initialPackingListData, remap } from './utils';
+import { PackingListPaginated } from './types';
+
+import { FetchStatus } from '../../utils';
 import { PackingListFormModel } from '../../pages/index/types';
 
 const useGetAllPackingList = () => {
   const { t } = useTranslation();
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<PackingListPaginated>({
-    packingList: [],
-    meta: { page: 0, count: 0 },
-  });
+  const [data, setData] = useState<PackingListPaginated>(initialPackingListData);
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
-    setData({ packingList: [], meta: { page: 0, count: 0 } });
+    setData(initialPackingListData);
     setError(null);
   };
 

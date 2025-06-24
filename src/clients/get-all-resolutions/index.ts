@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import client from './client';
-import { remap } from './utils';
+import { initialResolutiontData, remap } from './utils';
 import { ResolutionPaginated } from './types';
 
 import { FetchStatus } from '../../utils';
@@ -12,14 +12,11 @@ const useGetAllResolutions = () => {
   const { t } = useTranslation();
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<ResolutionPaginated>({
-    resolutions: [],
-    meta: { page: 0, count: 0 },
-  });
+  const [data, setData] = useState<ResolutionPaginated>(initialResolutiontData);
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
-    setData({ resolutions: [], meta: { page: 0, count: 0 } });
+    setData(initialResolutiontData);
     setError(null);
   };
 

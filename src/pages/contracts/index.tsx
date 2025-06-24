@@ -10,8 +10,6 @@ import {
   Notification,
   Input,
 } from '../../components';
-import { MaterialType } from '../../components/molecules/material-type';
-import { Material } from '../../components/molecules/material-type/types';
 
 import routes from '../../conf/routes';
 
@@ -25,9 +23,11 @@ import {
   formatCurrency,
   formatNumberWithGr,
   formatToDDMMYYYY,
+  getMaterialType,
 } from '../../utils';
+import { ContractsProps } from './types';
 
-const Contracts = ({ params }: { params: { id: string } }) => {
+const Contracts = ({ params }: ContractsProps) => {
   const { control, getValues, setValue } = useForm<ContractFormModel>({
     defaultValues: defaultContractsFormValues,
   });
@@ -72,10 +72,10 @@ const Contracts = ({ params }: { params: { id: string } }) => {
       <Breadcrumb items={[routes().index, routes().contracts]} />
       <Card>
         <CardContent>
-          <MaterialType
-            material={services.materialValue as Material}
-            label={`${t('common.resolution')} ${resolutionId}`}
-          />
+          {getMaterialType(
+            `${t('common.resolution')} ${resolutionId}`,
+            services.getResolution.data?.categoryId || ''
+          )}
         </CardContent>
         <Box p={2} display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
           <Box>

@@ -1,26 +1,22 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
-import { remap } from './utils';
-import client from './client';
-import { ContractPaginated } from './types';
 import { useTranslation } from 'react-i18next';
+
+import { FetchStatus } from '../../utils';
 import { ContractFormModel } from '../../pages/index/types';
+
+import client from './client';
+import { initialContractData, remap } from './utils';
+import { ContractPaginated } from './types';
 
 const useGetAllContracts = () => {
   const { t } = useTranslation();
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<ContractPaginated>({
-    contracts: [],
-    meta: {
-      page: 0,
-      count: 0,
-    },
-  });
+  const [data, setData] = useState<ContractPaginated>(initialContractData);
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
-    setData({ contracts: [], meta: { page: 0, count: 0 } });
+    setData(initialContractData);
     setError(null);
   };
 

@@ -9,6 +9,7 @@ export type Resolution = {
   contractCount: number;
   totalJewels: number;
   categoryName: string;
+  categoryId: string;
   statusName: string;
   locationAddress: string;
   investmentRut: string;
