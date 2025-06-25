@@ -58,9 +58,12 @@ const Contracts = ({ params }: ContractsProps) => {
   const handleContractNumberChange =
     (field: ControllerRenderProps<ContractFormModel>) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      field.onChange(value);
-      debouncedSearchRef.current(value);
+      const rawValue = event.target.value;
+
+      if (/^\d*$/.test(rawValue)) {
+        field.onChange(rawValue);
+        debouncedSearchRef.current(rawValue);
+      }
     };
 
   const handleChangePage = (_p: unknown, page: number) => {

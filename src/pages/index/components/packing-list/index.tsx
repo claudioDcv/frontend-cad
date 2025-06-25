@@ -149,9 +149,12 @@ const PackingList = () => {
   const handleDocNumberChange =
     (field: ControllerRenderProps<PackingListFormModel>) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      field.onChange(value);
-      debouncedSearchRef.current(value);
+      const rawValue = event.target.value;
+
+      if (/^\d*$/.test(rawValue)) {
+        field.onChange(rawValue);
+        debouncedSearchRef.current(rawValue);
+      }
     };
 
   const handleChangePage = (_p: unknown, page: number) => {
@@ -241,7 +244,12 @@ const PackingList = () => {
               render: ({ creationDate }) => formatToDDMMYYYY(creationDate),
             },
             { id: 'totalQuantity', label: t('packinglist.totalQuantity') },
-            { id: 'categoryName', label: t('common.category'), render: ({ categoryName, categoryId }) => getMaterialType(categoryName, categoryId, 'small') },
+            {
+              id: 'categoryName',
+              label: t('common.category'),
+              render: ({ categoryName, categoryId }) =>
+                getMaterialType(categoryName, categoryId, 'small'),
+            },
             { id: 'documentType', label: t('packinglist.documentType') },
           ]}
           rows={packingListRows}
