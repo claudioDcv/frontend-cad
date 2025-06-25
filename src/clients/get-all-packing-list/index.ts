@@ -1,36 +1,32 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
-import client from './client';
-import { remap } from './utils';
-import { PackingListPaginated, PropsPackingList } from './types';
 import { useTranslation } from 'react-i18next';
+
+import client from './client';
+import { initialPackingListData, remap } from './utils';
+import { PackingListPaginated } from './types';
+
+import { FetchStatus } from '../../utils';
+import { PackingListFormModel } from '../../pages/index/types';
 
 const useGetAllPackingList = () => {
   const { t } = useTranslation();
-  
+
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<PackingListPaginated>({
-    packingList: [],
-    meta: { page: 0, count: 0 },
-  });
+  const [data, setData] = useState<PackingListPaginated>(initialPackingListData);
   const [error, setError] = useState<string | null>(null);
-  const [lastProps, setLastProps] = useState<PropsPackingList | null>(null);
+
+  const onResetError = () => {
+    setData(initialPackingListData);
+    setError(null);
+  };
 
   const call = useCallback(
-    async (props: PropsPackingList) => {
-        const isSameFilter =
-        lastProps &&
-        lastProps.page === props.page &&
-        lastProps.size === props.size &&
-        lastProps.sort === props.sort &&
-        lastProps.startDate === props.startDate &&
-        lastProps.endDate === props.endDate &&
-        lastProps.originCcId === props.originCcId &&
-        lastProps.destinyCcId === props.destinyCcId &&
-        lastProps.categoryId === props.categoryId &&
-        lastProps.statusId === props.statusId;
-    
-      if (status === FetchStatus.LOADING || isSameFilter) {
+    async (props: PackingListFormModel) => {
+      if (status === FetchStatus.ERROR) {
+        return;
+      }
+
+      if (status === FetchStatus.LOADING) {
         setStatus(FetchStatus.SUCCESS);
         setError(null);
         return;
@@ -39,22 +35,30 @@ const useGetAllPackingList = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client(props);
+        const result = await client({
+          page: props.page,
+          packinglistId: props.docNumber || undefined,
+          categoryId: props.categoryId?.value || undefined,
+          statusId: props.status?.value || undefined,
+          investmentId: props.investment?.value || undefined,
+          originLocationId: props.location?.value || undefined,
+          startDate: props.range?.[0]?.toISOString().split('T')[0] || undefined,
+          endDate: props.range?.[1]?.toISOString().split('T')[0] || undefined,
+        });
+
         const model = remap(result);
         setData(model);
         setStatus(FetchStatus.SUCCESS);
-        setLastProps(props);
       } catch (err) {
-        setError(
-          (err as Error).message || t('error.genericHttpError')
-        );
+        const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
+        setError(t(messageKey));
         setStatus(FetchStatus.ERROR);
       }
     },
-    [lastProps, status, t]
+    [status, t]
   );
 
-  return { status, data, error, call };
+  return { status, data, error, call, onResetError };
 };
 
 export default useGetAllPackingList;

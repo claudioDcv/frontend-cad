@@ -2,22 +2,19 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
 import { FetchStatus } from '../../utils';
-import useGetAllResolutions from '.';
+import useGetAllContracts from '.';
 import { PageResponse } from './types';
 import { remap } from './utils';
-import { ResolutionFormModel } from '../../pages/index/types';
+import { ContractFormModel } from '../../pages/index/types';
 
-const mockFilters: ResolutionFormModel = {
+const mockFilters: ContractFormModel = {
   page: 1,
-  categoryId: { label: 'TODOS', value: 'all' },
-  status: { label: 'TODOS', value: 'all' },
-  investment: { label: 'TODOS', value: 'all' },
-  location: { label: 'TODOS', value: 'all' },
-  range: [new Date(), new Date()] as [Date, Date],
-  resolutionNumber: ''
+  resolutionId: '1',
+  clientRut: '11111111-1',
+  responsible: 'Juan Pérez',
 };
 
-describe('useGetAllResolutions', () => {
+describe('useGetAllContracts', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
@@ -26,22 +23,23 @@ describe('useGetAllResolutions', () => {
     const mockData: PageResponse = {
       content: [
         {
-          resolutionId: '',
-          resolutionNumber: '',
-          barcode: 'string',
-          dispatchGuide: 0,
-          investmentName: 'string',
-          locationName: 'string',
-          closeDate: '2025-05-16T15:27:40.874Z',
-          contractCount: 0,
-          totalJewels: 0,
-          categoryName: 'string',
-          statusName: 'string',
-          statusId: 0,
-          locationAddress: 'string',
-          investmentRut: 'string',
-          securityBag: 'string',
-          categoryId: ''
+          resolutionId: 1,
+          resolutionNumber: 100,
+          resolutionBarcode: 'ABC123',
+          dispatchGuideNumber: 123,
+          investmentName: 'Inversión Prueba',
+          branchName: 'Sucursal Central',
+          closureDate: '2025-12-31',
+          contractQuantity: 10,
+          jewelTotalCount: 100,
+          categoryName: 'Categoría A',
+          statusName: 'Cerrado',
+          totalWeight: '',
+          startDate: '',
+          endDate: '',
+          contractNumber: '',
+          totalContractValue: 0,
+          averagePurchaseValue: 0
         },
       ],
       totalElements: 1,
@@ -51,31 +49,29 @@ describe('useGetAllResolutions', () => {
       first: true,
       last: true,
       empty: false,
-      numberOfElements: 0,
+      numberOfElements: 1,
       pageable: {
         pageNumber: 0,
-        pageSize: 0,
+        pageSize: 10,
         sort: {
           sorted: false,
           empty: false,
-          unsorted: false,
+          unsorted: true,
         },
         offset: 0,
-        paged: undefined,
-        unpaged: undefined,
+        paged: true,
+        unpaged: false,
       },
-      sort: [
-        {
-          sorted: true,
-          empty: true,
-          unsorted: false,
-        },
-      ],
+      sort: {
+        sorted: false,
+        empty: false,
+        unsorted: true,
+      },
     };
 
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
-    const { result } = renderHook(() => useGetAllResolutions());
+    const { result } = renderHook(() => useGetAllContracts());
 
     await act(async () => {
       await result.current.call(mockFilters);
@@ -90,7 +86,7 @@ describe('useGetAllResolutions', () => {
     const mockError = new Error('API call failed');
     vi.spyOn(clientModule, 'default').mockRejectedValue(mockError);
 
-    const { result } = renderHook(() => useGetAllResolutions());
+    const { result } = renderHook(() => useGetAllContracts());
 
     await act(async () => {
       await result.current.call(mockFilters);
@@ -98,18 +94,18 @@ describe('useGetAllResolutions', () => {
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
     expect(result.current.data).toEqual({
-      resolutions: [],
+      contracts: [],
       meta: { page: 0, count: 0 },
     });
     expect(result.current.error).toBe('API call failed');
   });
 
   test('should have IDLE status initially', () => {
-    const { result } = renderHook(() => useGetAllResolutions());
+    const { result } = renderHook(() => useGetAllContracts());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
     expect(result.current.data).toEqual({
-      resolutions: [],
+      contracts: [],
       meta: { page: 0, count: 0 },
     });
     expect(result.current.error).toBe(null);

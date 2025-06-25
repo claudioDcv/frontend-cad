@@ -1,22 +1,24 @@
-import { Button } from "@mui/material";
+import { IconButton, Tooltip } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
-import styles from './index.module.css';
 
 interface ButtonClearProps {
-    onClick: () => void;
-    label: string;
-    disabled?: boolean;
+  onClick: () => void;
+  label?: string;
+  disabled?: boolean;
 }
 
-const ButtonClear: React.FC<ButtonClearProps> = ({ onClick, label, disabled }) => {
-    return <Button
-        variant="contained"
-        color="primary"
-        startIcon={<ClearIcon />}
-        onClick={onClick}
-        disabled={disabled}
-        className={styles.button}
-    >{label}</Button>;
-}
+const ButtonClear: React.FC<ButtonClearProps> = ({
+  onClick,
+  label,
+  disabled,
+}) => {
+  return (
+    <Tooltip title={label}>
+      <IconButton onClick={onClick} disabled={disabled}>
+        {<ClearIcon />}
+      </IconButton>
+    </Tooltip>
+  );
+};
 
 export default ButtonClear;

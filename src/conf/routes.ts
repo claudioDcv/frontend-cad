@@ -16,6 +16,7 @@ const useRoutes = () => {
     },
     contracts: {
       link: appendPrefix('/contracts/:id'),
+      path: (id: string) => appendPrefix(`/contracts/${id}`),
       label: t('routes.contracts'),
     },
   };

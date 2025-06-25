@@ -1,15 +1,16 @@
 import { API_BASE } from '../../conf/http';
-import { PropsStatus } from '../types';
 import { clearAllProps, clearProp, getHeader } from '../utils';
-import { Status } from './types';
+import { PageResponse, ContractQuery } from './types';
 
-const client = async (props: PropsStatus): Promise<Status[]> => {
+const client = async (props: ContractQuery): Promise<PageResponse> => {
   const params = {
-    tableId: clearProp(props.tableId)
-  };
+    page: clearProp(props.page - 1),
+    resolutionId: clearProp(props.resolutionId),
+    contractNumber: clearProp(props.contractNumber),
+  }
 
   const query = new URLSearchParams(clearAllProps(params));
-  const url = `${API_BASE}/status?${query}`;
+  const url = `${API_BASE}/contracts?${query}`;
 
   const response = await fetch(url, {
     headers: getHeader(),
@@ -17,7 +18,7 @@ const client = async (props: PropsStatus): Promise<Status[]> => {
   });
 
   if (!response.ok) {
-    throw new Error('error.getAllStatusFetch');
+    throw new Error('error.getAllContractsFetch');
   }
 
   try {

@@ -1,20 +1,43 @@
 import { Pageable, Sort } from "../types";
 
 export type PackingList = {
-  packinglistId: number;
+  packinglistId: string;
   barcode: string;
   dispatchNumber: string;
   investmentName: string;
-  originBranch: string;
-  destinyBranch: string;
+  originLocation: string; 
+  destinyLocation: string; 
   creationDate: string;
   totalQuantity: number;
   totalGrams: number;
   documentType: string;
   statusId: number;
   statusName: string;
-  category: string;
-}; 
+  categoryName: string;  
+  categoryId: string;
+};
+
+export type PackingListQuery = {
+  page: number;
+  size?: number;
+  sort?: string;
+  packinglistId?: string;
+  investmentId?: string;
+  originLocationId?: string;
+  destinyLocationId?: string;
+  categoryId?: string;
+  statusId?: string;
+  startDate?: string;
+  endDate?: string;
+};
+
+export type PackingListPaginated = {
+  packingList: PackingList[];
+  meta: {
+    page: number;
+    count: number;
+  };
+};
 
 export type PageResponse = {
   content: PackingList[];
@@ -28,24 +51,4 @@ export type PageResponse = {
   sort: Sort;
   totalElements: number;
   totalPages: number;
-};
-
-export type PropsPackingList = {
-  page: number;
-  size?: number;
-  sort?: string;
-  startDate?: string;
-  endDate?: string;
-  originCcId?: number;
-  destinyCcId?: number;
-  categoryId?: number;
-  statusId?: string;
-};
-
-export type PackingListPaginated = {
-  packingList: PackingList[];
-  meta: {
-    page: number;
-    count: number;
-  };
 };

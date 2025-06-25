@@ -1,20 +1,27 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
-import { Props } from './types';
-import client from './client';
-import { Option } from '../../types';
-import { remap } from './utils';
 import { useTranslation } from 'react-i18next';
 
-const useGetAllLocations = () => {
+import { FetchStatus } from '../../utils';
+import { ContractFormModel } from '../../pages/index/types';
+
+import client from './client';
+import { initialContractData, remap } from './utils';
+import { ContractPaginated } from './types';
+
+const useGetAllContracts = () => {
   const { t } = useTranslation();
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Option[]>([]);
+  const [data, setData] = useState<ContractPaginated>(initialContractData);
   const [error, setError] = useState<string | null>(null);
 
+  const onResetError = () => {
+    setData(initialContractData);
+    setError(null);
+  };
+
   const call = useCallback(
-    async (props: Props) => {
+    async (props: ContractFormModel) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -28,7 +35,12 @@ const useGetAllLocations = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client(props);
+        const result = await client({
+          page: props.page,
+          resolutionId: props.resolutionId,
+          contractNumber: props.contractNumber
+        });
+
         const model = remap(result);
         setData(model);
         setStatus(FetchStatus.SUCCESS);
@@ -41,13 +53,7 @@ const useGetAllLocations = () => {
     [status, t]
   );
 
-  const clearData = () => {
-    setData([]);
-    setStatus(FetchStatus.IDLE);
-    setError(null);
-  };
-
-  return { status, data, error, call, clearData };
+  return { status, data, error, call, onResetError };
 };
 
-export default useGetAllLocations;
+export default useGetAllContracts;

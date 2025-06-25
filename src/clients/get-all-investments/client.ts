@@ -10,10 +10,14 @@ const client = async (): Promise<Investment[]> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error('error.getAllInvestmentsFetch'); 
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new Error('error.jsonError');
+  }
 };
 
 export default client;

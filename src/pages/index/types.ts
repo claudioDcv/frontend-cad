@@ -1,39 +1,30 @@
 import { Option } from '../../types';
 
 export interface ResolutionFormModel {
-  materialType: Option;
+  page: number;
+  categoryId: Option;
   status: Option;
   investment: Option;
   location: Option;
-  dateRange: [Date, Date];
+  range: [Date, Date];
+  resolutionNumber: string;
 }
 
 export interface PackingListFormModel {
+  page: number;
+  categoryId: Option;
   status: Option;
+  investment: Option;
+  location: Option;
+  range: [Date, Date];
+  docNumber: string;
 }
 
-export type ResolutionModel = {
-  resolutionId: number;
-  resolutionNumber: number;
-  resolutionBarcode: string;
-  dispatchGuideNumber: number;
-  investmentName: string;
-  branchName: string;
-  closureDate: string;
-  contractQuantity: number;
-  jewelTotalCount: number;
-  categoryName: string;
-  stateName: string;
-};
-
-export type PropsPackingList = {
+export interface ContractFormModel {
   page: number;
-  size?: number;
-  sort?: string;
-  startDate?: string;
-  endDate?: string;
-  originCcId?: number;
-  destinyCcId?: number;
-  categoryId?: number;
-  statusId?: number;
-};
+  resolutionId?: string;
+  clientRut?: string;
+  responsible?: string;
+  expirationBefore?: Date;
+  contractNumber?: string;
+}

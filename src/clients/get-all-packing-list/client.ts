@@ -1,18 +1,19 @@
 import { API_BASE } from '../../conf/http';
-import { getHeader, clearProp, clearAllProps } from '../utils';
-import { PageResponse, PropsPackingList } from './types';
+import { clearAllProps, clearProp, getHeader } from '../utils';
+import { PageResponse, PackingListQuery } from './types';
+import { cleanDate } from './utils';
 
-const client = async (props: PropsPackingList): Promise<PageResponse> => {
+const client = async (props: PackingListQuery): Promise<PageResponse> => {
   const params = {
-    page: clearProp(props.page),
-    size: clearProp(props.size),
-    sort: clearProp(props.sort),
-    startDate: clearProp(props.startDate),
-    endDate: clearProp(props.endDate),
-    originCcId: clearProp(props.originCcId),
-    destinyCcId: clearProp(props.destinyCcId),
+    page: clearProp(props.page - 1),
+    packingListId: clearProp(props.packinglistId),
+    startDate: cleanDate(props.startDate),
+    endDate: cleanDate(props.endDate),
     categoryId: clearProp(props.categoryId),
     statusId: clearProp(props.statusId),
+    investmentId: clearProp(props.investmentId),
+    originLocationId: clearProp(props.originLocationId),
+    destinyLocationId: clearProp(props.destinyLocationId),
   };
 
   const query = new URLSearchParams(clearAllProps(params));
@@ -24,10 +25,14 @@ const client = async (props: PropsPackingList): Promise<PageResponse> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error('error.getAllPackingListFetch');
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new Error('error.jsonError');
+  }
 };
 
 export default client;

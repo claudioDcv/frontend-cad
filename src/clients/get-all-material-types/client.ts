@@ -10,10 +10,14 @@ const client = async (): Promise<MaterialType[]> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error('error.getAllMaterialTypesFetch'); 
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new Error('error.jsonError');
+  }
 };
 
 export default client;

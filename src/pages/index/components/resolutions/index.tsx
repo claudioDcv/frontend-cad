@@ -1,122 +1,181 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Box, Pagination } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { useRef, useState } from 'react';
 
-import { ResolutionFormModel } from '../../types';
+import { Box, Button } from '@mui/material';
+import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'wouter';
+
 import {
-  useGetAllInvestments,
-  useGetAllLocations,
-  useGetAllMaterialTypes,
-  useGetAllResolutions,
-  useGetAllStatus,
-} from '../../../../clients';
-import {
-  Dropdown,
-  MonthRangePicker,
   ButtonClear,
+  InputController,
+  MonthRangePicker,
+  Pagination,
   Table,
+  Notification,
+  Input,
 } from '../../../../components';
+
 import {
-  addOptionAll,
-  isEmpty,
-} from '../../utils';
-import {
+  debounce,
   defaultStartDate,
   emptyOption,
   FIRST_PAGE,
-  STATUS_RESOLUTION,
+  formatToDDMMYYYY,
+  getMaterialType,
+  getStatusIcon,
+  LOCATION_ACTIVE,
+  SEARCH_DELAY,
   toDay,
 } from '../../../../utils';
-import Notification from '../../../../components/molecules/notification';
-import { defaultResolutionsFormValues, resolutionParams } from './utils';
+
+import {
+  addOptionAll,
+  defaultResolutionsFormValues,
+  isEmpty,
+} from '../../utils';
+
+import { Visibility } from '@mui/icons-material';
+import { ResolutionFormModel } from '../../types';
+import useServices from './hooks/useServices';
+import useRoutes from '../../../../conf/routes';
+
+import { Option } from '../../../../types';
+
+import { Resolution } from '../../../../clients/get-all-resolutions/types';
 
 const Resolutions = () => {
-  const { control, reset, watch } = useForm<ResolutionFormModel>({
+  const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
     defaultValues: defaultResolutionsFormValues,
   });
 
+  const services = useServices();
+  const routes = useRoutes();
+
+  const materialTypeOptions = addOptionAll(services.getAllMaterialType.data);
+  const statusOptions = addOptionAll(services.getAllStatus.data);
+  const investmentOptions = addOptionAll(services.getAllInvestments.data);
+  const locationOptions = addOptionAll(services.getAllLocations.data);
+
+  const isMaterialTypeDisabled = isEmpty(services.getAllMaterialType.data);
+  const isStatusDisabled = isEmpty(services.getAllStatus.data);
+  const isInvestmentDisabled = isEmpty(services.getAllInvestments.data);
+  const isLocationDisabled = isEmpty(services.getAllLocations.data);
+
   const { t } = useTranslation();
+  const [, navigate] = useLocation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
-  const { investment, location, materialType, status } = watch();
-  const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
 
-  const getAllResolutions = useGetAllResolutions();
-  const getAllStatus = useGetAllStatus();
-  const getAllLocations = useGetAllLocations();
-  const getAllMaterialType = useGetAllMaterialTypes();
-  const getAllInvestments = useGetAllInvestments();
+  const resolutionRows = services.getAllResolutions.data?.resolutions || [];
+  const paginationCount = services.getAllResolutions.data?.meta?.count || 0;
 
-  const materialTypeOptions = addOptionAll(getAllMaterialType.data);
-  const statusOptions = addOptionAll(getAllStatus.data);
-  const investmentOptions = addOptionAll(getAllInvestments.data);
-  const locationOptions = addOptionAll(getAllLocations.data);
-
-  const isMaterialTypeDisabled = isEmpty(getAllMaterialType.data);
-  const isStatusDisabled = isEmpty(getAllStatus.data);
-  const isInvestmentDisabled = isEmpty(getAllInvestments.data);
-  const isLocationDisabled = isEmpty(getAllLocations.data);
-
-  const resolutionRows = getAllResolutions.data?.resolutions || [];
-  const paginationCount = getAllResolutions.data?.meta?.count || 0;
-
-  const fetchResolutions = useCallback(
-    (page: number = 0) => {
-      const filters = {
-        investment,
-        location,
-        materialType,
-        status,
-        range,
+  const debouncedSearchRef = useRef(
+    debounce((resolutionNumber: string) => {
+      const newFilters = {
+        ...getValues(),
+        resolutionNumber: resolutionNumber,
+        page: FIRST_PAGE,
       };
-      const params = resolutionParams(page, filters);
-      getAllResolutions.call(params);
-    },
-    [investment, location, materialType, status, range, getAllResolutions]
+      services.getAllResolutions.call(newFilters);
+    }, SEARCH_DELAY)
   );
 
-  const handleInvestmentChange =
-    (onChange: (value: { value: string; label: string }) => void) =>
-    (value: { value: string; label: string }) => {
-      onChange(value);
-      reset((prev) => ({
-        ...prev,
-        location: emptyOption,
-      }));
-
-      if (value.value) {
-        getAllLocations.call({ investmentId: value.value, status: true });
-      } else {
-        getAllLocations.clearData();
-      }
-    };
+  const renderContracts = (row: Resolution) => (
+    <Button
+      endIcon={<Visibility />}
+      onClick={() => navigate(routes.contracts.path(row.resolutionId))}
+      size="small"
+    >
+      {t('common.viewContracts')}
+    </Button>
+  );
 
   const handleClear = () => {
     reset(defaultResolutionsFormValues);
     setRange([defaultStartDate, new Date()]);
-    getAllLocations.clearData();
-    getAllInvestments.clearData();
+    services.getAllLocations.clearData();
+    services.getAllInvestments.clearData();
+
+    services.getAllResolutions.call({
+      ...defaultResolutionsFormValues,
+    });
   };
 
-  useEffect(() => {
-    getAllMaterialType.call();
-    getAllInvestments.call();
-    getAllStatus.call({ tableId: STATUS_RESOLUTION });
-  }, [getAllInvestments, getAllMaterialType, getAllStatus]);
+  const handleChangeStatus =
+    (field: ControllerRenderProps<ResolutionFormModel>) => (value: Option) => {
+      field.onChange(value);
+      const newFilters = { ...getValues(), status: value, page: FIRST_PAGE };
+      services.getAllResolutions.call(newFilters);
+    };
 
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [investment, location, materialType, status, range]);
+  const handleChangeMaterialType =
+    (field: ControllerRenderProps<ResolutionFormModel>) => (value: Option) => {
+      field.onChange(value);
+      const newFilters = {
+        ...getValues(),
+        categoryId: value,
+        page: FIRST_PAGE,
+      };
+      services.getAllResolutions.call(newFilters);
+    };
 
-  useEffect(() => {
-    fetchResolutions(currentPage);
-  }, [currentPage, fetchResolutions]);
+  const handleChangeInvestment =
+    (field: ControllerRenderProps<ResolutionFormModel>) => (value: Option) => {
+      field.onChange(value);
+      setValue('location', emptyOption);
+      if (value?.value) {
+        services.getAllLocations.call({
+          investmentId: value.value,
+          status: LOCATION_ACTIVE,
+        });
+      } else {
+        services.getAllLocations.clearData();
+      }
+      const newFilters = {
+        ...getValues(),
+        investment: value,
+        location: emptyOption,
+        page: FIRST_PAGE,
+      };
+      services.getAllResolutions.call(newFilters);
+    };
 
-  const handleChangePage = (
-    _event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value - 1);
+  const handleChangeLocation =
+    (field: ControllerRenderProps<ResolutionFormModel>) => (value: Option) => {
+      field.onChange(value);
+      const newFilters = {
+        ...getValues(),
+        location: value,
+        page: FIRST_PAGE,
+      };
+      services.getAllResolutions.call(newFilters);
+    };
+
+  const handleChangeRange = (newRange: [Date, Date]) => {
+    setRange(newRange);
+    const newFilters = {
+      ...getValues(),
+      range: newRange,
+      page: FIRST_PAGE,
+    };
+    setValue('range', newRange);
+    services.getAllResolutions.call(newFilters);
+  };
+
+  const handleDocNumberChange =
+    (field: ControllerRenderProps<ResolutionFormModel>) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = event.target.value;
+
+      if (/^\d*$/.test(rawValue)) {
+        field.onChange(rawValue);
+        debouncedSearchRef.current(rawValue);
+      }
+    };
+
+  const handleChangePage = (_p: unknown, page: number) => {
+    const newFilters = { ...getValues(), page };
+    setValue('page', page);
+    services.getAllResolutions.call(newFilters);
   };
 
   return (
@@ -132,60 +191,49 @@ const Resolutions = () => {
             gap={2}
           >
             <Controller
-              name="materialType"
+              name="resolutionNumber"
               control={control}
               render={({ field }) => (
-                <Dropdown
-                  {...field}
-                  options={materialTypeOptions}
-                  label={t('common.materialType')}
-                  disabled={isMaterialTypeDisabled}
+                <Input
+                  label={t('common.numDoc')}
+                  value={field.value}
+                  onChange={handleDocNumberChange(field)}
                 />
               )}
             />
-
-            <Controller
+            <InputController
+              onChange={handleChangeMaterialType}
+              disabled={isMaterialTypeDisabled}
+              options={materialTypeOptions}
+              label="common.materialType"
+              name="categoryId"
+              control={control}
+            />
+            <InputController
+              onChange={handleChangeStatus}
+              disabled={isStatusDisabled}
+              options={statusOptions}
+              label="common.status"
               name="status"
               control={control}
-              render={({ field }) => (
-                <Dropdown
-                  {...field}
-                  options={statusOptions}
-                  label={t('common.status')}
-                  disabled={isStatusDisabled}
-                />
-              )}
             />
-
-            <Controller
+            <InputController
+              onChange={handleChangeInvestment}
+              disabled={isInvestmentDisabled}
+              options={investmentOptions}
+              label="common.investment"
               name="investment"
               control={control}
-              render={({ field }) => (
-                <Dropdown
-                  {...field}
-                  options={investmentOptions}
-                  label={t('common.investment')}
-                  onChange={handleInvestmentChange(field.onChange)}
-                  disabled={isInvestmentDisabled}
-                />
-              )}
             />
-
-            <Controller
+            <InputController
+              onChange={handleChangeLocation}
+              disabled={isLocationDisabled}
+              options={locationOptions}
+              label="common.location"
               name="location"
               control={control}
-              render={({ field }) => (
-                <Dropdown
-                  {...field}
-                  options={locationOptions}
-                  label={t('common.location')}
-                  disabled={isLocationDisabled}
-                />
-              )}
             />
-
-            <MonthRangePicker value={range} onChange={setRange} />
-
+            <MonthRangePicker value={range} onChange={handleChangeRange} />
             <ButtonClear
               onClick={handleClear}
               label={t('common.clearFilters')}
@@ -194,40 +242,57 @@ const Resolutions = () => {
         </form>
         <Table
           columns={[
+            {
+              id: 'statusName',
+              label: t('resolution.status'),
+              render: ({ statusId, statusName }) =>
+                getStatusIcon(statusId, statusName),
+            },
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
             { id: 'barcode', label: t('resolution.barcode') },
             { id: 'dispatchGuide', label: t('resolution.dispatchGuide') },
-            { id: 'investmentName', label: t('resolution.investment') },
+            { id: 'investmentName', label: t('common.investment') },
             { id: 'locationName', label: t('resolution.location') },
-            { id: 'closeDate', label: t('resolution.closeDate') },
+            {
+              id: 'closeDate',
+              label: t('resolution.closeDate'),
+              render: ({ closeDate }) => formatToDDMMYYYY(closeDate),
+            },
             { id: 'contractCount', label: t('resolution.contractCount') },
-            { id: 'totalJewels', label: t('resolution.totalJewels') },
-            { id: 'categoryName', label: t('resolution.category') },
-            { id: 'stateName', label: t('resolution.status') },
+            {
+              id: 'categoryName',
+              label: t('common.category'),
+              render: ({ categoryName, categoryId }) =>
+                getMaterialType(categoryName, categoryId, 'small'),
+            },
+            {
+              id: 'actions',
+              label: t('common.actions'),
+              render: renderContracts,
+            },
           ]}
           rows={resolutionRows}
           messageVoidData={t('common.noData')}
+          size="small"
         />
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
             count={paginationCount}
-            page={currentPage + 1}
+            page={getValues().page}
             onChange={handleChangePage}
           />
         </Box>
       </Box>
-
       <Notification
-        open={!!getAllResolutions.error}
-        onClose={getAllResolutions.onResetError}
+        open={!!services.getAllResolutions.error}
+        onClose={services.getAllResolutions.onResetError}
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: getAllResolutions.error || t('common.unknownError'),
+          text: services.getAllResolutions.error || t('common.unknownError'),
         }}
       />
     </div>
   );
 };
-
 export default Resolutions;

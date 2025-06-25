@@ -17,10 +17,14 @@ const client = async (props: Props): Promise<Location[]> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error('error.getAllLocationsFetch'); 
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new Error('error.jsonError');
+  }
 };
 
 export default client;

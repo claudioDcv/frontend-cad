@@ -1,32 +1,39 @@
 import { Pageable, Sort } from '../types';
-import { Option } from '../../types';
 
 export type Resolution = {
-  resolutionId: number;
-  resolutionNumber: number;
-  resolutionBarcode: string;
-  dispatchGuideNumber: number;
+  resolutionId: string;
+  resolutionNumber: string;
+  barcode: string;
+  dispatchGuide: number;
   investmentName: string;
-  branchName: string;
-  closureDate: string;
-  contractQuantity: number;
-  jewelTotalCount: number;
+  locationName: string;
+  closeDate: string;
+  contractCount: number;
+  totalJewels: number;
   categoryName: string;
-  stateName: string;
+  categoryId: string;
+  statusName: string;
+  statusId: number;
+  locationAddress: string;
+  investmentRut: string;
+  securityBag: string;
 };
 
-export type PageResponse = {
-  content: Resolution[];
-  empty: boolean;
-  first: boolean;
-  last: boolean;
-  number: number;
-  numberOfElements: number;
-  pageable: Pageable;
-  size: number;
-  sort: Sort;
-  totalElements: number;
-  totalPages: number;
+export type ResolutionQuery = {
+  resolutionId?: string;
+  resolutionNumber?: string;
+  barcode?: string;
+  dispatchGuide?: number;
+  investmentId?: string;
+  locationId?: string;
+  categoryId?: string;
+  statusId?: string;
+  statusName?: string;
+  startDate?: string;
+  endDate?: string;
+  page: number;
+  size?: number;
+  sort?: string;
 };
 
 export type ResolutionPaginated = {
@@ -37,22 +44,17 @@ export type ResolutionPaginated = {
   };
 };
 
-export type PropsResolution = {
-  page: number;
-  size?: number;
-  sort?: string;
-  investmentId?: string;
-  locationId?: string;
-  categoryId?: string;
-  stateId?: string;
-  startDate?: string;
-  endDate?: string;
+export type PageResponse = {
+  totalPages: number;
+  totalElements: number;
+  pageable: Pageable;
+  size: number;
+  content: Resolution[];
+  number: number;
+  sort: Sort[];
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
 };
 
-export type ResolutionFilters = {
-  investment?: Option;
-  location?: Option;
-  materialType?: Option;
-  status?: Option;
-  range: [Date, Date];
-};
