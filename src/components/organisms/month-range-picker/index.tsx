@@ -293,7 +293,7 @@ const MonthRangePicker: React.FC<MonthRangePickerProps> = ({ value, onChange, i1
                                 <label className={styles.label}>
                                     {lang.startMonth}
                                 </label>
-                                <div className={styles.gridContainer}>
+                                <div className={styles.gridContainer} data-buttons="from">
                                     {lang.months.map((month, index) => (
                                         <button
                                             key={index}
@@ -311,7 +311,7 @@ const MonthRangePicker: React.FC<MonthRangePickerProps> = ({ value, onChange, i1
                                 <label className={styles.label}>
                                     {lang.startYear}
                                 </label>
-                                <div className={styles.gridContainer}>
+                                <div className={styles.gridContainer} data-buttons="from">
                                     {years.map((year) => (
                                         <button
                                             key={year}

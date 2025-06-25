@@ -1,0 +1,60 @@
+{
+    "api/v1/resolutions": {
+        "content": [
+            {
+                "resolutionId": 1,
+                "resolutionNumber": 123,
+                "resolutionBarcode": "ABC123",
+                "dispatchGuideNumber": 456,
+                "investmentName": "Investment 1",
+                "branchName": "Branch 1",
+                "closureDate": "2023-01-01",
+                "contractQuantity": 10,
+                "jewelTotalCount": 5,
+                "categoryName": "Category 1",
+                "stateName": "State 1"
+            },
+            {
+                "resolutionId": 2,
+                "resolutionNumber": 456,
+                "resolutionBarcode": "DEF456",
+                "dispatchGuideNumber": 789,
+                "investmentName": "Investment 2",
+                "branchName": "Branch 2",
+                "closureDate": "2023-02-01",
+                "contractQuantity": 20,
+                "jewelTotalCount": 10,
+                "categoryName": "Category 2",
+                "stateName": "State 2"
+            }
+        ],
+        "empty": true,
+        "first": true,
+        "last": true,
+        "number": 0,
+        "numberOfElements": 1,
+        "pageable": {
+            "pageNumber": 0,
+            "pageSize": 10,
+            "sort": {
+                "sorted": false,
+                "unsorted": true,
+                "empty": true
+            },
+            "offset": 0,
+            "paged": true,
+            "unpaged": false
+        },
+        "size": 0,
+        "sort": {
+            "sorted": false,
+            "unsorted": true,
+            "empty": true
+        },
+        "totalElements": 0,
+        "totalPages": 0
+    },
+    "api/v1/status": [],
+    "api/v1/investments": [],
+    "api/v1/material-categories": []
+}
