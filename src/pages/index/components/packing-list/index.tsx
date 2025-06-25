@@ -29,6 +29,7 @@ import {
   formatToDDMMYYYY,
   getMaterialType,
   getStatusIcon,
+  isOnlyNumbersOrEmpty,
   toDay,
 } from '../../../../utils';
 
@@ -151,7 +152,7 @@ const PackingList = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const rawValue = event.target.value;
 
-      if (/^\d*$/.test(rawValue)) {
+      if (isOnlyNumbersOrEmpty(rawValue)) {
         field.onChange(rawValue);
         debouncedSearchRef.current(rawValue);
       }

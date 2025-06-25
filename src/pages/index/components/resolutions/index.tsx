@@ -23,6 +23,7 @@ import {
   formatToDDMMYYYY,
   getMaterialType,
   getStatusIcon,
+  isOnlyNumbersOrEmpty,
   LOCATION_ACTIVE,
   SEARCH_DELAY,
   toDay,
@@ -166,7 +167,7 @@ const Resolutions = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const rawValue = event.target.value;
 
-      if (/^\d*$/.test(rawValue)) {
+      if (isOnlyNumbersOrEmpty(rawValue)) {
         field.onChange(rawValue);
         debouncedSearchRef.current(rawValue);
       }

@@ -28,6 +28,8 @@ export const defaultStartDate = new Date(
 );
 
 export const emptyOption = { value: 'all', label: 'TODOS' };
+export const isOnlyNumbersOrEmpty = (value: string) => /^\d*$/.test(value);
+
 
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));

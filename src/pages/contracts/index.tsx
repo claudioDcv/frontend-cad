@@ -25,6 +25,7 @@ import {
   formatNumberWithGr,
   formatToDDMMYYYY,
   getMaterialType,
+  isOnlyNumbersOrEmpty,
   SEARCH_DELAY,
 } from '../../utils';
 import { ContractsProps } from './types';
@@ -60,7 +61,7 @@ const Contracts = ({ params }: ContractsProps) => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const rawValue = event.target.value;
 
-      if (/^\d*$/.test(rawValue)) {
+      if (isOnlyNumbersOrEmpty(rawValue)) {
         field.onChange(rawValue);
         debouncedSearchRef.current(rawValue);
       }
