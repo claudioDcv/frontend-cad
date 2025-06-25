@@ -22,6 +22,7 @@ import { PackingListFormModel } from '../../types';
 import {
   FIRST_PAGE,
   LOCATION_ACTIVE,
+  SEARCH_DELAY,
   debounce,
   defaultStartDate,
   emptyOption,
@@ -70,7 +71,7 @@ const PackingList = () => {
         page: FIRST_PAGE,
       };
       services.getAllPackingList.call(newFilters);
-    }, 2000)
+    }, SEARCH_DELAY)
   );
 
   const handleClear = () => {

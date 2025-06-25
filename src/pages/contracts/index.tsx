@@ -25,6 +25,7 @@ import {
   formatNumberWithGr,
   formatToDDMMYYYY,
   getMaterialType,
+  SEARCH_DELAY,
 } from '../../utils';
 import { ContractsProps } from './types';
 
@@ -51,7 +52,7 @@ const Contracts = ({ params }: ContractsProps) => {
         page: FIRST_PAGE,
       };
       services.getAllContracts.call(newFilters);
-    }, 2000)
+    }, SEARCH_DELAY)
   );
 
   const handleContractNumberChange =

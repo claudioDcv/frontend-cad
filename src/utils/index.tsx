@@ -13,6 +13,8 @@ export const FIRST_PAGE = 0;
 export const LOCATION_ACTIVE = true;
 export const LOCATION_INACTIVE = false;
 
+export const SEARCH_DELAY = 300;
+
 export const toDay = new Date();
 export const defaultEndDate = new Date(
   toDay.getFullYear(),

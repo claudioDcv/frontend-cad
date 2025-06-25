@@ -24,6 +24,7 @@ import {
   getMaterialType,
   getStatusIcon,
   LOCATION_ACTIVE,
+  SEARCH_DELAY,
   toDay,
 } from '../../../../utils';
 
@@ -75,15 +76,13 @@ const Resolutions = () => {
         page: FIRST_PAGE,
       };
       services.getAllResolutions.call(newFilters);
-    }, 2000)
+    }, SEARCH_DELAY)
   );
 
   const renderContracts = (row: Resolution) => (
     <Button
       endIcon={<Visibility />}
-      onClick={() =>
-        navigate(routes.contracts.path(row.resolutionId))
-      }
+      onClick={() => navigate(routes.contracts.path(row.resolutionId))}
       size="small"
     >
       {t('common.viewContracts')}
@@ -260,7 +259,9 @@ const Resolutions = () => {
             {
               id: 'categoryName',
               label: t('common.category'),
-              render: ({ categoryName, categoryId }) => getMaterialType(categoryName, categoryId, 'small') },
+              render: ({ categoryName, categoryId }) =>
+                getMaterialType(categoryName, categoryId, 'small'),
+            },
             {
               id: 'actions',
               label: t('common.actions'),
