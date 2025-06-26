@@ -16,19 +16,18 @@ export type Contract = {
   startDate: string;
   endDate: string;
   contractNumber: string;
+  contractId: number;
   totalContractValue: number;
   averagePurchaseValue: number;
 };
 
 export type ContractQuery = {
-  page: number;
-  size?: number;
-  sort?: string;
   resolutionId?: string;
   clientRut?: string;
   responsible?: string;
   expirationBefore?: string;
   contractNumber?: string;
+  contractId?: number;
 };
 
 export type ContractPaginated = {

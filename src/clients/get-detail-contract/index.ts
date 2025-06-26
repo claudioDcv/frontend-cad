@@ -1,28 +1,23 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '../../utils';
 import client from './client';
-import { remap } from './utils';
-import { Option } from '../../types';
 import { useTranslation } from 'react-i18next';
-import { Props } from './types';
+import { ContractDetail, Props } from './type';
 
-const useGetAllStatus = () => {
+const useGetAllContractDetails = () => {
   const { t } = useTranslation();
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Option[]>([]);
+  const [data, setData] = useState<ContractDetail[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [lastProps, setLastProps] = useState<Props | null>(null);
 
   const call = useCallback(
     async (props: Props) => {
-      const isSameFilter = lastProps && lastProps.tableId === props.tableId;
-
       if (status === FetchStatus.ERROR) {
         return;
       }
 
-      if (status === FetchStatus.LOADING || isSameFilter) {
+      if (status === FetchStatus.LOADING) {
         setStatus(FetchStatus.SUCCESS);
         setError(null);
         return;
@@ -32,20 +27,18 @@ const useGetAllStatus = () => {
 
       try {
         const result = await client(props);
-        const model = remap(result);
-        setData(model);
+        setData(result);
         setStatus(FetchStatus.SUCCESS);
-        setLastProps(props);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
         setError(t(messageKey));
         setStatus(FetchStatus.ERROR);
       }
     },
-    [lastProps, status, t]
+    [status, t]
   );
 
   return { status, data, error, call };
 };
 
-export default useGetAllStatus;
+export default useGetAllContractDetails;

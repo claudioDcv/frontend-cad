@@ -1,6 +1,10 @@
 export interface Jewel {
-  id: string;
-  label: string;
+  number?: number;
+  description?: string;
+  family?: string;
+  weight?: number;
+  quantity?: number;
+  value?: number;
 }
 
 export interface Contract {

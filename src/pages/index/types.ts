@@ -21,7 +21,6 @@ export interface PackingListFormModel {
 }
 
 export interface ContractFormModel {
-  page: number;
   resolutionId?: string;
   clientRut?: string;
   responsible?: string;

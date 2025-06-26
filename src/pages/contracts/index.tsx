@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { Box, Card, CardContent, Divider } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -17,42 +18,66 @@ import routes from '../../conf/routes';
 import { ContractFormModel } from '../index/types';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { defaultContractsFormValues } from '../index/utils';
-import { useRef } from 'react';
 import {
   debounce,
-  FIRST_PAGE,
+  FIRST_PAGE_MANUAL,
   formatCurrency,
   formatNumberWithGr,
   formatToDDMMYYYY,
   getMaterialType,
   isOnlyNumbersOrEmpty,
+  ITEMS_PER_PAGE,
+  materialMap,
   SEARCH_DELAY,
 } from '../../utils';
 import { ContractsProps } from './types';
+import ModalContractDetail from '../../components/organisms/modal-contract-detail';
+import useContractDetail from './hooks/useContractDetail';
+import ContractDetailButton from './components/ContractDetailButton';
 
 const Contracts = ({ params }: ContractsProps) => {
-  const { control, getValues, setValue } = useForm<ContractFormModel>({
+  const { control } = useForm<ContractFormModel>({
     defaultValues: defaultContractsFormValues,
   });
 
+  const [selectedContractId, setSelectedContractId] = useState<number | null>(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(FIRST_PAGE_MANUAL);
+  const [searchTerm, setSearchTerm] = useState('');
+
   const resolutionId = params.id;
-
   const services = useServices(resolutionId);
-
+  const getDetailContract = useContractDetail(selectedContractId);
   const { t } = useTranslation();
+  
+  const allContracts = services.getAllContracts.contracts || [];
 
-  const contractRows = services.getAllContracts.data?.contracts || [];
-  const paginationCount = services.getAllContracts.data?.meta?.count || 0;
+  const filteredContracts = allContracts.filter((contract) =>
+    contract.contractNumber?.toString().includes(searchTerm)
+  );
+
+  const paginatedContracts = filteredContracts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const totalPages = Math.ceil(filteredContracts.length / ITEMS_PER_PAGE);
+
+  const detailData = getDetailContract.getDetailContract.data || [];
+
+  const categoryId = services.getResolution.data?.categoryId || '';
+  const materialType = materialMap[categoryId] || 'defaultMaterial';
+
+  const handleOpenModal = (contractId: number) => {
+    getDetailContract.getDetailContract.call({ contractId });
+    setSelectedContractId(contractId);
+    setOpenModal(true);
+  };
 
   const debouncedSearchRef = useRef(
     debounce((contractNumber: string) => {
-      const newFilters = {
-        ...getValues(),
-        contractNumber: contractNumber,
-        resolutionId,
-        page: FIRST_PAGE,
-      };
-      services.getAllContracts.call(newFilters);
+      setSearchTerm(contractNumber);
+      setCurrentPage(FIRST_PAGE_MANUAL);
     }, SEARCH_DELAY)
   );
 
@@ -60,17 +85,14 @@ const Contracts = ({ params }: ContractsProps) => {
     (field: ControllerRenderProps<ContractFormModel>) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const rawValue = event.target.value;
-
       if (isOnlyNumbersOrEmpty(rawValue)) {
         field.onChange(rawValue);
         debouncedSearchRef.current(rawValue);
       }
     };
 
-  const handleChangePage = (_p: unknown, page: number) => {
-    const newFilters = { ...getValues(), page, resolutionId };
-    setValue('page', page);
-    services.getAllContracts.call(newFilters);
+  const handleChangePage = (_: unknown, page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -162,14 +184,12 @@ const Contracts = ({ params }: ContractsProps) => {
             {
               id: 'totalContractValue',
               label: t('contract.totalContractValue'),
-              render: ({ totalContractValue }) =>
-                formatCurrency(totalContractValue),
+              render: ({ totalContractValue }) => formatCurrency(totalContractValue),
             },
             {
               id: 'averagePurchaseValue',
               label: t('contract.averagePurchaseValue'),
-              render: ({ averagePurchaseValue }) =>
-                formatCurrency(averagePurchaseValue),
+              render: ({ averagePurchaseValue }) => formatCurrency(averagePurchaseValue),
             },
             {
               id: 'totalWeight',
@@ -186,19 +206,33 @@ const Contracts = ({ params }: ContractsProps) => {
               label: t('contract.endDate'),
               render: ({ endDate }) => formatToDDMMYYYY(endDate),
             },
+            {
+              id: 'actions',
+              label: t('common.actions'),
+              render: (row) => (
+                <ContractDetailButton
+                  contractId={row.contractId}
+                  open={handleOpenModal}
+                  label={t('common.viewContracts')}
+                />
+              ),
+            },
           ]}
-          rows={contractRows}
+          rows={paginatedContracts}
           messageVoidData={t('common.noData')}
           size="small"
         />
       </form>
-      <Box>
-        <Pagination
-          count={paginationCount}
-          page={getValues().page}
-          onChange={handleChangePage}
-        />
-      </Box>
+      {totalPages > 1 && (
+        <Box>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handleChangePage}
+          />
+        </Box>
+      )}
+
       <Notification
         open={!!services.getAllContracts.error}
         onClose={services.getAllContracts.onResetError}
@@ -206,6 +240,19 @@ const Contracts = ({ params }: ContractsProps) => {
         i18n={{
           title: t('common.error'),
           text: services.getAllContracts.error || t('common.unknownError'),
+        }}
+      />
+      <ModalContractDetail
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onSuccess={() => console.log({ selectedContractId })}
+        material={materialType}
+        data={{
+          id: selectedContractId?.toString() || 'default-id',
+          jewels: detailData,
+        }}
+        i18n={{
+          label: `${t('common.contractDetail')} ${selectedContractId}`,
         }}
       />
     </div>

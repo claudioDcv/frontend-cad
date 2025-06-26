@@ -9,6 +9,8 @@ export const STATUS_RESOLUTION = 14;
 export const STATUS_PACKING_LIST = 32;
 
 export const FIRST_PAGE = 0;
+export const FIRST_PAGE_MANUAL = 1;
+export const ITEMS_PER_PAGE = 20;
 
 export const LOCATION_ACTIVE = true;
 export const LOCATION_INACTIVE = false;

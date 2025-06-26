@@ -1,22 +1,19 @@
 import { useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-
 import { FetchStatus } from '../../utils';
-import { ContractFormModel } from '../../pages/index/types';
-
 import client from './client';
-import { initialContractData, remap } from './utils';
-import { ContractPaginated } from './types';
+import { Contract } from './types';
+import { useTranslation } from 'react-i18next';
+import { ContractFormModel } from '../../pages/index/types';
 
 const useGetAllContracts = () => {
   const { t } = useTranslation();
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<ContractPaginated>(initialContractData);
+  const [contracts, setContracts] = useState<Contract[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
-    setData(initialContractData);
+    setContracts([]);
     setError(null);
   };
 
@@ -36,13 +33,11 @@ const useGetAllContracts = () => {
 
       try {
         const result = await client({
-          page: props.page,
           resolutionId: props.resolutionId,
           contractNumber: props.contractNumber
         });
 
-        const model = remap(result);
-        setData(model);
+        setContracts(result);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
@@ -53,7 +48,7 @@ const useGetAllContracts = () => {
     [status, t]
   );
 
-  return { status, data, error, call, onResetError };
+  return { status, contracts, error, call, onResetError };
 };
 
 export default useGetAllContracts;

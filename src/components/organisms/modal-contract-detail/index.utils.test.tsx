@@ -1,20 +1,32 @@
 import { describe, expect, test } from 'vitest';
+import { columns } from './index.utils';
 import { Jewel } from '../../../types';
 import { Column } from '../../organisms/table';
-import { columns } from './index.utils';
 
 describe('Utils for Modal Contract', () => {
-  test('should define the correct column structure', () => {
-    const expectedColumns: Column<Jewel>[] = [
-      { id: 'id', label: '#' },
-      { id: 'label', label: 'Nombre' },
+  test('should define the correct column structure (id and label only)', () => {
+    const expectedColumns: Pick<Column<Jewel>, 'id' | 'label'>[] = [
+      { id: 'number', label: 'Número' },
+      { id: 'description', label: 'Descripción' },
+      { id: 'family', label: 'Familia' },
+      { id: 'quantity', label: 'Cantidad' },
+      { id: 'value', label: 'Valor' },
+      { id: 'weight', label: 'Peso' },
     ];
 
-    expect(columns).toEqual(expectedColumns);
+    const simplified = columns.map(({ id, label }) => ({ id, label }));
+    expect(simplified).toEqual(expectedColumns);
   });
 
   test('should have correct column IDs', () => {
     const columnIds = columns.map((col) => col.id);
-    expect(columnIds).toEqual(['id', 'label']);
+    expect(columnIds).toEqual([
+      'number',
+      'description',
+      'family',
+      'quantity',
+      'value',
+      'weight',
+    ]);
   });
 });

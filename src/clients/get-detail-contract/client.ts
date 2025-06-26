@@ -1,22 +1,22 @@
 import { API_BASE } from '../../conf/http';
 import { clearAllProps, clearProp, getHeader } from '../utils';
-import { Contract, ContractQuery } from './types';
+import { ContractDetail, Props } from './type';
 
-const client = async (props: ContractQuery): Promise<Contract[]> => {
+const client = async (props: Props): Promise<ContractDetail[]> => {
   const params = {
-    resolutionId: clearProp(props.resolutionId),
-  }
+    contractId: clearProp(props.contractId),
+  };
 
   const query = new URLSearchParams(clearAllProps(params));
-  const url = `${API_BASE}/contracts/all?${query}`;
+  const url = new URL(`${API_BASE}/contract-detail?${query}`);
 
-  const response = await fetch(url, {
+  const response = await fetch(url.toString(), {
     headers: getHeader(),
     credentials: 'include',
   });
 
   if (!response.ok) {
-    throw new Error('error.getAllContractsFetch');
+    throw new Error('error.getResolutionFetch');
   }
 
   try {

@@ -1,9 +1,8 @@
 import { API_BASE } from '../../conf/http';
-import { PropsStatus } from '../types';
 import { clearAllProps, clearProp, getHeader } from '../utils';
-import { Status } from './types';
+import { Props, Status } from './types';
 
-const client = async (props: PropsStatus): Promise<Status[]> => {
+const client = async (props: Props): Promise<Status[]> => {
   const params = {
     tableId: clearProp(props.tableId)
   };

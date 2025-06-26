@@ -3,10 +3,6 @@ export interface PaginationMeta {
   count: number;
 }
 
-export type PropsStatus = {
-  tableId?: number;
-};
-
 export type Pageable = {
   pageNumber: number;
   pageSize: number;

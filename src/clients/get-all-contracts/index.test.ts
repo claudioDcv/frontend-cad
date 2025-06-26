@@ -3,73 +3,42 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
 import { FetchStatus } from '../../utils';
 import useGetAllContracts from '.';
-import { PageResponse } from './types';
-import { remap } from './utils';
 import { ContractFormModel } from '../../pages/index/types';
+import { Contract } from './types';
 
 const mockFilters: ContractFormModel = {
-  page: 1,
   resolutionId: '1',
   clientRut: '11111111-1',
   responsible: 'Juan Pérez',
 };
-
 describe('useGetAllContracts', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData: PageResponse = {
-      content: [
-        {
-          resolutionId: 1,
-          resolutionNumber: 100,
-          resolutionBarcode: 'ABC123',
-          dispatchGuideNumber: 123,
-          investmentName: 'Inversión Prueba',
-          branchName: 'Sucursal Central',
-          closureDate: '2025-12-31',
-          contractQuantity: 10,
-          jewelTotalCount: 100,
-          categoryName: 'Categoría A',
-          statusName: 'Cerrado',
-          totalWeight: '',
-          startDate: '',
-          endDate: '',
-          contractNumber: '',
-          totalContractValue: 0,
-          averagePurchaseValue: 0
-        },
-      ],
-      totalElements: 1,
-      totalPages: 1,
-      number: 0,
-      size: 10,
-      first: true,
-      last: true,
-      empty: false,
-      numberOfElements: 1,
-      pageable: {
-        pageNumber: 0,
-        pageSize: 10,
-        sort: {
-          sorted: false,
-          empty: false,
-          unsorted: true,
-        },
-        offset: 0,
-        paged: true,
-        unpaged: false,
-      },
-      sort: {
-        sorted: false,
-        empty: false,
-        unsorted: true,
-      },
+    const mockData: Contract = {
+      resolutionId: 0,
+      resolutionNumber: 0,
+      resolutionBarcode: '',
+      dispatchGuideNumber: 0,
+      investmentName: '',
+      branchName: '',
+      closureDate: '',
+      contractQuantity: 0,
+      jewelTotalCount: 0,
+      categoryName: '',
+      statusName: '',
+      totalWeight: '',
+      startDate: '',
+      endDate: '',
+      contractNumber: '',
+      contractId: 0,
+      totalContractValue: 0,
+      averagePurchaseValue: 0,
     };
 
-    vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
+    vi.spyOn(clientModule, 'default').mockResolvedValue([mockData]);
 
     const { result } = renderHook(() => useGetAllContracts());
 
@@ -78,7 +47,7 @@ describe('useGetAllContracts', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(remap(mockData));
+    expect(result.current.contracts).toEqual([mockData]);
     expect(result.current.error).toBe(null);
   });
 
@@ -93,10 +62,7 @@ describe('useGetAllContracts', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
-    expect(result.current.data).toEqual({
-      contracts: [],
-      meta: { page: 0, count: 0 },
-    });
+    expect(result.current.contracts).toEqual([]);
     expect(result.current.error).toBe('API call failed');
   });
 
@@ -104,10 +70,7 @@ describe('useGetAllContracts', () => {
     const { result } = renderHook(() => useGetAllContracts());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
-    expect(result.current.data).toEqual({
-      contracts: [],
-      meta: { page: 0, count: 0 },
-    });
+    expect(result.current.contracts).toEqual([]);
     expect(result.current.error).toBe(null);
   });
 });

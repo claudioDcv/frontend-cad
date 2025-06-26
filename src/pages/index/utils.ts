@@ -35,7 +35,6 @@ export const defaultPackingListFormValues: PackingListFormModel = {
 };
 
 export const defaultContractsFormValues: ContractFormModel = {
-  page: FIRST_PAGE,
   resolutionId: '',
   clientRut: '',
   responsible: '',
