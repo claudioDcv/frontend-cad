@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
-import client from './client';
 import { useTranslation } from 'react-i18next';
+
+import client from './client';
 import { FetchStatus } from '../../utils';
 import { Resolution } from './types';
 

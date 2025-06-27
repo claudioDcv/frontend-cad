@@ -1,12 +1,11 @@
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import client from './client';
-import { initialResolutiontData, remap } from './utils';
-import { ResolutionPaginated } from './types';
-
-import { FetchStatus } from '../../utils';
 import { ResolutionFormModel } from '../../pages/index/types';
+import client from './client';
+import { ResolutionPaginated } from './types';
+import { FetchStatus } from '../../utils';
+import { initialResolutiontData, remap } from './utils';
 
 const useGetAllResolutions = () => {
   const { t } = useTranslation();

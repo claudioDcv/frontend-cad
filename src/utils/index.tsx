@@ -30,7 +30,6 @@ export const defaultStartDate = new Date(
 export const emptyOption = { value: 'all', label: 'TODOS' };
 export const isOnlyNumbersOrEmpty = (value: string) => /^\d*$/.test(value);
 
-
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -72,6 +71,12 @@ export function debounce<A extends unknown[]>(
 
   return debounced;
 }
+
+export const cleanDate = (date?: string | Date): string => {
+  if (!date) return '';
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toISOString().split('T')[0];
+};
 
 export function formatToDDMMYYYY(dateInput: string | undefined) {
   if (!dateInput) return '';
@@ -131,7 +136,7 @@ export const getStatusIcon = (statusId: number, statusName?: string) => {
 export const getMaterialType = (
   label: string,
   categoryId: string,
-  size: Size = 'medium',
+  size: Size = 'medium'
 ): React.ReactNode => {
   const material = materialMap[categoryId];
 

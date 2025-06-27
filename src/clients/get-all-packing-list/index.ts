@@ -12,7 +12,9 @@ const useGetAllPackingList = () => {
   const { t } = useTranslation();
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<PackingListPaginated>(initialPackingListData);
+  const [data, setData] = useState<PackingListPaginated>(
+    initialPackingListData
+  );
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
