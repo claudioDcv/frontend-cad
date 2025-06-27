@@ -36,6 +36,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 7px;
 }
 
 .arrowIcon {
@@ -62,10 +63,21 @@
 .gridContainer {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    position: relative;
+
+    &[data-buttons="from"]::after {
+        content: '';
+        height: 100%;
+        width: 1px;
+        position: absolute;
+        right: -4px;
+        top: 0;
+        background: var(--variant-containedBg);
+    }
 }
 
 .gridItem {
-    width: 65px;
+    width: 62px;
     padding: 8px 0.85rem;
     font-size: 16px;
     border: 0 none #ffffff00;
