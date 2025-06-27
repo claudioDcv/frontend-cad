@@ -47,7 +47,7 @@ const Contracts = ({ params }: ContractsProps) => {
 
   const resolutionId = params.id;
   const services = useServices(resolutionId);
-  const getDetailContract = useContractDetail(selectedContractId);
+  const serviceContract = useContractDetail(selectedContractId);
   const { t } = useTranslation();
   
   const allContracts = services.getAllContracts.contracts || [];
@@ -62,14 +62,17 @@ const Contracts = ({ params }: ContractsProps) => {
   );
 
   const totalPages = Math.ceil(filteredContracts.length / ITEMS_PER_PAGE);
-
-  const detailData = getDetailContract.getDetailContract.data || [];
+  const detailData = serviceContract.getDetailContract.data || [];
 
   const categoryId = services.getResolution.data?.categoryId || '';
   const materialType = materialMap[categoryId] || 'defaultMaterial';
 
+  const contractData = allContracts.find(
+  (contract) => contract.contractId === selectedContractId
+);
+
   const handleOpenModal = (contractId: number) => {
-    getDetailContract.getDetailContract.call({ contractId });
+    serviceContract.getDetailContract.call({ contractId });
     setSelectedContractId(contractId);
     setOpenModal(true);
   };
@@ -251,8 +254,27 @@ const Contracts = ({ params }: ContractsProps) => {
           id: selectedContractId?.toString() || 'default-id',
           jewels: detailData,
         }}
+        contractData={{
+          weight: contractData?.totalWeight || 0,
+          averagePurchaseValue: contractData?.averagePurchaseValue || 0,
+          totalContractValue: contractData?.totalContractValue || 0,
+          responsibleName: contractData?.responsibleName || '',
+          endDate: formatToDDMMYYYY(contractData?.endDate),
+          clientName: contractData?.clientName || '',
+          clientRut: contractData?.clientRut || '',
+        }}
         i18n={{
           label: `${t('common.contractDetail')} ${selectedContractId}`,
+          success: t('common.save'),
+          cancel: t('common.cancel'),
+          checkboxLabel: t('common.markAsReviewed'),
+          weight: t('common.contractWeight'),
+          totalContractValue: t('common.totalContractValue'),
+          averagePurchaseValue: t('common.averagePurchaseValue'),
+          responsible: t('common.responsible'),
+          expiration: t('common.expiration'),
+          client: t('common.client'),
+          clientRut: t('common.rut'),
         }}
       />
     </div>

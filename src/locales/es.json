@@ -122,8 +122,8 @@
     "dispatchGuide": "Guía Despacho",
     "location": "Sucursal",
     "closeDate": "Fecha de Cierre",
-    "locationAddress": "Dirección",        
-    "investmentRut": "RUT de la inversión",                   
+    "locationAddress": "Dirección",
+    "investmentRut": "RUT de la inversión",
     "contractCount": "Contratos",
     "totalJewels": "Joyas Totales",
     "status": "Estado"
@@ -186,12 +186,21 @@
     "rut": "RUT",
     "securityBag": "Bolsa de seguridad",
     "status": "Estado",
+    "save": "Guardar",
     "successText": "Enviado con éxito.",
     "successTitle": "Éxito",
     "type": "Tipo",
     "viewContracts": "Ver",
-    "closureDate": "Fecha de Cierre"
+    "closureDate": "Fecha de Cierre",
+    "markAsReviewed": "Marcar Contrato como Revisado",
+    "contractWeight": "Peso Contrato",
+    "totalContractValue": "Compra venta",
+    "averagePurchaseValue": "Promedio de Compra",
+    "responsible": "Responsable",
+    "expiration": "vencimiento",
+    "client": "Cliente"
   },
+
   "routes": {
     "home": "Inicio",
     "contracts": "Lista de Contratos"

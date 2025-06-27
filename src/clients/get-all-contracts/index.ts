@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
+import { FetchStatus, parseOptionalNumber } from '../../utils';
 import client from './client';
 import { Contract } from './types';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,7 @@ const useGetAllContracts = () => {
 
       try {
         const result = await client({
-          resolutionId: props.resolutionId,
+          resolutionId: parseOptionalNumber(props.resolutionId),
           contractNumber: props.contractNumber
         });
 

@@ -18,24 +18,18 @@ describe('useGetAllContracts', () => {
 
   test('should return data and SUCCESS if the call is successful', async () => {
     const mockData: Contract = {
-      resolutionId: 0,
-      resolutionNumber: 0,
-      resolutionBarcode: '',
-      dispatchGuideNumber: 0,
-      investmentName: '',
-      branchName: '',
-      closureDate: '',
-      contractQuantity: 0,
-      jewelTotalCount: 0,
-      categoryName: '',
-      statusName: '',
-      totalWeight: '',
-      startDate: '',
-      endDate: '',
-      contractNumber: '',
       contractId: 0,
+      contractNumber: 0,
+      securityBagCode: '',
+      jewelQuantity: 0,
       totalContractValue: 0,
       averagePurchaseValue: 0,
+      totalWeight: 0,
+      startDate: '',
+      endDate: '',
+      responsibleName: '',
+      clientName: '',
+      clientRut: ''
     };
 
     vi.spyOn(clientModule, 'default').mockResolvedValue([mockData]);
