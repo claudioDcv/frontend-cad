@@ -7,7 +7,7 @@ import { useLocation } from 'wouter';
 
 import {
   ButtonClear,
-  InputController,
+  DropdownController,
   MonthRangePicker,
   Pagination,
   Table,
@@ -66,8 +66,7 @@ const Resolutions = () => {
   const [, navigate] = useLocation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
 
-  const resolutionRows = services.getAllResolutions.data?.resolutions || [];
-  const paginationCount = services.getAllResolutions.data?.meta?.count || 0;
+  const { resolutions, meta } = services.getAllResolutions.data;
 
   const debouncedSearchRef = useRef(
     debounce((resolutionNumber: string) => {
@@ -174,7 +173,7 @@ const Resolutions = () => {
     };
 
   const handleChangePage = (_p: unknown, page: number) => {
-    const newFilters = { ...getValues(), page };
+    const newFilters = { ...getValues(), page: page};
     setValue('page', page);
     services.getAllResolutions.call(newFilters);
   };
@@ -202,7 +201,7 @@ const Resolutions = () => {
                 />
               )}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeMaterialType}
               disabled={isMaterialTypeDisabled}
               options={materialTypeOptions}
@@ -210,7 +209,7 @@ const Resolutions = () => {
               name="categoryId"
               control={control}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeStatus}
               disabled={isStatusDisabled}
               options={statusOptions}
@@ -218,7 +217,7 @@ const Resolutions = () => {
               name="status"
               control={control}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeInvestment}
               disabled={isInvestmentDisabled}
               options={investmentOptions}
@@ -226,7 +225,7 @@ const Resolutions = () => {
               name="investment"
               control={control}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeLocation}
               disabled={isLocationDisabled}
               options={locationOptions}
@@ -264,7 +263,7 @@ const Resolutions = () => {
               id: 'categoryName',
               label: t('common.category'),
               render: ({ categoryName, categoryId }) =>
-                getMaterialType(categoryName, categoryId, 'small'),
+                getMaterialType(categoryName, categoryId, 'tooltip'),
             },
             {
               id: 'actions',
@@ -272,14 +271,14 @@ const Resolutions = () => {
               render: renderContracts,
             },
           ]}
-          rows={resolutionRows}
+          rows={resolutions}
           messageVoidData={t('common.noData')}
           size="small"
         />
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
-            count={paginationCount}
-            page={getValues().page}
+            count={meta.count}
+            page={meta.page}
             onChange={handleChangePage}
           />
         </Box>

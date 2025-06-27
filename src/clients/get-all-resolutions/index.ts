@@ -5,7 +5,7 @@ import { ResolutionFormModel } from '../../pages/index/types';
 import client from './client';
 import { ResolutionPaginated } from './types';
 import { FetchStatus } from '../../utils';
-import { initialResolutiontData, remap } from './utils';
+import { initialResolutiontData } from './utils';
 
 const useGetAllResolutions = () => {
   const { t } = useTranslation();
@@ -44,8 +44,7 @@ const useGetAllResolutions = () => {
           endDate: props?.range?.[1]?.toISOString() || undefined,
           resolutionNumber: props?.resolutionNumber || undefined,
         });
-        const model = remap(result);
-        setData(model);
+        setData(result);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';

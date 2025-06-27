@@ -148,6 +148,7 @@ const Contracts = ({ params }: ContractsProps) => {
               <Input
                 label={t('common.numDoc')}
                 value={field.value ?? ''}
+                type="number"
                 onChange={handleContractNumberChange(field)}
               />
             )}

@@ -9,6 +9,8 @@ const client = async (props: ContractQuery): Promise<PageResponse> => {
     contractNumber: clearProp(props.contractNumber),
   }
 
+  console.log(params);
+
   const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/contracts?${query}`;
 

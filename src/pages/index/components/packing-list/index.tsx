@@ -11,7 +11,7 @@ import {
   ButtonClear,
   Input,
   Notification,
-  InputController,
+  DropdownController,
 } from '../../../../components';
 
 import useServices from './hooks/useServices';
@@ -187,7 +187,7 @@ const PackingList = () => {
                 />
               )}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeMaterialType}
               disabled={isMaterialTypeDisabled}
               options={materialTypeOptions}
@@ -195,7 +195,7 @@ const PackingList = () => {
               name="categoryId"
               control={control}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeStatus}
               disabled={isStatusDisabled}
               options={statusOptions}
@@ -203,7 +203,7 @@ const PackingList = () => {
               name="status"
               control={control}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeInvestment}
               disabled={isInvestmentDisabled}
               options={investmentOptions}
@@ -211,7 +211,7 @@ const PackingList = () => {
               name="investment"
               control={control}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeLocation}
               disabled={isLocationDisabled}
               options={locationOptions}
