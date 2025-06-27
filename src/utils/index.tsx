@@ -5,6 +5,9 @@ import { icons } from '../components/molecules/icon/icons';
 import { MaterialType } from '../components/molecules/material-type';
 import { Material, Size } from '../components/molecules/material-type/types';
 
+export const TAB_RESOLUTIONS = 0;
+export const TAB_PACKING_LIST = 1;
+
 export const STATUS_RESOLUTION = 14;
 export const STATUS_PACKING_LIST = 32;
 

@@ -5,8 +5,8 @@ import {
   useGetAllMaterialTypes,
   useGetAllResolutions,
   useGetAllStatus,
-} from '../../../../../clients';
-import { FetchStatus, STATUS_RESOLUTION } from '../../../../../utils';
+} from '@clients/index';
+import { FetchStatus, STATUS_RESOLUTION } from '@/utils';
 import { defaultResolutionsFormValues } from '../../../utils';
 
 const useServices = () => {
