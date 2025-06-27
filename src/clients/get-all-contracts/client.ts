@@ -9,8 +9,6 @@ const client = async (props: ContractQuery): Promise<PageResponse> => {
     contractNumber: clearProp(props.contractNumber),
   }
 
-  console.log(params);
-
   const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/contracts?${query}`;
 
@@ -24,9 +22,9 @@ const client = async (props: ContractQuery): Promise<PageResponse> => {
   }
 
   try {
-    return await response.json();
+    return response.json();
   } catch {
-    throw new Error('error.jsonError');
+    throw new Error('error.getAllContractsParse');
   }
 };
 

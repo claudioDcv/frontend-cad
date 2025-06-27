@@ -4,7 +4,7 @@ import client from './client';
 import { initialPackingListData, remap } from './utils';
 import { PackingListPaginated } from './types';
 
-import { FetchStatus } from '../../utils';
+import { cleanDate, FetchStatus, toOptional } from '../../utils';
 import { PackingListFormModel } from '../../pages/index/types';
 
 const useGetAllPackingList = () => {
@@ -37,13 +37,13 @@ const useGetAllPackingList = () => {
       try {
         const result = await client({
           page: props.page,
-          packinglistId: props.docNumber || undefined,
-          categoryId: props.categoryId?.value || undefined,
-          statusId: props.status?.value || undefined,
-          investmentId: props.investment?.value || undefined,
-          originLocationId: props.location?.value || undefined,
-          startDate: props.range?.[0]?.toISOString().split('T')[0] || undefined,
-          endDate: props.range?.[1]?.toISOString().split('T')[0] || undefined,
+          packinglistId: toOptional(props.docNumber),
+          categoryId: toOptional(props.categoryId.value),
+          statusId: toOptional(props.status.value),
+          investmentId: toOptional(props.investment.value),
+          originLocationId: toOptional(props.location?.value),
+          startDate: cleanDate(props.range?.[0]),
+          endDate: cleanDate(props.range?.[1]),
         });
 
         const model = remap(result);

@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import { ResolutionFormModel } from '../../pages/index/types';
 import client from './client';
 import { ResolutionPaginated } from './types';
-import { FetchStatus } from '../../utils';
+import { FetchStatus, toOptional } from '../../utils';
 import { initialResolutiontData } from './utils';
 
 const useGetAllResolutions = () => {
@@ -33,14 +33,15 @@ const useGetAllResolutions = () => {
       try {
         const result = await client({
           page: props.page,
-          statusId: props?.status?.value || undefined,
-          categoryId: props?.categoryId?.value || undefined,
-          investmentId: props?.investment?.value || undefined,
-          locationId: props?.location?.value || undefined,
-          startDate: props?.range?.[0]?.toISOString() || undefined,
-          endDate: props?.range?.[1]?.toISOString() || undefined,
-          resolutionNumber: props?.resolutionNumber || undefined,
+          statusId: toOptional(props.status.value),
+          categoryId: toOptional(props.categoryId.value),
+          investmentId: toOptional(props.investment.value),
+          locationId: toOptional(props.location.value),
+          startDate: props?.range?.[0]?.toISOString(),
+          endDate: props?.range?.[1]?.toISOString(),
+          resolutionNumber: toOptional(props.resolutionNumber),
         });
+        
         setData(result);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {

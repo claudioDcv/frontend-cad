@@ -14,6 +14,10 @@ export const STATUS_PACKING_LIST = 32;
 export const FIRST_PAGE_INDEX = 0;
 export const FIRST_PAGE = 1;
 
+export const FIVE_YEARS_AGO = 5;
+export const FIRST_DAY = 1;
+export const LAST_DAY_OF_PREVIOUS_MONTH = 0;
+
 export const LOCATION_ACTIVE = true;
 export const LOCATION_INACTIVE = false;
 
@@ -22,16 +26,17 @@ export const SEARCH_DELAY = 300;
 export const toDay = new Date();
 export const defaultEndDate = new Date(
   toDay.getFullYear(),
-  toDay.getMonth() + 1,
-  0
+  toDay.getMonth() + FIRST_DAY,
+  LAST_DAY_OF_PREVIOUS_MONTH
 );
 export const defaultStartDate = new Date(
-  toDay.getFullYear() - 5,
+  toDay.getFullYear() - FIVE_YEARS_AGO,
   toDay.getMonth(),
-  1
+  FIRST_DAY
 );
 
 export const emptyOption = { value: 'all', label: 'TODOS' };
+
 export const isOnlyNumbersOrEmpty = (value: string) => /^\d*$/.test(value);
 
 export const sleep = (ms: number) =>
@@ -65,14 +70,12 @@ export function debounce<A extends unknown[]>(
       func(...args);
     }, wait);
   };
-
   debounced.cancel = () => {
     if (timeoutId) {
       clearTimeout(timeoutId);
       timeoutId = null;
     }
   };
-
   return debounced;
 }
 
@@ -82,31 +85,21 @@ export const cleanDate = (date?: string | Date): string => {
   return d.toISOString().split('T')[0];
 };
 
+export const formatDate = (date?: Date) => date?.toISOString().split('T')[0];
+
 export function formatToDDMMYYYY(dateInput: string | undefined) {
   if (!dateInput) return '';
-
   const date = new Date(dateInput);
-
-  if (isNaN(date.getTime())) {
-    console.error('Fecha inválida proporcionada:', dateInput);
-    return '';
-  }
-
+  if (isNaN(date.getTime())) return '';
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
-
   return `${day}/${month}/${year}`;
 }
 
 export function formatNumberWithGr(value: string | number) {
-  if (typeof value !== 'number' || isNaN(value)) {
-    console.error('Entrada inválida. Se esperaba un número:', value);
-    return '';
-  }
-
+  if (typeof value !== 'number' || isNaN(value)) return '';
   const formattedNumber = value.toLocaleString('es-ES');
-
   return `${formattedNumber} gr`;
 }
 
@@ -118,6 +111,10 @@ export const formatCurrency = (value: number) => {
   }).format(value);
 };
 
+export function toOptional<T>(value: T | undefined | null): T | undefined {
+  return value ?? undefined;
+}
+
 export const getStatusIcon = (statusId: number, statusName?: string) => {
   const key = statusToKeyMap[statusId];
   const fallback = {
@@ -125,9 +122,7 @@ export const getStatusIcon = (statusId: number, statusName?: string) => {
     color: Token.Color.Neutral,
     description: statusName ?? '',
   };
-
   const { name, color, description } = key ? Token.IconTemplate[key] : fallback;
-
   return (
     <IconList
       name={name as keyof typeof icons}
@@ -144,9 +139,7 @@ export const getMaterialType = (
 ): React.ReactNode => {
   const material = materialMap[categoryId];
   const sizeProp = size === 'tooltip' ? 'small' : size;
-
   if (!material) return label;
-
   return (
     <MaterialType
       material={material}

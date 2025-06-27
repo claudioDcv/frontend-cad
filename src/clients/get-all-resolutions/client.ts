@@ -32,7 +32,7 @@ const client = async (props: ResolutionQuery) => {
     const res = await response.json();
     return remap(res);
   } catch {
-    throw new Error('error.jsonError');
+    throw new Error('error.getAllResolutionsParse');
   }
 };
 

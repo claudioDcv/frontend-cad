@@ -70,7 +70,7 @@ const PackingList = () => {
 
   const handleClear = () => {
     reset(defaultPackingListFormValues);
-    setRange([defaultStartDate, new Date()]);
+    setRange([defaultStartDate, toDay]);
     services.getAllLocations.clearData();
     services.getAllInvestments.clearData();
 

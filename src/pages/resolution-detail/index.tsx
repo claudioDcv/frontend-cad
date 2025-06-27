@@ -14,7 +14,7 @@ import {
 
 import routes from '../../conf/routes';
 
-import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { defaultContractsFormValues } from '../index/utils';
 import { useRef } from 'react';
 import {
@@ -35,7 +35,7 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
     defaultValues: defaultContractsFormValues,
   });
 
-  const { id: resolutionId } = params
+  const { id: resolutionId } = params;
 
   const services = useServices(resolutionId);
 
@@ -56,16 +56,16 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
     }, SEARCH_DELAY)
   );
 
-  const handleContractNumberChange =
-    (field: ControllerRenderProps<ContractFormModel>) =>
-      (event: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = event.target.value;
+  const handleDocNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const rawValue = event.target.value;
 
-        if (isOnlyNumbersOrEmpty(rawValue)) {
-          field.onChange(rawValue);
-          debouncedSearchRef.current(rawValue);
-        }
-      };
+    if (isOnlyNumbersOrEmpty(rawValue)) {
+      setValue('contractNumber', rawValue);
+      debouncedSearchRef.current(rawValue);
+    }
+  };
 
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page, resolutionId };
@@ -79,7 +79,7 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
       <Card>
         <CardContent>
           {getMaterialType(
-            `${t('common.resolution')} ${resolutionId}`,
+            t('common.resolution', { id: resolutionId }),
             services.getResolution.data.categoryId
           )}
         </CardContent>
@@ -147,9 +147,8 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
             render={({ field }) => (
               <Input
                 label={t('common.numDoc')}
-                value={field.value ?? ''}
-                type="number"
-                onChange={handleContractNumberChange(field)}
+                value={field.value}
+                onChange={handleDocNumberChange}
               />
             )}
           />

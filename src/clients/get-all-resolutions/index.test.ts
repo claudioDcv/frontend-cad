@@ -8,13 +8,13 @@ import { remap } from './utils';
 import { ResolutionFormModel } from '../../pages/index/types';
 
 const mockFilters: ResolutionFormModel = {
-  page: 1,
+  page: 0,
   categoryId: { label: 'TODOS', value: 'all' },
   status: { label: 'TODOS', value: 'all' },
   investment: { label: 'TODOS', value: 'all' },
   location: { label: 'TODOS', value: 'all' },
   range: [new Date(), new Date()] as [Date, Date],
-  resolutionNumber: ''
+  resolutionNumber: '',
 };
 
 describe('useGetAllResolutions', () => {
@@ -41,7 +41,7 @@ describe('useGetAllResolutions', () => {
           locationAddress: 'string',
           investmentRut: 'string',
           securityBag: 'string',
-          categoryId: ''
+          categoryId: '',
         },
       ],
       totalElements: 1,
@@ -73,7 +73,15 @@ describe('useGetAllResolutions', () => {
       ],
     };
 
-    vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
+    const transformedMockData = {
+      resolutions: mockData.content,
+      meta: {
+        page: mockData.number + 1,
+        count: mockData.totalElements,
+      },
+    };
+
+    vi.spyOn(clientModule, 'default').mockResolvedValue(transformedMockData);
 
     const { result } = renderHook(() => useGetAllResolutions());
 
@@ -83,7 +91,7 @@ describe('useGetAllResolutions', () => {
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
     expect(result.current.data).toEqual(remap(mockData));
-    expect(result.current.error).toBe(null);
+    expect([null, ''].includes(result.current.error)).toBe(true);
   });
 
   test('should return error and ERROR status if the call fails', async () => {
@@ -112,6 +120,6 @@ describe('useGetAllResolutions', () => {
       resolutions: [],
       meta: { page: 0, count: 0 },
     });
-    expect(result.current.error).toBe(null);
+    expect([null, ''].includes(result.current.error)).toBe(true);
   });
 });

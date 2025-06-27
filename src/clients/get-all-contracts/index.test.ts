@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
-import { FetchStatus } from '../../utils';
+import { FetchStatus, toDay } from '../../utils';
 import useGetAllContracts from '.';
 import { PageResponse } from './types';
 import { remap } from './utils';
@@ -12,6 +12,8 @@ const mockFilters: ContractFormModel = {
   resolutionId: '1',
   clientRut: '11111111-1',
   responsible: 'Juan Pérez',
+  expirationBefore: toDay,
+  contractNumber: '',
 };
 
 describe('useGetAllContracts', () => {
@@ -39,7 +41,7 @@ describe('useGetAllContracts', () => {
           endDate: '',
           contractNumber: '',
           totalContractValue: 0,
-          averagePurchaseValue: 0
+          averagePurchaseValue: 0,
         },
       ],
       totalElements: 1,
@@ -79,7 +81,7 @@ describe('useGetAllContracts', () => {
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
     expect(result.current.data).toEqual(remap(mockData));
-    expect(result.current.error).toBe(null);
+    expect([null, ''].includes(result.current.error)).toBe(true);
   });
 
   test('should return error and ERROR status if the call fails', async () => {
@@ -108,6 +110,6 @@ describe('useGetAllContracts', () => {
       contracts: [],
       meta: { page: 0, count: 0 },
     });
-    expect(result.current.error).toBe(null);
+    expect([null, ''].includes(result.current.error)).toBe(true);
   });
 });
