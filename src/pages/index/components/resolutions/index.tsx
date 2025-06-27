@@ -284,7 +284,7 @@ const Resolutions = () => {
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: services.getAllResolutions.error || t('common.unknownError'),
+          text: t(services.getAllResolutions.error),
         }}
       />
     </div>

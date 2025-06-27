@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
-import MonthRangePicker from "./index";
+import { render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
+import MonthRangePicker from './index';
 
 describe("MonthRangePicker", () => {
   const initialValue: [Date, Date] = [

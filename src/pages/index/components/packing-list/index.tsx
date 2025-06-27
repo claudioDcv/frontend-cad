@@ -54,8 +54,8 @@ const PackingList = () => {
   const isInvestmentDisabled = isEmpty(services.getAllInvestments.data);
   const isLocationDisabled = isEmpty(services.getAllLocations.data);
 
-  const packingListRows = services.getAllPackingList.data?.packingList || [];
-  const paginationCount = services.getAllPackingList.data?.meta?.count || 0;
+  const { packingList } = services.getAllPackingList.data;
+  const { count } = services.getAllPackingList.data.meta;
 
   const debouncedSearchRef = useRef(
     debounce((docNumber: string) => {
@@ -246,13 +246,13 @@ const PackingList = () => {
             },
             { id: 'documentType', label: t('packinglist.documentType') },
           ]}
-          rows={packingListRows}
+          rows={packingList}
           messageVoidData={t('common.noData')}
           size="small"
         />
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
-            count={paginationCount}
+            count={count}
             page={getValues().page}
             onChange={handleChangePage}
           />

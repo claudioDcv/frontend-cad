@@ -11,6 +11,7 @@ export interface Column<T> {
     className?: string;
     align?: 'left' | 'center' | 'right';
     render?: (row: T) => React.ReactNode;
+    field?: (value: T[keyof T]) => React.ReactNode;
     renderIf?: () => boolean;
     sortable?: boolean;
 }
@@ -118,7 +119,8 @@ const Body = <T,>({ columns, data, onRowClick, rowStyle }: {
                             }
                             return (
                                 <td key={index} style={{ textAlign: column.align }} className={column.className}>
-                                    {column.render ? column.render(row) : <>{value}</>}
+                                    {!column.field && column.render ? column.render(row) : <>{value}</>}
+                                    {(column.field && column.id && !column.render) && column.field(row[column.id as keyof T])}
                                 </td>
                             );
                         })}
