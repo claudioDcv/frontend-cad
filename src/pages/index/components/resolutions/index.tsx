@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
-
 import { Box, Button } from '@mui/material';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'wouter';
+import { Visibility } from '@mui/icons-material';
 
 import {
   ButtonClear,
@@ -13,8 +13,7 @@ import {
   Table,
   Notification,
   Input,
-} from '../../../../components';
-
+} from '@components/index';
 import {
   debounce,
   defaultStartDate,
@@ -27,22 +26,17 @@ import {
   LOCATION_ACTIVE,
   SEARCH_DELAY,
   toDay,
-} from '../../../../utils';
-
+} from '@/utils';
 import {
   addOptionAll,
   defaultResolutionsFormValues,
   isEmpty,
 } from '../../utils';
-
-import { Visibility } from '@mui/icons-material';
 import { ResolutionFormModel } from '../../types';
 import useServices from './hooks/useServices';
-import useRoutes from '../../../../conf/routes';
-
-import { Option } from '../../../../types';
-
-import { Resolution } from '../../../../clients/get-all-resolutions/types';
+import useRoutes from '@/conf/routes';
+import { Option } from '@/types';
+import { Resolution } from '@clients/get-all-resolutions/types';
 
 const Resolutions = () => {
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
@@ -163,14 +157,14 @@ const Resolutions = () => {
 
   const handleDocNumberChange =
     (field: ControllerRenderProps<ResolutionFormModel>) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const rawValue = event.target.value;
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        const rawValue = event.target.value;
 
-      if (isOnlyNumbersOrEmpty(rawValue)) {
-        field.onChange(rawValue);
-        debouncedSearchRef.current(rawValue);
-      }
-    };
+        if (isOnlyNumbersOrEmpty(rawValue)) {
+          field.onChange(rawValue);
+          debouncedSearchRef.current(rawValue);
+        }
+      };
 
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page: page};
@@ -289,7 +283,7 @@ const Resolutions = () => {
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: services.getAllResolutions.error || t('common.unknownError'),
+          text: t(services.getAllResolutions.error),
         }}
       />
     </div>

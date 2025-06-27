@@ -1,10 +1,7 @@
 import { useRef, useState } from 'react';
-
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-
 import { Box, Pagination } from '@mui/material';
-
 import {
   Table,
   MonthRangePicker,
@@ -12,13 +9,9 @@ import {
   Input,
   Notification,
   DropdownController,
-} from '../../../../components';
-
+} from '@components/index';
 import useServices from './hooks/useServices';
-
-import { Option } from '../../../../types';
-import { PackingListFormModel } from '../../types';
-
+import { Option } from '@/types';
 import {
   FIRST_PAGE,
   LOCATION_ACTIVE,
@@ -31,8 +24,8 @@ import {
   getStatusIcon,
   isOnlyNumbersOrEmpty,
   toDay,
-} from '../../../../utils';
-
+} from '@/utils';
+import { PackingListFormModel } from '../../types';
 import {
   addOptionAll,
   defaultPackingListFormValues,
@@ -61,8 +54,8 @@ const PackingList = () => {
   const isInvestmentDisabled = isEmpty(services.getAllInvestments.data);
   const isLocationDisabled = isEmpty(services.getAllLocations.data);
 
-  const packingListRows = services.getAllPackingList.data?.packingList || [];
-  const paginationCount = services.getAllPackingList.data?.meta?.count || 0;
+  const { packingList } = services.getAllPackingList.data;
+  const { count } = services.getAllPackingList.data.meta;
 
   const debouncedSearchRef = useRef(
     debounce((docNumber: string) => {
@@ -149,14 +142,14 @@ const PackingList = () => {
 
   const handleDocNumberChange =
     (field: ControllerRenderProps<PackingListFormModel>) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const rawValue = event.target.value;
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        const rawValue = event.target.value;
 
-      if (isOnlyNumbersOrEmpty(rawValue)) {
-        field.onChange(rawValue);
-        debouncedSearchRef.current(rawValue);
-      }
-    };
+        if (isOnlyNumbersOrEmpty(rawValue)) {
+          field.onChange(rawValue);
+          debouncedSearchRef.current(rawValue);
+        }
+      };
 
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page };
@@ -253,13 +246,13 @@ const PackingList = () => {
             },
             { id: 'documentType', label: t('packinglist.documentType') },
           ]}
-          rows={packingListRows}
+          rows={packingList}
           messageVoidData={t('common.noData')}
           size="small"
         />
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
-            count={paginationCount}
+            count={count}
             page={getValues().page}
             onChange={handleChangePage}
           />
@@ -271,7 +264,7 @@ const PackingList = () => {
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: services.getAllPackingList.error || t('common.unknownError'),
+          text: t(services.getAllPackingList.error),
         }}
       />
     </div>

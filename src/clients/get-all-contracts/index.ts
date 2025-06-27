@@ -1,6 +1,4 @@
 import { useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-
 import { FetchStatus } from '../../utils';
 import { ContractFormModel } from '../../pages/index/types';
 
@@ -9,15 +7,14 @@ import { initialContractData, remap } from './utils';
 import { ContractPaginated } from './types';
 
 const useGetAllContracts = () => {
-  const { t } = useTranslation();
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<ContractPaginated>(initialContractData);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
   const onResetError = () => {
     setData(initialContractData);
-    setError(null);
+    setError('');
   };
 
   const call = useCallback(
@@ -28,7 +25,7 @@ const useGetAllContracts = () => {
 
       if (status === FetchStatus.LOADING) {
         setStatus(FetchStatus.SUCCESS);
-        setError(null);
+        setError('');
         return;
       }
 
@@ -46,11 +43,11 @@ const useGetAllContracts = () => {
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-        setError(t(messageKey));
+        setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
     },
-    [status, t]
+    [status]
   );
 
   return { status, data, error, call, onResetError };

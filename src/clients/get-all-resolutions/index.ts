@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { ResolutionFormModel } from '../../pages/index/types';
 import client from './client';
@@ -8,15 +7,13 @@ import { FetchStatus } from '../../utils';
 import { initialResolutiontData } from './utils';
 
 const useGetAllResolutions = () => {
-  const { t } = useTranslation();
-
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<ResolutionPaginated>(initialResolutiontData);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
   const onResetError = () => {
     setData(initialResolutiontData);
-    setError(null);
+    setError('');
   };
 
   const call = useCallback(
@@ -27,7 +24,7 @@ const useGetAllResolutions = () => {
 
       if (status === FetchStatus.LOADING) {
         setStatus(FetchStatus.SUCCESS);
-        setError(null);
+        setError('');
         return;
       }
 
@@ -48,11 +45,11 @@ const useGetAllResolutions = () => {
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-        setError(t(messageKey));
+        setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
     },
-    [status, t]
+    [status]
   );
 
   return { status, data, error, call, onResetError };

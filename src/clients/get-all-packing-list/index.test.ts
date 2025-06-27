@@ -5,7 +5,6 @@ import { FetchStatus } from '../../utils';
 import useGetAllPackingList from '.';
 import { PageResponse } from './types';
 import { remap } from './utils';
-import { PackingListFormModel } from '../../pages/index/types';
 
 const mockFilters: PackingListFormModel = {
   page: 1,
