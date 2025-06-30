@@ -10,7 +10,7 @@ const Router = () => {
   const [location] = useLocation();
 
   useEffect(() => {
-    window.parent.postMessage({ action: 'changeLocation', location: '/todo-lo-nuevo' }, '*');
+    window.parent.postMessage({ action: 'changeLocation', location: location }, '*');
   }, [location]);
 
   return (

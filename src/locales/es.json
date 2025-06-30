@@ -180,7 +180,7 @@
     "numDoc": "Número",
     "packingList": "Packing List",
     "reject": "Rechazar",
-    "resolution": "Resolution %{id}",
+    "resolution": "Resolucion {{id}}",
     "resolutions": "Resoluciones",
     "rut": "RUT",
     "securityBag": "Bolsa de seguridad",
