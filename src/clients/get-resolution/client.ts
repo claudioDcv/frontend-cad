@@ -20,7 +20,7 @@ const client = async (id: string): Promise<Resolution | null> => {
     const resolution = result?.content?.[0] ?? null;
     return resolution;
   } catch {
-    throw new Error('error.jsonError');
+    throw new Error('error.getResolutionParse');
   }
 };
 

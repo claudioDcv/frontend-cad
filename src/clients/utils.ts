@@ -19,7 +19,7 @@ export const clearAllProps = (props: Record<string, string>) => {
   const clearedProps: Record<string, string> = {};
   const allKey = 'all';
   Object.keys(props).forEach((key) => {
-    if (props[key] != allKey) {
+    if (props[key] !== allKey && props[key] !== '') {
       clearedProps[key] = props[key];
     }
   });
@@ -30,7 +30,7 @@ export function mapMeta<T extends { number: number; totalPages: number }>(
   data: T
 ): PaginationMeta {
   return {
-    page: data.number,
+    page: data.number + 1,
     count: data.totalPages,
   };
 }

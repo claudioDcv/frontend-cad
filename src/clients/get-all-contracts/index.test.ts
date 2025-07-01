@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
-import { FetchStatus } from '../../utils';
+import { FetchStatus, toDay } from '../../utils';
 import useGetAllContracts from '.';
 import { ContractFormModel } from '../../pages/index/types';
 import { Contract } from './types';
@@ -10,6 +10,8 @@ const mockFilters: ContractFormModel = {
   resolutionId: '1',
   clientRut: '11111111-1',
   responsible: 'Juan Pérez',
+  expirationBefore: toDay,
+  contractNumber: '',
 };
 describe('useGetAllContracts', () => {
   beforeEach(() => {

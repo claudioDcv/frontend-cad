@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
+import { useTranslation } from 'react-i18next';
 import client from './client';
+import { FetchStatus } from '../../utils';
 import { remap } from './utils';
 import { Option } from '../../types';
-import { useTranslation } from 'react-i18next';
 import { Props } from './types';
 
 const useGetAllStatus = () => {

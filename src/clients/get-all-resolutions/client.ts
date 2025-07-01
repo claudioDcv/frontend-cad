@@ -1,10 +1,9 @@
-import { API_BASE, VITE_MOCK_API } from '../../conf/http';
+import { API_BASE } from '../../conf/http';
 import { clearAllProps, clearProp, getHeader } from '../utils';
 import { ResolutionQuery } from './types';
-import { PageResponse } from './types';
-import faker, { FakeServices } from '../../fake-clients/get-all-resolutions';
+import { remap } from './utils';
 
-const client = async (props: ResolutionQuery): Promise<PageResponse> => {
+const client = async (props: ResolutionQuery) => {
   const params = {
     page: clearProp(props.page - 1),
     resolutionNumber: clearProp(props.resolutionNumber),
@@ -20,7 +19,6 @@ const client = async (props: ResolutionQuery): Promise<PageResponse> => {
   const query = new URLSearchParams(clearAllProps(params));
   const url = `${API_BASE}/resolutions?${query}`;
 
-  if (VITE_MOCK_API) return faker(FakeServices.Resolutions);
   const response = await fetch(url, {
     headers: getHeader(),
     credentials: 'include',
@@ -31,9 +29,10 @@ const client = async (props: ResolutionQuery): Promise<PageResponse> => {
   }
 
   try {
-    return await response.json();
+    const res = await response.json();
+    return remap(res);
   } catch {
-    throw new Error('error.jsonError');
+    throw new Error('error.getAllResolutionsParse');
   }
 };
 

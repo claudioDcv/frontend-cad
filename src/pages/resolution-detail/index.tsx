@@ -1,75 +1,63 @@
 import { useRef, useState } from 'react';
 import { Box, Card, CardContent, Divider } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-
 import useServices from './hooks/useServices';
-
 import {
   Breadcrumb,
-  Pagination,
   Table,
   Notification,
   Input,
   DisplayData,
 } from '../../components';
-
 import routes from '../../conf/routes';
-
-import { ContractFormModel } from '../index/types';
-import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { defaultContractsFormValues } from '../index/utils';
 import {
   debounce,
-  FIRST_PAGE_MANUAL,
   formatCurrency,
   formatNumberWithGr,
   formatToDDMMYYYY,
   getMaterialType,
   isOnlyNumbersOrEmpty,
-  ITEMS_PER_PAGE,
   materialMap,
   SEARCH_DELAY,
 } from '../../utils';
-import { ContractsProps } from './types';
 import ModalContractDetail from '../../components/organisms/modal-contract-detail';
 import useContractDetail from './hooks/useContractDetail';
+import { ContractFormModel } from '../index/types';
+import { ResolutionDetailProps } from './types';
 import ContractDetailButton from './components/ContractDetailButton';
 
-const Contracts = ({ params }: ContractsProps) => {
-  const { control } = useForm<ContractFormModel>({
+const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
+  const { control, setValue } = useForm<ContractFormModel>({
     defaultValues: defaultContractsFormValues,
   });
 
-  const [selectedContractId, setSelectedContractId] = useState<number | null>(null);
+  const [selectedContractId, setSelectedContractId] = useState<number | null>(
+    null
+  );
   const [openModal, setOpenModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(FIRST_PAGE_MANUAL);
   const [searchTerm, setSearchTerm] = useState('');
 
   const resolutionId = params.id;
   const services = useServices(resolutionId);
   const serviceContract = useContractDetail(selectedContractId);
   const { t } = useTranslation();
-  
+
   const allContracts = services.getAllContracts.contracts || [];
 
   const filteredContracts = allContracts.filter((contract) =>
     contract.contractNumber?.toString().includes(searchTerm)
   );
 
-  const paginatedContracts = filteredContracts.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  const detailData = serviceContract.getDetailContract.data;
 
-  const totalPages = Math.ceil(filteredContracts.length / ITEMS_PER_PAGE);
-  const detailData = serviceContract.getDetailContract.data || [];
-
-  const categoryId = services.getResolution.data?.categoryId || '';
+  const categoryId = services.getResolution.data?.categoryId;
   const materialType = materialMap[categoryId] || 'defaultMaterial';
 
   const contractData = allContracts.find(
-  (contract) => contract.contractId === selectedContractId
-);
+    (contract) => contract.contractId === selectedContractId
+  );
 
   const handleOpenModal = (contractId: number) => {
     serviceContract.getDetailContract.call({ contractId });
@@ -80,32 +68,28 @@ const Contracts = ({ params }: ContractsProps) => {
   const debouncedSearchRef = useRef(
     debounce((contractNumber: string) => {
       setSearchTerm(contractNumber);
-      setCurrentPage(FIRST_PAGE_MANUAL);
     }, SEARCH_DELAY)
   );
 
-  const handleContractNumberChange =
-    (field: ControllerRenderProps<ContractFormModel>) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const rawValue = event.target.value;
-      if (isOnlyNumbersOrEmpty(rawValue)) {
-        field.onChange(rawValue);
-        debouncedSearchRef.current(rawValue);
-      }
-    };
+  const handleDocNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const rawValue = event.target.value;
 
-  const handleChangePage = (_: unknown, page: number) => {
-    setCurrentPage(page);
+    if (isOnlyNumbersOrEmpty(rawValue)) {
+      setValue('contractNumber', rawValue);
+      debouncedSearchRef.current(rawValue);
+    }
   };
 
   return (
     <div>
-      <Breadcrumb items={[routes().index, routes().contracts]} />
+      <Breadcrumb items={[routes.index, routes.resolutionDetail]} />
       <Card>
         <CardContent>
           {getMaterialType(
-            `${t('common.resolution')} ${resolutionId}`,
-            services.getResolution.data?.categoryId || ''
+            t('common.resolution', { id: resolutionId }),
+            services.getResolution.data.categoryId
           )}
         </CardContent>
         <Box p={2} display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
@@ -172,8 +156,8 @@ const Contracts = ({ params }: ContractsProps) => {
             render={({ field }) => (
               <Input
                 label={t('common.numDoc')}
-                value={field.value ?? ''}
-                onChange={handleContractNumberChange(field)}
+                value={field.value}
+                onChange={handleDocNumberChange}
               />
             )}
           />
@@ -187,27 +171,27 @@ const Contracts = ({ params }: ContractsProps) => {
             {
               id: 'totalContractValue',
               label: t('contract.totalContractValue'),
-              render: ({ totalContractValue }) => formatCurrency(totalContractValue),
+              field: (f) => formatCurrency(f as number),
             },
             {
               id: 'averagePurchaseValue',
               label: t('contract.averagePurchaseValue'),
-              render: ({ averagePurchaseValue }) => formatCurrency(averagePurchaseValue),
+              field: (f) => formatCurrency(f as number),
             },
             {
               id: 'totalWeight',
               label: t('contract.totalWeight'),
-              render: ({ totalWeight }) => formatNumberWithGr(totalWeight),
+              field: (f) => formatNumberWithGr(f),
             },
             {
               id: 'startDate',
               label: t('contract.startDate'),
-              render: ({ startDate }) => formatToDDMMYYYY(startDate),
+              field: (f) => formatToDDMMYYYY(f as string),
             },
             {
               id: 'endDate',
               label: t('contract.endDate'),
-              render: ({ endDate }) => formatToDDMMYYYY(endDate),
+              field: (f) => formatToDDMMYYYY(f as string),
             },
             {
               id: 'actions',
@@ -221,28 +205,27 @@ const Contracts = ({ params }: ContractsProps) => {
               ),
             },
           ]}
-          rows={paginatedContracts}
+          rows={filteredContracts}
           messageVoidData={t('common.noData')}
           size="small"
         />
       </form>
-      {totalPages > 1 && (
-        <Box>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handleChangePage}
-          />
-        </Box>
-      )}
-
       <Notification
         open={!!services.getAllContracts.error}
         onClose={services.getAllContracts.onResetError}
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: services.getAllContracts.error || t('common.unknownError'),
+          text: t(services.getAllContracts.error || 'common.unknownError'),
+        }}
+      />
+      <Notification
+        open={!!services.getResolution.error}
+        onClose={services.getResolution.onResetError}
+        severity="error"
+        i18n={{
+          title: t('common.error'),
+          text: t(services.getResolution.error),
         }}
       />
       <ModalContractDetail
@@ -281,4 +264,4 @@ const Contracts = ({ params }: ContractsProps) => {
   );
 };
 
-export default Contracts;
+export default ResolutionDetail;

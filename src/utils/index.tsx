@@ -5,12 +5,19 @@ import { icons } from '../components/molecules/icon/icons';
 import { MaterialType } from '../components/molecules/material-type';
 import { Material, Size } from '../components/molecules/material-type/types';
 
+export const TAB_RESOLUTIONS = 0;
+export const TAB_PACKING_LIST = 1;
+
 export const STATUS_RESOLUTION = 14;
 export const STATUS_PACKING_LIST = 32;
 
-export const FIRST_PAGE = 0;
-export const FIRST_PAGE_MANUAL = 1;
+export const FIRST_PAGE_INDEX = 0;
+export const FIRST_PAGE = 1;
 export const ITEMS_PER_PAGE = 20;
+
+export const FIVE_YEARS_AGO = 5;
+export const FIRST_DAY = 1;
+export const LAST_DAY_OF_PREVIOUS_MONTH = 0;
 
 export const LOCATION_ACTIVE = true;
 export const LOCATION_INACTIVE = false;
@@ -20,17 +27,26 @@ export const SEARCH_DELAY = 300;
 export const toDay = new Date();
 export const defaultEndDate = new Date(
   toDay.getFullYear(),
-  toDay.getMonth() + 1,
-  0
+  toDay.getMonth() + FIRST_DAY,
+  LAST_DAY_OF_PREVIOUS_MONTH
 );
 export const defaultStartDate = new Date(
-  toDay.getFullYear() - 5,
+  toDay.getFullYear() - FIVE_YEARS_AGO,
   toDay.getMonth(),
-  1
+  FIRST_DAY
 );
 
 export const emptyOption = { value: 'all', label: 'TODOS' };
+
 export const isOnlyNumbersOrEmpty = (value: string) => /^\d*$/.test(value);
+
+export function parseOptionalNumber(
+  value: string | undefined
+): number | undefined {
+  if (value === undefined) return undefined;
+  const parsed = Number(value);
+  return isNaN(parsed) ? undefined : parsed;
+}
 
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -63,50 +79,36 @@ export function debounce<A extends unknown[]>(
       func(...args);
     }, wait);
   };
-
   debounced.cancel = () => {
     if (timeoutId) {
       clearTimeout(timeoutId);
       timeoutId = null;
     }
   };
-
   return debounced;
 }
 
-export function parseOptionalNumber(
-  value: string | undefined
-): number | undefined {
-  if (value === undefined) return undefined;
-  const parsed = Number(value);
-  return isNaN(parsed) ? undefined : parsed;
-}
+export const cleanDate = (date?: string | Date): string => {
+  if (!date) return '';
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toISOString().split('T')[0];
+};
+
+export const formatDate = (date?: Date) => date?.toISOString().split('T')[0];
 
 export function formatToDDMMYYYY(dateInput: string | undefined) {
   if (!dateInput) return '';
-
   const date = new Date(dateInput);
-
-  if (isNaN(date.getTime())) {
-    console.error('Fecha inválida proporcionada:', dateInput);
-    return '';
-  }
-
+  if (isNaN(date.getTime())) return '';
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
-
   return `${day}/${month}/${year}`;
 }
 
 export function formatNumberWithGr(value: string | number) {
-  if (typeof value !== 'number' || isNaN(value)) {
-    console.error('Entrada inválida. Se esperaba un número:', value);
-    return '';
-  }
-
+  if (typeof value !== 'number' || isNaN(value)) return '';
   const formattedNumber = value.toLocaleString('es-ES');
-
   return `${formattedNumber} gr`;
 }
 
@@ -118,6 +120,10 @@ export const formatCurrency = (value: number) => {
   }).format(value);
 };
 
+export function toOptional<T>(value: T | undefined | null): T | undefined {
+  return value ?? undefined;
+}
+
 export const getStatusIcon = (statusId: number, statusName?: string) => {
   const key = statusToKeyMap[statusId];
   const fallback = {
@@ -125,9 +131,7 @@ export const getStatusIcon = (statusId: number, statusName?: string) => {
     color: Token.Color.Neutral,
     description: statusName ?? '',
   };
-
   const { name, color, description } = key ? Token.IconTemplate[key] : fallback;
-
   return (
     <IconList
       name={name as keyof typeof icons}
@@ -140,11 +144,17 @@ export const getStatusIcon = (statusId: number, statusName?: string) => {
 export const getMaterialType = (
   label: string,
   categoryId: string,
-  size: Size = 'medium'
+  size: Size | 'tooltip' = 'medium'
 ): React.ReactNode => {
   const material = materialMap[categoryId];
-
+  const sizeProp = size === 'tooltip' ? 'small' : size;
   if (!material) return label;
-
-  return <MaterialType material={material} label={label} size={size} />;
+  return (
+    <MaterialType
+      material={material}
+      label={label}
+      size={sizeProp}
+      tooltip={size === 'tooltip'}
+    />
+  );
 };

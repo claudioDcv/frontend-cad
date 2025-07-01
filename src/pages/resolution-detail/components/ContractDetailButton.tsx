@@ -13,11 +13,7 @@ const ContractDetailButton = ({ contractId, open, label }: Props) => {
   };
 
   return (
-    <Button
-      endIcon={<Visibility />}
-      onClick={handleClick}
-      size="small"
-    >
+    <Button endIcon={<Visibility />} onClick={handleClick} size="small">
       {label}
     </Button>
   );
