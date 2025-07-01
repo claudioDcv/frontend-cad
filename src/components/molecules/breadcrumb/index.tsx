@@ -1,4 +1,5 @@
 import { Breadcrumbs, Link, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import styles from './index.module.css';
 
 interface Item {
@@ -17,16 +18,18 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   action,
   lastItemLink,
 }) => {
+  const { t } = useTranslation(); 
+
   return (
     <div className={styles.container}>
       <Breadcrumbs>
         {items.map((item, index) =>
           item.link && (lastItemLink || index < items.length - 1) ? (
             <Link key={index} href={item.link}>
-              {item.label}
+              {t(item.label)}
             </Link>
           ) : (
-            <Typography key={index}>{item.label}</Typography>
+            <Typography key={index}>{t(item.label)}</Typography>
           )
         )}
       </Breadcrumbs>

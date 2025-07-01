@@ -75,7 +75,7 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
 
   return (
     <div>
-      <Breadcrumb items={[routes().index, routes().contracts]} />
+      <Breadcrumb items={[routes.index, routes.resolutionDetail]} />
       <Card>
         <CardContent>
           {getMaterialType(

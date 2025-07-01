@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
 import { Link } from 'wouter';
-import useRoutes from '@/conf/routes';
+import routes from '@/conf/routes';
 
 interface Props {
   id: string;
@@ -9,10 +9,8 @@ interface Props {
 }
 
 const ViewContractsButton = ({ id, label }: Props) => {
-  const routes = useRoutes();
-
   return (
-    <Link to={routes.contracts.path(id)}>
+    <Link to={routes.resolutionDetail.path(id)}>
       <Button endIcon={<Visibility />} size="small">
         {label}
       </Button>
