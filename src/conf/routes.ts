@@ -19,6 +19,10 @@ const useRoutes = () => {
       path: (id: string) => appendPrefix(`/contracts/${id}`),
       label: t('routes.contracts'),
     },
+    notFound: {
+      link: appendPrefix('/not-found'),
+      label: t('routes.notFound'),
+    },
   };
 };
 
