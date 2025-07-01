@@ -242,7 +242,7 @@ const PackingList = () => {
               id: 'categoryName',
               label: t('common.category'),
               render: ({ categoryName, categoryId }) =>
-                getMaterialType(categoryName, categoryId, 'small'),
+                getMaterialType(categoryName, categoryId, 'tooltip'),
             },
             { id: 'documentType', label: t('packinglist.documentType') },
           ]}
