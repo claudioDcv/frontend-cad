@@ -1,4 +1,4 @@
-export type ContractsProps = {
+export type ResolutionDetailProps = {
     params: {
       id: string;
     };

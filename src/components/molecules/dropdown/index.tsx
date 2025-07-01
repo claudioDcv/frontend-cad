@@ -4,9 +4,9 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
-} from "@mui/material";
-import { useId } from "react";
-import { Option } from "../../../types";
+} from '@mui/material';
+import { useId } from 'react';
+import { Option } from '../../../types';
 
 export interface DropdownProps {
   value?: Option;

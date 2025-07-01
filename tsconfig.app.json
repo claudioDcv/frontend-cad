@@ -22,6 +22,14 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
+
+    /* Path mapping */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@clients/*": ["src/clients/*"],
+      "@components/*": ["src/components/*"],
+    }
   },
   "include": ["src", "setupTests.ts"]
 }

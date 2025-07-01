@@ -1,20 +1,17 @@
 import { useRef, useState } from 'react';
-
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'wouter';
 
 import {
   ButtonClear,
-  InputController,
+  DropdownController,
   MonthRangePicker,
   Pagination,
   Table,
   Notification,
   Input,
-} from '../../../../components';
-
+} from '@components/index';
 import {
   debounce,
   defaultStartDate,
@@ -23,25 +20,20 @@ import {
   formatToDDMMYYYY,
   getMaterialType,
   getStatusIcon,
+  isOnlyNumbersOrEmpty,
   LOCATION_ACTIVE,
   SEARCH_DELAY,
   toDay,
-} from '../../../../utils';
-
+} from '@/utils';
 import {
   addOptionAll,
   defaultResolutionsFormValues,
   isEmpty,
 } from '../../utils';
-
-import { Visibility } from '@mui/icons-material';
 import { ResolutionFormModel } from '../../types';
 import useServices from './hooks/useServices';
-import useRoutes from '../../../../conf/routes';
-
-import { Option } from '../../../../types';
-
-import { Resolution } from '../../../../clients/get-all-resolutions/types';
+import { Option } from '@/types';
+import ViewContractsButton from './components/ViewContractsButton';
 
 const Resolutions = () => {
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
@@ -49,7 +41,6 @@ const Resolutions = () => {
   });
 
   const services = useServices();
-  const routes = useRoutes();
 
   const materialTypeOptions = addOptionAll(services.getAllMaterialType.data);
   const statusOptions = addOptionAll(services.getAllStatus.data);
@@ -62,11 +53,9 @@ const Resolutions = () => {
   const isLocationDisabled = isEmpty(services.getAllLocations.data);
 
   const { t } = useTranslation();
-  const [, navigate] = useLocation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
 
-  const resolutionRows = services.getAllResolutions.data?.resolutions || [];
-  const paginationCount = services.getAllResolutions.data?.meta?.count || 0;
+  const { resolutions, meta } = services.getAllResolutions.data;
 
   const debouncedSearchRef = useRef(
     debounce((resolutionNumber: string) => {
@@ -79,19 +68,9 @@ const Resolutions = () => {
     }, SEARCH_DELAY)
   );
 
-  const renderContracts = (row: Resolution) => (
-    <Button
-      endIcon={<Visibility />}
-      onClick={() => navigate(routes.contracts.path(row.resolutionId))}
-      size="small"
-    >
-      {t('common.viewContracts')}
-    </Button>
-  );
-
   const handleClear = () => {
     reset(defaultResolutionsFormValues);
-    setRange([defaultStartDate, new Date()]);
+    setRange([defaultStartDate, toDay]);
     services.getAllLocations.clearData();
     services.getAllInvestments.clearData();
 
@@ -161,19 +140,19 @@ const Resolutions = () => {
     services.getAllResolutions.call(newFilters);
   };
 
-  const handleDocNumberChange =
-    (field: ControllerRenderProps<ResolutionFormModel>) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const rawValue = event.target.value;
+  const handleDocNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const rawValue = event.target.value;
 
-      if (/^\d*$/.test(rawValue)) {
-        field.onChange(rawValue);
-        debouncedSearchRef.current(rawValue);
-      }
-    };
+    if (isOnlyNumbersOrEmpty(rawValue)) {
+      setValue('resolutionNumber', rawValue);
+      debouncedSearchRef.current(rawValue);
+    }
+  };
 
   const handleChangePage = (_p: unknown, page: number) => {
-    const newFilters = { ...getValues(), page };
+    const newFilters = { ...getValues(), page: page };
     setValue('page', page);
     services.getAllResolutions.call(newFilters);
   };
@@ -197,11 +176,11 @@ const Resolutions = () => {
                 <Input
                   label={t('common.numDoc')}
                   value={field.value}
-                  onChange={handleDocNumberChange(field)}
+                  onChange={handleDocNumberChange}
                 />
               )}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeMaterialType}
               disabled={isMaterialTypeDisabled}
               options={materialTypeOptions}
@@ -209,7 +188,7 @@ const Resolutions = () => {
               name="categoryId"
               control={control}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeStatus}
               disabled={isStatusDisabled}
               options={statusOptions}
@@ -217,7 +196,7 @@ const Resolutions = () => {
               name="status"
               control={control}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeInvestment}
               disabled={isInvestmentDisabled}
               options={investmentOptions}
@@ -225,7 +204,7 @@ const Resolutions = () => {
               name="investment"
               control={control}
             />
-            <InputController
+            <DropdownController
               onChange={handleChangeLocation}
               disabled={isLocationDisabled}
               options={locationOptions}
@@ -263,22 +242,27 @@ const Resolutions = () => {
               id: 'categoryName',
               label: t('common.category'),
               render: ({ categoryName, categoryId }) =>
-                getMaterialType(categoryName, categoryId, 'small'),
+                getMaterialType(categoryName, categoryId, 'tooltip'),
             },
             {
               id: 'actions',
               label: t('common.actions'),
-              render: renderContracts,
+              render: ({ resolutionId }) => (
+                <ViewContractsButton
+                  id={resolutionId}
+                  label={t('common.viewContracts')}
+                />
+              ),
             },
           ]}
-          rows={resolutionRows}
+          rows={resolutions}
           messageVoidData={t('common.noData')}
           size="small"
         />
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination
-            count={paginationCount}
-            page={getValues().page}
+            count={meta.count}
+            page={meta.page}
             onChange={handleChangePage}
           />
         </Box>
@@ -289,7 +273,7 @@ const Resolutions = () => {
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: services.getAllResolutions.error || t('common.unknownError'),
+          text: t(services.getAllResolutions.error),
         }}
       />
     </div>

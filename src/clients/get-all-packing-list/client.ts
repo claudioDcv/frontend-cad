@@ -1,7 +1,7 @@
 import { API_BASE } from '../../conf/http';
+import { cleanDate } from '../../utils';
 import { clearAllProps, clearProp, getHeader } from '../utils';
 import { PageResponse, PackingListQuery } from './types';
-import { cleanDate } from './utils';
 
 const client = async (props: PackingListQuery): Promise<PageResponse> => {
   const params = {
@@ -29,9 +29,9 @@ const client = async (props: PackingListQuery): Promise<PageResponse> => {
   }
 
   try {
-    return await response.json();
+    return response.json();
   } catch {
-    throw new Error('error.jsonError');
+    throw new Error('error.getAllPackingListParse');
   }
 };
 

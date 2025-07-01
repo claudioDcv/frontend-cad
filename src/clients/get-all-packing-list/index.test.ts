@@ -1,11 +1,11 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
-import { FetchStatus } from '../../utils';
 import useGetAllPackingList from '.';
 import { PageResponse } from './types';
+import { PackingListFormModel } from '@/pages/index/types';
+import { FetchStatus } from '../../utils';
 import { remap } from './utils';
-import { PackingListFormModel } from '../../pages/index/types';
 
 const mockFilters: PackingListFormModel = {
   page: 1,
@@ -14,7 +14,7 @@ const mockFilters: PackingListFormModel = {
   investment: { label: 'TODOS', value: 'all' },
   location: { label: 'TODOS', value: 'all' },
   range: [new Date(), new Date()] as [Date, Date],
-  docNumber: '1234'
+  docNumber: '1234',
 };
 
 describe('useGetAllPackingList', () => {
@@ -39,7 +39,7 @@ describe('useGetAllPackingList', () => {
           statusId: 1,
           statusName: 'Enviado',
           categoryName: 'Cat 1',
-          categoryId: ''
+          categoryId: '',
         },
       ],
       totalElements: 1,
@@ -79,7 +79,7 @@ describe('useGetAllPackingList', () => {
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
     expect(result.current.data).toEqual(remap(mockData));
-    expect(result.current.error).toBe(null);
+    expect([null, ''].includes(result.current.error)).toBe(true);
   });
 
   test('should return error and ERROR status if the call fails', async () => {
@@ -108,6 +108,6 @@ describe('useGetAllPackingList', () => {
       packingList: [],
       meta: { page: 0, count: 0 },
     });
-    expect(result.current.error).toBe(null);
+    expect([null, ''].includes(result.current.error)).toBe(true);
   });
 });

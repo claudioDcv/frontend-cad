@@ -14,8 +14,7 @@ import {
 
 import routes from '../../conf/routes';
 
-import { ContractFormModel } from '../index/types';
-import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { defaultContractsFormValues } from '../index/utils';
 import { useRef } from 'react';
 import {
@@ -25,23 +24,25 @@ import {
   formatNumberWithGr,
   formatToDDMMYYYY,
   getMaterialType,
+  isOnlyNumbersOrEmpty,
   SEARCH_DELAY,
 } from '../../utils';
-import { ContractsProps } from './types';
+import { ResolutionDetailProps } from './types';
+import { ContractFormModel } from '../index/types';
 
-const Contracts = ({ params }: ContractsProps) => {
+const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
   const { control, getValues, setValue } = useForm<ContractFormModel>({
     defaultValues: defaultContractsFormValues,
   });
 
-  const resolutionId = params.id;
+  const { id: resolutionId } = params;
 
   const services = useServices(resolutionId);
 
   const { t } = useTranslation();
 
-  const contractRows = services.getAllContracts.data?.contracts || [];
-  const paginationCount = services.getAllContracts.data?.meta?.count || 0;
+  const contractRows = services.getAllContracts.data.contracts;
+  const paginationCount = services.getAllContracts.data.meta.count;
 
   const debouncedSearchRef = useRef(
     debounce((contractNumber: string) => {
@@ -55,16 +56,16 @@ const Contracts = ({ params }: ContractsProps) => {
     }, SEARCH_DELAY)
   );
 
-  const handleContractNumberChange =
-    (field: ControllerRenderProps<ContractFormModel>) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const rawValue = event.target.value;
+  const handleDocNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const rawValue = event.target.value;
 
-      if (/^\d*$/.test(rawValue)) {
-        field.onChange(rawValue);
-        debouncedSearchRef.current(rawValue);
-      }
-    };
+    if (isOnlyNumbersOrEmpty(rawValue)) {
+      setValue('contractNumber', rawValue);
+      debouncedSearchRef.current(rawValue);
+    }
+  };
 
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page, resolutionId };
@@ -78,8 +79,8 @@ const Contracts = ({ params }: ContractsProps) => {
       <Card>
         <CardContent>
           {getMaterialType(
-            `${t('common.resolution')} ${resolutionId}`,
-            services.getResolution.data?.categoryId || ''
+            t('common.resolution', { id: resolutionId }),
+            services.getResolution.data.categoryId
           )}
         </CardContent>
         <Box p={2} display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
@@ -146,8 +147,8 @@ const Contracts = ({ params }: ContractsProps) => {
             render={({ field }) => (
               <Input
                 label={t('common.numDoc')}
-                value={field.value ?? ''}
-                onChange={handleContractNumberChange(field)}
+                value={field.value}
+                onChange={handleDocNumberChange}
               />
             )}
           />
@@ -161,29 +162,27 @@ const Contracts = ({ params }: ContractsProps) => {
             {
               id: 'totalContractValue',
               label: t('contract.totalContractValue'),
-              render: ({ totalContractValue }) =>
-                formatCurrency(totalContractValue),
+              field: (f) => formatCurrency(f as number),
             },
             {
               id: 'averagePurchaseValue',
               label: t('contract.averagePurchaseValue'),
-              render: ({ averagePurchaseValue }) =>
-                formatCurrency(averagePurchaseValue),
+              field: (f) => formatCurrency(f as number),
             },
             {
               id: 'totalWeight',
               label: t('contract.totalWeight'),
-              render: ({ totalWeight }) => formatNumberWithGr(totalWeight),
+              field: (f) => formatNumberWithGr(f),
             },
             {
               id: 'startDate',
               label: t('contract.startDate'),
-              render: ({ startDate }) => formatToDDMMYYYY(startDate),
+              field: (f) => formatToDDMMYYYY(f as string),
             },
             {
               id: 'endDate',
               label: t('contract.endDate'),
-              render: ({ endDate }) => formatToDDMMYYYY(endDate),
+              field: (f) => formatToDDMMYYYY(f as string),
             },
           ]}
           rows={contractRows}
@@ -204,11 +203,20 @@ const Contracts = ({ params }: ContractsProps) => {
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: services.getAllContracts.error || t('common.unknownError'),
+          text: t(services.getAllContracts.error),
+        }}
+      />
+      <Notification
+        open={!!services.getResolution.error}
+        onClose={services.getResolution.onResetError}
+        severity="error"
+        i18n={{
+          title: t('common.error'),
+          text: t(services.getResolution.error),
         }}
       />
     </div>
   );
 };
 
-export default Contracts;
+export default ResolutionDetail;

@@ -6,9 +6,9 @@ import {
   useGetAllMaterialTypes,
   useGetAllPackingList,
   useGetAllStatus,
-} from '../../../../../clients';
+} from '@clients/index';
 
-import { FetchStatus, STATUS_PACKING_LIST } from '../../../../../utils';
+import { FetchStatus, STATUS_PACKING_LIST } from '@/utils';
 
 import { defaultPackingListFormValues } from '../../../utils';
 
@@ -21,7 +21,7 @@ const useServices = () => {
 
   useEffect(() => {
     if (getAllPackingList.status === FetchStatus.IDLE) {
-        getAllPackingList.call({
+      getAllPackingList.call({
         ...defaultPackingListFormValues,
       });
     }

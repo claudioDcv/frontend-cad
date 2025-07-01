@@ -22,9 +22,9 @@ const client = async (props: ContractQuery): Promise<PageResponse> => {
   }
 
   try {
-    return await response.json();
+    return response.json();
   } catch {
-    throw new Error('error.jsonError');
+    throw new Error('error.getAllContractsParse');
   }
 };
 

@@ -1,36 +1,38 @@
 import { useCallback, useState } from 'react';
 import client from './client';
-import { useTranslation } from 'react-i18next';
 import { FetchStatus } from '../../utils';
 import { Resolution } from './types';
+import { initialResolutionData } from './utils';
 
 const useGetResolution = () => {
-  const { t } = useTranslation();
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Resolution | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<Resolution>(initialResolutionData);
+  const [error, setError] = useState('');
 
   const onResetError = () => {
-    setData(null);
-    setError(null);
+    setData(initialResolutionData);
+    setError('');
   };
 
   const call = useCallback(
     async (id: string) => {
       setStatus(FetchStatus.LOADING);
-      setError(null);
+      setError('');
       try {
         const result = await client(id);
+        if (!result) {
+          throw new Error('error.resolutionNotFound');
+        }
         setData(result);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-        setError(t(messageKey));
+        setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
     },
-    [t]
+    []
   );
 
   return { status, data, error, call, onResetError };

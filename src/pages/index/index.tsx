@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import PackingList from './components/packing-list';
-import Resolutions from './components/resolutions';
-import { Breadcrumb } from '../../components';
+import { Breadcrumb } from '@components/index';
 import routes from '../../conf/routes';
+import { TAB_RESOLUTIONS } from '@/utils';
+import { TAB_PACKING_LIST } from '@/utils';
+import Resolutions from './components/resolutions';
 
 const Index = () => {
   const { t } = useTranslation();
@@ -22,8 +24,8 @@ const Index = () => {
           <Tab label={t('common.resolutions')} />
           <Tab label={t('common.packingList')} />
         </Tabs>
-        {tabIndex === 0 && <Resolutions />}
-        {tabIndex === 1 && <PackingList />}
+        {tabIndex === TAB_RESOLUTIONS && <Resolutions />}
+        {tabIndex === TAB_PACKING_LIST && <PackingList />}
       </Box>
     </div>
   );
