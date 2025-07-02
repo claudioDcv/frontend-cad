@@ -1,7 +1,6 @@
-
 import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
-import { FetchStatus } from '../../utils';
 import useGetAllInvestments from '.';
 import { act, renderHook } from '@testing-library/react';
 
@@ -23,27 +22,26 @@ describe('useGetAllInvestments', () => {
         economicActivity: '411010',
       },
     ];
-  
+
     const expectedTransformedData = [
       {
         label: 'INVERSIÓN FICTICIA S.A.',
         value: '1',
       },
     ];
-  
+
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockRawData);
-  
+
     const { result } = renderHook(() => useGetAllInvestments());
-  
+
     await act(async () => {
       await result.current.call();
     });
-  
+
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
     expect(result.current.data).toEqual(expectedTransformedData);
     expect(result.current.error).toBe(null);
   });
-  
 
   test('should return error and ERROR status if the call fails', async () => {
     const mockError = new Error('API call failed');

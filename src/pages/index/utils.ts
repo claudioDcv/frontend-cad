@@ -1,4 +1,5 @@
-import { Option, toDay, defaultStartDate, emptyOption, FIRST_PAGE } from '@/utils';
+import { Option, toDay, defaultStartDate } from '@/utils';
+import { emptyOption, FIRST_PAGE } from '@/constants';
 import {
   ContractFormModel,
   PackingListFormModel,
@@ -18,7 +19,7 @@ export const defaultResolutionsFormValues: ResolutionFormModel = {
   investment: emptyOption,
   location: emptyOption,
   range: [defaultStartDate, toDay],
-  resolutionNumber: ''
+  resolutionNumber: '',
 };
 
 export const defaultPackingListFormValues: PackingListFormModel = {

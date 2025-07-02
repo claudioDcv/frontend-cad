@@ -3,6 +3,12 @@ import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Pagination } from '@mui/material';
 import {
+  emptyOption,
+  FIRST_PAGE,
+  LOCATION_ACTIVE,
+  SEARCH_DELAY,
+} from '@/constants';
+import {
   Table,
   MonthRangePicker,
   ButtonClear,
@@ -13,12 +19,8 @@ import {
 import useServices from './hooks/useServices';
 import { Option } from '@/utils';
 import {
-  FIRST_PAGE,
-  LOCATION_ACTIVE,
-  SEARCH_DELAY,
   debounce,
   defaultStartDate,
-  emptyOption,
   formatToDDMMYYYY,
   getMaterialType,
   getStatusIcon,
@@ -142,14 +144,14 @@ const PackingList = () => {
 
   const handleDocNumberChange =
     (field: ControllerRenderProps<PackingListFormModel>) =>
-      (event: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = event.target.value;
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = event.target.value;
 
-        if (isOnlyNumbersOrEmpty(rawValue)) {
-          field.onChange(rawValue);
-          debouncedSearchRef.current(rawValue);
-        }
-      };
+      if (isOnlyNumbersOrEmpty(rawValue)) {
+        field.onChange(rawValue);
+        debouncedSearchRef.current(rawValue);
+      }
+    };
 
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page };

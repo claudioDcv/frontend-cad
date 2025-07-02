@@ -1,14 +1,12 @@
 import { useCallback, useState } from 'react';
-
+import { FetchStatus } from '@/constants';
 import client from './client';
 import { initialPackingListData, remap } from './utils';
 import { PackingListPaginated } from './types';
-
-import { cleanDate, FetchStatus, toOptional } from '../../utils';
+import { cleanDate, toOptional } from '../../utils';
 import { PackingListFormModel } from '../../pages/index/types';
 
 const useGetAllPackingList = () => {
-
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<PackingListPaginated>(
     initialPackingListData

@@ -1,11 +1,11 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
 import useGetAllPackingList from '.';
 import { PageResponse } from './types';
-import { PackingListFormModel } from '@/pages/index/types';
-import { FetchStatus } from '../../utils';
 import { remap } from './utils';
+import { PackingListFormModel } from '@/pages/index/types';
 
 const mockFilters: PackingListFormModel = {
   page: 1,

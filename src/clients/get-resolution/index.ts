@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 import { Resolution } from '@/entities/Resolution.entity';
 import client from './client';
-import { FetchStatus } from '../../utils';
 import { initialResolutionData } from './utils';
+import { FetchStatus } from '@/constants';
 
 const useGetResolution = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);

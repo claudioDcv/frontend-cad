@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
+import { FetchStatus } from '@/constants';
 import client from './client';
+import { Option } from '@/utils';
 import { remap } from './utils';
-import { Option, FetchStatus } from '@/utils';
 
 const useGetAllMaterialTypes = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -23,7 +24,7 @@ const useGetAllMaterialTypes = () => {
     }
 
     setStatus(FetchStatus.LOADING);
-    
+
     try {
       const result = await client();
       const model = remap(result);

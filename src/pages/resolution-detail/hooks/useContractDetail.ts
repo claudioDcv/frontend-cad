@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
+import { FetchStatus } from '@/constants';
 import useGetAllResolutionDetails from '@/clients/get-detail-resolution';
-import { FetchStatus } from '../../../utils';
 
 const useContractDetail = (contractId: number | null) => {
   const getDetailContract = useGetAllResolutionDetails();

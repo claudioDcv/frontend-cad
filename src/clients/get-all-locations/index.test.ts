@@ -1,8 +1,8 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import * as clientModule from './client';
-import { FetchStatus } from '../../utils';
+import { FetchStatus } from '@/constants';
 import useGetAllBranches from '.';
+import * as clientModule from './client';
 import { remap } from './utils';
 
 describe('useGetAllStatus', () => {

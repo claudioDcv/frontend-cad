@@ -1,7 +1,10 @@
 import { useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { Box, Card, CardContent, Divider } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { materialMap, SEARCH_DELAY } from '@/constants';
 import useServices from './hooks/useServices';
+import routes from '../../conf/routes';
 import {
   Breadcrumb,
   Table,
@@ -9,9 +12,6 @@ import {
   Input,
   DisplayData,
 } from '../../components';
-import routes from '../../conf/routes';
-import { Controller, useForm } from 'react-hook-form';
-import { defaultContractsFormValues } from '../index/utils';
 import {
   debounce,
   formatCurrency,
@@ -19,13 +19,12 @@ import {
   formatToDDMMYYYY,
   getMaterialType,
   isOnlyNumbersOrEmpty,
-  materialMap,
-  SEARCH_DELAY,
 } from '../../utils';
-import ModalContractDetail from '../../components/organisms/modal-contract-detail';
-import useContractDetail from './hooks/useContractDetail';
+import { defaultContractsFormValues } from '../index/utils';
 import { ContractFormModel } from '../index/types';
 import { ResolutionDetailProps } from './types';
+import ModalContractDetail from '../../components/organisms/modal-contract-detail';
+import useContractDetail from './hooks/useContractDetail';
 import ContractDetailButton from './components/ContractDetailButton';
 
 const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
@@ -33,7 +32,9 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
     defaultValues: defaultContractsFormValues,
   });
 
-  const [selectedContractId, setSelectedContractId] = useState<number | null>(null);
+  const [selectedContractId, setSelectedContractId] = useState<number | null>(
+    null
+  );
   const [openModal, setOpenModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 

@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box, Tab, Tabs } from '@mui/material';
+import { TAB_PACKING_LIST, TAB_RESOLUTIONS } from '@/constants';
 import PackingList from './components/packing-list';
 import { Breadcrumb } from '@components/index';
 import routes from '../../conf/routes';
-import { TAB_RESOLUTIONS } from '@/utils';
-import { TAB_PACKING_LIST } from '@/utils';
 import Resolutions from './components/resolutions';
 
 const Index = () => {

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
+import { FetchStatus } from '@/constants';
 import { ResolutionDetail } from '@/entities/ResolutiontDetail.entity';
 import client from './client';
-import { FetchStatus } from '../../utils';
 import { Props } from './type';
 
 const useGetAllResolutionDetails = () => {

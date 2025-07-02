@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-
-import { ResolutionFormModel } from '../../pages/index/types';
+import { FetchStatus } from '@/constants';
 import client from './client';
 import { ResolutionPaginated } from './types';
-import { FetchStatus, toOptional } from '../../utils';
+import { toOptional } from '../../utils';
 import { initialResolutiontData } from './utils';
+import { ResolutionFormModel } from '../../pages/index/types';
 
 const useGetAllResolutions = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);

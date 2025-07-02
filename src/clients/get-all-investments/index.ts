@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus, Option } from '@/utils';
+import { FetchStatus } from '@/constants';
 import client from './client';
+import { Option } from '@/utils';
 import { remap } from './utils';
 
 const useGetAllInvestments = () => {
@@ -31,7 +32,7 @@ const useGetAllInvestments = () => {
       const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
       setError(messageKey);
       setStatus(FetchStatus.ERROR);
-    } 
+    }
   }, [status, data.length]);
 
   const clearData = () => {

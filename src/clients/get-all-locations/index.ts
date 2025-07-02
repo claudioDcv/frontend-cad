@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
-import { Props } from './types';
+import { FetchStatus } from '@/constants';
 import client from './client';
-import { FetchStatus } from '../../utils';
+import { Props } from './types';
 import { remap } from './utils';
 import { Option } from '@/utils';
 

@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
-import { FetchStatus } from '../../utils';
 import useGetAllMaterialTypes from '.';
 import { remap } from './utils';
 

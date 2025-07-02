@@ -1,10 +1,11 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import * as clientModule from './client';
-import { FetchStatus, toDay } from '../../utils';
+import { FetchStatus } from '@/constants';
 import useGetAllContracts from '.';
-import { ContractFormModel } from '../../pages/index/types';
+import * as clientModule from './client';
+import { toDay } from '@/utils';
 import { Contract } from '@/entities/Contract.entity';
+import { ContractFormModel } from '@/pages/index/types';
 
 const mockFilters: ContractFormModel = {
   resolutionId: '1',
@@ -32,7 +33,7 @@ describe('useGetAllContracts', () => {
       responsibleName: '',
       clientName: '',
       clientRut: '',
-      cadMetadata: null
+      cadMetadata: null,
     };
 
     vi.spyOn(clientModule, 'default').mockResolvedValue([mockData]);

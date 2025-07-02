@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-
+import { FetchStatus, STATUS_PACKING_LIST } from '@/constants';
 import {
   useGetAllInvestments,
   useGetAllLocations,
@@ -7,10 +7,7 @@ import {
   useGetAllPackingList,
   useGetAllStatus,
 } from '@clients/index';
-
-import { FetchStatus, STATUS_PACKING_LIST } from '@/utils';
-
-import { defaultPackingListFormValues } from '../../../utils';
+import { defaultPackingListFormValues } from '@/pages/index/utils';
 
 const useServices = () => {
   const getAllPackingList = useGetAllPackingList();
@@ -36,7 +33,13 @@ const useServices = () => {
     }
   }, [getAllInvestments, getAllMaterialType, getAllPackingList, getAllStatus]);
 
-  return { getAllMaterialType, getAllPackingList, getAllStatus, getAllInvestments, getAllLocations };
+  return {
+    getAllMaterialType,
+    getAllPackingList,
+    getAllStatus,
+    getAllInvestments,
+    getAllLocations,
+  };
 };
 
 export default useServices;

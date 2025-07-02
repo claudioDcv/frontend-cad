@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
+import { FetchStatus } from '@/constants';
 import client from './client';
 import { Contract } from '@/entities/Contract.entity';
 import { ContractFormModel } from '../../pages/index/types';
-import { FetchStatus, parseOptionalNumber } from '../../utils';
+import { parseOptionalNumber } from '../../utils';
 
 const useGetAllContracts = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -31,7 +32,7 @@ const useGetAllContracts = () => {
       try {
         const result = await client({
           resolutionId: parseOptionalNumber(props.resolutionId),
-          contractNumber: props.contractNumber
+          contractNumber: props.contractNumber,
         });
 
         setContracts(result);

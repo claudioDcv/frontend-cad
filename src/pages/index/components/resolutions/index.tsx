@@ -1,8 +1,23 @@
 import { useRef, useState } from 'react';
-import { Box } from '@mui/material';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
+import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-
+import {
+  emptyOption,
+  FIRST_PAGE,
+  LOCATION_ACTIVE,
+  SEARCH_DELAY,
+} from '@/constants';
+import {
+  debounce,
+  defaultStartDate,
+  formatToDDMMYYYY,
+  getMaterialType,
+  getStatusIcon,
+  isOnlyNumbersOrEmpty,
+  toDay,
+  Option,
+} from '@/utils';
 import {
   ButtonClear,
   DropdownController,
@@ -12,27 +27,13 @@ import {
   Notification,
   Input,
 } from '@components/index';
-import {
-  debounce,
-  defaultStartDate,
-  emptyOption,
-  FIRST_PAGE,
-  formatToDDMMYYYY,
-  getMaterialType,
-  getStatusIcon,
-  isOnlyNumbersOrEmpty,
-  LOCATION_ACTIVE,
-  SEARCH_DELAY,
-  toDay,
-} from '@/utils';
+import useServices from './hooks/useServices';
 import {
   addOptionAll,
   defaultResolutionsFormValues,
   isEmpty,
 } from '../../utils';
 import { ResolutionFormModel } from '../../types';
-import useServices from './hooks/useServices';
-import { Option } from '@/utils';
 import ViewContractsButton from './components/ViewContractsButton';
 
 const Resolutions = () => {

@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
 import client from './client';
-import { FetchStatus } from '../../utils';
-import { remap } from './utils';
+import { FetchStatus } from '@/constants';
 import { Option } from '@/utils';
 import { Props } from './types';
+import { remap } from './utils';
 
 const useGetAllStatus = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);

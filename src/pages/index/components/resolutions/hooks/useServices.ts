@@ -6,7 +6,7 @@ import {
   useGetAllResolutions,
   useGetAllStatus,
 } from '@clients/index';
-import { FetchStatus, STATUS_RESOLUTION } from '@/utils';
+import { FetchStatus, STATUS_RESOLUTION } from '@/constants';
 import { defaultResolutionsFormValues } from '../../../utils';
 
 const useServices = () => {
@@ -33,7 +33,13 @@ const useServices = () => {
     }
   }, [getAllInvestments, getAllMaterialType, getAllResolutions, getAllStatus]);
 
-  return { getAllMaterialType, getAllResolutions, getAllStatus, getAllInvestments, getAllLocations };
+  return {
+    getAllMaterialType,
+    getAllResolutions,
+    getAllStatus,
+    getAllInvestments,
+    getAllLocations,
+  };
 };
 
 export default useServices;

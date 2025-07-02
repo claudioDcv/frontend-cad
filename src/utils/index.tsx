@@ -1,28 +1,15 @@
 import { IconList } from '../components';
-import { statusToKeyMap } from '../constants';
+import {
+  FIRST_DAY,
+  FIVE_YEARS_AGO,
+  LAST_DAY_OF_PREVIOUS_MONTH,
+  materialMap,
+  statusToKeyMap,
+} from '../constants';
 import Token from '../tokens';
 import { icons } from '../components/molecules/icon/icons';
 import { MaterialType } from '../components/molecules/material-type';
-import { Material, Size } from '../components/molecules/material-type/types';
-
-export const TAB_RESOLUTIONS = 0;
-export const TAB_PACKING_LIST = 1;
-
-export const STATUS_RESOLUTION = 14;
-export const STATUS_PACKING_LIST = 32;
-
-export const FIRST_PAGE_INDEX = 0;
-export const FIRST_PAGE = 1;
-export const ITEMS_PER_PAGE = 20;
-
-export const FIVE_YEARS_AGO = 5;
-export const FIRST_DAY = 1;
-export const LAST_DAY_OF_PREVIOUS_MONTH = 0;
-
-export const LOCATION_ACTIVE = true;
-export const LOCATION_INACTIVE = false;
-
-export const SEARCH_DELAY = 300;
+import { Size } from '../components/molecules/material-type/types';
 
 export const toDay = new Date();
 export const defaultEndDate = new Date(
@@ -41,8 +28,6 @@ export interface Option {
   value: string;
 }
 
-export const emptyOption = { value: 'all', label: 'TODOS' };
-
 export const isOnlyNumbersOrEmpty = (value: string) => /^\d*$/.test(value);
 
 export function parseOptionalNumber(
@@ -55,22 +40,6 @@ export function parseOptionalNumber(
 
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
-
-export enum FetchStatus {
-  IDLE = 'idle',
-  LOADING = 'loading',
-  SUCCESS = 'success',
-  ERROR = 'error',
-}
-
-export const materialMap: Record<string, Material> = {
-  1: 'Gold',
-  2: 'Silver',
-  3: 'Platinum',
-  4: 'ExclusiveBrand',
-  5: 'Steel',
-  6: 'Accessory',
-};
 
 export function debounce<A extends unknown[]>(
   func: (...args: A) => void,
