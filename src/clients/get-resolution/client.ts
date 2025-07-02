@@ -3,8 +3,7 @@ import { getHeader } from '../utils';
 import { Resolution } from './types';
 
 const client = async (id: string): Promise<Resolution | null> => {
-  const url = new URL(`${API_BASE}/resolutions`);
-  url.searchParams.append('resolutionId', id);
+  const url = new URL(`${API_BASE}/resolutions/${id}`);
 
   const response = await fetch(url.toString(), {
     headers: getHeader(),
@@ -17,12 +16,10 @@ const client = async (id: string): Promise<Resolution | null> => {
 
   try {
     const result = await response.json();
-    const resolution = result?.content?.[0] ?? null;
-    return resolution;
+    return result;
   } catch {
-    throw new Error('error.getResolutionParse');
+    throw new Error('error.getResolutionFetch');
   }
 };
-
 
 export default client;

@@ -1,6 +1,7 @@
 import { API_BASE } from '../../conf/http';
+import { Contract } from '@/entities/Contract.entity';
 import { clearAllProps, clearProp, getHeader } from '../utils';
-import { Contract, ContractQuery } from './types';
+import { ContractQuery } from './types';
 
 const client = async (props: ContractQuery): Promise<Contract[]> => {
   const params = {

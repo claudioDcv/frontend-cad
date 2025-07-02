@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { columns } from './index.utils';
-import { Jewel } from '../../../types';
+import { Jewel } from '@/entities/Jewel.entity';
 import { Column } from '../../organisms/table';
 
 describe('Utils for Modal Contract', () => {

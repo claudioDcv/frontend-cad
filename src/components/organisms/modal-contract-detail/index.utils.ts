@@ -1,6 +1,8 @@
-import { Jewel } from '../../../types';
+import { Jewel } from '@/entities/Jewel.entity';
 import { formatCurrency, formatNumberWithGr } from '../../../utils';
 import { Column } from '../../organisms/table';
+
+// TODO: Translate labels
 
 export const columns: Column<Jewel>[] = [
   {
@@ -22,11 +24,11 @@ export const columns: Column<Jewel>[] = [
   {
     id: 'value',
     label: 'Valor',
-    render: (row) => formatCurrency(row.value ?? 0),
+    render: (row) => formatCurrency(row.value),
   },
   {
     id: 'weight',
     label: 'Peso',
-    render: (row) => formatNumberWithGr(row.weight ?? 0),
+    render: (row) => formatNumberWithGr(row.weight),
   },
 ];

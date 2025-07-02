@@ -1,11 +1,10 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus, parseOptionalNumber } from '../../utils';
 import client from './client';
-import { Contract } from './types';
+import { Contract } from '@/entities/Contract.entity';
 import { ContractFormModel } from '../../pages/index/types';
+import { FetchStatus, parseOptionalNumber } from '../../utils';
 
 const useGetAllContracts = () => {
-
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [contracts, setContracts] = useState<Contract[]>([]);
   const [error, setError] = useState<string | null>(null);

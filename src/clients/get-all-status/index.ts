@@ -1,14 +1,11 @@
 import { useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import client from './client';
 import { FetchStatus } from '../../utils';
 import { remap } from './utils';
-import { Option } from '../../types';
+import { Option } from '@/utils';
 import { Props } from './types';
 
 const useGetAllStatus = () => {
-  const { t } = useTranslation();
-
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<Option[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -38,11 +35,11 @@ const useGetAllStatus = () => {
         setLastProps(props);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-        setError(t(messageKey));
+        setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
     },
-    [lastProps, status, t]
+    [lastProps, status]
   );
 
   return { status, data, error, call };

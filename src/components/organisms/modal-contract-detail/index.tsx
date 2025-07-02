@@ -4,10 +4,10 @@ import Table from '../../organisms/table';
 import { initialStateI18n, ModalContractDetailProps } from './index.type';
 import { columns } from './index.utils';
 import ModalHeader from '../../molecules/modal-header';
-import { Jewel } from '../../../types';
 import ModalActions from '../../molecules/modal-actions';
 import { DisplayData } from '../..';
 import { formatCurrency, formatNumberWithGr } from '../../../utils';
+import { Jewel } from '@/entities/Jewel.entity';
 
 const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
   open,

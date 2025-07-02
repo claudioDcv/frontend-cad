@@ -33,9 +33,7 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
     defaultValues: defaultContractsFormValues,
   });
 
-  const [selectedContractId, setSelectedContractId] = useState<number | null>(
-    null
-  );
+  const [selectedContractId, setSelectedContractId] = useState<number | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -181,7 +179,7 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
             {
               id: 'totalWeight',
               label: t('contract.totalWeight'),
-              field: (f) => formatNumberWithGr(f),
+              field: (f) => formatNumberWithGr(f as number),
             },
             {
               id: 'startDate',
@@ -234,7 +232,7 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
         onSuccess={() => console.log({ selectedContractId })}
         material={materialType}
         data={{
-          id: selectedContractId?.toString() || 'default-id',
+          contractId: selectedContractId,
           jewels: detailData,
         }}
         contractData={{

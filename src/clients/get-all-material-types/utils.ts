@@ -1,4 +1,4 @@
-import { MaterialType } from './types';
+import { MaterialType } from "@/entities/MaterialType.entity";
 
 export const remap = (data: MaterialType[]) => {
   return data.map((item: MaterialType) => ({

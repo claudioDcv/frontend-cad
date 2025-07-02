@@ -36,6 +36,11 @@ export const defaultStartDate = new Date(
   FIRST_DAY
 );
 
+export interface Option {
+  label: string;
+  value: string;
+}
+
 export const emptyOption = { value: 'all', label: 'TODOS' };
 
 export const isOnlyNumbersOrEmpty = (value: string) => /^\d*$/.test(value);
@@ -106,13 +111,14 @@ export function formatToDDMMYYYY(dateInput: string | undefined) {
   return `${day}/${month}/${year}`;
 }
 
-export function formatNumberWithGr(value: string | number) {
+export function formatNumberWithGr(value: string | number | null) {
   if (typeof value !== 'number' || isNaN(value)) return '';
   const formattedNumber = value.toLocaleString('es-ES');
   return `${formattedNumber} gr`;
 }
 
-export const formatCurrency = (value: number) => {
+export const formatCurrency = (value: number | null) => {
+  if (typeof value !== 'number' || isNaN(value)) return '';
   return new Intl.NumberFormat('es-CL', {
     style: 'currency',
     currency: 'CLP',

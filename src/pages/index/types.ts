@@ -1,4 +1,4 @@
-import { Option } from '../../types';
+import { Option } from '@/utils';
 
 export interface ResolutionFormModel {
   page: number;

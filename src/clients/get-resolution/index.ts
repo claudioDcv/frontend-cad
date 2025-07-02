@@ -5,7 +5,6 @@ import { Resolution } from './types';
 import { initialResolutionData } from './utils';
 
 const useGetResolution = () => {
-
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<Resolution>(initialResolutionData);
   const [error, setError] = useState('');
@@ -15,25 +14,22 @@ const useGetResolution = () => {
     setError('');
   };
 
-  const call = useCallback(
-    async (id: string) => {
-      setStatus(FetchStatus.LOADING);
-      setError('');
-      try {
-        const result = await client(id);
-        if (!result) {
-          throw new Error('error.resolutionNotFound');
-        }
-        setData(result);
-        setStatus(FetchStatus.SUCCESS);
-      } catch (err) {
-        const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-        setError(messageKey);
-        setStatus(FetchStatus.ERROR);
+  const call = useCallback(async (id: string) => {
+    setStatus(FetchStatus.LOADING);
+    setError('');
+    try {
+      const result = await client(id);
+      if (!result) {
+        throw new Error('error.resolutionNotFound');
       }
-    },
-    []
-  );
+      setData(result);
+      setStatus(FetchStatus.SUCCESS);
+    } catch (err) {
+      const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
+      setError(messageKey);
+      setStatus(FetchStatus.ERROR);
+    }
+  }, []);
 
   return { status, data, error, call, onResetError };
 };

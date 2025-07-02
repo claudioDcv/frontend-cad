@@ -1,13 +1,9 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
+import { FetchStatus, Option } from '@/utils';
 import client from './client';
 import { remap } from './utils';
-import { Option } from '../../types';
-import { useTranslation } from 'react-i18next';
 
 const useGetAllInvestments = () => {
-  const { t } = useTranslation();
-
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<Option[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -33,10 +29,10 @@ const useGetAllInvestments = () => {
       setStatus(FetchStatus.SUCCESS);
     } catch (err) {
       const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-      setError(t(messageKey));
+      setError(messageKey);
       setStatus(FetchStatus.ERROR);
     } 
-  }, [status, data.length, t]);
+  }, [status, data.length]);
 
   const clearData = () => {
     setData([]);

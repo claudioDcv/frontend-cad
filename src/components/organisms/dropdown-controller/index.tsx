@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Control, Controller, ControllerRenderProps } from 'react-hook-form';
-import { Option } from '../../../types';
+import { Option } from '@/utils';
 import Dropdown from '../../molecules/dropdown';
 
 interface DropdownControllerProps {

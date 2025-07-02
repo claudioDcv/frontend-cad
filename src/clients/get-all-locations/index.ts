@@ -1,14 +1,11 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
 import { Props } from './types';
 import client from './client';
-import { Option } from '../../types';
+import { FetchStatus } from '../../utils';
 import { remap } from './utils';
-import { useTranslation } from 'react-i18next';
+import { Option } from '@/utils';
 
 const useGetAllLocations = () => {
-  const { t } = useTranslation();
-
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<Option[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -34,11 +31,11 @@ const useGetAllLocations = () => {
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-        setError(t(messageKey));
+        setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
     },
-    [status, t]
+    [status]
   );
 
   const clearData = () => {

@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import ModalContractDetail from './index';
 
 const mockData = {
-  id: '1',
+  contractId: 1,
   jewels: [
     {
       number: 123,

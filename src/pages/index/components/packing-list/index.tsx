@@ -11,7 +11,7 @@ import {
   DropdownController,
 } from '@components/index';
 import useServices from './hooks/useServices';
-import { Option } from '@/types';
+import { Option } from '@/utils';
 import {
   FIRST_PAGE,
   LOCATION_ACTIVE,

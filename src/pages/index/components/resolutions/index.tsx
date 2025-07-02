@@ -32,7 +32,7 @@ import {
 } from '../../utils';
 import { ResolutionFormModel } from '../../types';
 import useServices from './hooks/useServices';
-import { Option } from '@/types';
+import { Option } from '@/utils';
 import ViewContractsButton from './components/ViewContractsButton';
 
 const Resolutions = () => {

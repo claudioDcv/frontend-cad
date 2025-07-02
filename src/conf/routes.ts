@@ -10,9 +10,9 @@ const routes = {
     label: 'routes.home',
   },
   resolutionDetail: {
-    link: appendPrefix('/contracts/:id'),
-    path: (id: string) => appendPrefix(`/contracts/${id}`),
-    label: 'routes.contracts',
+    link: appendPrefix('/resolutions/:id'),
+    path: (id: string) => appendPrefix(`/resolutions/${id}`),
+    label: 'routes.resolutions',
   },
   notFound: {
     link: '',

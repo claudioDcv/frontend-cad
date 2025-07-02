@@ -1,5 +1,5 @@
-import { Contract } from '../../../types';
 import { Material } from '../../molecules/material-type/types';
+import { Jewel } from '@/entities/Jewel.entity';
 
 export interface I18N {
   label: string;
@@ -44,7 +44,7 @@ export interface ModalContractDetailProps {
   onClose: () => void;
   onSuccess: (checked: boolean) => void;
   material: Material;
-  data: Contract;
+  data: { contractId: number | null; jewels: Jewel[] };
   checked?: boolean;
   contractData?: ContractHeaderData;
   i18n?: Partial<I18N>;

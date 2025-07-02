@@ -1,7 +1,7 @@
+import { MaterialType } from '@/entities/MaterialType.entity';
 import { API_BASE, VITE_MOCK_API } from '../../conf/http';
 import faker, { FakeServices } from '../../fake-clients/get-all-resolutions';
 import { getHeader } from '../utils';
-import { MaterialType } from './types';
 
 const client = async (): Promise<MaterialType[]> => {
   const url = `${API_BASE}/material-categories`;

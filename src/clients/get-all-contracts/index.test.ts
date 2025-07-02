@@ -4,7 +4,7 @@ import * as clientModule from './client';
 import { FetchStatus, toDay } from '../../utils';
 import useGetAllContracts from '.';
 import { ContractFormModel } from '../../pages/index/types';
-import { Contract } from './types';
+import { Contract } from '@/entities/Contract.entity';
 
 const mockFilters: ContractFormModel = {
   resolutionId: '1',
@@ -31,7 +31,8 @@ describe('useGetAllContracts', () => {
       endDate: '',
       responsibleName: '',
       clientName: '',
-      clientRut: ''
+      clientRut: '',
+      cadMetadata: null
     };
 
     vi.spyOn(clientModule, 'default').mockResolvedValue([mockData]);
