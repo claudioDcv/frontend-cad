@@ -28,11 +28,13 @@ import useContractDetail from './hooks/useContractDetail';
 import ContractDetailButton from './components/ContractDetailButton';
 
 const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
+  const { t } = useTranslation();
+
   const { control, setValue } = useForm<ContractFormModel>({
     defaultValues: defaultContractsFormValues,
   });
 
-  const [selectedContractId, setSelectedContractId] = useState<number | null>(
+  const [selectedResolutionId, setSelectedResolutionId] = useState<number | null>(
     null
   );
   const [openModal, setOpenModal] = useState(false);
@@ -40,8 +42,7 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
 
   const resolutionId = params.id;
   const services = useServices(resolutionId);
-  const serviceContract = useContractDetail(selectedContractId);
-  const { t } = useTranslation();
+  const serviceContract = useContractDetail(selectedResolutionId);
 
   const allContracts = services.getAllContracts.contracts || [];
 
@@ -55,12 +56,12 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
   const materialType = materialMap[categoryId] || 'defaultMaterial';
 
   const contractData = allContracts.find(
-    (contract) => contract.contractId === selectedContractId
+    (contract) => contract.contractId === selectedResolutionId
   );
 
   const handleOpenModal = (contractId: number) => {
     serviceContract.getDetailContract.call({ contractId });
-    setSelectedContractId(contractId);
+    setSelectedResolutionId(contractId);
     setOpenModal(true);
   };
 
@@ -230,10 +231,10 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
       <ModalContractDetail
         open={openModal}
         onClose={() => setOpenModal(false)}
-        onSuccess={() => console.log({ selectedContractId })}
+        onSuccess={() => console.log({ selectedResolutionId })}
         material={materialType}
         data={{
-          contractId: selectedContractId,
+          contractId: selectedResolutionId,
           jewels: detailData,
         }}
         contractData={{
@@ -246,7 +247,7 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
           clientRut: contractData?.clientRut || '',
         }}
         i18n={{
-          label: `${t('common.contractDetail')} ${selectedContractId}`,
+          label: `${t('common.contractDetail')} ${selectedResolutionId}`,
           success: t('common.save'),
           cancel: t('common.cancel'),
           checkboxLabel: t('common.markAsReviewed'),

@@ -3,7 +3,7 @@ import { formatCurrency, formatNumberWithGr } from '../../../utils';
 import { Column } from '../table';
 import { Excerpt } from '@components/index';
 
-// TODO: Translate labels
+// TODO: add translation
 
 export const columns: Column<Jewel>[] = [
   {

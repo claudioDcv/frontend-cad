@@ -35,6 +35,8 @@ import {
 } from '../../utils';
 
 const PackingList = () => {
+  const { t } = useTranslation();
+  
   const { control, reset, getValues, setValue } = useForm<PackingListFormModel>(
     {
       defaultValues: defaultPackingListFormValues,
@@ -43,7 +45,6 @@ const PackingList = () => {
 
   const services = useServices();
 
-  const { t } = useTranslation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
 
   const statusOptions = addOptionAll(services.getAllStatus.data);

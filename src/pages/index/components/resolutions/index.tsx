@@ -37,6 +37,8 @@ import { ResolutionFormModel } from '../../types';
 import ViewContractsButton from './components/ViewContractsButton';
 
 const Resolutions = () => {
+  const { t } = useTranslation();
+
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
     defaultValues: defaultResolutionsFormValues,
   });
@@ -53,7 +55,6 @@ const Resolutions = () => {
   const isInvestmentDisabled = isEmpty(services.getAllInvestments.data);
   const isLocationDisabled = isEmpty(services.getAllLocations.data);
 
-  const { t } = useTranslation();
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
 
   const { resolutions, meta } = services.getAllResolutions.data;
