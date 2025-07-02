@@ -51,10 +51,10 @@ const ModalActions: React.FC<ModalActionsProps> = ({
           label={lang?.checkboxLabel}
         />
       )}
-      <Button onClick={onClose} variant="contained" color="secondary" type="button">
+      <Button onClick={onClose} variant="contained" color="secondary" type="button" size="small">
         {lang?.cancel}
       </Button>
-      <Button onClick={handleSuccess} variant="contained" color="primary" type="submit">
+      <Button onClick={handleSuccess} variant="contained" color="primary" type="submit" size="small">
         {lang?.success}
       </Button>
     </DialogActions>

@@ -1,10 +1,11 @@
-import { renderHook, act } from '@testing-library/react';
+
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import * as clientModule from './client';
 import { FetchStatus } from '../../utils';
 import useGetAllInvestments from '.';
+import { act, renderHook } from '@testing-library/react';
 
-describe('useGetAllStatus', () => {
+describe('useGetAllInvestments', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });

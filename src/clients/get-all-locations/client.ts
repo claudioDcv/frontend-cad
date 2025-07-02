@@ -1,6 +1,7 @@
+import { Location } from '@/entities/Location.entity';
 import { API_BASE } from '../../conf/http';
 import { getHeader, clearProp, clearAllProps } from '../utils';
-import { Location, Props } from './types';
+import { Props } from './types';
 
 const client = async (props: Props): Promise<Location[]> => {
   const params = {
@@ -17,7 +18,7 @@ const client = async (props: Props): Promise<Location[]> => {
   });
 
   if (!response.ok) {
-    throw new Error('error.getAllLocationsFetch'); 
+    throw new Error('error.getAllLocationsFetch');
   }
 
   try {

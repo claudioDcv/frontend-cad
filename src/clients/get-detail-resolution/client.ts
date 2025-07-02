@@ -1,8 +1,9 @@
 import { API_BASE } from '../../conf/http';
+import { ResolutionDetail } from '@/entities/ResolutiontDetail.entity';
 import { clearAllProps, clearProp, getHeader } from '../utils';
-import { ContractDetail, Props } from './type';
+import { Props } from './type';
 
-const client = async (props: Props): Promise<ContractDetail[]> => {
+const client = async (props: Props): Promise<ResolutionDetail[]> => {
   const params = {
     contractId: clearProp(props.contractId),
   };

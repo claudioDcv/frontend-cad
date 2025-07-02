@@ -76,7 +76,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
           </Card>
         )}
         <Divider sx={{ mb: 2 }} />
-        <Table<Jewel> columns={columns} rows={data.jewels} />
+        <Table<Jewel> columns={columns} rows={data.jewels} size="small" />
       </DialogContent>
       <ModalActions
         i18n={lang}

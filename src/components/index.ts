@@ -9,3 +9,4 @@ export { default as MonthRangePicker } from './organisms/month-range-picker'
 export { default as Table } from './organisms/table';
 export { default as DropdownController } from './organisms/dropdown-controller';
 export { default as DisplayData } from './atoms/display-data';
+export { default as Excerpt } from './atoms/excerpt';

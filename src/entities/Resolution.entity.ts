@@ -11,6 +11,7 @@ export type Resolution = {
   categoryName: string;
   categoryId: string;
   statusName: string;
+  statusId: number;
   locationAddress: string;
   investmentRut: string;
   securityBag: string;

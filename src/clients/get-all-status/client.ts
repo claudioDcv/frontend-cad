@@ -1,11 +1,12 @@
 import { API_BASE, VITE_MOCK_API } from '../../conf/http';
+import { Status } from '@/entities/Status.entity';
 import faker, { FakeServices } from '../../fake-clients/get-all-resolutions';
 import { clearAllProps, clearProp, getHeader } from '../utils';
-import { Props, Status } from './types';
+import { Props } from './types';
 
 const client = async (props: Props): Promise<Status[]> => {
   const params = {
-    tableId: clearProp(props.tableId)
+    tableId: clearProp(props.tableId),
   };
 
   const query = new URLSearchParams(clearAllProps(params));

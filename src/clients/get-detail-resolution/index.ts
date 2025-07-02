@@ -1,14 +1,12 @@
 import { useCallback, useState } from 'react';
-import { FetchStatus } from '../../utils';
+import { ResolutionDetail } from '@/entities/ResolutiontDetail.entity';
 import client from './client';
-import { useTranslation } from 'react-i18next';
-import { ContractDetail, Props } from './type';
+import { FetchStatus } from '../../utils';
+import { Props } from './type';
 
-const useGetAllContractDetails = () => {
-  const { t } = useTranslation();
-
+const useGetAllResolutionDetails = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<ContractDetail[]>([]);
+  const [data, setData] = useState<ResolutionDetail[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const call = useCallback(
@@ -31,14 +29,14 @@ const useGetAllContractDetails = () => {
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-        setError(t(messageKey));
+        setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
     },
-    [status, t]
+    [status]
   );
 
   return { status, data, error, call };
 };
 
-export default useGetAllContractDetails;
+export default useGetAllResolutionDetails;

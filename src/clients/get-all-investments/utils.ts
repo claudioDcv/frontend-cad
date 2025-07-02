@@ -1,4 +1,4 @@
-import { Investment } from './types';
+import { Investment } from "@/entities/Investment.entity";
 
 export const remap = (data: Investment[]) => {
   return data.map((item: Investment) => ({

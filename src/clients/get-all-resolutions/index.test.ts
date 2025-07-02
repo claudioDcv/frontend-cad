@@ -27,7 +27,7 @@ describe('useGetAllResolutions', () => {
       content: [
         {
           resolutionId: '',
-          resolutionNumber: '',
+          resolutionNumber: 0,
           barcode: 'string',
           dispatchGuide: 0,
           investmentName: 'string',

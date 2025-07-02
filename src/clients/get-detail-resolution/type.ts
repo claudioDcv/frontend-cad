@@ -1,3 +1,3 @@
 export type Props = {
-  tableId?: number;
+  contractId: number;
 };

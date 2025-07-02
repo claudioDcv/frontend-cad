@@ -1,6 +1,6 @@
-import { API_BASE } from '../../conf/http';
+import { Resolution } from '@/entities/Resolution.entity';
+import { API_BASE } from '@/conf/http';
 import { getHeader } from '../utils';
-import { Resolution } from './types';
 
 const client = async (id: string): Promise<Resolution | null> => {
   const url = new URL(`${API_BASE}/resolutions/${id}`);
