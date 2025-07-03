@@ -5,29 +5,27 @@ import Table from '../../organisms/table';
 import { initialStateI18n, ModalContractDetailProps } from './index.type';
 import { columns } from './index.utils';
 import ModalHeader from '../../molecules/modal-header';
-import ModalActions from '../../molecules/modal-actions';
 import { DisplayData } from '../..';
 import { Jewel } from '@/entities/Jewel.entity';
+import ContractNote from '@/components/atoms/contract-note';
 
 const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
-  open,
   onClose,
   onSuccess,
   material,
-  data,
-  checked,
-  contractData,
+  jewels = [],
+  contract,
   i18n,
 }) => {
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={!!contract} onClose={onClose} maxWidth="md" fullWidth>
       <ModalHeader onClose={onClose}>
         <MaterialType size="medium" material={material} label={lang.label} />
       </ModalHeader>
       <DialogContent>
-        {contractData && (
+        {contract && (
           <Card>
             <Box
               p={2}
@@ -39,51 +37,49 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
               <Box>
                 <DisplayData
                   label={lang.weight}
-                  value={formatNumberWithGr(contractData.weight ?? 0)}
+                  value={formatNumberWithGr(contract.totalWeight ?? 0)}
                 />
                 <DisplayData
                   label={lang.totalContractValue}
-                  value={formatCurrency(contractData.totalContractValue ?? 0)}
+                  value={formatCurrency(contract.totalContractValue ?? 0)}
                 />
                 <DisplayData
                   label={lang.averagePurchaseValue}
-                  value={formatCurrency(contractData.averagePurchaseValue ?? 0)}
+                  value={formatCurrency(contract.averagePurchaseValue ?? 0)}
                 />
               </Box>
 
               <Box>
                 <DisplayData
                   label={lang.responsible}
-                  value={contractData.responsibleName}
+                  value={contract.responsibleName}
                 />
                 <DisplayData
                   label={lang.expiration}
-                  value={contractData.endDate}
+                  value={contract.endDate}
                 />
               </Box>
 
               <Box>
                 <DisplayData
                   label={lang.client}
-                  value={contractData.clientName}
+                  value={contract.clientName}
                 />
                 <DisplayData
                   label={lang.clientRut}
-                  value={contractData.clientRut}
+                  value={contract.clientRut}
                 />
               </Box>
             </Box>
           </Card>
         )}
         <Divider sx={{ mb: 2 }} />
-        <Table<Jewel> columns={columns} rows={data.jewels} size="small" />
+        <Table<Jewel> columns={columns} rows={jewels} size="small" />
       </DialogContent>
-      <ModalActions
-        i18n={lang}
+      <ContractNote
+        metadata={contract?.cadMetadata}
         onClose={onClose}
         onSuccess={onSuccess}
-        showCheckbox
-        checked={checked}
       />
     </Dialog>
   );

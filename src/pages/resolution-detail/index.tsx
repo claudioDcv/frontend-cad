@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Box, Card, CardContent, Divider } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { materialMap, SEARCH_DELAY } from '@/constants';
-import useServices from './hooks/useServices';
+import { FetchStatus, SEARCH_DELAY } from '@/constants';
 import routes from '../../conf/routes';
 import {
   Breadcrumb,
@@ -17,52 +16,50 @@ import {
   formatCurrency,
   formatNumberWithGr,
   formatToDDMMYYYY,
+  getMaterial,
   getMaterialType,
   isOnlyNumbersOrEmpty,
 } from '../../utils';
 import { defaultContractsFormValues } from '../index/utils';
-import { ContractFormModel } from '../index/types';
-import { ResolutionDetailProps } from './types';
 import ModalContractDetail from '../../components/organisms/modal-contract-detail';
-import useContractDetail from './hooks/useContractDetail';
 import ContractDetailButton from './components/ContractDetailButton';
+import useGetResolution from '@/clients/get-resolution';
+import useGetResolutionContracts from '@/clients/get-resolution-contracts';
+import { useParams } from 'wouter';
+import { Contract } from '@/entities/Contract.entity';
 
-const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
+const ResolutionDetail = () => {
+  const { id: resolutionId } = useParams<{ id: string }>();
   const { t } = useTranslation();
 
-  const { control, setValue } = useForm<ContractFormModel>({
+  const { control, setValue } = useForm<{
+    contractNumber: string;
+  }>({
     defaultValues: defaultContractsFormValues,
   });
 
-  const [selectedResolutionId, setSelectedResolutionId] = useState<number | null>(
-    null
-  );
-  const [openModal, setOpenModal] = useState(false);
+  const [contract, setContract] = useState<Contract | null>(null);
+
   const [searchTerm, setSearchTerm] = useState('');
 
-  const resolutionId = params.id;
-  const services = useServices(resolutionId);
-  const serviceContract = useContractDetail(selectedResolutionId);
+  const getResolution = useGetResolution();
+  const getResolutionContracts = useGetResolutionContracts();
 
-  const allContracts = services.getAllContracts.contracts || [];
+  useEffect(() => {
+    if (resolutionId && getResolution.status === FetchStatus.IDLE && getResolutionContracts.status === FetchStatus.IDLE) {
+      getResolution.call(resolutionId);
+      getResolutionContracts.call(resolutionId);
+    }
+  }, [resolutionId, getResolution, getResolutionContracts]);
 
-  const filteredContracts = allContracts.filter((contract) =>
+  const filteredContracts = getResolutionContracts.data.filter((contract) =>
     contract.contractNumber?.toString().includes(searchTerm)
   );
 
-  const detailData = serviceContract.getDetailContract.data;
+  const materialType = getMaterial(getResolution.data?.categoryId);
 
-  const categoryId = services.getResolution.data?.categoryId;
-  const materialType = materialMap[categoryId] || 'defaultMaterial';
-
-  const contractData = allContracts.find(
-    (contract) => contract.contractId === selectedResolutionId
-  );
-
-  const handleOpenModal = (contractId: number) => {
-    serviceContract.getDetailContract.call({ contractId });
-    setSelectedResolutionId(contractId);
-    setOpenModal(true);
+  const handleOpenModal = (contract: Contract) => {
+    setContract(contract);
   };
 
   const debouncedSearchRef = useRef(
@@ -89,60 +86,60 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
         <CardContent>
           {getMaterialType(
             t('common.resolution', { id: resolutionId }),
-            services.getResolution.data.categoryId
+            getResolution.data.categoryId
           )}
         </CardContent>
         <Box p={2} display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
           <Box>
             <DisplayData
               label={t('common.code')}
-              value={services.getResolution.data?.resolutionNumber}
+              value={getResolution.data?.resolutionNumber}
             />
             <DisplayData
               label={t('common.dispatchGuide')}
-              value={services.getResolution.data?.dispatchGuide}
+              value={getResolution.data?.dispatchGuide}
             />
           </Box>
           <Box>
             <DisplayData
               label={t('common.contractNumberLabel')}
-              value={services.getResolution.data?.contractCount}
+              value={getResolution.data?.contractCount}
             />
             <DisplayData
               label={t('common.type')}
-              value={services.getResolution.data?.resolutionNumber}
+              value={getResolution.data?.resolutionNumber}
             />
           </Box>
           <Box>
             <DisplayData
               label={t('common.securityBag')}
-              value={services.getResolution.data?.securityBag}
+              value={getResolution.data?.securityBag}
             />
           </Box>
           <Box>
             <DisplayData
               label={t('common.branch')}
-              value={services.getResolution.data?.locationName}
+              value={getResolution.data?.locationName}
             />
             <DisplayData
               label={t('common.address')}
-              value={services.getResolution.data?.locationAddress}
+              value={getResolution.data?.locationAddress}
             />
           </Box>
           <Box>
             <DisplayData
               label={t('common.investment')}
-              value={services.getResolution.data?.investmentName}
+              value={getResolution.data?.investmentName}
             />
             <DisplayData
               label={t('common.rut')}
-              value={services.getResolution.data?.investmentRut}
+              value={getResolution.data?.investmentRut}
             />
           </Box>
           <Box>
             <DisplayData
               label={t('common.closureDate')}
-              value={formatToDDMMYYYY(services.getResolution.data?.closeDate)}
+              value={formatToDDMMYYYY(getResolution.data?.closeDate)}
             />
           </Box>
         </Box>
@@ -198,7 +195,7 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
               label: t('common.actions'),
               render: (row) => (
                 <ContractDetailButton
-                  contractId={row.contractId}
+                  contract={row}
                   open={handleOpenModal}
                   label={t('common.viewContracts')}
                 />
@@ -211,43 +208,30 @@ const ResolutionDetail = ({ params }: ResolutionDetailProps) => {
         />
       </form>
       <Notification
-        open={!!services.getAllContracts.error}
-        onClose={services.getAllContracts.onResetError}
+        open={!!getResolutionContracts.error}
+        onClose={getResolutionContracts.onResetError}
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: t(services.getAllContracts.error || 'common.unknownError'),
+          text: t(getResolutionContracts.error || 'common.unknownError'),
         }}
       />
       <Notification
-        open={!!services.getResolution.error}
-        onClose={services.getResolution.onResetError}
+        open={!!getResolution.error}
+        onClose={getResolution.onResetError}
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: t(services.getResolution.error),
+          text: t(getResolution.error),
         }}
       />
       <ModalContractDetail
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        onSuccess={() => console.log({ selectedResolutionId })}
+        onClose={() => setContract(null)}
+        onSuccess={(data) => console.log(data)}
         material={materialType}
-        data={{
-          contractId: selectedResolutionId,
-          jewels: detailData,
-        }}
-        contractData={{
-          weight: contractData?.totalWeight || 0,
-          averagePurchaseValue: contractData?.averagePurchaseValue || 0,
-          totalContractValue: contractData?.totalContractValue || 0,
-          responsibleName: contractData?.responsibleName || '',
-          endDate: formatToDDMMYYYY(contractData?.endDate),
-          clientName: contractData?.clientName || '',
-          clientRut: contractData?.clientRut || '',
-        }}
+        contract={contract}
         i18n={{
-          label: `${t('common.contractDetail')} ${selectedResolutionId}`,
+          label: `${t('common.contractDetail')} ${contract?.contractNumber}`,
           success: t('common.save'),
           cancel: t('common.cancel'),
           checkboxLabel: t('common.markAsReviewed'),

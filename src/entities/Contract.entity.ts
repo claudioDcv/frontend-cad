@@ -1,4 +1,4 @@
-type ContractMetaData = {
+export type ContractMetadata = {
   contractId: number;
   note: string | null;
   reviewed: boolean;
@@ -23,5 +23,5 @@ export type Contract = {
   responsibleName: string;
   clientName: string;
   clientRut: string;
-  cadMetadata: ContractMetaData | null;
+  cadMetadata: ContractMetadata | null;
 };

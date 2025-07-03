@@ -2,21 +2,20 @@ import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
 import client from './client';
 import { Contract } from '@/entities/Contract.entity';
-import { ContractFormModel } from '../../pages/index/types';
-import { parseOptionalNumber } from '../../utils';
+import { ReviewedBody } from './types';
 
-const useGetAllContracts = () => {
+const usePatchReviewedContract = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [contracts, setContracts] = useState<Contract[]>([]);
+  const [data, setData] = useState<Contract>();
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
-    setContracts([]);
+    setData(undefined);
     setError(null);
   };
 
   const call = useCallback(
-    async (props: ContractFormModel) => {
+    async (props: ReviewedBody) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -30,15 +29,12 @@ const useGetAllContracts = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client({
-          resolutionId: parseOptionalNumber(props.resolutionId),
-          contractNumber: props.contractNumber,
-        });
+        const result = await client(props);
 
-        setContracts(result);
+        setData(result);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
-        const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
+        const messageKey = (err as Error)?.message ?? 'error.patchReviewedContractFetch';
         setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
@@ -46,7 +42,7 @@ const useGetAllContracts = () => {
     [status]
   );
 
-  return { status, contracts, error, call, onResetError };
+  return { status, data, error, call, onResetError };
 };
 
-export default useGetAllContracts;
+export default usePatchReviewedContract;

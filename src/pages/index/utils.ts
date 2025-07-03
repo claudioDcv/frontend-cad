@@ -1,10 +1,10 @@
 import { Option, toDay, defaultStartDate } from '@/utils';
 import { emptyOption, FIRST_PAGE } from '@/constants';
 import {
-  ContractFormModel,
   PackingListFormModel,
   ResolutionFormModel,
 } from './types';
+import { ContractFormModel } from '@/clients/get-all-contracts/types';
 export const addOptionAll = (
   options: Option[],
   allOption: Option = emptyOption

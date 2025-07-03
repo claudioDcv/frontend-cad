@@ -1,7 +1,4 @@
-import { useState } from 'react';
 import { Button, DialogActions } from '@mui/material';
-import Checkbox from '../../atoms/checkbox';
-
 interface I18N {
   checkboxLabel: string;
   success: string;
@@ -17,48 +14,41 @@ const initialStateI18n: I18N = {
 interface ModalActionsProps {
   onClose: () => void;
   onSuccess?: (checked: boolean) => void;
-  checked?: boolean;
-  showCheckbox?: boolean;
   i18n?: Partial<I18N>;
+  wrap?: boolean;
 }
 
 const ModalActions: React.FC<ModalActionsProps> = ({
   i18n,
   onClose,
   onSuccess,
-  checked: outChecked,
-  showCheckbox,
+  wrap = true,
 }) => {
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
-  const [checked, setChecked] = useState<boolean>(outChecked || false);
-
-  const handleCheckboxChange = () => {
-    setChecked((prev) => !prev);
-  };
 
   const handleSuccess = () => {
     if (onSuccess) {
-      onSuccess(checked);
       onClose();
     }
   };
-  return (
-    <DialogActions>
-      {showCheckbox && (
-        <Checkbox
-          value={checked}
-          onChange={handleCheckboxChange}
-          label={lang?.checkboxLabel}
-        />
-      )}
-      <Button onClick={onClose} variant="contained" color="secondary" type="button" size="small">
-        {lang?.cancel}
-      </Button>
-      <Button onClick={handleSuccess} variant="contained" color="primary" type="submit" size="small">
-        {lang?.success}
-      </Button>
-    </DialogActions>
-  );
+
+  const base = (<>
+    <Button onClick={onClose} variant="contained" color="secondary" type="button" size="small">
+      {lang?.cancel}
+    </Button>
+    <Button onClick={handleSuccess} variant="contained" color="primary" type="submit" size="small">
+      {lang?.success}
+    </Button>
+  </>)
+
+  if (wrap) {
+    return (
+      <DialogActions>
+        {base}
+      </DialogActions>
+    );
+  }
+  return base;
 };
 
 export default ModalActions;

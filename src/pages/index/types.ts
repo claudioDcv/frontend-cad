@@ -19,11 +19,3 @@ export interface PackingListFormModel {
   range: [Date, Date];
   docNumber: string;
 }
-
-export interface ContractFormModel {
-  resolutionId: string;
-  clientRut: string;
-  responsible: string;
-  expirationBefore: Date;
-  contractNumber: string;
-}

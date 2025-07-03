@@ -1,3 +1,4 @@
+import { Contract, ContractMetadata } from '@/entities/Contract.entity';
 import { Material } from '../../molecules/material-type/types';
 import { Jewel } from '@/entities/Jewel.entity';
 
@@ -29,23 +30,11 @@ export const initialStateI18n: I18N = {
   clientRut: 'RUT',
 };
 
-export interface ContractHeaderData {
-  clientRut?: string;
-  weight?: number;
-  totalContractValue?: number;
-  averagePurchaseValue?: number;
-  responsibleName?: string;
-  clientName?: string;
-  endDate?: string;
-}
-
 export interface ModalContractDetailProps {
-  open: boolean;
   onClose: () => void;
-  onSuccess: (checked: boolean) => void;
+  onSuccess: (contractMetadata: ContractMetadata) => void;
   material: Material;
-  data: { contractId: number | null; jewels: Jewel[] };
-  checked?: boolean;
-  contractData?: ContractHeaderData;
+  jewels?: Jewel[];
+  contract?: Contract | null;
   i18n?: Partial<I18N>;
 }

@@ -5,7 +5,7 @@ import useGetAllContracts from '.';
 import * as clientModule from './client';
 import { toDay } from '@/utils';
 import { Contract } from '@/entities/Contract.entity';
-import { ContractFormModel } from '@/pages/index/types';
+import { ContractFormModel } from './types';
 
 const mockFilters: ContractFormModel = {
   resolutionId: '1',
@@ -45,7 +45,7 @@ describe('useGetAllContracts', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.contracts).toEqual([mockData]);
+    expect(result.current.data).toEqual([mockData]);
     expect(result.current.error).toBe(null);
   });
 
@@ -60,7 +60,7 @@ describe('useGetAllContracts', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
-    expect(result.current.contracts).toEqual([]);
+    expect(result.current.data).toEqual([]);
     expect(result.current.error).toBe('API call failed');
   });
 
@@ -68,7 +68,7 @@ describe('useGetAllContracts', () => {
     const { result } = renderHook(() => useGetAllContracts());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
-    expect(result.current.contracts).toEqual([]);
+    expect(result.current.data).toEqual([]);
     expect(result.current.error).toBe(null);
   });
 });

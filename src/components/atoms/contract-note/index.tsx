@@ -1,95 +1,89 @@
 import { useEffect, useState } from 'react';
-import { Contract } from '@/entities/Contract.entity';
-import { Grid2 as Grid, TextField } from '@mui/material';
+import { ContractMetadata } from '@/entities/Contract.entity';
+import { DialogActions, Grid2 as Grid, TextField } from '@mui/material';
 import Checkbox from '../checkbox';
 import ModalActions from '@/components/molecules/modal-actions';
-import { toDay } from '@/utils';
+import { orFalseBoolean, orVoidString, toDay } from '@/utils';
+import { useTranslation } from 'react-i18next';
+
+const initialState: ContractMetadata = {
+  contractId: 0,
+  note: null,
+  reviewed: false,
+  reviewedBy: null,
+  reviewedAt: null,
+  confirmedBy: null,
+  confirmedAt: null,
+  createdAt: toDay.toString(),
+  updatedAt: null,
+};
 
 interface ContractNoteProps {
-  contract: Contract;
-  onSave: (contract: Contract) => void;
+  metadata?: ContractMetadata | null;
+  onSuccess: (contract: ContractMetadata) => void;
   onClose: () => void;
-}
+};
 
 const ContractNote: React.FC<ContractNoteProps> = ({
-  contract: initialContract,
-  onSave,
+  metadata: initialContract,
+  onSuccess,
   onClose,
 }) => {
-  const [contract, setContract] = useState<Contract>(() => ({
+  const { t } = useTranslation();
+  const [metadata, setMetadata] = useState<ContractMetadata>({
+    ...initialState,
     ...initialContract,
-    cadMetadata: initialContract.cadMetadata || {
-      contractId: initialContract.contractId,
-      note: '',
-      reviewed: false,
-      reviewedBy: null,
-      reviewedAt: null,
-      confirmedBy: null,
-      confirmedAt: null,
-      createdAt: toDay.toISOString(),
-      updatedAt: null,
-    },
-  }));
+    note: orVoidString(initialContract?.note),
+    reviewed: orFalseBoolean(initialContract?.reviewed),
+  });
 
   useEffect(() => {
-    setContract((prevContract) => ({
-      ...prevContract,
-      cadMetadata: {
-        ...prevContract.cadMetadata,
-        contractId: initialContract.contractId,
-      },
+    setMetadata((prev) => ({
+      ...prev,
+      contractId: initialContract?.contractId ?? 0,
+      note: orVoidString(initialContract?.note),
+      reviewed: orFalseBoolean(initialContract?.reviewed),
     }));
   }, [initialContract]);
 
-  const handleSave = () => {
-    if (!contract.cadMetadata) {
-      console.error('Contract metadata is missing');
-      return;
-    }
-    onSave(contract);
-    onClose();
-  };
-
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContract((prevContract) => ({
-      ...prevContract,
-      cadMetadata: {
-        ...prevContract.cadMetadata,
-        note: event.target.value,
-      },
+    setMetadata((prev) => ({
+      ...prev,
+      note: event.target.value,
     }));
   };
 
-  const handleChangeReviewed = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContract((prevContract) => ({
-      ...prevContract,
-      cadMetadata: {
-        ...prevContract.cadMetadata,
-        reviewed: event.target.checked,
-      },
+  const handleChangeReviewed = (reviewed: boolean) => {
+    setMetadata((prev) => ({
+      ...prev,
+      reviewed,
     }));
+  };
+
+  const handleSuccess = () => {
+    onSuccess(metadata);
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid size={{ xs: 12, sm: 6 }}>
-        <TextField
-          label="Nota del contrato"
-          value={contract.cadMetadata.note}
-          onChange={handleChangeNote}
-        />
+    <DialogActions>
+      <Grid container spacing={2}>
+        <Grid size={{ xs: 12, sm: 6 }} gap={2}>
+          <TextField
+            label={t('contractMetadata.note')}
+            value={metadata.note}
+            onChange={handleChangeNote}
+          />
+          <Checkbox
+            onChange={handleChangeReviewed}
+            label={t('contractMetadata.reviewed')}
+            value={metadata.reviewed}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <ModalActions wrap={false} onSuccess={handleSuccess} onClose={onClose} />
+        </Grid>
       </Grid>
-      <Grid size={{ xs: 12, sm: 6 }}>
-        <Checkbox
-          onChange={handleChangeReviewed}
-          label="Contrato revisado"
-          value={contract.cadMetadata.reviewed}
-        />
-      </Grid>
-      <Grid size={{ xs: 12, sm: 6 }}>
-        <ModalActions onSuccess={handleSave} onClose={onClose} />
-      </Grid>
-    </Grid>
+    </DialogActions>
   );
 };
 

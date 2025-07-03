@@ -1,34 +1,39 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
-import { ResolutionDetail } from '@/entities/ResolutiontDetail.entity';
 import client from './client';
-import { Props } from './type';
+import { Contract } from '@/entities/Contract.entity';
 
-const useGetAllResolutionDetails = () => {
+const useGetResolutionContracts = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<ResolutionDetail[]>([]);
+  const [data, setData] = useState<Contract[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  const onResetError = () => {
+    setData([]);
+    setError(null);
+  };
+
   const call = useCallback(
-    async (props: Props) => {
+    async (resolutionId: string) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
 
       if (status === FetchStatus.LOADING) {
         setStatus(FetchStatus.SUCCESS);
-        setError(null);
+        setError('');
         return;
       }
 
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client(props);
+        const result = await client(resolutionId);
+
         setData(result);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
-        const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
+        const messageKey = (err as Error)?.message ?? 'error.getAllContractsFetch';
         setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
@@ -36,7 +41,7 @@ const useGetAllResolutionDetails = () => {
     [status]
   );
 
-  return { status, data, error, call };
+  return { status, data, error, call, onResetError };
 };
 
-export default useGetAllResolutionDetails;
+export default useGetResolutionContracts;

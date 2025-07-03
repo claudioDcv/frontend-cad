@@ -1,11 +1,10 @@
 import { API_BASE } from '../../conf/http';
 import { ResolutionDetail } from '@/entities/ResolutiontDetail.entity';
 import { clearAllProps, clearProp, getHeader } from '../utils';
-import { Props } from './type';
 
-const client = async (props: Props): Promise<ResolutionDetail[]> => {
+const client = async (contractId: string): Promise<ResolutionDetail[]> => {
   const params = {
-    contractId: clearProp(props.contractId),
+    contractId: clearProp(contractId),
   };
 
   const query = new URLSearchParams(clearAllProps(params));
@@ -17,13 +16,13 @@ const client = async (props: Props): Promise<ResolutionDetail[]> => {
   });
 
   if (!response.ok) {
-    throw new Error('error.getResolutionFetch');
+    throw new Error('error.getContractJewelsFetch');
   }
 
   try {
     return await response.json();
   } catch {
-    throw new Error('error.jsonError');
+    throw new Error('error.getContractJewelsParse');
   }
 };
 

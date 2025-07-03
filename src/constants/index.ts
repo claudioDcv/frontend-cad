@@ -48,10 +48,10 @@ export const SEARCH_DELAY = 300;
 export const emptyOption = { value: 'all', label: 'TODOS' };
 
 export const materialMap: Record<string, Material> = {
-  1: 'Gold',
-  2: 'Silver',
-  3: 'Platinum',
-  4: 'ExclusiveBrand',
-  5: 'Steel',
-  6: 'Accessory',
+  '1': 'Gold',
+  '2': 'Silver',
+  '3': 'Platinum',
+  '4': 'ExclusiveBrand',
+  '5': 'Steel',
+  '6': 'Accessory',
 };

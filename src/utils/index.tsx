@@ -9,7 +9,7 @@ import {
 import Token from '../tokens';
 import { icons } from '../components/molecules/icon/icons';
 import { MaterialType } from '../components/molecules/material-type';
-import { Size } from '../components/molecules/material-type/types';
+import { Material, Size } from '../components/molecules/material-type/types';
 
 export const toDay = new Date();
 export const defaultEndDate = new Date(
@@ -99,6 +99,14 @@ export function toOptional<T>(value: T | undefined | null): T | undefined {
   return value ?? undefined;
 }
 
+export const orVoidString = (value: string | undefined | null): string => {
+  return value ?? '';
+};
+
+export const orFalseBoolean = (value: boolean | undefined | null): boolean => {
+  return value ?? false;
+};
+
 export const getStatusIcon = (statusId: number, statusName?: string) => {
   const key = statusToKeyMap[statusId];
   const fallback = {
@@ -132,4 +140,10 @@ export const getMaterialType = (
       tooltip={size === 'tooltip'}
     />
   );
+};
+
+export const getMaterial = (
+  categoryId: string
+): Material => {
+  return materialMap[categoryId] || 'defaultMaterial';
 };

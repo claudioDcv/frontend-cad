@@ -9,6 +9,7 @@ export enum FakeServices {
     Status = 'api/v1/status',
     Investments = 'api/v1/investments',
     MaterialTypes = 'api/v1/material-categories',
+    patchReviewedContract = 'api/v1/contracts/{contractId}/reviewed',
 }
 
 const faker = async (model: FakeServices): Promise<any> => {

@@ -1,15 +1,16 @@
 import { Button } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
+import { Contract } from '@/entities/Contract.entity';
 
 type Props = {
-  contractId: number;
-  open: (contractId: number) => void;
+  contract: Contract;
+  open: (contract: Contract) => void;
   label: string;
 };
 
-const ContractDetailButton = ({ contractId, open, label }: Props) => {
+const ContractDetailButton = ({ contract, open, label }: Props) => {
   const handleClick = () => {
-    open(contractId);
+    open(contract);
   };
 
   return (
