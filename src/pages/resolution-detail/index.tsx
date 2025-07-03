@@ -20,7 +20,6 @@ import {
   getMaterialType,
   isOnlyNumbersOrEmpty,
 } from '../../utils';
-import { defaultContractsFormValues } from '../index/utils';
 import ModalContractDetail from '../../components/organisms/modal-contract-detail';
 import ContractDetailButton from './components/ContractDetailButton';
 import useGetResolution from '@/clients/get-resolution';
@@ -35,7 +34,9 @@ const ResolutionDetail = () => {
   const { control, setValue } = useForm<{
     contractNumber: string;
   }>({
-    defaultValues: defaultContractsFormValues,
+    defaultValues: {
+      contractNumber: '',
+    },
   });
 
   const [contract, setContract] = useState<Contract | null>(null);
@@ -46,7 +47,11 @@ const ResolutionDetail = () => {
   const getResolutionContracts = useGetResolutionContracts();
 
   useEffect(() => {
-    if (resolutionId && getResolution.status === FetchStatus.IDLE && getResolutionContracts.status === FetchStatus.IDLE) {
+    if (
+      resolutionId &&
+      getResolution.status === FetchStatus.IDLE &&
+      getResolutionContracts.status === FetchStatus.IDLE
+    ) {
       getResolution.call(resolutionId);
       getResolutionContracts.call(resolutionId);
     }
@@ -77,6 +82,12 @@ const ResolutionDetail = () => {
       setValue('contractNumber', rawValue);
       debouncedSearchRef.current(rawValue);
     }
+  };
+
+  const handleSuccess = () => {};
+
+  const handleClose = () => {
+    setContract(null);
   };
 
   return (
@@ -226,8 +237,8 @@ const ResolutionDetail = () => {
         }}
       />
       <ModalContractDetail
-        onClose={() => setContract(null)}
-        onSuccess={(data) => console.log(data)}
+        onClose={handleClose}
+        onSuccess={handleSuccess}
         material={materialType}
         contract={contract}
         i18n={{

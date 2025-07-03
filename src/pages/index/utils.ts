@@ -4,7 +4,6 @@ import {
   PackingListFormModel,
   ResolutionFormModel,
 } from './types';
-import { ContractFormModel } from '@/clients/get-all-contracts/types';
 export const addOptionAll = (
   options: Option[],
   allOption: Option = emptyOption
@@ -30,12 +29,4 @@ export const defaultPackingListFormValues: PackingListFormModel = {
   location: emptyOption,
   range: [defaultStartDate, toDay],
   docNumber: '',
-};
-
-export const defaultContractsFormValues: ContractFormModel = {
-  resolutionId: '',
-  clientRut: '',
-  responsible: '',
-  expirationBefore: toDay,
-  contractNumber: '',
 };

@@ -178,11 +178,13 @@
     "materialType": "Tipo",
     "modals": "Modales",
     "noData": "No hay datos",
+    "note": "Nota",
     "numDoc": "Número",
     "packingList": "Packing List",
     "reject": "Rechazar",
     "resolution": "Resolucion {{id}}",
     "resolutions": "Resoluciones",
+    "reviewed" : "Revisado",
     "rut": "RUT",
     "securityBag": "Bolsa de seguridad",
     "status": "Estado",
@@ -203,7 +205,7 @@
 
   "routes": {
     "home": "Inicio",
-    "contracts": "Lista de Contratos"
+    "resolutions": "Lista de Resoluciones"
   },
   "error": {
     "404Error": "Error 404 - Página no encontrada",
@@ -224,6 +226,8 @@
     "getAllLocationsParse": "Error al interpretar los datos de ubicaciones del servidor.",
     "getAllInvestmentsFetch": "Error al obtener la lista de inversiones. Por favor, inténtalo de nuevo más tarde.",
     "getAllInvestmentsParse": "Error al interpretar los datos de inversiones del servidor.",
+    "patchReviewedContractFetch": "Error al actualizar el contrato revisado. Por favor, inténtalo de nuevo más tarde.",
+    "patchReviewedContractParse": "Error al interpretar los datos del contrato revisado del servidor.",
     "jsonError": "Error al procesar la respuesta del servidor."
   }
 }

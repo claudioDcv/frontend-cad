@@ -7,21 +7,55 @@ import { columns } from './index.utils';
 import ModalHeader from '../../molecules/modal-header';
 import { DisplayData } from '../..';
 import { Jewel } from '@/entities/Jewel.entity';
-import ContractNote from '@/components/atoms/contract-note';
+import ContractNote from '@/components/organisms/contract-note';
+import useGetContractJewels from '@/clients/get-contract-jewels';
+import { useEffect } from 'react';
+import { FetchStatus } from '@/constants';
+import { ContractMetadata } from '@/entities/Contract.entity';
 
 const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
   onClose,
   onSuccess,
   material,
-  jewels = [],
   contract,
   i18n,
 }) => {
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
 
+  const getContractJewels = useGetContractJewels();
+
+  const metadata: ContractMetadata = {
+    note: null,
+    reviewed: false,
+    reviewedBy: null,
+    reviewedAt: null,
+    confirmedBy: null,
+    confirmedAt: null,
+    createdAt: '',
+    updatedAt: null,
+    ...(contract?.cadMetadata ?? {}),
+    contractId: contract?.contractId ?? 0,
+  };
+
+  const handleClose = () => {
+    getContractJewels.reset();
+    onClose();
+  };
+
+  const handleSuccess = (data: ContractMetadata) => {
+    getContractJewels.reset();
+    onSuccess(data);
+  };
+
+  useEffect(() => {
+    if (contract?.contractId && getContractJewels.status === FetchStatus.IDLE) {
+      getContractJewels.call(contract.contractId);
+    }
+  }, [contract, getContractJewels]);
+
   return (
-    <Dialog open={!!contract} onClose={onClose} maxWidth="md" fullWidth>
-      <ModalHeader onClose={onClose}>
+    <Dialog open={!!contract} onClose={handleClose} maxWidth="md" fullWidth>
+      <ModalHeader onClose={handleClose}>
         <MaterialType size="medium" material={material} label={lang.label} />
       </ModalHeader>
       <DialogContent>
@@ -37,15 +71,15 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
               <Box>
                 <DisplayData
                   label={lang.weight}
-                  value={formatNumberWithGr(contract.totalWeight ?? 0)}
+                  value={formatNumberWithGr(contract.totalWeight)}
                 />
                 <DisplayData
                   label={lang.totalContractValue}
-                  value={formatCurrency(contract.totalContractValue ?? 0)}
+                  value={formatCurrency(contract.totalContractValue)}
                 />
                 <DisplayData
                   label={lang.averagePurchaseValue}
-                  value={formatCurrency(contract.averagePurchaseValue ?? 0)}
+                  value={formatCurrency(contract.averagePurchaseValue)}
                 />
               </Box>
 
@@ -54,17 +88,11 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
                   label={lang.responsible}
                   value={contract.responsibleName}
                 />
-                <DisplayData
-                  label={lang.expiration}
-                  value={contract.endDate}
-                />
+                <DisplayData label={lang.expiration} value={contract.endDate} />
               </Box>
 
               <Box>
-                <DisplayData
-                  label={lang.client}
-                  value={contract.clientName}
-                />
+                <DisplayData label={lang.client} value={contract.clientName} />
                 <DisplayData
                   label={lang.clientRut}
                   value={contract.clientRut}
@@ -74,12 +102,16 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
           </Card>
         )}
         <Divider sx={{ mb: 2 }} />
-        <Table<Jewel> columns={columns} rows={jewels} size="small" />
+        <Table<Jewel>
+          columns={columns}
+          rows={getContractJewels.data}
+          size="small"
+        />
       </DialogContent>
       <ContractNote
-        metadata={contract?.cadMetadata}
-        onClose={onClose}
-        onSuccess={onSuccess}
+        metadata={metadata}
+        onClose={handleClose}
+        onSuccess={handleSuccess}
       />
     </Dialog>
   );

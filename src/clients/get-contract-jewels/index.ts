@@ -1,15 +1,21 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
-import { ResolutionDetail } from '@/entities/ResolutiontDetail.entity';
+import { Jewel } from '@/entities/Jewel.entity';
 import client from './client';
 
 const useGetContractJewels = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<ResolutionDetail[]>([]);
+  const [data, setData] = useState<Jewel[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  const reset = useCallback(() => {
+    setStatus(FetchStatus.IDLE);
+    setData([]);
+    setError(null);
+  }, []);
+
   const call = useCallback(
-    async (contractId: string) => {
+    async (contractId: number) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -35,7 +41,7 @@ const useGetContractJewels = () => {
     [status]
   );
 
-  return { status, data, error, call };
+  return { status, data, error, call, reset };
 };
 
 export default useGetContractJewels;

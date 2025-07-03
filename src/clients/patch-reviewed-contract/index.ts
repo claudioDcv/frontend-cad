@@ -34,7 +34,8 @@ const usePatchReviewedContract = () => {
         setData(result);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
-        const messageKey = (err as Error)?.message ?? 'error.patchReviewedContractFetch';
+        const messageKey =
+          (err as Error)?.message ?? 'error.patchReviewedContractFetch';
         setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }

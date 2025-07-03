@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
 import { Contract } from '@/entities/Contract.entity';
 
@@ -14,9 +14,9 @@ const ContractDetailButton = ({ contract, open, label }: Props) => {
   };
 
   return (
-    <Button endIcon={<Visibility />} onClick={handleClick} size="small">
-      {label}
-    </Button>
+    <Tooltip title={label}>
+      <IconButton onClick={handleClick}>{<Visibility />}</IconButton>
+    </Tooltip>
   );
 };
 

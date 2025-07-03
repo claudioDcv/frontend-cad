@@ -3,17 +3,16 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { FetchStatus } from '@/constants';
 import useGetAllContracts from '.';
 import * as clientModule from './client';
-import { toDay } from '@/utils';
 import { Contract } from '@/entities/Contract.entity';
-import { ContractFormModel } from './types';
 
-const mockFilters: ContractFormModel = {
-  resolutionId: '1',
+const mockFilters: string = JSON.stringify({
+  resolutionId: 1,
   clientRut: '11111111-1',
   responsible: 'Juan Pérez',
-  expirationBefore: toDay,
+  expirationBefore: '2023-12-31',
   contractNumber: '',
-};
+});
+
 describe('useGetAllContracts', () => {
   beforeEach(() => {
     vi.restoreAllMocks();

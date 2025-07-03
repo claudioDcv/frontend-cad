@@ -1,6 +1,5 @@
 import { Contract, ContractMetadata } from '@/entities/Contract.entity';
 import { Material } from '../../molecules/material-type/types';
-import { Jewel } from '@/entities/Jewel.entity';
 
 export interface I18N {
   label: string;
@@ -34,7 +33,6 @@ export interface ModalContractDetailProps {
   onClose: () => void;
   onSuccess: (contractMetadata: ContractMetadata) => void;
   material: Material;
-  jewels?: Jewel[];
   contract?: Contract | null;
   i18n?: Partial<I18N>;
 }

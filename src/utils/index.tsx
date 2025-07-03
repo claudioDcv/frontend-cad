@@ -142,8 +142,6 @@ export const getMaterialType = (
   );
 };
 
-export const getMaterial = (
-  categoryId: string
-): Material => {
+export const getMaterial = (categoryId: string): Material => {
   return materialMap[categoryId] || 'defaultMaterial';
 };

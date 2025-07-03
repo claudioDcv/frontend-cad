@@ -1,8 +1,8 @@
+import { Jewel } from '@/entities/Jewel.entity';
 import { API_BASE } from '../../conf/http';
-import { ResolutionDetail } from '@/entities/ResolutiontDetail.entity';
 import { clearAllProps, clearProp, getHeader } from '../utils';
 
-const client = async (contractId: string): Promise<ResolutionDetail[]> => {
+const client = async (contractId: number): Promise<Jewel[]> => {
   const params = {
     contractId: clearProp(contractId),
   };

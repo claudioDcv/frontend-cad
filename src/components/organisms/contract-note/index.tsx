@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ContractMetadata } from '@/entities/Contract.entity';
-import { DialogActions, Grid2 as Grid, TextField } from '@mui/material';
-import Checkbox from '../checkbox';
-import ModalActions from '@/components/molecules/modal-actions';
-import { orFalseBoolean, orVoidString, toDay } from '@/utils';
 import { useTranslation } from 'react-i18next';
+import { Box, DialogActions, TextField } from '@mui/material';
+import ModalActions from '@/components/molecules/modal-actions';
+import { ContractMetadata } from '@/entities/Contract.entity';
+import { FetchStatus } from '@/constants';
+import { orFalseBoolean, orVoidString, toDay } from '@/utils';
+import Checkbox from '../../atoms/checkbox';
+import usePatchReviewedContract from '@/clients/patch-reviewed-contract';
 
 const initialState: ContractMetadata = {
   contractId: 0,
@@ -22,7 +24,7 @@ interface ContractNoteProps {
   metadata?: ContractMetadata | null;
   onSuccess: (contract: ContractMetadata) => void;
   onClose: () => void;
-};
+}
 
 const ContractNote: React.FC<ContractNoteProps> = ({
   metadata: initialContract,
@@ -30,6 +32,8 @@ const ContractNote: React.FC<ContractNoteProps> = ({
   onClose,
 }) => {
   const { t } = useTranslation();
+  const { call, status } = usePatchReviewedContract();
+
   const [metadata, setMetadata] = useState<ContractMetadata>({
     ...initialState,
     ...initialContract,
@@ -60,29 +64,50 @@ const ContractNote: React.FC<ContractNoteProps> = ({
     }));
   };
 
-  const handleSuccess = () => {
-    onSuccess(metadata);
+  const handleSuccess = async () => {
+    await call({
+      contractId: metadata.contractId,
+      note: metadata.note ?? '',
+      reviewed: metadata.reviewed,
+    });
+
+    if (status === FetchStatus.SUCCESS) {
+      onSuccess(metadata);
+    }
   };
 
   return (
     <DialogActions>
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 12, sm: 6 }} gap={2}>
-          <TextField
-            label={t('contractMetadata.note')}
-            value={metadata.note}
-            onChange={handleChangeNote}
-          />
+      <Box
+        sx={{ p: 2 }}
+        display="flex"
+        flexDirection="column"
+        gap={2}
+        justifyContent="flex-end"
+      >
+        <TextField
+          label={t('common.note')}
+          value={metadata.note}
+          onChange={handleChangeNote}
+        />
+        <Box
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="center"
+          gap={1}
+        >
           <Checkbox
             onChange={handleChangeReviewed}
-            label={t('contractMetadata.reviewed')}
+            label={t('common.reviewed')}
             value={metadata.reviewed}
           />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <ModalActions wrap={false} onSuccess={handleSuccess} onClose={onClose} />
-        </Grid>
-      </Grid>
+          <ModalActions
+            wrap={false}
+            onSuccess={handleSuccess}
+            onClose={onClose}
+          />
+        </Box>
+      </Box>
     </DialogActions>
   );
 };

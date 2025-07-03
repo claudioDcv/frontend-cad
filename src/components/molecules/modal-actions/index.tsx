@@ -13,7 +13,7 @@ const initialStateI18n: I18N = {
 
 interface ModalActionsProps {
   onClose: () => void;
-  onSuccess?: (checked: boolean) => void;
+  onSuccess?: () => void;
   i18n?: Partial<I18N>;
   wrap?: boolean;
 }
@@ -26,27 +26,31 @@ const ModalActions: React.FC<ModalActionsProps> = ({
 }) => {
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
 
-  const handleSuccess = () => {
-    if (onSuccess) {
-      onClose();
-    }
-  };
-
-  const base = (<>
-    <Button onClick={onClose} variant="contained" color="secondary" type="button" size="small">
-      {lang?.cancel}
-    </Button>
-    <Button onClick={handleSuccess} variant="contained" color="primary" type="submit" size="small">
-      {lang?.success}
-    </Button>
-  </>)
+  const base = (
+    <>
+      <Button
+        onClick={onClose}
+        variant="contained"
+        color="secondary"
+        type="button"
+        size="small"
+      >
+        {lang?.cancel}
+      </Button>
+      <Button
+        onClick={onSuccess}
+        variant="contained"
+        color="primary"
+        type="submit"
+        size="small"
+      >
+        {lang?.success}
+      </Button>
+    </>
+  );
 
   if (wrap) {
-    return (
-      <DialogActions>
-        {base}
-      </DialogActions>
-    );
+    return <DialogActions>{base}</DialogActions>;
   }
   return base;
 };

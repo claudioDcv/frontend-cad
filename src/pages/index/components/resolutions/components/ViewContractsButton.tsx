@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
 import { Link } from 'wouter';
 import routes from '@/conf/routes';
@@ -6,14 +6,15 @@ import routes from '@/conf/routes';
 interface Props {
   id: string;
   label: string;
+  disabled?: boolean;
 }
 
-const ViewContractsButton = ({ id, label }: Props) => {
+const ViewContractsButton = ({ id, label, disabled }: Props) => {
   return (
     <Link to={routes.resolutionDetail.path(id)}>
-      <Button endIcon={<Visibility />} size="small">
-        {label}
-      </Button>
+      <Tooltip title={label}>
+        <IconButton disabled={disabled}>{<Visibility />}</IconButton>
+      </Tooltip>
     </Link>
   );
 };
