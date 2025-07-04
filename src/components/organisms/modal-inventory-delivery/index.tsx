@@ -99,7 +99,7 @@ const ModalInventoryDelivery: React.FC<InventoryDeliveryProps> = ({
             )}
           </Box>
         </DialogContent>
-        <ModalActions i18n={lang} onClose={onClose}/>
+        <ModalActions i18n={lang} onClose={onClose} loading/>
       </form>
     </Dialog>
   );

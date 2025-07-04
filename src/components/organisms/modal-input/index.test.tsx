@@ -2,11 +2,31 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import ModalInputIndex from './index';
 
+vi.mock('../../molecules/modal-actions', () => {
+  return {
+    __esModule: true,
+    default: ({
+      onClose,
+      onSuccess,
+      i18n,
+    }: {
+      onClose: () => void;
+      onSuccess: () => void;
+      i18n: { cancel: string; success: string };
+    }) => (
+      <>
+        <button onClick={onClose}>{i18n.cancel}</button>
+        <button onClick={onSuccess}>{i18n.success}</button>
+      </>
+    ),
+  };
+});
+
 const mockI18n = {
   title: 'Modal input',
   label: 'Label',
   success: 'Success',
-  cancel: 'cancel',
+  cancel: 'Cancel',
 };
 
 describe('ModalInputIndex', () => {
@@ -14,7 +34,7 @@ describe('ModalInputIndex', () => {
     render(
       <ModalInputIndex
         open
-        value=''
+        value=""
         onClose={() => {}}
         onChange={() => {}}
         onSuccess={() => {}}
@@ -22,7 +42,7 @@ describe('ModalInputIndex', () => {
       />
     );
 
-    expect(screen.getByText('cancel')).toBeInTheDocument();
+    expect(screen.getByText('Cancel')).toBeInTheDocument();
     expect(screen.getByText('Success')).toBeInTheDocument();
   });
 
@@ -32,7 +52,7 @@ describe('ModalInputIndex', () => {
     render(
       <ModalInputIndex
         open
-        value=''
+        value=""
         onClose={onCloseMock}
         onChange={() => {}}
         onSuccess={() => {}}
@@ -40,9 +60,29 @@ describe('ModalInputIndex', () => {
       />
     );
 
-    const cancelButton = screen.getByText('cancel');
+    const cancelButton = screen.getByRole('button', { name: /cancel/i });
     fireEvent.click(cancelButton);
 
     expect(onCloseMock).toHaveBeenCalled();
+  });
+
+  test('should call onSuccess on success button click', () => {
+    const onSuccessMock = vi.fn();
+
+    render(
+      <ModalInputIndex
+        open
+        value=""
+        onClose={() => {}}
+        onChange={() => {}}
+        onSuccess={onSuccessMock}
+        i18n={mockI18n}
+      />
+    );
+
+    const successButton = screen.getByRole('button', { name: /success/i });
+    fireEvent.click(successButton);
+
+    expect(onSuccessMock).toHaveBeenCalled();
   });
 });

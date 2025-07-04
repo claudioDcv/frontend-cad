@@ -47,6 +47,7 @@ const ModalConfirm: React.FC<ModalConfirmProps> = ({
         i18n={lang}
         onClose={onClose}
         onSuccess={onSuccess}
+        loading
       />
     </Dialog>
   );

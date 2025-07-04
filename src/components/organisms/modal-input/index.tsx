@@ -35,6 +35,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
         i18n={lang}
         onClose={onClose}
         onSuccess={onSuccess}
+        loading
       />
     </Dialog>
   );
