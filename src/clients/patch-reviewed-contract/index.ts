@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
 import client from './client';
 import { Contract } from '@/entities/Contract.entity';
-import { ReviewedBody } from './types';
 
 const usePatchReviewedContract = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -15,7 +14,7 @@ const usePatchReviewedContract = () => {
   };
 
   const call = useCallback(
-    async (props: ReviewedBody) => {
+    async (props: Contract) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -33,6 +32,7 @@ const usePatchReviewedContract = () => {
 
         setData(result);
         setStatus(FetchStatus.SUCCESS);
+        return result;
       } catch (err) {
         const messageKey =
           (err as Error)?.message ?? 'error.patchReviewedContractFetch';

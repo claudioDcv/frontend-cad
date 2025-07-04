@@ -3,10 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Box, DialogActions, TextField } from '@mui/material';
 import ModalActions from '@/components/molecules/modal-actions';
 import { ContractMetadata } from '@/entities/Contract.entity';
-import { FetchStatus } from '@/constants';
 import { orFalseBoolean, orVoidString, toDay } from '@/utils';
 import Checkbox from '../../atoms/checkbox';
-import usePatchReviewedContract from '@/clients/patch-reviewed-contract';
 
 const initialState: ContractMetadata = {
   contractId: 0,
@@ -24,15 +22,16 @@ interface ContractNoteProps {
   metadata?: ContractMetadata | null;
   onSuccess: (contract: ContractMetadata) => void;
   onClose: () => void;
+  loading: boolean;
 }
 
 const ContractNote: React.FC<ContractNoteProps> = ({
   metadata: initialContract,
   onSuccess,
   onClose,
+  loading,
 }) => {
   const { t } = useTranslation();
-  const { call, status } = usePatchReviewedContract();
 
   const [metadata, setMetadata] = useState<ContractMetadata>({
     ...initialState,
@@ -65,15 +64,7 @@ const ContractNote: React.FC<ContractNoteProps> = ({
   };
 
   const handleSuccess = async () => {
-    await call({
-      contractId: metadata.contractId,
-      note: metadata.note ?? '',
-      reviewed: metadata.reviewed,
-    });
-
-    if (status === FetchStatus.SUCCESS) {
-      onSuccess(metadata);
-    }
+    onSuccess(metadata);
   };
 
   return (
@@ -105,6 +96,7 @@ const ContractNote: React.FC<ContractNoteProps> = ({
             wrap={false}
             onSuccess={handleSuccess}
             onClose={onClose}
+            loading={loading}
           />
         </Box>
       </Box>

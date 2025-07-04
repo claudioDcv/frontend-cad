@@ -184,7 +184,7 @@
     "reject": "Rechazar",
     "resolution": "Resolucion {{id}}",
     "resolutions": "Resoluciones",
-    "reviewed" : "Revisado",
+    "reviewed": "Revisado",
     "rut": "RUT",
     "securityBag": "Bolsa de seguridad",
     "status": "Estado",
@@ -229,5 +229,12 @@
     "patchReviewedContractFetch": "Error al actualizar el contrato revisado. Por favor, inténtalo de nuevo más tarde.",
     "patchReviewedContractParse": "Error al interpretar los datos del contrato revisado del servidor.",
     "jsonError": "Error al procesar la respuesta del servidor."
+  },
+  "notification": {
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "info": "Información",
+    "updateNote": "Nota guardada con éxito."
   }
 }

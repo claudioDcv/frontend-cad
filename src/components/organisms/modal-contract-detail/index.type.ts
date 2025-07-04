@@ -1,4 +1,4 @@
-import { Contract, ContractMetadata } from '@/entities/Contract.entity';
+import { Contract } from '@/entities/Contract.entity';
 import { Material } from '../../molecules/material-type/types';
 
 export interface I18N {
@@ -31,7 +31,7 @@ export const initialStateI18n: I18N = {
 
 export interface ModalContractDetailProps {
   onClose: () => void;
-  onSuccess: (contractMetadata: ContractMetadata) => void;
+  onSuccess: (contract: Contract) => void;
   material: Material;
   contract?: Contract | null;
   i18n?: Partial<I18N>;

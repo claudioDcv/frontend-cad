@@ -1,10 +1,8 @@
 import { API_BASE } from '../../conf/http';
 import { Contract } from '@/entities/Contract.entity';
 import { clearProp, getHeader } from '../utils';
-import { ReviewedBody } from './types';
 
-const client = async (props: ReviewedBody): Promise<Contract> => {
-  console.log('patchReviewedContract', props);
+const client = async (props: Contract): Promise<Contract> => {
   const url = `${API_BASE}/contracts/${props.contractId}/reviewed`;
 
   const response = await fetch(url, {
@@ -12,8 +10,8 @@ const client = async (props: ReviewedBody): Promise<Contract> => {
     credentials: 'include',
     method: 'PATCH',
     body: JSON.stringify({
-      note: clearProp(props.note),
-      reviewed: props.reviewed,
+      note: clearProp(props.cadMetadata?.note),
+      reviewed: props.cadMetadata?.reviewed ?? false,
     }),
   });
 

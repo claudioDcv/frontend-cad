@@ -41,6 +41,7 @@ const ResolutionDetail = () => {
 
   const [contract, setContract] = useState<Contract | null>(null);
 
+  const [successNotification, setSuccessNotification] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   const getResolution = useGetResolution();
@@ -63,6 +64,10 @@ const ResolutionDetail = () => {
 
   const materialType = getMaterial(getResolution.data?.categoryId);
 
+  const handleCloseNotification = () => {
+    setSuccessNotification(false);
+  };
+
   const handleOpenModal = (contract: Contract) => {
     setContract(contract);
   };
@@ -84,7 +89,14 @@ const ResolutionDetail = () => {
     }
   };
 
-  const handleSuccess = () => {};
+  const handleSuccess = (contract: Contract) => {
+    if (!contract) {
+      return;
+    }
+    getResolutionContracts.replaceContract(contract);
+    setContract(null);
+    setSuccessNotification(true);
+  };
 
   const handleClose = () => {
     setContract(null);
@@ -232,8 +244,17 @@ const ResolutionDetail = () => {
         onClose={getResolution.onResetError}
         severity="error"
         i18n={{
-          title: t('common.error'),
+          title: t('notification.error'),
           text: t(getResolution.error),
+        }}
+      />
+      <Notification
+        open={successNotification}
+        onClose={handleCloseNotification}
+        severity="success"
+        i18n={{
+          title: t('notification.success'),
+          text: t('notification.updateNote'),
         }}
       />
       <ModalContractDetail

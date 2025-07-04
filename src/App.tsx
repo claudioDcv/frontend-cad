@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Container } from '@mui/material';
+import { Alert, Container } from '@mui/material';
 import Router from './Router';
 import useJWTNotification from './hooks/useJWTNotification';
 import { VITE_MOCK_API } from './conf/http';
@@ -13,10 +13,12 @@ function App() {
 
   return jwtNotification.token || VITE_MOCK_API ? (
     <Container maxWidth="xl">
-      <Router />
+      <Router hostUrl={jwtNotification.hostUrl}/>
     </Container>
   ) : (
-    <div>waiting for JWT...</div>
+    <Alert severity="info" sx={{ marginTop: 2 }}>
+      Cargando
+    </Alert>
   );
 }
 

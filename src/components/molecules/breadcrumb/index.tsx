@@ -1,6 +1,7 @@
-import { Breadcrumbs, Link, Typography } from '@mui/material';
+import { Breadcrumbs, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import styles from './index.module.css';
+import { Link } from 'wouter';
 
 interface Item {
   label: string;

@@ -1,14 +1,9 @@
 import { Jewel } from '@/entities/Jewel.entity';
 import { API_BASE } from '../../conf/http';
-import { clearAllProps, clearProp, getHeader } from '../utils';
+import { getHeader } from '../utils';
 
 const client = async (contractId: number): Promise<Jewel[]> => {
-  const params = {
-    contractId: clearProp(contractId),
-  };
-
-  const query = new URLSearchParams(clearAllProps(params));
-  const url = new URL(`${API_BASE}/contract-detail?${query}`);
+  const url = new URL(`${API_BASE}/contracts/${contractId}/jewels`);
 
   const response = await fetch(url.toString(), {
     headers: getHeader(),

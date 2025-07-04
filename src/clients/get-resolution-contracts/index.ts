@@ -13,6 +13,16 @@ const useGetResolutionContracts = () => {
     setError(null);
   };
 
+  const replaceContract = (contract: Contract) => {
+    const contracts = data.map((c) => {
+      if (c.contractNumber === contract.contractNumber) {
+        return contract;
+      }
+      return c;
+    });
+    setData(contracts);
+  };
+
   const call = useCallback(
     async (resolutionId: string) => {
       if (status === FetchStatus.ERROR) {
@@ -33,7 +43,8 @@ const useGetResolutionContracts = () => {
         setData(result);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
-        const messageKey = (err as Error)?.message ?? 'error.getAllContractsFetch';
+        const messageKey =
+          (err as Error)?.message ?? 'error.getAllContractsFetch';
         setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
@@ -41,7 +52,7 @@ const useGetResolutionContracts = () => {
     [status]
   );
 
-  return { status, data, error, call, onResetError };
+  return { status, data, error, call, onResetError, replaceContract };
 };
 
 export default useGetResolutionContracts;

@@ -16,6 +16,7 @@ interface ModalActionsProps {
   onSuccess?: () => void;
   i18n?: Partial<I18N>;
   wrap?: boolean;
+  loading: boolean;
 }
 
 const ModalActions: React.FC<ModalActionsProps> = ({
@@ -23,6 +24,7 @@ const ModalActions: React.FC<ModalActionsProps> = ({
   onClose,
   onSuccess,
   wrap = true,
+  loading,
 }) => {
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
 
@@ -34,6 +36,8 @@ const ModalActions: React.FC<ModalActionsProps> = ({
         color="secondary"
         type="button"
         size="small"
+        loading={loading}
+        disabled={loading}
       >
         {lang?.cancel}
       </Button>
@@ -43,6 +47,8 @@ const ModalActions: React.FC<ModalActionsProps> = ({
         color="primary"
         type="submit"
         size="small"
+        loading={loading}
+        disabled={loading}
       >
         {lang?.success}
       </Button>

@@ -12,6 +12,7 @@ import useGetContractJewels from '@/clients/get-contract-jewels';
 import { useEffect } from 'react';
 import { FetchStatus } from '@/constants';
 import { ContractMetadata } from '@/entities/Contract.entity';
+import usePatchReviewedContract from '@/clients/patch-reviewed-contract';
 
 const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
   onClose,
@@ -23,6 +24,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
 
   const getContractJewels = useGetContractJewels();
+  const patchReviewedContract = usePatchReviewedContract();
 
   const metadata: ContractMetadata = {
     note: null,
@@ -42,9 +44,24 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
     onClose();
   };
 
-  const handleSuccess = (data: ContractMetadata) => {
+  const handleSuccess = async (data: ContractMetadata) => {
+    if (!contract) {
+      return;
+    }
+    const result = await patchReviewedContract.call({
+      ...contract,
+      cadMetadata: {
+        ...metadata,
+        note: data.note,
+        reviewed: data.reviewed,
+        contractId: contract?.contractId ?? 0,
+      },
+    });
     getContractJewels.reset();
-    onSuccess(data);
+
+    if (result) {
+      onSuccess(result);
+    }
   };
 
   useEffect(() => {
@@ -112,6 +129,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
         metadata={metadata}
         onClose={handleClose}
         onSuccess={handleSuccess}
+        loading={patchReviewedContract.status === FetchStatus.LOADING}
       />
     </Dialog>
   );
