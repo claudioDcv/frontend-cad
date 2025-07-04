@@ -10,7 +10,7 @@ const Router = (props: { hostUrl: string }) => {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
-    if (props.hostUrl && props.hostUrl !== '/' && !init) {
+    if (props.hostUrl && props.hostUrl !== '/' && !init && props.hostUrl !== '') {
       setLocation(props.hostUrl);
       setInit(true);
     }

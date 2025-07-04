@@ -8,6 +8,8 @@ interface Message {
 
 const TOKEN_KEY = 'TOKEN_KEY';
 
+const ON_HOST_URL = false;
+
 export const getToken = () => {
   const token = localStorage.getItem(TOKEN_KEY);
   if (token) {
@@ -26,10 +28,12 @@ const useJWTNotification = () => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent<Message>) => {
       if (event.data.action === 'sendCode') {
-        const hostUrl = event.data.hostUrl.split('#')[1];
-        if (hostUrl) {
-          setHostUrl(hostUrl);
-          console.log('Host URL:', hostUrl);
+        if (ON_HOST_URL) {
+          const hostUrl = event.data.hostUrl.split('#')[1];
+          if (hostUrl) {
+            setHostUrl(hostUrl);
+            console.log('Host URL:', hostUrl);
+          }
         }
         if (event.data.code) {
           setToken(event.data.code);
