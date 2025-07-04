@@ -8,7 +8,8 @@ interface Message {
 
 const TOKEN_KEY = 'TOKEN_KEY';
 
-const ON_HOST_URL = false;
+// TODO: Change this to false when not in host URL
+const ON_HOST_URL = true;
 
 export const getToken = () => {
   const token = localStorage.getItem(TOKEN_KEY);

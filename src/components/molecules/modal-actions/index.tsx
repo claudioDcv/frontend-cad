@@ -1,14 +1,12 @@
 import { Button, DialogActions } from '@mui/material';
 interface I18N {
-  checkboxLabel: string;
   success: string;
   cancel: string;
 }
 
 const initialStateI18n: I18N = {
-  checkboxLabel: 'Check Label',
-  success: 'Success',
-  cancel: 'Cancel',
+  success: 'Guardar',
+  cancel: 'Cancelar',
 };
 
 interface ModalActionsProps {
@@ -32,8 +30,7 @@ const ModalActions: React.FC<ModalActionsProps> = ({
     <>
       <Button
         onClick={onClose}
-        variant="contained"
-        color="secondary"
+        variant="outlined"
         type="button"
         size="small"
         loading={loading}
@@ -44,7 +41,6 @@ const ModalActions: React.FC<ModalActionsProps> = ({
       <Button
         onClick={onSuccess}
         variant="contained"
-        color="primary"
         type="submit"
         size="small"
         loading={loading}

@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Box, Card, CardContent, Divider } from '@mui/material';
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Key as IconKey } from '@mui/icons-material';
 import { FetchStatus, SEARCH_DELAY } from '@/constants';
 import routes from '../../conf/routes';
 import {
@@ -102,70 +111,110 @@ const ResolutionDetail = () => {
     setContract(null);
   };
 
+  const isAllContractReviewed = filteredContracts.every(
+    (c) => c.cadMetadata?.reviewed
+
+    // TODO: 
+    // Levantar modal de confirmacion de envio y crear servicio (momentaneamente que devuelva true) para que salga notification
+    // modal del bolsa tmb
+    // enviar a cad, se levanta modal y si acepto, consumo servicio resolutions/{idResolutions}/resolve (patch)
+    // este debe considerar los que estan revisados y los que no (contract.filter(c => c.cadMetadata?.reviewed === true))
+    
+    // el verde es reviewd true  y el azul significa que el cadnote no es '' (texto vacio)
+
+
+    // los contratos que se habren (modal) son los pre-resolucionados (agregar nueva columna estado)
+    // todos se pueden ver, pero van a estar disabled (boton guardar, checked y text field) si no son pre resolucionados
+
+    // contratos anulados deben quedar disabled (status: 'ANULADO')
+
+    // switch que muestre solo no revisados
+    // achicar estado al 60%
+  );
+
   return (
     <div>
       <Breadcrumb items={[routes.index, routes.resolutionDetail]} />
       <Card>
-        <CardContent>
-          {getMaterialType(
+        <CardHeader
+          title={getMaterialType(
             t('common.resolution', { id: resolutionId }),
             getResolution.data.categoryId
           )}
+          action={
+            <>
+              <ButtonGroup size="small">
+                <Button startIcon={<IconKey />} disabled>
+                  Bolsa
+                </Button>
+                <Button variant="contained" disabled={!isAllContractReviewed}>
+                  Enviar a CAD
+                </Button>
+              </ButtonGroup>
+            </>
+          }
+        />
+        <CardContent>
+          <Box
+            p={2}
+            display="grid"
+            gridTemplateColumns="repeat(3, 1fr)"
+            gap={2}
+          >
+            <Box>
+              <DisplayData
+                label={t('common.code')}
+                value={getResolution.data?.resolutionNumber}
+              />
+              <DisplayData
+                label={t('common.dispatchGuide')}
+                value={getResolution.data?.dispatchGuide}
+              />
+            </Box>
+            <Box>
+              <DisplayData
+                label={t('common.contractNumberLabel')}
+                value={getResolution.data?.contractCount}
+              />
+              <DisplayData
+                label={t('common.type')}
+                value={getResolution.data?.resolutionNumber}
+              />
+            </Box>
+            <Box>
+              <DisplayData
+                label={t('common.securityBag')}
+                value={getResolution.data?.securityBag}
+              />
+            </Box>
+            <Box>
+              <DisplayData
+                label={t('common.branch')}
+                value={getResolution.data?.locationName}
+              />
+              <DisplayData
+                label={t('common.address')}
+                value={getResolution.data?.locationAddress}
+              />
+            </Box>
+            <Box>
+              <DisplayData
+                label={t('common.investment')}
+                value={getResolution.data?.investmentName}
+              />
+              <DisplayData
+                label={t('common.rut')}
+                value={getResolution.data?.investmentRut}
+              />
+            </Box>
+            <Box>
+              <DisplayData
+                label={t('common.closureDate')}
+                value={formatToDDMMYYYY(getResolution.data?.closeDate)}
+              />
+            </Box>
+          </Box>
         </CardContent>
-        <Box p={2} display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
-          <Box>
-            <DisplayData
-              label={t('common.code')}
-              value={getResolution.data?.resolutionNumber}
-            />
-            <DisplayData
-              label={t('common.dispatchGuide')}
-              value={getResolution.data?.dispatchGuide}
-            />
-          </Box>
-          <Box>
-            <DisplayData
-              label={t('common.contractNumberLabel')}
-              value={getResolution.data?.contractCount}
-            />
-            <DisplayData
-              label={t('common.type')}
-              value={getResolution.data?.resolutionNumber}
-            />
-          </Box>
-          <Box>
-            <DisplayData
-              label={t('common.securityBag')}
-              value={getResolution.data?.securityBag}
-            />
-          </Box>
-          <Box>
-            <DisplayData
-              label={t('common.branch')}
-              value={getResolution.data?.locationName}
-            />
-            <DisplayData
-              label={t('common.address')}
-              value={getResolution.data?.locationAddress}
-            />
-          </Box>
-          <Box>
-            <DisplayData
-              label={t('common.investment')}
-              value={getResolution.data?.investmentName}
-            />
-            <DisplayData
-              label={t('common.rut')}
-              value={getResolution.data?.investmentRut}
-            />
-          </Box>
-          <Box>
-            <DisplayData
-              label={t('common.closureDate')}
-              value={formatToDDMMYYYY(getResolution.data?.closeDate)}
-            />
-          </Box>
-        </Box>
       </Card>
       <Divider sx={{ mb: 2 }} />
       <form>
