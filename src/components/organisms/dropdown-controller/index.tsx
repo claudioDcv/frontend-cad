@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Control, Controller, ControllerRenderProps } from 'react-hook-form';
 import { Option } from '@/utils';
 import Dropdown from '../../molecules/dropdown';
+import { SxProps } from '@mui/material';
 
 interface DropdownControllerProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,6 +13,7 @@ interface DropdownControllerProps {
   disabled: boolean;
   name: string;
   label: string;
+  sx?: SxProps;
 }
 
 const DropdownController = (props: DropdownControllerProps) => {
@@ -27,6 +29,7 @@ const DropdownController = (props: DropdownControllerProps) => {
           options={props.options}
           label={t(props.label)}
           disabled={props.disabled}
+          sx={props.sx}
         />
       )}
     />

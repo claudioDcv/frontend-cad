@@ -27,6 +27,7 @@ export enum FetchStatus {
 }
 
 export const STATUS_RESOLUTION = 14;
+export const STATUS_CONTRACTS = 2;
 export const STATUS_PACKING_LIST = 32;
 
 export const TAB_RESOLUTIONS = 0;

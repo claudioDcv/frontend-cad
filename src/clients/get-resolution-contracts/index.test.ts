@@ -33,6 +33,7 @@ describe('useGetAllContracts', () => {
       clientName: '',
       clientRut: '',
       cadMetadata: null,
+      statusId: 0
     };
 
     vi.spyOn(clientModule, 'default').mockResolvedValue([mockData]);

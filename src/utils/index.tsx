@@ -17,6 +17,7 @@ export const defaultEndDate = new Date(
   toDay.getMonth() + FIRST_DAY,
   LAST_DAY_OF_PREVIOUS_MONTH
 );
+
 export const defaultStartDate = new Date(
   toDay.getFullYear() - FIVE_YEARS_AGO,
   toDay.getMonth(),
@@ -144,4 +145,13 @@ export const getMaterialType = (
 
 export const getMaterial = (categoryId: string): Material => {
   return materialMap[categoryId] || 'defaultMaterial';
+};
+
+export const getStatusLabel = (
+  id: string | number,
+  options: Option[] = []
+): string => {
+  const idStr = id.toString();
+  const found = options.find((opt) => opt.value === idStr);
+  return found?.label ?? idStr;
 };

@@ -159,6 +159,7 @@
     "address": "Dirección",
     "aprove": "Aprobar",
     "branch": "Sucursal",
+    "bag": "Bolsa",
     "cancel": "Cancelar",
     "category": "Tipo",
     "checkBoxLabel": "Verificar",
@@ -180,6 +181,7 @@
     "noData": "No hay datos",
     "note": "Nota",
     "numDoc": "Número",
+    "onlyNotReviewed": "Solo no revisados",
     "packingList": "Packing List",
     "reject": "Rechazar",
     "resolution": "Resolucion {{id}}",
@@ -187,6 +189,7 @@
     "reviewed": "Revisado",
     "rut": "RUT",
     "securityBag": "Bolsa de seguridad",
+    "sendCAD": "Enviar a CAD",
     "status": "Estado",
     "save": "Guardar",
     "successText": "Enviado con éxito.",
@@ -228,6 +231,8 @@
     "getAllInvestmentsParse": "Error al interpretar los datos de inversiones del servidor.",
     "patchReviewedContractFetch": "Error al actualizar el contrato revisado. Por favor, inténtalo de nuevo más tarde.",
     "patchReviewedContractParse": "Error al interpretar los datos del contrato revisado del servidor.",
+    "patchResolveResolutionFetch": "Error al enviar la resolución. Por favor, inténtalo de nuevo más tarde.",
+    "patchResolveResolutionParse": "Error al interpretar la respuesta del servidor al resolver la resolución.",
     "jsonError": "Error al procesar la respuesta del servidor."
   },
   "notification": {
@@ -235,6 +240,11 @@
     "success": "Éxito",
     "warning": "Advertencia",
     "info": "Información",
-    "updateNote": "Nota guardada con éxito."
+    "updateNote": "Nota guardada con éxito.",
+    "updateResolve": "La PR {{id}} se envió con éxito."
+  },
+  "modalConfirm": {
+    "ResolveTitle": "Confirmación de Envío",
+    "ResolveDescription": "¿Estás seguro que deseas enviar la PR {{id}} a CAD?"
   }
 }

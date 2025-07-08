@@ -197,6 +197,7 @@ const Resolutions = () => {
               label="common.status"
               name="status"
               control={control}
+              sx={{ width: '70%' }}
             />
             <DropdownController
               onChange={handleChangeInvestment}

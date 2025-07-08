@@ -3,20 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Box, DialogActions, TextField } from '@mui/material';
 import ModalActions from '@/components/molecules/modal-actions';
 import { ContractMetadata } from '@/entities/Contract.entity';
-import { orFalseBoolean, orVoidString, toDay } from '@/utils';
+import { orFalseBoolean, orVoidString } from '@/utils';
 import Checkbox from '../../atoms/checkbox';
-
-const initialState: ContractMetadata = {
-  contractId: 0,
-  note: null,
-  reviewed: false,
-  reviewedBy: null,
-  reviewedAt: null,
-  confirmedBy: null,
-  confirmedAt: null,
-  createdAt: toDay.toString(),
-  updatedAt: null,
-};
+import { initialState } from './index.type';
 
 interface ContractNoteProps {
   metadata?: ContractMetadata | null;

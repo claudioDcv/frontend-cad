@@ -17,6 +17,7 @@ const mockContract: Contract = {
   clientName: 'Jane Smith',
   clientRut: '12345678-9',
   cadMetadata: null,
+  statusId: 0
 };
 
 describe('ModalContractDetail', () => {

@@ -13,6 +13,7 @@ export type ContractMetadata = {
 export type Contract = {
   contractId: number;
   contractNumber: number;
+  statusId: number;
   securityBagCode: string;
   jewelQuantity: number;
   totalContractValue: number;

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useRef, useState } from 'react';
+import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import {
   Box,
   Button,
@@ -8,10 +8,12 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  FormControlLabel,
+  Switch,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Key as IconKey } from '@mui/icons-material';
-import { FetchStatus, SEARCH_DELAY } from '@/constants';
+import { emptyOption, SEARCH_DELAY } from '@/constants';
 import routes from '../../conf/routes';
 import {
   Breadcrumb,
@@ -19,6 +21,7 @@ import {
   Notification,
   Input,
   DisplayData,
+  DropdownController,
 } from '../../components';
 import {
   debounce,
@@ -27,14 +30,17 @@ import {
   formatToDDMMYYYY,
   getMaterial,
   getMaterialType,
+  getStatusLabel,
   isOnlyNumbersOrEmpty,
+  Option,
 } from '../../utils';
 import ModalContractDetail from '../../components/organisms/modal-contract-detail';
 import ContractDetailButton from './components/ContractDetailButton';
-import useGetResolution from '@/clients/get-resolution';
-import useGetResolutionContracts from '@/clients/get-resolution-contracts';
 import { useParams } from 'wouter';
 import { Contract } from '@/entities/Contract.entity';
+import ModalConfirm from '@/components/organisms/modal-confirm';
+import { addOptionAll, isEmpty } from '../index/utils';
+import useServices from './hooks/useServices';
 
 const ResolutionDetail = () => {
   const { id: resolutionId } = useParams<{ id: string }>();
@@ -42,50 +48,75 @@ const ResolutionDetail = () => {
 
   const { control, setValue } = useForm<{
     contractNumber: string;
+    status: Option;
   }>({
     defaultValues: {
       contractNumber: '',
+      status: emptyOption,
     },
   });
 
   const [contract, setContract] = useState<Contract | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>(emptyOption.value);
+  const [showOnlyNotReviewed, setShowOnlyNotReviewed] = useState(false);
 
-  const [successNotification, setSuccessNotification] = useState(false);
+  const [successNoteNotification, setSuccessNoteNotification] = useState(false);
+  const [successConfirmNotification, setSuccessConfirmNotification] =
+    useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const getResolution = useGetResolution();
-  const getResolutionContracts = useGetResolutionContracts();
+  const services = useServices(resolutionId);
 
-  useEffect(() => {
-    if (
-      resolutionId &&
-      getResolution.status === FetchStatus.IDLE &&
-      getResolutionContracts.status === FetchStatus.IDLE
-    ) {
-      getResolution.call(resolutionId);
-      getResolutionContracts.call(resolutionId);
-    }
-  }, [resolutionId, getResolution, getResolutionContracts]);
+  const statusOptions = addOptionAll(services.getAllStatus.data);
 
-  const filteredContracts = getResolutionContracts.data.filter((contract) =>
-    contract.contractNumber?.toString().includes(searchTerm)
-  );
+  const isStatusDisabled = isEmpty(services.getAllStatus.data);
 
-  const materialType = getMaterial(getResolution.data?.categoryId);
+  const filteredContracts = services.getResolutionContracts.data
+    .filter((contract) =>
+      contract.contractNumber?.toString().includes(searchTerm)
+    )
+    .filter(
+      (contract) =>
+        statusFilter === emptyOption.value ||
+        contract.statusId === Number(statusFilter)
+    )
+    .filter((contract) =>
+      showOnlyNotReviewed ? !contract.cadMetadata?.reviewed : true
+    );
 
-  const handleCloseNotification = () => {
-    setSuccessNotification(false);
-  };
-
-  const handleOpenModal = (contract: Contract) => {
-    setContract(contract);
-  };
+  const materialType = getMaterial(services.getResolution.data?.categoryId);
 
   const debouncedSearchRef = useRef(
     debounce((contractNumber: string) => {
       setSearchTerm(contractNumber);
     }, SEARCH_DELAY)
   );
+
+  const handleCloseNoteNotification = () => {
+    setSuccessNoteNotification(false);
+  };
+  const handleCloseConfirmNotification = () => {
+    setSuccessConfirmNotification(false);
+  };
+
+  const handleOpenModal = (contract: Contract) => {
+    setContract(contract);
+  };
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
+
+  const handleSuccessConfirm = () => {
+    services.patchResolutionResolve.call(services.getResolution.data);
+    setOpenConfirm(false);
+    setSuccessConfirmNotification(true);
+  };
 
   const handleDocNumberChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -98,13 +129,28 @@ const ResolutionDetail = () => {
     }
   };
 
+  const handleChangeStatus =
+    (
+      field: ControllerRenderProps<{ contractNumber: string; status: Option }>
+    ) =>
+    (selectedOption: Option) => {
+      field.onChange(selectedOption); // actualiza el form react-hook-form
+      setStatusFilter(selectedOption.value); // guarda el valor del filtro localmente
+    };
+
+  const handleShowOnlyNotReviewedChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setShowOnlyNotReviewed(event.target.checked);
+  };
+
   const handleSuccess = (contract: Contract) => {
     if (!contract) {
       return;
     }
-    getResolutionContracts.replaceContract(contract);
+    services.getResolutionContracts.replaceContract(contract);
     setContract(null);
-    setSuccessNotification(true);
+    setSuccessNoteNotification(true);
   };
 
   const handleClose = () => {
@@ -114,22 +160,13 @@ const ResolutionDetail = () => {
   const isAllContractReviewed = filteredContracts.every(
     (c) => c.cadMetadata?.reviewed
 
-    // TODO: 
-    // Levantar modal de confirmacion de envio y crear servicio (momentaneamente que devuelva true) para que salga notification
-    // modal del bolsa tmb
-    // enviar a cad, se levanta modal y si acepto, consumo servicio resolutions/{idResolutions}/resolve (patch)
+    // TODO:
     // este debe considerar los que estan revisados y los que no (contract.filter(c => c.cadMetadata?.reviewed === true))
-    
+
     // el verde es reviewd true  y el azul significa que el cadnote no es '' (texto vacio)
 
-
-    // los contratos que se habren (modal) son los pre-resolucionados (agregar nueva columna estado)
+    // los contratos que se habren (modal) son los pre-resolucionados
     // todos se pueden ver, pero van a estar disabled (boton guardar, checked y text field) si no son pre resolucionados
-
-    // contratos anulados deben quedar disabled (status: 'ANULADO')
-
-    // switch que muestre solo no revisados
-    // achicar estado al 60%
   );
 
   return (
@@ -139,16 +176,20 @@ const ResolutionDetail = () => {
         <CardHeader
           title={getMaterialType(
             t('common.resolution', { id: resolutionId }),
-            getResolution.data.categoryId
+            services.getResolution.data.categoryId
           )}
           action={
             <>
               <ButtonGroup size="small">
                 <Button startIcon={<IconKey />} disabled>
-                  Bolsa
+                  {t('common.bag')}
                 </Button>
-                <Button variant="contained" disabled={!isAllContractReviewed}>
-                  Enviar a CAD
+                <Button
+                  variant="contained"
+                  disabled={!isAllContractReviewed}
+                  onClick={handleOpenConfirm}
+                >
+                  {t('common.sendCAD')}
                 </Button>
               </ButtonGroup>
             </>
@@ -164,53 +205,53 @@ const ResolutionDetail = () => {
             <Box>
               <DisplayData
                 label={t('common.code')}
-                value={getResolution.data?.resolutionNumber}
+                value={services.getResolution.data?.resolutionNumber}
               />
               <DisplayData
                 label={t('common.dispatchGuide')}
-                value={getResolution.data?.dispatchGuide}
+                value={services.getResolution.data?.dispatchGuide}
               />
             </Box>
             <Box>
               <DisplayData
                 label={t('common.contractNumberLabel')}
-                value={getResolution.data?.contractCount}
+                value={services.getResolution.data?.contractCount}
               />
               <DisplayData
                 label={t('common.type')}
-                value={getResolution.data?.resolutionNumber}
+                value={services.getResolution.data?.resolutionNumber}
               />
             </Box>
             <Box>
               <DisplayData
                 label={t('common.securityBag')}
-                value={getResolution.data?.securityBag}
+                value={services.getResolution.data?.securityBag}
               />
             </Box>
             <Box>
               <DisplayData
                 label={t('common.branch')}
-                value={getResolution.data?.locationName}
+                value={services.getResolution.data?.locationName}
               />
               <DisplayData
                 label={t('common.address')}
-                value={getResolution.data?.locationAddress}
+                value={services.getResolution.data?.locationAddress}
               />
             </Box>
             <Box>
               <DisplayData
                 label={t('common.investment')}
-                value={getResolution.data?.investmentName}
+                value={services.getResolution.data?.investmentName}
               />
               <DisplayData
                 label={t('common.rut')}
-                value={getResolution.data?.investmentRut}
+                value={services.getResolution.data?.investmentRut}
               />
             </Box>
             <Box>
               <DisplayData
                 label={t('common.closureDate')}
-                value={formatToDDMMYYYY(getResolution.data?.closeDate)}
+                value={formatToDDMMYYYY(services.getResolution.data?.closeDate)}
               />
             </Box>
           </Box>
@@ -218,7 +259,14 @@ const ResolutionDetail = () => {
       </Card>
       <Divider sx={{ mb: 2 }} />
       <form>
-        <Box>
+        <Box
+          mb={2}
+          mt={2}
+          flexWrap="nowrap"
+          display="flex"
+          alignItems="center"
+          gap={2}
+        >
           <Controller
             name="contractNumber"
             control={control}
@@ -229,6 +277,23 @@ const ResolutionDetail = () => {
                 onChange={handleDocNumberChange}
               />
             )}
+          />
+          <DropdownController
+            onChange={handleChangeStatus}
+            disabled={isStatusDisabled}
+            options={statusOptions}
+            label="common.status"
+            name="status"
+            control={control}
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={showOnlyNotReviewed}
+                onChange={handleShowOnlyNotReviewedChange}
+              />
+            }
+            label={t('common.onlyNotReviewed')}
           />
         </Box>
         <Divider sx={{ mb: 2 }} />
@@ -263,6 +328,11 @@ const ResolutionDetail = () => {
               field: (f) => formatToDDMMYYYY(f as string),
             },
             {
+              id: 'statusId',
+              label: t('common.status'),
+              field: (f) => getStatusLabel(f as number, statusOptions),
+            },
+            {
               id: 'actions',
               label: t('common.actions'),
               render: (row) => (
@@ -280,30 +350,54 @@ const ResolutionDetail = () => {
         />
       </form>
       <Notification
-        open={!!getResolutionContracts.error}
-        onClose={getResolutionContracts.onResetError}
+        open={!!services.getResolutionContracts.error}
+        onClose={services.getResolutionContracts.onResetError}
         severity="error"
         i18n={{
           title: t('common.error'),
-          text: t(getResolutionContracts.error || 'common.unknownError'),
+          text: t(
+            services.getResolutionContracts.error || 'common.unknownError'
+          ),
         }}
       />
       <Notification
-        open={!!getResolution.error}
-        onClose={getResolution.onResetError}
+        open={!!services.getResolution.error}
+        onClose={services.getResolution.onResetError}
         severity="error"
         i18n={{
           title: t('notification.error'),
-          text: t(getResolution.error),
+          text: t(services.getResolution.error),
         }}
       />
       <Notification
-        open={successNotification}
-        onClose={handleCloseNotification}
+        open={successNoteNotification}
+        onClose={handleCloseNoteNotification}
         severity="success"
         i18n={{
           title: t('notification.success'),
           text: t('notification.updateNote'),
+        }}
+      />
+      <Notification
+        open={successConfirmNotification}
+        onClose={handleCloseConfirmNotification}
+        severity="success"
+        i18n={{
+          title: t('notification.success'),
+          text: t('notification.updateResolve', {
+            id: services.getResolution.data.resolutionId,
+          }),
+        }}
+      />
+      <ModalConfirm
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        onSuccess={handleSuccessConfirm}
+        i18n={{
+          title: t('modalConfirm.ResolveTitle'),
+          text: t('modalConfirm.ResolveDescription', {
+            id: services.getResolution.data.resolutionId,
+          }),
         }}
       />
       <ModalContractDetail

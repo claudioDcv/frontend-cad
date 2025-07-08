@@ -9,7 +9,7 @@ describe('ModalActions', () => {
 
     render(<ModalActions onClose={onClose} onSuccess={onSuccess} loading={false} />);
 
-    const successButton = screen.getByRole('button', { name: /success/i });
+    const successButton = screen.getByRole('button', { name: /guardar/i });
     fireEvent.click(successButton);
     expect(onSuccess).toHaveBeenCalled();
   });

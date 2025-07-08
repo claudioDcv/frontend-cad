@@ -4,6 +4,7 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  SxProps,
 } from '@mui/material';
 import { useId } from 'react';
 import { Option } from '@/utils';
@@ -15,6 +16,7 @@ export interface DropdownProps {
   label: string;
   required?: boolean;
   disabled?: boolean;
+  sx?: SxProps;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -24,16 +26,24 @@ const Dropdown: React.FC<DropdownProps> = ({
   label,
   required,
   disabled = false,
+  sx
 }) => {
   const id = useId();
 
   const handleChange = (event: SelectChangeEvent) => {
-    const selected = options.find(opt => opt.value === event.target.value);
+    const selected = options.find((opt) => opt.value === event.target.value);
     if (selected) onChange(selected);
   };
 
   return (
-    <FormControl fullWidth size="small" variant="outlined" required={required} disabled={disabled}>
+    <FormControl
+      fullWidth
+      size="small"
+      variant="outlined"
+      required={required}
+      disabled={disabled}
+      sx={sx}
+    >
       <InputLabel id={id}>{label}</InputLabel>
       <Select
         labelId={id}
