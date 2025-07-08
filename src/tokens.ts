@@ -161,7 +161,7 @@ const IconTemplate: IIconTemplate = {
   ContractWithNotes: {
     name: 'note',
     description: 'Contrato con nota',
-    color: PrimaryMain,
+    color: Info,
   },
   NormalAperture: {
     name: 'box',

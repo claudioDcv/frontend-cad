@@ -27,14 +27,14 @@ const client = async (props: Resolution): Promise<Resolution> => {
   }
 };
 */
-
+// TODO:
+// este debe considerar los que estan revisados y los que no (contract.filter(c => c.cadMetadata?.reviewed === true))
 const client = async (props: Resolution): Promise<boolean> => {
   // Simulación temporal: retorna true directamente
   return new Promise((resolve) => {
-    console.log(props)
-    setTimeout(() => resolve(true), 200); 
+    console.log(props);
+    setTimeout(() => resolve(true), 200);
   });
 };
-
 
 export default client;

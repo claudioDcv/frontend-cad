@@ -30,6 +30,8 @@ export const STATUS_RESOLUTION = 14;
 export const STATUS_CONTRACTS = 2;
 export const STATUS_PACKING_LIST = 32;
 
+export const STATUS_PRE_RESOLUTION = 20;
+
 export const TAB_RESOLUTIONS = 0;
 export const TAB_PACKING_LIST = 1;
 

@@ -35,4 +35,5 @@ export interface ModalContractDetailProps {
   material: Material;
   contract?: Contract | null;
   i18n?: Partial<I18N>;
+  editable?: boolean;
 }

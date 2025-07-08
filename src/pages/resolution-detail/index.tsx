@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Key as IconKey } from '@mui/icons-material';
-import { emptyOption, SEARCH_DELAY } from '@/constants';
+import { emptyOption, SEARCH_DELAY, STATUS_PRE_RESOLUTION } from '@/constants';
 import routes from '../../conf/routes';
 import {
   Breadcrumb,
@@ -87,6 +87,7 @@ const ResolutionDetail = () => {
     );
 
   const materialType = getMaterial(services.getResolution.data?.categoryId);
+  const isEditable = contract?.statusId === STATUS_PRE_RESOLUTION;
 
   const debouncedSearchRef = useRef(
     debounce((contractNumber: string) => {
@@ -135,8 +136,8 @@ const ResolutionDetail = () => {
       field: ControllerRenderProps<{ contractNumber: string; status: Option }>
     ) =>
     (selectedOption: Option) => {
-      field.onChange(selectedOption); // actualiza el form react-hook-form
-      setStatusFilter(selectedOption.value); // guarda el valor del filtro localmente
+      field.onChange(selectedOption);
+      setStatusFilter(selectedOption.value);
     };
 
   const handleShowOnlyNotReviewedChange = (
@@ -160,14 +161,6 @@ const ResolutionDetail = () => {
 
   const isAllContractReviewed = filteredContracts.every(
     (c) => c.cadMetadata?.reviewed
-
-    // TODO:
-    // este debe considerar los que estan revisados y los que no (contract.filter(c => c.cadMetadata?.reviewed === true))
-
-    // el verde es reviewd true  y el azul significa que el cadnote no es '' (texto vacio)
-
-    // los contratos que se habren (modal) son los pre-resolucionados
-    // todos se pueden ver, pero van a estar disabled (boton guardar, checked y text field) si no son pre resolucionados
   );
 
   return (
@@ -412,6 +405,7 @@ const ResolutionDetail = () => {
         onSuccess={handleSuccess}
         material={materialType}
         contract={contract}
+        editable={isEditable}
         i18n={{
           label: `${t('common.contractDetail')} ${contract?.contractNumber}`,
           success: t('common.save'),

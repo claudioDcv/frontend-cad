@@ -1,4 +1,5 @@
 import { Button, DialogActions } from '@mui/material';
+
 interface I18N {
   success: string;
   cancel: string;
@@ -15,6 +16,7 @@ interface ModalActionsProps {
   i18n?: Partial<I18N>;
   wrap?: boolean;
   loading: boolean;
+  disabled?: boolean;
 }
 
 const ModalActions: React.FC<ModalActionsProps> = ({
@@ -23,6 +25,7 @@ const ModalActions: React.FC<ModalActionsProps> = ({
   onSuccess,
   wrap = true,
   loading,
+  disabled = false,
 }) => {
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
 
@@ -44,7 +47,7 @@ const ModalActions: React.FC<ModalActionsProps> = ({
         type="submit"
         size="small"
         loading={loading}
-        disabled={loading}
+        disabled={loading || disabled}
       >
         {lang?.success}
       </Button>

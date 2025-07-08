@@ -12,6 +12,7 @@ interface ContractNoteProps {
   onSuccess: (contract: ContractMetadata) => void;
   onClose: () => void;
   loading: boolean;
+  editable?: boolean;
 }
 
 const ContractNote: React.FC<ContractNoteProps> = ({
@@ -19,8 +20,11 @@ const ContractNote: React.FC<ContractNoteProps> = ({
   onSuccess,
   onClose,
   loading,
+  editable
 }) => {
   const { t } = useTranslation();
+
+  const isEditable = editable ?? true;
 
   const [metadata, setMetadata] = useState<ContractMetadata>({
     ...initialState,
@@ -69,6 +73,7 @@ const ContractNote: React.FC<ContractNoteProps> = ({
           label={t('common.note')}
           value={metadata.note}
           onChange={handleChangeNote}
+          disabled={!isEditable}
         />
         <Box
           display="flex"
@@ -80,12 +85,14 @@ const ContractNote: React.FC<ContractNoteProps> = ({
             onChange={handleChangeReviewed}
             label={t('common.reviewed')}
             value={metadata.reviewed}
+            disabled={!isEditable}
           />
           <ModalActions
             wrap={false}
             onSuccess={handleSuccess}
             onClose={onClose}
             loading={loading}
+            disabled={!isEditable}
           />
         </Box>
       </Box>

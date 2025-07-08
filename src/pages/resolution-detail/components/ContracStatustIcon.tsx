@@ -1,23 +1,32 @@
 import { Box } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import EditOffIcon from '@mui/icons-material/EditOff'; // Icono para sin nota
 import { Contract } from '@/entities/Contract.entity';
+import Token from '@/tokens';
+import { IconList } from '@/components';
 
 const getContractStatusIcons = (contract: Contract) => {
+  const reviewed = contract.cadMetadata?.reviewed;
+  const hasNote = !!contract.cadMetadata?.note?.trim();
+
+  const statusIcon = reviewed
+    ? Token.IconTemplate.ContractReviewed
+    : Token.IconTemplate.ContractPending;
+
+  const noteIcon = hasNote
+    ? Token.IconTemplate.ContractWithNotes
+    : Token.IconTemplate.ContractWithoutNotes;
+
   return (
     <Box display="flex" alignItems="center" gap={1}>
-      {contract.cadMetadata?.reviewed ? (
-        <CheckCircleIcon color="success" />
-      ) : (
-        <CancelIcon color="disabled" />
-      )}
-      {contract.cadMetadata?.note?.trim() ? (
-        <EditNoteIcon color="primary" />
-      ) : (
-        <EditOffIcon color="disabled" />
-      )}
+      <IconList
+        name={statusIcon.name}
+        description={statusIcon.description}
+        color={statusIcon.color}
+      />
+      <IconList
+        name={noteIcon.name}
+        description={noteIcon.description}
+        color={noteIcon.color}
+      />
     </Box>
   );
 };

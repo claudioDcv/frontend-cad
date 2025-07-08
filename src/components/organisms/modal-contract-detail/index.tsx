@@ -20,6 +20,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
   material,
   contract,
   i18n,
+  editable
 }) => {
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
 
@@ -130,6 +131,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
         onClose={handleClose}
         onSuccess={handleSuccess}
         loading={patchReviewedContract.status === FetchStatus.LOADING}
+        editable={editable}
       />
     </Dialog>
   );
