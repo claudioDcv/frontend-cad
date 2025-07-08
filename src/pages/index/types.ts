@@ -1,4 +1,4 @@
-import { Option } from '@/utils';
+import { Option } from '@/entities/Option.entity';
 
 export interface ResolutionFormModel {
   page: number;

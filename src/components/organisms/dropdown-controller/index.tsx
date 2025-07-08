@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Control, Controller, ControllerRenderProps } from 'react-hook-form';
-import { Option } from '@/utils';
+import { Option } from '@/entities/Option.entity';
 import Dropdown from '../../molecules/dropdown';
 import { SxProps } from '@mui/material';
 
@@ -29,7 +29,7 @@ const DropdownController = (props: DropdownControllerProps) => {
           options={props.options}
           label={t(props.label)}
           disabled={props.disabled}
-          sx={props.sx}
+          sx={{ maxWidth: 250, ...props.sx }}
         />
       )}
     />

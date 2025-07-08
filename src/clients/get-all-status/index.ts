@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import client from './client';
 import { FetchStatus } from '@/constants';
-import { Option } from '@/utils';
+import { Option } from '@/entities/Option.entity';
 import { Props } from './types';
 import { remap } from './utils';
 

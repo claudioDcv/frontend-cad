@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, OutlinedInput, InputAdornment } from '@mui/material';
+import { FormControl, InputLabel, OutlinedInput, InputAdornment, SxProps } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useId } from 'react';
 
@@ -14,6 +14,7 @@ interface InputProps {
     required?: boolean;
     size?: 'small' | 'medium';
     marginTop?: boolean;
+    sx?: SxProps;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -28,6 +29,7 @@ const Input: React.FC<InputProps> = ({
     iconPosition = 'start',
     type = 'text',
     size = 'small',
+    sx
 }) => {
     const id = useId();
     const startAdornment = type === 'search' ? (
@@ -65,7 +67,7 @@ const Input: React.FC<InputProps> = ({
     };
 
     return (
-        <FormControl fullWidth size={size} variant='outlined' sx={{ mt: marginTop ? 1 : 0 }}>
+        <FormControl fullWidth size={size} variant='outlined' sx={{ mt: marginTop ? 1 : 0, ...sx }}>
             <InputLabel
                 htmlFor={externalId || id}
                 required={required}

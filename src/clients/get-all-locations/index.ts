@@ -3,7 +3,7 @@ import { FetchStatus } from '@/constants';
 import client from './client';
 import { Props } from './types';
 import { remap } from './utils';
-import { Option } from '@/utils';
+import { Option } from '@/entities/Option.entity';
 
 const useGetAllLocations = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);

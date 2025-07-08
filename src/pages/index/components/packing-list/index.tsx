@@ -17,7 +17,7 @@ import {
   DropdownController,
 } from '@components/index';
 import useServices from './hooks/useServices';
-import { Option } from '@/utils';
+import { Option } from '@/entities/Option.entity';
 import {
   debounce,
   defaultStartDate,
@@ -36,7 +36,7 @@ import {
 
 const PackingList = () => {
   const { t } = useTranslation();
-  
+
   const { control, reset, getValues, setValue } = useForm<PackingListFormModel>(
     {
       defaultValues: defaultPackingListFormValues,

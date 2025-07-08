@@ -10,6 +10,7 @@ import Token from '../tokens';
 import { icons } from '../components/molecules/icon/icons';
 import { MaterialType } from '../components/molecules/material-type';
 import { Material, Size } from '../components/molecules/material-type/types';
+import { Option } from '@/entities/Option.entity';
 
 export const toDay = new Date();
 export const defaultEndDate = new Date(
@@ -23,11 +24,6 @@ export const defaultStartDate = new Date(
   toDay.getMonth(),
   FIRST_DAY
 );
-
-export interface Option {
-  label: string;
-  value: string;
-}
 
 export const isOnlyNumbersOrEmpty = (value: string) => /^\d*$/.test(value);
 

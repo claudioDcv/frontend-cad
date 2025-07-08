@@ -16,8 +16,8 @@ import {
   getStatusIcon,
   isOnlyNumbersOrEmpty,
   toDay,
-  Option,
 } from '@/utils';
+import { Option } from '@/entities/Option.entity';
 import {
   ButtonClear,
   DropdownController,

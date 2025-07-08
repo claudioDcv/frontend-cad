@@ -32,8 +32,8 @@ import {
   getMaterialType,
   getStatusLabel,
   isOnlyNumbersOrEmpty,
-  Option,
 } from '../../utils';
+import { Option } from '@/entities/Option.entity';
 import ModalContractDetail from '../../components/organisms/modal-contract-detail';
 import ContractDetailButton from './components/ContractDetailButton';
 import { useParams } from 'wouter';
@@ -41,6 +41,7 @@ import { Contract } from '@/entities/Contract.entity';
 import ModalConfirm from '@/components/organisms/modal-confirm';
 import { addOptionAll, isEmpty } from '../index/utils';
 import useServices from './hooks/useServices';
+import getContractStatusIcons from './components/ContracStatustIcon';
 
 const ResolutionDetail = () => {
   const { id: resolutionId } = useParams<{ id: string }>();
@@ -219,7 +220,7 @@ const ResolutionDetail = () => {
               />
               <DisplayData
                 label={t('common.type')}
-                value={services.getResolution.data?.resolutionNumber}
+                value={services.getResolution.data?.categoryName}
               />
             </Box>
             <Box>
@@ -275,6 +276,7 @@ const ResolutionDetail = () => {
                 label={t('common.numDoc')}
                 value={field.value}
                 onChange={handleDocNumberChange}
+                sx={{ maxWidth: 250 }}
               />
             )}
           />
@@ -282,7 +284,7 @@ const ResolutionDetail = () => {
             onChange={handleChangeStatus}
             disabled={isStatusDisabled}
             options={statusOptions}
-            label="common.status"
+            label="common.statusOlimpo"
             name="status"
             control={control}
           />
@@ -296,9 +298,13 @@ const ResolutionDetail = () => {
             label={t('common.onlyNotReviewed')}
           />
         </Box>
-        <Divider sx={{ mb: 2 }} />
         <Table
           columns={[
+            {
+              id: 'statusIcons',
+              label: t('common.status'),
+              render: getContractStatusIcons,
+            },
             { id: 'contractNumber', label: t('common.numDoc') },
             { id: 'securityBagCode', label: t('contract.securityBagCode') },
             { id: 'jewelQuantity', label: t('contract.jewelQuantity') },
@@ -329,7 +335,7 @@ const ResolutionDetail = () => {
             },
             {
               id: 'statusId',
-              label: t('common.status'),
+              label: t('common.statusOlimpo'),
               field: (f) => getStatusLabel(f as number, statusOptions),
             },
             {
@@ -398,6 +404,7 @@ const ResolutionDetail = () => {
           text: t('modalConfirm.ResolveDescription', {
             id: services.getResolution.data.resolutionId,
           }),
+          success: t('common.send'),
         }}
       />
       <ModalContractDetail

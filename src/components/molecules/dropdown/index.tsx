@@ -7,7 +7,7 @@ import {
   SxProps,
 } from '@mui/material';
 import { useId } from 'react';
-import { Option } from '@/utils';
+import { Option } from '@/entities/Option.entity';
 
 export interface DropdownProps {
   value?: Option;
@@ -26,7 +26,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   label,
   required,
   disabled = false,
-  sx
+  sx,
 }) => {
   const id = useId();
 

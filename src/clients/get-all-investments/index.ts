@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
 import client from './client';
-import { Option } from '@/utils';
+import { Option } from '@/entities/Option.entity';
 import { remap } from './utils';
 
 const useGetAllInvestments = () => {
