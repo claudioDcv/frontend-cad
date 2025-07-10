@@ -5,8 +5,7 @@ import { Resolution } from '@/entities/Resolution.entity';
 
 const usePatchResolutionResolve = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  //const [data, setData] = useState<Resolution>();
-  const [data, setData] = useState<boolean | undefined>(undefined);
+  const [data, setData] = useState<Resolution>();
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {

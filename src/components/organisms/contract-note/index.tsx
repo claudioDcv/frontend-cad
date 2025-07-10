@@ -5,22 +5,14 @@ import ModalActions from '@/components/molecules/modal-actions';
 import { ContractMetadata } from '@/entities/Contract.entity';
 import { orFalseBoolean, orVoidString } from '@/utils';
 import Checkbox from '../../atoms/checkbox';
-import { initialState } from './index.type';
-
-interface ContractNoteProps {
-  metadata?: ContractMetadata | null;
-  onSuccess: (contract: ContractMetadata) => void;
-  onClose: () => void;
-  loading: boolean;
-  editable?: boolean;
-}
+import { ContractNoteProps, initialState } from './index.types';
 
 const ContractNote: React.FC<ContractNoteProps> = ({
   metadata: initialContract,
   onSuccess,
   onClose,
   loading,
-  editable
+  editable,
 }) => {
   const { t } = useTranslation();
 

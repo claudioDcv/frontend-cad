@@ -140,7 +140,7 @@ export const getMaterialType = (
 };
 
 export const getMaterial = (categoryId: string): Material => {
-  return materialMap[categoryId] || 'defaultMaterial';
+  return materialMap[categoryId];
 };
 
 export const getStatusLabel = (

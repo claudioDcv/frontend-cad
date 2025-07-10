@@ -2,27 +2,7 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogContentText } from '@mui/material';
 import ModalHeader from '../../molecules/modal-header';
 import ModalActions from '../../molecules/modal-actions';
-
-interface I18N {
-  title: string;
-  text: string;
-  success: string;
-  cancel: string;
-}
-
-const initialStateI18n: I18N = {
-  title: 'Modal input',
-  text: 'Label',
-  success: 'Éxito',
-  cancel: 'Cancelar',
-};
-
-interface ModalConfirmProps {
-  open: boolean;
-  onClose: () => void;
-  onSuccess: () => void | Promise<void>;
-  i18n?: Partial<I18N>;
-}
+import { initialStateI18n, ModalConfirmProps } from './index.types';
 
 const ModalConfirm: React.FC<ModalConfirmProps> = ({
   open,

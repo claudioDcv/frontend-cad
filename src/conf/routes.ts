@@ -14,6 +14,10 @@ const routes = {
     path: (id: string) => appendPrefix(`/resolutions/${id}`),
     label: 'routes.resolutions',
   },
+  notifications: {
+    link: appendPrefix('/notifacations'),
+    label: 'notificaciones',
+  },
   notFound: {
     link: '',
     label: 'routes.notFound',

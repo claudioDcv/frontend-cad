@@ -1,8 +1,6 @@
-//import { API_BASE } from '../../conf/http';
+import { API_BASE } from '../../conf/http';
 import { Resolution } from '@/entities/Resolution.entity';
-//import { getHeader } from '../utils';
-
-/*
+import { getHeader } from '../utils';
 
 const client = async (props: Resolution): Promise<Resolution> => {
   const url = `${API_BASE}/resolutions/${props.resolutionId}/resolve`;
@@ -13,6 +11,8 @@ const client = async (props: Resolution): Promise<Resolution> => {
     method: 'PATCH',
     body: JSON.stringify({
       //Despues agregar aca los datos que de modifican
+      //   note: clearProp(props.cadMetadata?.note),
+      // reviewed: props.cadMetadata?.reviewed ?? false,
     }),
   });
 
@@ -25,16 +25,6 @@ const client = async (props: Resolution): Promise<Resolution> => {
   } catch {
     throw new Error('error.patchResolveResolutionParse');
   }
-};
-*/
-// TODO:
-// este debe considerar los que estan revisados y los que no (contract.filter(c => c.cadMetadata?.reviewed === true))
-const client = async (props: Resolution): Promise<boolean> => {
-  // Simulación temporal: retorna true directamente
-  return new Promise((resolve) => {
-    console.log(props);
-    setTimeout(() => resolve(true), 200);
-  });
 };
 
 export default client;

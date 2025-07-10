@@ -4,6 +4,7 @@ import routes from './conf/routes';
 import Index from './pages/index';
 import ResolutionDetail from './pages/resolution-detail';
 import NotFound from './pages/not-found';
+import Notifications from './pages/notification';
 
 const Router = (props: { hostUrl: string }) => {
   const [location, setLocation] = useLocation();
@@ -32,6 +33,7 @@ const Router = (props: { hostUrl: string }) => {
     <Switch>
       <Route path={routes.index.link} component={Index} />
       <Route path={routes.resolutionDetail.link} component={ResolutionDetail} />
+      <Route path={routes.notifications.link} component={Notifications} />
       <Route component={NotFound} />
     </Switch>
   );

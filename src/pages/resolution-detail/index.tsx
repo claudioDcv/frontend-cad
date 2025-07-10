@@ -22,6 +22,7 @@ import {
   Input,
   DisplayData,
   DropdownController,
+  NotificationDrawer,
 } from '../../components';
 import {
   debounce,
@@ -165,7 +166,16 @@ const ResolutionDetail = () => {
 
   return (
     <div>
-      <Breadcrumb items={[routes.index, routes.resolutionDetail]} />
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Breadcrumb items={[routes.index, routes.resolutionDetail]} />
+        <NotificationDrawer />
+      </Box>
+
       <Card>
         <CardHeader
           title={getMaterialType(
