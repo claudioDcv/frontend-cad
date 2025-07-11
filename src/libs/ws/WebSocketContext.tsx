@@ -1,6 +1,6 @@
-import React, {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
   createContext,
-  useContext,
   useReducer,
   useRef,
   useEffect,
@@ -309,6 +309,7 @@ export function WebSocketProvider({
           }
         } catch (e) {
           addLog(`📨 Mensaje (texto plano): ${event.data}`, LogType.INFO);
+          console.error(e);
         }
       };
 

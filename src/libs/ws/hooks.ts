@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useCallback, useMemo, useContext } from 'react';
 import { WebSocketContext } from './WebSocketContext';
 import {
@@ -143,7 +144,7 @@ export function useWebSocketStats() {
  * Hook para enviar comandos predefinidos
  */
 export function useWebSocketCommands() {
-  const { sendMessage, sendPing, subscribe, isConnected } = useWebSocket();
+  const { sendMessage, subscribe, isConnected } = useWebSocket();
 
   const sendCommand = useCallback(
     (type: MessageType, data?: any) => {
