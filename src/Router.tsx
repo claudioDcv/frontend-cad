@@ -4,7 +4,9 @@ import routes from './conf/routes';
 import Index from './pages/index';
 import ResolutionDetail from './pages/resolution-detail';
 import NotFound from './pages/not-found';
-import Notifications from './pages/notification';
+import Notifications from './pages/notifications';
+import WsTest from './pages/ws-test';
+import { Header } from './components';
 
 const Router = (props: { hostUrl: string }) => {
   const [location, setLocation] = useLocation();
@@ -30,12 +32,19 @@ const Router = (props: { hostUrl: string }) => {
   }, [location]);
 
   return (
-    <Switch>
-      <Route path={routes.index.link} component={Index} />
-      <Route path={routes.resolutionDetail.link} component={ResolutionDetail} />
-      <Route path={routes.notifications.link} component={Notifications} />
-      <Route component={NotFound} />
-    </Switch>
+    <div>
+      <Header />
+      <Switch>
+        <Route path={routes.index.link} component={Index} />
+        <Route
+          path={routes.resolutionDetail.link}
+          component={ResolutionDetail}
+        />
+        <Route path={routes.notifications.link} component={Notifications} />
+        <Route path={routes.wsTest.link} component={WsTest} />
+        <Route component={NotFound} />
+      </Switch>
+    </div>
   );
 };
 

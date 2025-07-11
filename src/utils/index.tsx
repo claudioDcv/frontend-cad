@@ -65,7 +65,27 @@ export const cleanDate = (date?: string | Date): string => {
   return d.toISOString().split('T')[0];
 };
 
-export const formatDate = (date?: Date) => date?.toISOString().split('T')[0];
+export const formatDateHour = (dateInput?: Date | string | number) => {
+  if (!dateInput) return '';
+  const date =
+    typeof dateInput === 'number' || typeof dateInput === 'string'
+      ? new Date(dateInput)
+      : dateInput;
+
+  // Verifica si la fecha es válida
+  if (isNaN(date.getTime())) {
+    console.error('Fecha y hora inválida proporcionada:', dateInput);
+    return ''; // Retorna una cadena vacía o maneja el error como prefieras
+  }
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() es base 0
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+};
 
 export function formatToDDMMYYYY(dateInput: string | undefined) {
   if (!dateInput) return '';

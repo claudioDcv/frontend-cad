@@ -15,8 +15,12 @@ const routes = {
     label: 'routes.resolutions',
   },
   notifications: {
-    link: appendPrefix('/notifacations'),
+    link: appendPrefix('/notifications'),
     label: 'notificaciones',
+  },
+  wsTest: {
+    link: appendPrefix('/ws-test'),
+    label: 'WsTest',
   },
   notFound: {
     link: '',

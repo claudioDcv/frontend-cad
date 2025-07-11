@@ -6,21 +6,22 @@ import {
   Divider,
   Drawer,
   IconButton,
-  ListItemText,
   MenuItem,
   Typography,
 } from '@mui/material';
 import { Link } from 'wouter';
 import routes from '@/conf/routes';
 import MailIcon from '@mui/icons-material/Mail';
-import { Notification } from './index.types';
+import { mockNotifications } from './mock';
+import { Notification } from '@/entities/Notification.entity';
+import CardNotification from '@/components/molecules/card-notification';
 
 const NotificationDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // 🔹 Simulamos fetch inicial solo del conteo (como viene del endpoint /notifications/unviewed)
+  // Simular /notifications/unviewed)
   useEffect(() => {
     const mockCounts = [
       { type: 'new-resolution', count: 5 },
@@ -36,32 +37,10 @@ const NotificationDrawer = () => {
   useEffect(() => {
     if (drawerOpen) {
       // Simular llamada a /notifications?viewed=false...
-      const mockNotifs = [
-        {
-          id: '1',
-          title: 'Nuevo contrato agregado',
-          message: 'Se agregó el contrato 123456.',
-          date: new Date().toISOString(),
-          read: false,
-        },
-        {
-          id: '2',
-          title: 'Contrato cancelado',
-          message: 'El contrato 789012 fue cancelado.',
-          date: new Date().toISOString(),
-          read: false,
-        },
-      ];
-
-      setNotifications(mockNotifs);
+      setNotifications(mockNotifications);
     }
   }, [drawerOpen]);
 
-  const handleMarkAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-  };
 
   return (
     <>
@@ -86,22 +65,7 @@ const NotificationDrawer = () => {
               <MenuItem disabled>No hay notificaciones</MenuItem>
             ) : (
               notifications.map((n) => (
-                <MenuItem
-                  key={n.id}
-                  onClick={() => {
-                    handleMarkAsRead(n.id);
-                    setDrawerOpen(false);
-                  }}
-                  sx={{ whiteSpace: 'normal' }}
-                >
-                  <ListItemText
-                    primary={n.title}
-                    secondary={n.message}
-                    primaryTypographyProps={{
-                      fontWeight: n.read ? 'normal' : 'bold',
-                    }}
-                  />
-                </MenuItem>
+                <CardNotification data={n} key={n.notificationId}/>
               ))
             )}
           </Box>

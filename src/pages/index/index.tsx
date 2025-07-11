@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Box, Tab, Tabs } from '@mui/material';
 import { TAB_PACKING_LIST, TAB_RESOLUTIONS } from '@/constants';
 import PackingList from './components/packing-list';
-import { Breadcrumb } from '@components/index';
-import routes from '../../conf/routes';
 import Resolutions from './components/resolutions';
 
 const Index = () => {
@@ -16,17 +14,14 @@ const Index = () => {
   };
 
   return (
-    <div>
-      <Breadcrumb items={[routes.index]} />
-      <Box>
-        <Tabs value={tabIndex} onChange={handleTabChange}>
-          <Tab label={t('common.resolutions')} />
-          <Tab label={t('common.packingList')} />
-        </Tabs>
-        {tabIndex === TAB_RESOLUTIONS && <Resolutions />}
-        {tabIndex === TAB_PACKING_LIST && <PackingList />}
-      </Box>
-    </div>
+    <Box>
+      <Tabs value={tabIndex} onChange={handleTabChange}>
+        <Tab label={t('common.resolutions')} />
+        <Tab label={t('common.packingList')} />
+      </Tabs>
+      {tabIndex === TAB_RESOLUTIONS && <Resolutions />}
+      {tabIndex === TAB_PACKING_LIST && <PackingList />}
+    </Box>
   );
 };
 

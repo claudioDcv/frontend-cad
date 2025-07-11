@@ -1,6 +1,4 @@
-import { Breadcrumb, NotificationDrawer, Table } from '@/components';
-import routes from '@/conf/routes';
-import { Box } from '@mui/material';
+import { Table } from '@/components';
 import { useMemo } from 'react';
 
 const Notifications = () => {
@@ -48,21 +46,7 @@ const Notifications = () => {
       },
     ];
   }, []);
-  return (
-    <div>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        <Breadcrumb items={[routes.index, routes.notifications]} />
-        <NotificationDrawer />
-      </Box>
-
-      <Table columns={columns} rows={mockNotifications} size="small" />
-    </div>
-  );
+  return <Table columns={columns} rows={mockNotifications} size="small" />;
 };
 
 export default Notifications;

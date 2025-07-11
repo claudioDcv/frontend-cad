@@ -14,15 +14,12 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Key as IconKey } from '@mui/icons-material';
 import { emptyOption, SEARCH_DELAY, STATUS_PRE_RESOLUTION } from '@/constants';
-import routes from '../../conf/routes';
 import {
-  Breadcrumb,
   Table,
   Notification,
   Input,
   DisplayData,
   DropdownController,
-  NotificationDrawer,
 } from '../../components';
 import {
   debounce,
@@ -166,39 +163,28 @@ const ResolutionDetail = () => {
 
   return (
     <div>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        <Breadcrumb items={[routes.index, routes.resolutionDetail]} />
-        <NotificationDrawer />
-      </Box>
-
-      <Card>
+      <Card variant="outlined" sx={{ backgroundColor: '#f5f5f5' }}>
         <CardHeader
           title={getMaterialType(
             t('common.resolution', { id: resolutionId }),
             services.getResolution.data.categoryId
           )}
           action={
-            <>
-              <ButtonGroup size="small">
-                <Button startIcon={<IconKey />} disabled>
-                  {t('common.bag')}
-                </Button>
-                <Button
-                  variant="contained"
-                  disabled={!isAllContractReviewed}
-                  onClick={handleOpenConfirm}
-                >
-                  {t('common.sendCAD')}
-                </Button>
-              </ButtonGroup>
-            </>
+            <ButtonGroup size="small">
+              <Button startIcon={<IconKey />} disabled>
+                {t('common.bag')}
+              </Button>
+              <Button
+                variant="contained"
+                disabled={!isAllContractReviewed}
+                onClick={handleOpenConfirm}
+              >
+                {t('common.sendCAD')}
+              </Button>
+            </ButtonGroup>
           }
         />
+        <Divider />
         <CardContent>
           <Box
             p={2}
@@ -261,7 +247,6 @@ const ResolutionDetail = () => {
           </Box>
         </CardContent>
       </Card>
-      <Divider sx={{ mb: 2 }} />
       <form>
         <Box
           mb={2}

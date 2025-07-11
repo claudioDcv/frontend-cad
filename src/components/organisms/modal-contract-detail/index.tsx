@@ -78,7 +78,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
       </ModalHeader>
       <DialogContent>
         {contract && (
-          <Card>
+          <Card variant="outlined" sx={{ backgroundColor: '#f5f5f5' }}>
             <Box
               p={2}
               display="grid"
