@@ -1,10 +1,13 @@
 export interface Notification {
-  timestamp: number;
+  id: number;
   type: string;
-  message: string;
-  userName: string;
-  userId: number;
-  notificationId: number;
   entity: string;
   entityId: number;
+  userName: string;
+  userId: number;
+  message: string;
+  timestamp: string;
+  viewed: boolean;
+  viewedAt: string;
+  viewedBy: number;
 }

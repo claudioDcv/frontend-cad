@@ -26,7 +26,7 @@ describe('useGetAllResolutions', () => {
     const mockData: PageResponse = {
       content: [
         {
-          resolutionId: '',
+          resolutionId: 0,
           resolutionNumber: 0,
           barcode: 'string',
           dispatchGuide: 0,
@@ -36,12 +36,13 @@ describe('useGetAllResolutions', () => {
           contractCount: 0,
           totalJewels: 0,
           categoryName: 'string',
-          statusName: 'string',
+          stateName: 'string',
           statusId: 0,
           locationAddress: 'string',
           investmentRut: 'string',
           securityBag: 'string',
-          categoryId: '',
+          categoryId: 0,
+          cadMetadata: null
         },
       ],
       totalElements: 1,

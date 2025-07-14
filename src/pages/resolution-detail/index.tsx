@@ -84,7 +84,7 @@ const ResolutionDetail = () => {
       showOnlyNotReviewed ? !contract.cadMetadata?.reviewed : true
     );
 
-  const materialType = getMaterial(services.getResolution.data?.categoryId);
+  const materialType = getMaterial(String(services.getResolution.data?.categoryId));
   const isEditable = contract?.statusId === STATUS_PRE_RESOLUTION;
 
   const debouncedSearchRef = useRef(
@@ -157,7 +157,7 @@ const ResolutionDetail = () => {
     setContract(null);
   };
 
-  const isAllContractReviewed = filteredContracts.every(
+  const isAllContractReviewed = services.getResolutionContracts.data.every(
     (c) => c.cadMetadata?.reviewed
   );
 
@@ -167,7 +167,7 @@ const ResolutionDetail = () => {
         <CardHeader
           title={getMaterialType(
             t('common.resolution', { id: resolutionId }),
-            services.getResolution.data.categoryId
+            String(services.getResolution.data.categoryId)
           )}
           action={
             <ButtonGroup size="small">

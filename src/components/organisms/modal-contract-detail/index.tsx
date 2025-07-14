@@ -20,7 +20,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
   material,
   contract,
   i18n,
-  editable
+  editable,
 }) => {
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
 

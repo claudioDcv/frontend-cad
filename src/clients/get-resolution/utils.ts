@@ -1,7 +1,7 @@
 import { Resolution } from '@/entities/Resolution.entity';
 
 export const initialResolutionData: Resolution = {
-  resolutionId: '',
+  resolutionId: 0,
   resolutionNumber: 0,
   barcode: '',
   dispatchGuide: 0,
@@ -11,10 +11,11 @@ export const initialResolutionData: Resolution = {
   contractCount: 0,
   totalJewels: 0,
   categoryName: '',
-  categoryId: '',
-  statusName: '',
+  categoryId: 0,
+  stateName: '',
   locationAddress: '',
   investmentRut: '',
   securityBag: '',
   statusId: 0,
+  cadMetadata: null
 };

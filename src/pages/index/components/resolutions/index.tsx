@@ -227,8 +227,8 @@ const Resolutions = () => {
             {
               id: 'statusName',
               label: t('resolution.status'),
-              render: ({ statusId, statusName }) =>
-                getStatusIcon(statusId, statusName),
+              render: ({ statusId, stateName }) =>
+                getStatusIcon(statusId, stateName),
             },
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
             { id: 'barcode', label: t('resolution.barcode') },
@@ -245,14 +245,14 @@ const Resolutions = () => {
               id: 'categoryName',
               label: t('common.category'),
               render: ({ categoryName, categoryId }) =>
-                getMaterialType(categoryName, categoryId, 'tooltip'),
+                getMaterialType(categoryName, String(categoryId), 'tooltip'),
             },
             {
               id: 'actions',
               label: t('common.actions'),
               render: ({ resolutionId }) => (
                 <ViewContractsButton
-                  id={resolutionId}
+                  id={String(resolutionId)}
                   label={t('common.viewContracts')}
                 />
               ),

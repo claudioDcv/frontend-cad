@@ -3,5 +3,5 @@ export { default as useGetAllStatus } from './get-all-status';
 export { default as useGetAllInvestments } from './get-all-investments';
 export { default as useGetAllLocations } from './get-all-locations';
 export { default as useGetAllResolutions } from './get-all-resolutions';
-export { default as useGetAllPackingList} from './get-all-packing-list';
-
+export { default as useGetAllPackingList } from './get-all-packing-list';
+export { default as useGetUnviewedNotifications } from './get-unviewed-notifications';

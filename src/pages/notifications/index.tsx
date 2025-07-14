@@ -1,51 +1,33 @@
 import { Table } from '@/components';
+import { mockNotifications } from '@/components/organisms/notification-drawer/mock';
 import { useMemo } from 'react';
 
 const Notifications = () => {
-  const mockNotifications = [
-    {
-      id: '1',
-      title: 'Nuevo contrato agregado',
-      message: 'Se agregó el contrato 123456.',
-      date: '2024-07-10 12:34',
-      read: false,
-    },
-    {
-      id: '2',
-      title: 'Contrato cancelado',
-      message: 'El contrato 789012 fue cancelado.',
-      date: '2024-07-09 09:12',
-      read: true,
-    },
-    {
-      id: '3',
-      title: 'CPC nueva',
-      message: 'Se ha generado una nueva CPC.',
-      date: '2024-07-08 16:22',
-      read: false,
-    },
-  ];
-
   const columns = useMemo(() => {
     return [
       {
-        id: 'title',
-        label: 'Título',
+        id: 'type',
+        label: 'Tipo',
       },
       {
         id: 'message',
         label: 'Mensaje',
       },
       {
-        id: 'date',
+        id: 'timestamp',
         label: 'Fecha',
+        render: (row: (typeof mockNotifications)[0]) =>
+          new Date(row.timestamp).toLocaleString(),
       },
       {
-        id: 'read',
+        id: 'viewed',
         label: 'Leído',
+        render: (row: (typeof mockNotifications)[0]) =>
+          row.viewed ? 'Sí' : 'No',
       },
     ];
   }, []);
+
   return <Table columns={columns} rows={mockNotifications} size="small" />;
 };
 

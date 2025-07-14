@@ -10,9 +10,7 @@ const client = async (props: Resolution): Promise<Resolution> => {
     credentials: 'include',
     method: 'PATCH',
     body: JSON.stringify({
-      //Despues agregar aca los datos que de modifican
-      //   note: clearProp(props.cadMetadata?.note),
-      // reviewed: props.cadMetadata?.reviewed ?? false,
+      metadata: props.cadMetadata,
     }),
   });
 

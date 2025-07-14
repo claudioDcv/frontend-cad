@@ -235,6 +235,8 @@
     "patchReviewedContractParse": "Error al interpretar los datos del contrato revisado del servidor.",
     "patchResolveResolutionFetch": "Error al enviar la resolución. Por favor, inténtalo de nuevo más tarde.",
     "patchResolveResolutionParse": "Error al interpretar la respuesta del servidor al resolver la resolución.",
+    "getAllUnviewedNotificationsFetch": "Error al obtener las notificaciones no vistas. Por favor, inténtalo de nuevo más tarde.",
+    "getAllUnviewedNotificationsParse": "Error al interpretar los datos de notificaciones del servidor.",
     "jsonError": "Error al procesar la respuesta del servidor."
   },
   "notification": {

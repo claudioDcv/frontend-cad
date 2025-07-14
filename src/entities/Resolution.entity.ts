@@ -1,5 +1,14 @@
+export interface ResolutionMetadata {
+  resolutionId: number;
+  resolvedBy: number | null;
+  resolvedAt: string | null;
+  opened: string;
+  openedBy: number | null;
+  openedAt: string | null;
+}
+
 export type Resolution = {
-  resolutionId: string;
+  resolutionId: number;
   resolutionNumber: number;
   barcode: string;
   dispatchGuide: number;
@@ -9,10 +18,11 @@ export type Resolution = {
   contractCount: number;
   totalJewels: number;
   categoryName: string;
-  categoryId: string;
-  statusName: string;
-  statusId: number;
+  stateName: string;
   locationAddress: string;
   investmentRut: string;
   securityBag: string;
+  statusId: number;
+  categoryId: number;
+  cadMetadata: ResolutionMetadata | null;
 };

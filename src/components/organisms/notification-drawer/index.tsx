@@ -15,24 +15,17 @@ import MailIcon from '@mui/icons-material/Mail';
 import { mockNotifications } from './mock';
 import { Notification } from '@/entities/Notification.entity';
 import CardNotification from '@/components/molecules/card-notification';
+import useServices from './hooks/userServices';
 
 const NotificationDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
 
-  // Simular /notifications/unviewed)
-  useEffect(() => {
-    const mockCounts = [
-      { type: 'new-resolution', count: 5 },
-      { type: 'new-cpc', count: 0 },
-      { type: 'cancel-cpc', count: 2 },
-      { type: 'new-any', count: 3 },
-    ];
+  const services = useServices();
 
-    const total = mockCounts.reduce((sum, item) => sum + item.count, 0);
-    setUnreadCount(total);
-  }, []);
+  const getUnreadTotal = () => {
+    return services.getUnviewedNotifications.data?.reduce((sum, item) => sum + item.count, 0) ?? 0;
+  };
 
   useEffect(() => {
     if (drawerOpen) {
@@ -41,11 +34,10 @@ const NotificationDrawer = () => {
     }
   }, [drawerOpen]);
 
-
   return (
     <>
       <IconButton onClick={() => setDrawerOpen(true)}>
-        <Badge badgeContent={unreadCount} color="error">
+        <Badge badgeContent={getUnreadTotal()} color="error">
           <MailIcon />
         </Badge>
       </IconButton>
@@ -64,9 +56,7 @@ const NotificationDrawer = () => {
             {notifications.length === 0 ? (
               <MenuItem disabled>No hay notificaciones</MenuItem>
             ) : (
-              notifications.map((n) => (
-                <CardNotification data={n} key={n.notificationId}/>
-              ))
+              notifications.map((n) => <CardNotification data={n} key={n.id} />)
             )}
           </Box>
           <Divider />
