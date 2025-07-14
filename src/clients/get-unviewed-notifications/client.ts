@@ -10,13 +10,13 @@ const client = async () => {
   });
 
   if (!response.ok) {
-    throw new Error('error.getAllUnviewedNotificationsFetch');
+    throw new Error('error.getUnviewedNotificationsFetch');
   }
 
   try {
     return await response.json();
   } catch {
-    throw new Error('error.getAllUnviewedNotificationsParse');
+    throw new Error('error.getUnviewedNotificationsParse');
   }
 };
 

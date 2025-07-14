@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { FetchStatus, STATUS_CONTRACTS } from '@/constants';
-import { useGetAllStatus } from '@/clients';
-import useGetResolutionContracts from '@/clients/get-resolution-contracts';
-import useGetResolution from '@/clients/get-resolution';
-import usePatchResolutionResolve from '@/clients/patch-resolve-resolution';
+import {
+  useGetAllStatus,
+  useGetResolution,
+  useGetResolutionContracts,
+  usePatchResolutionResolve,
+} from '@/clients';
 
 const useServices = (resolutionId?: string) => {
   const getAllStatus = useGetAllStatus();

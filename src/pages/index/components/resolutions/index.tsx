@@ -33,8 +33,8 @@ import {
   defaultResolutionsFormValues,
   isEmpty,
 } from '../../utils';
-import { ResolutionFormModel } from '../../types';
 import ViewContractsButton from './components/ViewContractsButton';
+import { ResolutionFormModel } from '../../types';
 
 const Resolutions = () => {
   const { t } = useTranslation();

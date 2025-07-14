@@ -19,3 +19,7 @@ export interface PackingListFormModel {
   range: [Date, Date];
   docNumber: string;
 }
+
+export interface NotificationFormModel {
+  page: number;
+}

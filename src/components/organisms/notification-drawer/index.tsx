@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Badge,
   Box,
@@ -12,27 +12,23 @@ import {
 import { Link } from 'wouter';
 import routes from '@/conf/routes';
 import MailIcon from '@mui/icons-material/Mail';
-import { mockNotifications } from './mock';
-import { Notification } from '@/entities/Notification.entity';
 import CardNotification from '@/components/molecules/card-notification';
 import useServices from './hooks/userServices';
 
 const NotificationDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-
   const services = useServices();
 
   const getUnreadTotal = () => {
-    return services.getUnviewedNotifications.data?.reduce((sum, item) => sum + item.count, 0) ?? 0;
+    return (
+      services.getUnviewedNotifications.data?.reduce(
+        (sum, item) => sum + item.count,
+        0
+      ) ?? 0
+    );
   };
 
-  useEffect(() => {
-    if (drawerOpen) {
-      // Simular llamada a /notifications?viewed=false...
-      setNotifications(mockNotifications);
-    }
-  }, [drawerOpen]);
+  const getAllNotifications = services.getAllNotifications.data ?? [];
 
   return (
     <>
@@ -53,10 +49,12 @@ const NotificationDrawer = () => {
           </Box>
           <Divider />
           <Box flex={1} overflow="auto">
-            {notifications.length === 0 ? (
+            {getAllNotifications.meta.count === 0 ? (
               <MenuItem disabled>No hay notificaciones</MenuItem>
             ) : (
-              notifications.map((n) => <CardNotification data={n} key={n.id} />)
+              getAllNotifications.notifications.map((n) => (
+                <CardNotification data={n} key={n.id} />
+              ))
             )}
           </Box>
           <Divider />

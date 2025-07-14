@@ -1,7 +1,11 @@
 import { toDay, defaultStartDate } from '@/utils';
 import { emptyOption, FIRST_PAGE } from '@/constants';
 import { Option } from '@/entities/Option.entity';
-import { PackingListFormModel, ResolutionFormModel } from './types';
+import {
+  NotificationFormModel,
+  PackingListFormModel,
+  ResolutionFormModel,
+} from './types';
 
 export const addOptionAll = (
   options: Option[],
@@ -28,4 +32,8 @@ export const defaultPackingListFormValues: PackingListFormModel = {
   location: emptyOption,
   range: [defaultStartDate, toDay],
   docNumber: '',
+};
+
+export const defaultNotificationFormValues: NotificationFormModel = {
+  page: FIRST_PAGE,
 };

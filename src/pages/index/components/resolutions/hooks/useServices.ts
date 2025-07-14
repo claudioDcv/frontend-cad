@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
+import { FetchStatus, STATUS_RESOLUTION } from '@/constants';
+import { defaultResolutionsFormValues } from '../../../utils';
 import {
   useGetAllInvestments,
   useGetAllLocations,
   useGetAllMaterialTypes,
   useGetAllResolutions,
   useGetAllStatus,
-} from '@clients/index';
-import { FetchStatus, STATUS_RESOLUTION } from '@/constants';
-import { defaultResolutionsFormValues } from '../../../utils';
+} from '@/clients';
 
 const useServices = () => {
   const getAllResolutions = useGetAllResolutions();
