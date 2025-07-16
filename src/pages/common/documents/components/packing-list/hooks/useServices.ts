@@ -7,7 +7,7 @@ import {
   useGetAllPackingList,
   useGetAllStatus,
 } from '@clients/index';
-import { defaultPackingListFormValues } from '@/pages/index/utils';
+import { defaultPackingListFormValues } from '@/pages/common/documents/utils';
 
 const useServices = () => {
   const getAllPackingList = useGetAllPackingList();

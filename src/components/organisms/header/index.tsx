@@ -3,6 +3,7 @@ import breadcrumbs from '@/conf/breadcrumbs';
 import { Box } from '@mui/material';
 import { useLocation } from 'wouter';
 import { matchRoute } from './index.utils';
+import Receiver from '../notification-container/components/receiver';
 
 const Header = () => {
   const [location] = useLocation();
@@ -14,6 +15,7 @@ const Header = () => {
       sx={{ my: 1.2 }}
     >
       <Breadcrumb items={matchRoute(location, breadcrumbs)?.match || []} />
+      <Receiver />
       <NotificationContainer />
     </Box>
   );

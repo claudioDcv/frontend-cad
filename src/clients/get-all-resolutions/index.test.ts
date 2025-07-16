@@ -5,7 +5,7 @@ import * as clientModule from './client';
 import useGetAllResolutions from '.';
 import { PageResponse } from './types';
 import { remap } from './utils';
-import { ResolutionFormModel } from '@/pages/index/types';
+import { ResolutionFormModel } from '@/pages/common/documents/types';
 
 const mockFilters: ResolutionFormModel = {
   page: 0,

@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "start": "npm run build && npm run dev"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

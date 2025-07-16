@@ -4,7 +4,7 @@ import client from './client';
 import { initialPackingListData, remap } from './utils';
 import { PackingListPaginated } from './types';
 import { cleanDate, toOptional } from '../../utils';
-import { PackingListFormModel } from '../../pages/index/types';
+import { PackingListFormModel } from '../../pages/common/documents/types';
 
 const useGetAllPackingList = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);

@@ -21,21 +21,26 @@ const NotificationContainer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const services = useServices();
   const notificationCtx = useNotification();
+  const setter = notificationCtx.setUnviewedCounter;
 
   useEffect(() => {
     const { status, data } = services.getUnviewedNotifications;
     if (status === FetchStatus.SUCCESS) {
       const count = data.reduce((sum, item) => sum + item.count, 0);
-      notificationCtx.setUnviewedCounter(count);
+      setter((prev) => (prev === 0 ? count : prev));
     }
-  }, [notificationCtx, services.getUnviewedNotifications]);
+  }, [services.getUnviewedNotifications, setter]);
 
   const getAllNotifications = services.getAllNotifications.data;
 
   return (
     <>
       <IconButton onClick={() => setDrawerOpen(true)}>
-        <Badge badgeContent={notificationCtx.unviewedCounter} color="error">
+        <Badge
+          badgeContent={notificationCtx.unviewedCounter}
+          color="error"
+          max={1000000}
+        >
           <MailIcon />
         </Badge>
       </IconButton>
@@ -61,7 +66,7 @@ const NotificationContainer = () => {
           </Box>
           <Divider />
           <Box p={2}>
-            <Link to={routes.notifications.link}>
+            <Link to={routes.cordinator.notifications.link}>
               <Button fullWidth variant="contained" color="primary">
                 Ver todas
               </Button>

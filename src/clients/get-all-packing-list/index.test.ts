@@ -5,7 +5,7 @@ import * as clientModule from './client';
 import useGetAllPackingList from '.';
 import { PageResponse } from './types';
 import { remap } from './utils';
-import { PackingListFormModel } from '@/pages/index/types';
+import { PackingListFormModel } from '@/pages/common/documents/types';
 
 const mockFilters: PackingListFormModel = {
   page: 1,

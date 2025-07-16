@@ -3,7 +3,7 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
 import useGetAllNotifications from '.';
-import { NotificationFormModel } from '@/pages/index/types';
+import { NotificationFormModel } from '@/pages/common/documents/types';
 import { initialNotificationData } from './utils';
 
 const mockFilters: NotificationFormModel = {
@@ -19,9 +19,17 @@ describe('useGetAllNotifications', () => {
     const mockData = {
       notifications: [
         {
-          id: 1,
-          title: 'Test Notification',
-          message: 'This is a test',
+          id: 0,
+          type: 'string',
+          entity: 'string',
+          entityId: 0,
+          userName: 'string',
+          userId: 0,
+          message: 'string',
+          timestamp: 'string',
+          viewed: false,
+          viewedAt: 'string',
+          viewedBy: 0,
         },
       ],
       meta: {

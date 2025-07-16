@@ -5,7 +5,7 @@ import { TAB_PACKING_LIST, TAB_RESOLUTIONS } from '@/constants';
 import PackingList from './components/packing-list';
 import Resolutions from './components/resolutions';
 
-const Index = () => {
+const Documents = () => {
   const { t } = useTranslation();
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -25,4 +25,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Documents;

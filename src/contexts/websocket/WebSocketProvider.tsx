@@ -50,14 +50,6 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
       reconnectAttempts: config.reconnectAttempts || 10,
       reconnectInterval: config.reconnectInterval || 5000,
       
-      // Configuración de heartbeat
-      heartbeat: config.heartbeatInterval ? {
-        message: 'ping',
-        returnMessage: 'pong',
-        timeout: 60000,
-        interval: config.heartbeatInterval,
-      } : false,
-      
       // Protocolos
       protocols: config.protocols,
       
@@ -135,13 +127,6 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
     sendJsonMessage(messageWithTimestamp);
   }, [isConnected, sendJsonMessage]);
 
-  // Función para enviar ping
-  const sendPing = useCallback(() => {
-    sendMessage({
-      type: MessageType.PING,
-    });
-  }, [sendMessage]);
-
   // Función para suscribirse a un topic
   const subscribe = useCallback((topic: string) => {
     sendMessage({
@@ -155,7 +140,6 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
     isConnecting,
     readyState,
     sendMessage,
-    sendPing,
     subscribe,
     lastMessage,
     lastJsonMessage: lastJsonMessage as WebSocketMessage | null,

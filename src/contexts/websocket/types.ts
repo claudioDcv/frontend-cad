@@ -3,11 +3,9 @@ import { ReadyState } from 'react-use-websocket';
 // Tipos para los mensajes WebSocket
 export enum MessageType {
   WELCOME = 'welcome',
-  PONG = 'pong',
   SUBSCRIBED = 'subscribed',
   NOTIFICATION = 'notification',
   ERROR = 'error',
-  PING = 'ping',
   SUBSCRIBE = 'subscribe',
 }
 
@@ -38,7 +36,6 @@ export interface WebSocketContextValue {
   
   // Acciones
   sendMessage: (message: WebSocketMessage) => void;
-  sendPing: () => void;
   subscribe: (topic: string) => void;
   
   // Último mensaje recibido

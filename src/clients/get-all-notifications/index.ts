@@ -3,7 +3,7 @@ import { FetchStatus } from '@/constants';
 import client from './client';
 import { NotificationPaginated } from './index.types';
 import { initialNotificationData } from './utils';
-import { NotificationFormModel } from '@/pages/index/types';
+import { NotificationFormModel } from '@/pages/common/documents/types';
 
 const useGetAllNotifications = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);

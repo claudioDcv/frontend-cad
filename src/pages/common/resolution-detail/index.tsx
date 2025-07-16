@@ -12,15 +12,7 @@ import {
   Switch,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Key as IconKey } from '@mui/icons-material';
 import { emptyOption, SEARCH_DELAY, STATUS_PRE_RESOLUTION } from '@/constants';
-import {
-  Table,
-  Notification,
-  Input,
-  DisplayData,
-  DropdownController,
-} from '../../components';
 import {
   debounce,
   formatCurrency,
@@ -30,16 +22,24 @@ import {
   getMaterialType,
   getStatusLabel,
   isOnlyNumbersOrEmpty,
-} from '../../utils';
+} from '../../../utils';
 import { Option } from '@/entities/Option.entity';
-import ModalContractDetail from '../../components/organisms/modal-contract-detail';
-import ContractDetailButton from './components/ContractDetailButton';
 import { useParams } from 'wouter';
 import { Contract } from '@/entities/Contract.entity';
-import ModalConfirm from '@/components/organisms/modal-confirm';
-import { addOptionAll, isEmpty } from '../index/utils';
 import useServices from './hooks/useServices';
+import ContractDetailButton from './components/ContractDetailButton';
 import getContractStatusIcons from './components/ContracStatustIcon';
+import { Key as IconKey } from '@mui/icons-material';
+import {
+  DisplayData,
+  DropdownController,
+  Input,
+  ModalConfirm,
+  ModalContractDetail,
+  Notification,
+  Table,
+} from '@/components';
+import { addOptionAll, isEmpty } from '../documents/utils';
 
 const ResolutionDetail = () => {
   const { id: resolutionId } = useParams<{ id: string }>();
@@ -84,7 +84,9 @@ const ResolutionDetail = () => {
       showOnlyNotReviewed ? !contract.cadMetadata?.reviewed : true
     );
 
-  const materialType = getMaterial(String(services.getResolution.data?.categoryId));
+  const materialType = getMaterial(
+    String(services.getResolution.data?.categoryId)
+  );
   const isEditable = contract?.statusId === STATUS_PRE_RESOLUTION;
 
   const debouncedSearchRef = useRef(

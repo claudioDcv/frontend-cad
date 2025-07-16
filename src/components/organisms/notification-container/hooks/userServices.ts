@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { FetchStatus } from '@/constants';
 import { useGetAllNotifications, useGetUnviewedNotifications } from '@/clients';
-import { defaultNotificationFormValues } from '@/pages/index/utils';
+import { defaultNotificationFormValues } from '@/pages/common/documents/utils';
 
 const useServices = () => {
   const getUnviewedNotifications = useGetUnviewedNotifications();

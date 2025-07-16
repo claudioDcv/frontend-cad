@@ -4,7 +4,7 @@ import client from './client';
 import { ResolutionPaginated } from './types';
 import { toOptional } from '../../utils';
 import { initialResolutiontData } from './utils';
-import { ResolutionFormModel } from '../../pages/index/types';
+import { ResolutionFormModel } from '../../pages/common/documents/types';
 
 const useGetAllResolutions = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);

@@ -209,8 +209,10 @@
   },
 
   "routes": {
-    "home": "Inicio",
-    "resolutions": "Lista de Resoluciones"
+    "operatorDocuments": "Operador",
+    "cordinatorDocuments": "Cordinador",
+    "resolutions": "Lista de Resoluciones",
+    "notifications": "Notificaciones"
   },
   "error": {
     "404Error": "Error 404 - Página no encontrada",

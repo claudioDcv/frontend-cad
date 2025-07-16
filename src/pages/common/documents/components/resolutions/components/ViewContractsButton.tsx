@@ -11,7 +11,7 @@ interface Props {
 
 const ViewContractsButton = ({ id, label, disabled }: Props) => {
   return (
-    <Link to={routes.resolutionDetail.path(id)}>
+    <Link to={routes.cordinator.resolutionDetail.path(id)}>
       <Tooltip title={label}>
         <IconButton disabled={disabled}>{<Visibility />}</IconButton>
       </Tooltip>

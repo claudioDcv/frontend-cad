@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Route, Switch, useLocation } from 'wouter';
 import routes from './conf/routes';
-import Index from './pages/index';
-import ResolutionDetail from './pages/resolution-detail';
-import NotFound from './pages/not-found';
-import Notifications from './pages/notifications';
+import NotFound from './pages/common/not-found';
+import Notifications from './pages/common/notifications';
 import { Header } from './components';
-import Receiver from './components/organisms/notification-container/components/receiver';
+import Index from './pages/common/index';
+import Documents from './pages/common/documents';
+import ResolutionDetail from './pages/common/resolution-detail';
 
 const Router = (props: { hostUrl: string }) => {
   const [location, setLocation] = useLocation();
@@ -33,15 +33,27 @@ const Router = (props: { hostUrl: string }) => {
 
   return (
     <div>
-      <Receiver />
       <Header />
       <Switch>
-        <Route path={routes.index.link} component={Index} />
+        <Route path={routes.common.index.link} component={Index} />
+        <Route path={routes.operator.documents.link} component={Documents} />
         <Route
-          path={routes.resolutionDetail.link}
+          path={routes.operator.resolutionDetail.link}
           component={ResolutionDetail}
         />
-        <Route path={routes.notifications.link} component={Notifications} />
+        <Route
+          path={routes.operator.notifications.link}
+          component={Notifications}
+        />
+        <Route path={routes.cordinator.documents.link} component={Documents} />
+        <Route
+          path={routes.cordinator.resolutionDetail.link}
+          component={ResolutionDetail}
+        />
+        <Route
+          path={routes.cordinator.notifications.link}
+          component={Notifications}
+        />
         <Route component={NotFound} />
       </Switch>
     </div>

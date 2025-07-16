@@ -1,6 +1,8 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export interface NotificationContextValue {
   unviewedCounter: number;
-  setUnviewedCounter: (counter: number) => void;
+  setUnviewedCounter: Dispatch<SetStateAction<number>>;
   add: () => void;
   sub: () => void;
 }
