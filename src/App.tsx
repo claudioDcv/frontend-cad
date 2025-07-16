@@ -3,7 +3,7 @@ import { Alert, Container } from '@mui/material';
 import Router from './Router';
 import useJWTNotification from './hooks/useJWTNotification';
 import { VITE_MOCK_API } from './conf/http';
-import { WebSocketProvider } from './libs/ws';
+import { SharedWebSocketProvider } from './libs/ws';
 import NotificationProvider from './contexts/notification/NotificationProvider';
 
 const wsConfig = {
@@ -23,11 +23,11 @@ function App() {
   return jwtNotification.token || VITE_MOCK_API ? (
     <Container maxWidth="xl">
       <NotificationProvider>
-        <WebSocketProvider
+        <SharedWebSocketProvider
           config={{ ...wsConfig, token: `${jwtNotification.token}` }}
         >
           <Router hostUrl={jwtNotification.hostUrl} />
-        </WebSocketProvider>
+        </SharedWebSocketProvider>
       </NotificationProvider>
     </Container>
   ) : (

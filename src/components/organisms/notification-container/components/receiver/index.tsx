@@ -1,14 +1,14 @@
 import { useNotification } from '@/contexts/notification/useNotification';
-import { useWebSocket, useWebSocketAutoReconnect } from '@/libs/ws';
+import { useSharedWebSocket, useSharedWebSocketAutoReconnect } from '@/libs/ws';
 import { useEffect, useRef } from 'react';
 
 const Receiver = () => {
   const notificationCtx = useNotification();
   const init = useRef<boolean>(false);
   const { isConnected, isConnecting, lastMessage, connect, subscribe } =
-    useWebSocket();
+    useSharedWebSocket();
 
-  const { isReconnecting } = useWebSocketAutoReconnect(
+  const { isReconnecting } = useSharedWebSocketAutoReconnect(
     true, // habilitado
     5, // máximo 5 intentos
     3000 // 3 segundos entre intentos
