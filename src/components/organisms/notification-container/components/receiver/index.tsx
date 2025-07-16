@@ -1,36 +1,32 @@
 import { useNotification } from '@/contexts/notification/useNotification';
-import { useSharedWebSocket, useSharedWebSocketAutoReconnect } from '@/libs/ws';
+import { useWebSocket } from '@/contexts/websocket';
 import { useEffect, useRef } from 'react';
 
 const Receiver = () => {
   const notificationCtx = useNotification();
   const init = useRef<boolean>(false);
-  const { isConnected, isConnecting, lastMessage, connect, subscribe } =
-    useSharedWebSocket();
-
-  const { isReconnecting } = useSharedWebSocketAutoReconnect(
-    true, // habilitado
-    5, // máximo 5 intentos
-    3000 // 3 segundos entre intentos
-  );
+  const { 
+    isConnected, 
+    isConnecting, 
+    lastJsonMessage, 
+    subscribe,
+    readyState 
+  } = useWebSocket();
 
   useEffect(() => {
-    if (!isConnected && !init.current && !isReconnecting) {
+    if (isConnected && !init.current) {
       init.current = true;
-      connect();
-    }
-    if (isConnected && init.current && !isReconnecting) {
       subscribe('alerts');
     }
-  }, [isConnected, connect, isReconnecting, subscribe]);
+  }, [isConnected, subscribe]);
 
   useEffect(() => {
-    if (lastMessage?.type === 'notification') {
+    if (lastJsonMessage?.type === 'notification') {
       notificationCtx.add();
     }
-  }, [notificationCtx, lastMessage]);
+  }, [notificationCtx, lastJsonMessage]);
 
-  return <div>{JSON.stringify({ isConnecting, isConnected })}</div>;
+  return <div>{JSON.stringify({ isConnecting, isConnected, readyState })}</div>;
 };
 
 export default Receiver;
