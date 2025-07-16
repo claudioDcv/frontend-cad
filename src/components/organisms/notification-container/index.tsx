@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Badge,
   Box,
@@ -14,26 +14,28 @@ import routes from '@/conf/routes';
 import MailIcon from '@mui/icons-material/Mail';
 import CardNotification from '@/components/molecules/card-notification';
 import useServices from './hooks/userServices';
+import { useNotification } from '@/contexts/notification/useNotification';
+import { FetchStatus } from '@/constants';
 
-const NotificationDrawer = () => {
+const NotificationContainer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const services = useServices();
+  const notificationCtx = useNotification();
 
-  const getUnreadTotal = () => {
-    return (
-      services.getUnviewedNotifications.data?.reduce(
-        (sum, item) => sum + item.count,
-        0
-      ) ?? 0
-    );
-  };
+  useEffect(() => {
+    const { status, data } = services.getUnviewedNotifications;
+    if (status === FetchStatus.SUCCESS) {
+      const count = data.reduce((sum, item) => sum + item.count, 0);
+      notificationCtx.setUnviewedCounter(count);
+    }
+  }, [notificationCtx, services.getUnviewedNotifications]);
 
-  const getAllNotifications = services.getAllNotifications.data ?? [];
+  const getAllNotifications = services.getAllNotifications.data;
 
   return (
     <>
       <IconButton onClick={() => setDrawerOpen(true)}>
-        <Badge badgeContent={getUnreadTotal()} color="error">
+        <Badge badgeContent={notificationCtx.unviewedCounter} color="error">
           <MailIcon />
         </Badge>
       </IconButton>
@@ -71,4 +73,4 @@ const NotificationDrawer = () => {
   );
 };
 
-export default NotificationDrawer;
+export default NotificationContainer;

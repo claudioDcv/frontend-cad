@@ -5,8 +5,8 @@ import Index from './pages/index';
 import ResolutionDetail from './pages/resolution-detail';
 import NotFound from './pages/not-found';
 import Notifications from './pages/notifications';
-import WsTest from './pages/ws-test';
 import { Header } from './components';
+import Receiver from './components/organisms/notification-container/components/receiver';
 
 const Router = (props: { hostUrl: string }) => {
   const [location, setLocation] = useLocation();
@@ -33,6 +33,7 @@ const Router = (props: { hostUrl: string }) => {
 
   return (
     <div>
+      <Receiver />
       <Header />
       <Switch>
         <Route path={routes.index.link} component={Index} />
@@ -41,7 +42,6 @@ const Router = (props: { hostUrl: string }) => {
           component={ResolutionDetail}
         />
         <Route path={routes.notifications.link} component={Notifications} />
-        <Route path={routes.wsTest.link} component={WsTest} />
         <Route component={NotFound} />
       </Switch>
     </div>

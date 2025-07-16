@@ -16,9 +16,6 @@ export {
   useWebSocket,
 } from './hooks';
 
-// Exportar componente de demostración
-export { WebSocketDemo } from './WebSocketDemo';
-
 // Exportar utilidades
 export {
   WebSocketMessageBuilder,

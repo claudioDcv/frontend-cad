@@ -150,7 +150,7 @@ export function WebSocketProvider({
 
   // Generar ID único para logs
   const generateLogId = useCallback(() => {
-    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
   }, []);
 
   // Función para agregar logs

@@ -10,5 +10,5 @@ export { default as IconList } from './molecules/icon';
 export { default as MonthRangePicker } from './organisms/month-range-picker';
 export { default as Table } from './organisms/table';
 export { default as DropdownController } from './organisms/dropdown-controller';
-export { default as NotificationDrawer } from './organisms/notification-drawer';
+export { default as NotificationContainer } from './organisms/notification-container';
 export { default as Header } from './organisms/header';

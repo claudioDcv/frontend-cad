@@ -1,5 +1,5 @@
 import { Table } from '@/components';
-import { mockNotifications } from '@/components/organisms/notification-drawer/mock';
+import { mockNotifications } from '@/components/organisms/notification-container/mock';
 import { useMemo } from 'react';
 
 const Notifications = () => {

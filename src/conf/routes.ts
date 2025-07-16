@@ -18,10 +18,6 @@ const routes = {
     link: appendPrefix('/notifications'),
     label: 'notificaciones',
   },
-  wsTest: {
-    link: appendPrefix('/ws-test'),
-    label: 'WsTest',
-  },
   notFound: {
     link: '',
     label: 'routes.notFound',
