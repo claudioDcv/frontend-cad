@@ -58,3 +58,9 @@ export const materialMap: Record<string, Material> = {
   '5': 'Steel',
   '6': 'Accessory',
 };
+
+export const validRoles = {
+  operator: 'operator-role',
+  admin: 'admin-role',
+  cordinator: 'cordinator-role',
+};

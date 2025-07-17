@@ -1,3 +1,5 @@
+import { validRoles } from "@/constants";
+
 const prefix = import.meta.env.VITE_URL_PREFIX || '';
 
 const appendPrefix = (path: string) => {
@@ -17,32 +19,34 @@ const common = {
 
 const operator = {
   documents: {
-    link: appendPrefix('/operator'),
+    link: appendPrefix(`/${validRoles.operator}`),
     label: 'routes.operatorDocuments',
   },
   resolutionDetail: {
-    link: appendPrefix('/operator/resolutions/:id'),
-    path: (id: string) => appendPrefix(`/operator/resolutions/${id}`),
+    link: appendPrefix(`/${validRoles.operator}/resolutions/:id`),
+    path: (id: string) =>
+      appendPrefix(`/${validRoles.operator}/resolutions/${id}`),
     label: 'routes.resolutions',
   },
   notifications: {
-    link: appendPrefix('/operator/notifications'),
+    link: appendPrefix(`/${validRoles.operator}/notifications`),
     label: 'routes.notifications',
   },
 };
 
 const cordinator = {
   documents: {
-    link: appendPrefix('/cordinator'),
+    link: appendPrefix(`/${validRoles.cordinator}`),
     label: 'routes.cordinatorDocuments',
   },
   resolutionDetail: {
-    link: appendPrefix('/cordinator/resolutions/:id'),
-    path: (id: string) => appendPrefix(`/cordinator/resolutions/${id}`),
+    link: appendPrefix(`/${validRoles.cordinator}/resolutions/:id`),
+    path: (id: string) =>
+      appendPrefix(`/${validRoles.cordinator}/resolutions/${id}`),
     label: 'routes.resolutions',
   },
   notifications: {
-    link: appendPrefix('/cordinator/notifications'),
+    link: appendPrefix(`/${validRoles.cordinator}/notifications`),
     label: 'routes.notifications',
   },
 };

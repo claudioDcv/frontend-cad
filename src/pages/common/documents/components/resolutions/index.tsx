@@ -33,14 +33,14 @@ import {
   defaultResolutionsFormValues,
   isEmpty,
 } from '../../utils';
-import ViewContractsButton from './components/ViewContractsButton';
+import ResolutionDetailButton from './components/ResolutionDetailButton';
 import { ResolutionFormModel } from '../../types';
 
 const Resolutions = () => {
   const { t } = useTranslation();
 
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
-    defaultValues: defaultResolutionsFormValues,
+    defaultValues: defaultResolutionsFormValues(),
   });
 
   const services = useServices();
@@ -77,7 +77,7 @@ const Resolutions = () => {
     services.getAllInvestments.clearData();
 
     services.getAllResolutions.call({
-      ...defaultResolutionsFormValues,
+      ...defaultResolutionsFormValues(),
     });
   };
 
@@ -251,7 +251,7 @@ const Resolutions = () => {
               id: 'actions',
               label: t('common.actions'),
               render: ({ resolutionId }) => (
-                <ViewContractsButton
+                <ResolutionDetailButton
                   id={String(resolutionId)}
                   label={t('common.viewContracts')}
                 />

@@ -19,7 +19,7 @@ const useServices = () => {
   useEffect(() => {
     if (getAllResolutions.status === FetchStatus.IDLE) {
       getAllResolutions.call({
-        ...defaultResolutionsFormValues,
+        ...defaultResolutionsFormValues(),
       });
     }
     if (getAllStatus.status === FetchStatus.IDLE) {

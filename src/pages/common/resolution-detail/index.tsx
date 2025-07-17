@@ -12,7 +12,12 @@ import {
   Switch,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { emptyOption, SEARCH_DELAY, STATUS_PRE_RESOLUTION } from '@/constants';
+import {
+  emptyOption,
+  SEARCH_DELAY,
+  STATUS_PRE_RESOLUTION,
+  validRoles,
+} from '@/constants';
 import {
   debounce,
   formatCurrency,
@@ -40,6 +45,7 @@ import {
   Table,
 } from '@/components';
 import { addOptionAll, isEmpty } from '../documents/utils';
+import Access from '@/components/atoms/access';
 
 const ResolutionDetail = () => {
   const { id: resolutionId } = useParams<{ id: string }>();
@@ -176,13 +182,15 @@ const ResolutionDetail = () => {
               <Button startIcon={<IconKey />} disabled>
                 {t('common.bag')}
               </Button>
-              <Button
-                variant="contained"
-                disabled={!isAllContractReviewed}
-                onClick={handleOpenConfirm}
-              >
-                {t('common.sendCAD')}
-              </Button>
+              <Access roles={[validRoles.cordinator]}>
+                <Button
+                  variant="contained"
+                  disabled={!isAllContractReviewed}
+                  onClick={handleOpenConfirm}
+                >
+                  {t('common.sendCAD')}
+                </Button>
+              </Access>
             </ButtonGroup>
           }
         />

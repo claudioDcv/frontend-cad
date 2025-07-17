@@ -1,7 +1,10 @@
 export { default as Excerpt } from './atoms/excerpt';
 export { default as DisplayData } from './atoms/display-data';
+export { default as Checkbox } from './atoms/checkbox';
+export { default as Access } from './atoms/access';
 export { default as Pagination } from './molecules/pagination';
 export { default as Dropdown } from './molecules/dropdown';
+export { default as ModalActions } from './molecules/modal-actions';
 export { default as Breadcrumb } from './molecules/breadcrumb';
 export { default as ButtonClear } from './molecules/button-clear';
 export { default as Input } from './molecules/input';

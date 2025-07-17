@@ -14,7 +14,7 @@ export const addOptionAll = (
 
 export const isEmpty = (data?: unknown[]) => !data || data.length === 0;
 
-export const defaultResolutionsFormValues: ResolutionFormModel = {
+export const defaultResolutionsFormValues = (): ResolutionFormModel => ({
   page: FIRST_PAGE,
   categoryId: emptyOption,
   status: emptyOption,
@@ -22,9 +22,9 @@ export const defaultResolutionsFormValues: ResolutionFormModel = {
   location: emptyOption,
   range: [defaultStartDate, toDay],
   resolutionNumber: '',
-};
+});
 
-export const defaultPackingListFormValues: PackingListFormModel = {
+export const defaultPackingListFormValues = (): PackingListFormModel => ({
   page: FIRST_PAGE,
   categoryId: emptyOption,
   status: emptyOption,
@@ -32,8 +32,8 @@ export const defaultPackingListFormValues: PackingListFormModel = {
   location: emptyOption,
   range: [defaultStartDate, toDay],
   docNumber: '',
-};
+});
 
-export const defaultNotificationFormValues: NotificationFormModel = {
+export const defaultNotificationFormValues = (): NotificationFormModel => ({
   page: FIRST_PAGE,
-};
+});

@@ -1,24 +1,25 @@
+import { validRoles } from '@/constants';
 import routes from './routes';
 
 const breadcrumbs = {
   '/': [routes.common.index],
   // Operador
-  '/operator': [routes.common.index, routes.operator.documents],
-  '/operator/resolutions/:id': [
+  [`/${validRoles.operator}`]: [routes.common.index, routes.operator.documents],
+  [`/${validRoles.operator}/resolutions/:id`]: [
     routes.operator.documents,
     routes.operator.resolutionDetail,
   ],
-  '/operator/notifications': [
+  [`/${validRoles.operator}/notifications`]: [
     routes.operator.documents,
     routes.operator.notifications,
   ],
   // Cordinador
-  '/cordinator': [routes.common.index, routes.cordinator.documents],
-  '/cordinator/resolutions/:id': [
+  [`/${validRoles.cordinator}`]: [routes.common.index, routes.cordinator.documents],
+  [`/${validRoles.cordinator}/resolutions/:id`]: [
     routes.cordinator.documents,
     routes.cordinator.resolutionDetail,
   ],
-  '/cordinator/notifications': [
+  [`/${validRoles.cordinator}/notifications`]: [
     routes.cordinator.documents,
     routes.cordinator.notifications,
   ],

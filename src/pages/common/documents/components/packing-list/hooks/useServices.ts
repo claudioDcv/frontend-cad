@@ -19,7 +19,7 @@ const useServices = () => {
   useEffect(() => {
     if (getAllPackingList.status === FetchStatus.IDLE) {
       getAllPackingList.call({
-        ...defaultPackingListFormValues,
+        ...defaultPackingListFormValues(),
       });
     }
     if (getAllStatus.status === FetchStatus.IDLE) {

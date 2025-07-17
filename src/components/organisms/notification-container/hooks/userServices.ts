@@ -14,7 +14,7 @@ const useServices = () => {
 
     if (getAllNotifications.status === FetchStatus.IDLE) {
       getAllNotifications.call({
-        ...defaultNotificationFormValues,
+        ...defaultNotificationFormValues(),
       });
     }
   }, [getAllNotifications, getUnviewedNotifications]);

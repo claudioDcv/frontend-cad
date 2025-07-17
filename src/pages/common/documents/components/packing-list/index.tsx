@@ -39,7 +39,7 @@ const PackingList = () => {
 
   const { control, reset, getValues, setValue } = useForm<PackingListFormModel>(
     {
-      defaultValues: defaultPackingListFormValues,
+      defaultValues: defaultPackingListFormValues(),
     }
   );
 
@@ -78,7 +78,7 @@ const PackingList = () => {
     services.getAllInvestments.clearData();
 
     services.getAllPackingList.call({
-      ...defaultPackingListFormValues,
+      ...defaultPackingListFormValues(),
     });
   };
 
