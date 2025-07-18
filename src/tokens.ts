@@ -43,6 +43,11 @@ interface IIconTemplate {
 }
 
 const IconTemplate: IIconTemplate = {
+  Deleted: {
+    name: 'delete', 
+    description: 'Eliminado',
+    color: Error,
+  },
   Income: {
     name: 'income',
     description: 'Ingreso',

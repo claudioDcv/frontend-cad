@@ -33,9 +33,9 @@ import {
   defaultResolutionsFormValues,
   isEmpty,
 } from '../../utils';
+import { ResolutionFormModel } from '../../types';
 import ResolutionDetailButton from './components/ResolutionDetailButton';
 import ResolutionSendTruckModal from './components/ResolutionSendTruckModal';
-import { ResolutionFormModel } from '../../types';
 import ResolutionMassiveModal from './components/ResolutionMassiveModal';
 
 const Resolutions = () => {

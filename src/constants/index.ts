@@ -3,6 +3,7 @@ import Token from '../tokens';
 
 export const statusToKeyMap: Record<number, keyof typeof Token.IconTemplate> = {
   19: 'AcceptedPayment',
+  22: 'Deleted',
   26: 'ContractAllSaved',
   29: 'ContractReviewed',
   30: 'RejectedPayment',

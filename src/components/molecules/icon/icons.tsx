@@ -4,6 +4,7 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SaveIcon from '@mui/icons-material/Save';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
@@ -34,53 +35,56 @@ const createMuiIcon = (IconComponent: ElementType) => {
 // Factory function for custom icons
 const createCustomIcon = (IconComponent: ElementType) => {
   return (props: Props) => (
-    <IconComponent 
-      color={props.color} 
-      width={props.size || 24} 
-      height={props.size || 24} 
+    <IconComponent
+      color={props.color}
+      width={props.size || 24}
+      height={props.size || 24}
     />
   );
 };
 
 export const icons = {
+  // Delete icon
+  delete: createMuiIcon(DeleteIcon),
+  
   // Send icons
   sent: createMuiIcon(SendIcon),
-  
+
   // Truck document icons
   truckDoc: createMuiIcon(LocalShippingIcon),
-  
+
   // Security bag icon
   securityBag: createMuiIcon(VpnKeyIcon),
-  
+
   // Contract status icons
   contract: createMuiIcon(CheckCircleIcon),
-  
+
   // Save status icons
   save: createMuiIcon(SaveIcon),
-  
+
   // Action icons
   visualize: createMuiIcon(VisibilityIcon),
   download: createMuiIcon(DownloadIcon),
   edit: createMuiIcon(EditIcon),
   next: createMuiIcon(ArrowRightAltIcon),
   update: createMuiIcon(RefreshIcon),
-  
+
   // Note icons
   note: createCustomIcon(NoteIcon),
-  
+
   // Transaction icons
   expenditure: createCustomIcon(ExpenditureIcon),
   income: createCustomIcon(IncomeIcon),
   movement: createCustomIcon(MovementIcon),
   incomeMovement: createCustomIcon(IncomeMovementIcon),
   expenditureMovement: createCustomIcon(ExpenditureMovementIcon),
-  
+
   // Aperture icons
   box: createCustomIcon(BoxIcon),
-  
+
   // Payment status icons
   payment: createCustomIcon(CIcon),
-  
+
   // Account receivable icons
   info: createCustomIcon(InfoIcon),
 };
