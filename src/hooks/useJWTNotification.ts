@@ -29,6 +29,9 @@ const useJWTNotification = () => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent<Message>) => {
       if (event.data.action === 'sendCode') {
+
+        console.log('[Message Received]', event.data);
+
         if (ON_HOST_URL) {
           const hostUrl = event.data.hostUrl.split('#')[1];
           if (hostUrl) {
@@ -37,6 +40,7 @@ const useJWTNotification = () => {
           }
         }
         if (event.data.code) {
+          console.log('[Code]', event.data.code);
           setToken(event.data.code);
           localStorage.setItem(TOKEN_KEY, event.data.code);
         }
