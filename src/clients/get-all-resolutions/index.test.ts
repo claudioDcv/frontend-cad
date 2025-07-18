@@ -17,6 +17,13 @@ const mockFilters: ResolutionFormModel = {
   resolutionNumber: '',
 };
 
+vi.mock('@/utils', () => ({
+  toDay: () => new Date('2025-07-18T00:00:00.000Z'),
+  cleanDate: (date: Date) => date,
+  toOptional: (value: string | undefined) =>
+    value === 'all' ? undefined : value,
+}));
+
 describe('useGetAllResolutions', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -42,7 +49,7 @@ describe('useGetAllResolutions', () => {
           investmentRut: 'string',
           securityBag: 'string',
           categoryId: 0,
-          cadMetadata: null
+          cadMetadata: null,
         },
       ],
       totalElements: 1,

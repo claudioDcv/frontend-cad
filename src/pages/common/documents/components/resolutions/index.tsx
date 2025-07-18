@@ -34,7 +34,9 @@ import {
   isEmpty,
 } from '../../utils';
 import ResolutionDetailButton from './components/ResolutionDetailButton';
+import ResolutionSendTruckModal from './components/ResolutionSendTruckModal';
 import { ResolutionFormModel } from '../../types';
+import ResolutionMassiveModal from './components/ResolutionMassiveModal';
 
 const Resolutions = () => {
   const { t } = useTranslation();
@@ -55,7 +57,7 @@ const Resolutions = () => {
   const isInvestmentDisabled = isEmpty(services.getAllInvestments.data);
   const isLocationDisabled = isEmpty(services.getAllLocations.data);
 
-  const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
+  const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay()]);
 
   const { resolutions, meta } = services.getAllResolutions.data;
 
@@ -72,7 +74,7 @@ const Resolutions = () => {
 
   const handleClear = () => {
     reset(defaultResolutionsFormValues);
-    setRange([defaultStartDate, toDay]);
+    setRange([defaultStartDate, toDay()]);
     services.getAllLocations.clearData();
     services.getAllInvestments.clearData();
 
@@ -251,10 +253,20 @@ const Resolutions = () => {
               id: 'actions',
               label: t('common.actions'),
               render: ({ resolutionId }) => (
-                <ResolutionDetailButton
-                  id={String(resolutionId)}
-                  label={t('common.viewContracts')}
-                />
+                <Box display="flex" gap={1}>
+                  <ResolutionDetailButton
+                    id={String(resolutionId)}
+                    label={t('common.viewContracts')}
+                  />
+                  <ResolutionMassiveModal
+                    id={String(resolutionId)}
+                    label={t('common.massUpload')}
+                  />
+                  <ResolutionSendTruckModal
+                    id={String(resolutionId)}
+                    label={t('common.sendTruck')}
+                  />
+                </Box>
               ),
             },
           ]}

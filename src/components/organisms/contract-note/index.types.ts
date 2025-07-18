@@ -17,6 +17,6 @@ export const initialState: ContractMetadata = {
   reviewedAt: null,
   confirmedBy: null,
   confirmedAt: null,
-  createdAt: toDay.toString(),
+  createdAt: toDay().toString(),
   updatedAt: null,
 };

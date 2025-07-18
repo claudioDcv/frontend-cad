@@ -20,7 +20,7 @@ export const defaultResolutionsFormValues = (): ResolutionFormModel => ({
   status: emptyOption,
   investment: emptyOption,
   location: emptyOption,
-  range: [defaultStartDate, toDay],
+  range: [defaultStartDate, toDay()],
   resolutionNumber: '',
 });
 
@@ -30,7 +30,7 @@ export const defaultPackingListFormValues = (): PackingListFormModel => ({
   status: emptyOption,
   investment: emptyOption,
   location: emptyOption,
-  range: [defaultStartDate, toDay],
+  range: [defaultStartDate, toDay()],
   docNumber: '',
 });
 

@@ -4,12 +4,16 @@ import * as clientModule from './client';
 import useGetAllInvestments from '.';
 import { act, renderHook } from '@testing-library/react';
 
+vi.mock('@/utils', () => ({
+  toDay: () => new Date('2025-07-18T00:00:00Z'),
+}));
+
 describe('useGetAllInvestments', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
-  test('should return data and SUCCESS if the call is successful', async () => {
+  test('returns data and SUCCESS when API call succeeds', async () => {
     const mockRawData = [
       {
         investmentId: 1,
@@ -43,7 +47,7 @@ describe('useGetAllInvestments', () => {
     expect(result.current.error).toBe(null);
   });
 
-  test('should return error and ERROR status if the call fails', async () => {
+  test('returns error and ERROR status when API call fails', async () => {
     const mockError = new Error('API call failed');
     vi.spyOn(clientModule, 'default').mockRejectedValue(mockError);
 
@@ -58,7 +62,7 @@ describe('useGetAllInvestments', () => {
     expect(result.current.error).toBe('API call failed');
   });
 
-  test('should have IDLE status initially', () => {
+  test('has IDLE status initially', () => {
     const { result } = renderHook(() => useGetAllInvestments());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);

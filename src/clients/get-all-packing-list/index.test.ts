@@ -1,11 +1,20 @@
+import { vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, beforeEach } from 'vitest';
 import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
 import useGetAllPackingList from '.';
 import { PageResponse } from './types';
 import { remap } from './utils';
 import { PackingListFormModel } from '@/pages/common/documents/types';
+
+vi.mock('@/utils', () => {
+  return {
+    toDay: () => new Date('2025-07-18T00:00:00.000Z'),
+    cleanDate: (date: Date) => date,
+    toOptional: (value: string | undefined) => (value === 'all' ? undefined : value),
+  };
+});
 
 const mockFilters: PackingListFormModel = {
   page: 1,

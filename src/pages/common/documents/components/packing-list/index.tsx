@@ -45,7 +45,7 @@ const PackingList = () => {
 
   const services = useServices();
 
-  const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay]);
+  const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay()]);
 
   const statusOptions = addOptionAll(services.getAllStatus.data);
   const materialTypeOptions = addOptionAll(services.getAllMaterialType.data);
@@ -73,7 +73,7 @@ const PackingList = () => {
 
   const handleClear = () => {
     reset(defaultPackingListFormValues);
-    setRange([defaultStartDate, toDay]);
+    setRange([defaultStartDate, toDay()]);
     services.getAllLocations.clearData();
     services.getAllInvestments.clearData();
 

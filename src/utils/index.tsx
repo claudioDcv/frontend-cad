@@ -12,16 +12,17 @@ import { MaterialType } from '../components/molecules/material-type';
 import { Material, Size } from '../components/molecules/material-type/types';
 import { Option } from '@/entities/Option.entity';
 
-export const toDay = new Date();
+export const toDay = () => new Date();
+
 export const defaultEndDate = new Date(
-  toDay.getFullYear(),
-  toDay.getMonth() + FIRST_DAY,
+  toDay().getFullYear(),
+  toDay().getMonth() + FIRST_DAY,
   LAST_DAY_OF_PREVIOUS_MONTH
 );
 
 export const defaultStartDate = new Date(
-  toDay.getFullYear() - FIVE_YEARS_AGO,
-  toDay.getMonth(),
+  toDay().getFullYear() - FIVE_YEARS_AGO,
+  toDay().getMonth(),
   FIRST_DAY
 );
 

@@ -1,10 +1,15 @@
+import { vi } from 'vitest';
 import { describe, expect, test } from 'vitest';
 import { columns } from './index.utils';
 import { Jewel } from '@/entities/Jewel.entity';
 import { Column } from '../../organisms/table';
 
-describe('Utils for Modal Contract', () => {
-  test('should define the correct column structure (id and label only)', () => {
+vi.mock('@/utils', () => ({
+  toDay: () => new Date('2025-07-18T00:00:00.000Z'),
+}));
+
+describe('Modal Contract Utils - columns definition', () => {
+  test('should have the expected columns with correct id and label', () => {
     const expectedColumns: Pick<Column<Jewel>, 'id' | 'label'>[] = [
       { id: 'number', label: 'Número' },
       { id: 'description', label: 'Descripción' },
@@ -18,7 +23,7 @@ describe('Utils for Modal Contract', () => {
     expect(simplified).toEqual(expectedColumns);
   });
 
-  test('should have correct column IDs', () => {
+  test('should have correct column ids in order', () => {
     const columnIds = columns.map((col) => col.id);
     expect(columnIds).toEqual([
       'number',
