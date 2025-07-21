@@ -9,7 +9,7 @@ import {
 import ModalActions from '../../molecules/modal-actions';
 import Table from '../table';
 import { initialStateI18N, ModalMassUploadProps } from './index.types';
-import { DisplayData } from '@/components';
+import { DisplayData, IconList } from '@/components';
 import ModalHeader from '@/components/molecules/modal-header';
 
 const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
@@ -25,7 +25,10 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
       <Card variant="outlined" sx={{ backgroundColor: '#f5f5f5' }}>
         <ModalHeader onClose={onClose}>
-          "Carga Masiva Documento Número 1561651565"
+          <Box display="flex" alignItems="center" gap={1}>
+            <IconList name="box" />
+            Documento Número 1561651565
+          </Box>
         </ModalHeader>
         <Divider />
         <CardContent>
