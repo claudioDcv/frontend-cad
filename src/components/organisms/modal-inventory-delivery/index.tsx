@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Dialog, DialogContent } from '@mui/material';
-import { initialStateI18N, InventoryDeliveryProps, Item } from './index.type';
+import { initialStateI18N, InventoryDeliveryProps, Item } from './index.types.ts';
 import ModalActions from '../../molecules/modal-actions';
 import ModalHeader from '../../molecules/modal-header';
 import Dropdown from '../../molecules/dropdown';

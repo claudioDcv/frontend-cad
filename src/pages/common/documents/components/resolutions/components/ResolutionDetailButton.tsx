@@ -4,14 +4,13 @@ import { Link } from 'wouter';
 import routes from '@/conf/routes';
 import useAccess from '@/components/atoms/access/useAccess';
 import { validRoles } from '@/constants';
+import { ButtonResolutionsProps } from './types';
 
-interface Props {
-  id: string;
-  label: string;
-  disabled?: boolean;
-}
-
-const ResolutionDetailButton = ({ id, label, disabled }: Props) => {
+const ResolutionDetailButton = ({
+  id,
+  label,
+  disabled,
+}: ButtonResolutionsProps) => {
   const access = useAccess();
   const getLink = () => {
     if (access([validRoles.admin])) return '';

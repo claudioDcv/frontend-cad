@@ -7,6 +7,7 @@ import {
   FIRST_PAGE,
   LOCATION_ACTIVE,
   SEARCH_DELAY,
+  validRoles,
 } from '@/constants';
 import {
   debounce,
@@ -26,6 +27,7 @@ import {
   Table,
   Notification,
   Input,
+  Access,
 } from '@components/index';
 import useServices from './hooks/useServices';
 import {
@@ -258,10 +260,12 @@ const Resolutions = () => {
                     id={String(resolutionId)}
                     label={t('common.viewContracts')}
                   />
-                  <ResolutionMassiveModal
-                    id={String(resolutionId)}
-                    label={t('common.massUpload')}
-                  />
+                  <Access roles={[validRoles.operator]}>
+                    <ResolutionMassiveModal
+                      id={String(resolutionId)}
+                      label={t('common.massUpload')}
+                    />
+                  </Access>
                   <ResolutionSendTruckModal
                     id={String(resolutionId)}
                     label={t('common.sendTruck')}

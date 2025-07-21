@@ -17,3 +17,4 @@ export { default as NotificationContainer } from './organisms/notification-conta
 export { default as ModalContractDetail } from './organisms/modal-contract-detail';
 export { default as ModalConfirm } from './organisms/modal-confirm';
 export { default as Header } from './organisms/header';
+export { default as ModalMassUpload } from './organisms/modal-massupload';

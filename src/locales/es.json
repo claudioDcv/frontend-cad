@@ -251,10 +251,20 @@
     "warning": "Advertencia",
     "info": "Información",
     "updateNote": "Nota guardada con éxito.",
-    "updateResolve": "La PR {{id}} se envió con éxito."
+    "updateResolve": "La PR {{id}} se envió con éxito.",
+    "sendTruckSuccess": "La PR {{id}} se envió con éxito.",
+    "sendTruckCancel": "La PR {{id}} no se envió."
   },
   "modalConfirm": {
-    "ResolveTitle": "Confirmación de Envío",
-    "ResolveDescription": "¿Estás seguro que deseas enviar la PR {{id}} a CAD?"
+    "confirmationTitle": "Confirmación de Envío",
+    "resolveDescription": "¿Estás seguro que deseas enviar la PR {{id}} a CAD?",
+    "truckDocumentDescription": "¿Estás seguro que deseas enviar la PR {{id}} con fecha {{date}}?",
+    "massiveLoadTitle": "Confirmación Carga Masiva",
+    "massiveLoadDescription": "¿Estás seguro que deseas modificar el envío normal a Carga Masiva para el documento {{id}}?"
+  },
+  "modalInput": {
+    "truckDocumentTitle": "Envío de Documento en Camión",
+    "truckDocumentLabel": "Mensaje",
+    "truckDocumentSuccess": "Marcar como enviado"
   }
 }

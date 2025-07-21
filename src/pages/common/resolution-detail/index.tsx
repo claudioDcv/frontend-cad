@@ -398,8 +398,8 @@ const ResolutionDetail = () => {
         onClose={handleCloseConfirm}
         onSuccess={handleSuccessConfirm}
         i18n={{
-          title: t('modalConfirm.ResolveTitle'),
-          text: t('modalConfirm.ResolveDescription', {
+          title: t('modalConfirm.confirmationTitle'),
+          text: t('modalConfirm.resolveDescription', {
             id: services.getResolution.data.resolutionId,
           }),
           success: t('common.send'),
