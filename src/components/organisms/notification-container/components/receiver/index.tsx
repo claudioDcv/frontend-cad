@@ -80,15 +80,6 @@ const Receiver = () => {
         }}
         title={getStatusText()}
       />
-      {config?.debug && (
-        <span style={{ 
-          fontSize: '0.8em', 
-          color: '#666',
-          fontWeight: 'bold'
-        }}>
-          {config.connectionType?.toUpperCase()}
-        </span>
-      )}
     </div>
   );
 };

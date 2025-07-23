@@ -3,8 +3,8 @@ import useClickOutside from '../hooks/useClickOutside';
 import styles from './EditableRow.module.css';
 
 interface EditableRowProps {
-  value: string; // Siempre debe venir con punto como separador
-  onChange: (value: string) => void; // Debe retornar siempre con punto
+  value: string;
+  onChange: (value: string) => boolean;
   type?: 'text' | 'number';
 }
 
@@ -45,10 +45,15 @@ const EditableRow: React.FC<EditableRowProps> = ({
     const val = event.target.value;
 
     if (type === 'number') {
-      // Solo acepta coma como separador decimal
       const validRegex = /^-?\d*,?\d*$/;
       if (validRegex.test(val) || val === '' || val === '-') {
-        setInputValue(val);
+        const accepted = onChange(val.replace(',', '.'));
+
+        if (accepted) {
+          setInputValue(val);
+        } else {
+          setInputValue(value.replace('.', ','));
+        }
       }
     } else {
       setInputValue(val);

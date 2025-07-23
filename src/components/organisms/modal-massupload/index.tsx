@@ -1,16 +1,10 @@
-import {
-  Dialog,
-  DialogContent,
-  Box,
-  Card,
-  Divider,
-  CardContent,
-} from '@mui/material';
+import { useState } from 'react';
+import { Dialog, DialogContent, Box, Card, Divider } from '@mui/material';
 import ModalActions from '../../molecules/modal-actions';
+import { DisplayData, EditableTable, IconList } from '@/components';
 import { initialStateI18N, ModalMassUploadProps } from './index.types';
-import { DisplayData, IconList } from '@/components';
 import ModalHeader from '@/components/molecules/modal-header';
-import EditableTable from '../inventory-editable-table';
+import styles from './index.module.css'; // Asegúrate que esté apuntando bien
 
 const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   open,
@@ -18,6 +12,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   i18n,
 }) => {
   const lang = i18n ? { ...initialStateI18N, ...i18n } : initialStateI18N;
+  const [isValid, setIsValid] = useState(false);
 
   const handleSuccess = () => {};
 
@@ -29,38 +24,44 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
           Documento Número 1561651565
         </ModalHeader>
         <Divider />
-        <CardContent>
-          <Box
-            p={2}
-            display="grid"
-            gridTemplateColumns="repeat(3, 1fr)"
-            gap={2}
-          >
-            <Box>
-              <DisplayData label="Peso total" value="500 grs" />
-              <DisplayData label="Compra venta" value="$234.000" />
-              <DisplayData label="Promedio Compra" value="$12.550" />
-            </Box>
-            <Box>
-              <DisplayData label="Responsable" value="Alejandro Cisternas" />
-              <DisplayData label="Vencimiento" value="12/05/2024" />
-            </Box>
-            <Box>
-              <DisplayData label="Cliente" value="Nestor Cantillana Perez" />
-              <DisplayData label="RUT" value="10.548.548-5" />
-            </Box>
-          </Box>
-        </CardContent>
       </Card>
+
       <form onSubmit={handleSuccess}>
         <DialogContent>
           <Box display="flex" gap={2}>
+            <Box className={styles.leftPanel}>
+              <Box>
+                <DisplayData label="Peso total" value="500 grs" />
+                <DisplayData label="Compra venta" value="$234.000" />
+                <DisplayData label="Promedio Compra" value="$12.550" />
+              </Box>
+              <Divider />
+              <Box>
+                <DisplayData label="Responsable" value="Alejandro Cisternas" />
+                <DisplayData label="Vencimiento" value="12/05/2024" />
+              </Box>
+              <Divider />
+              <Box>
+                <DisplayData label="Cliente" value="Nestor Cantillana Perez" />
+                <DisplayData label="RUT" value="10.548.548-5" />
+              </Box>
+            </Box>
+
             <Box flex={2}>
-              <EditableTable total={{ quantity: 100, weight: 1000 }} />
+              <EditableTable
+                total={{ quantity: 100, weight: 1000 }}
+                onValid={setIsValid}
+              />
             </Box>
           </Box>
         </DialogContent>
-        <ModalActions i18n={lang} onClose={onClose} loading={false} />
+
+        <ModalActions
+          i18n={lang}
+          onClose={onClose}
+          loading={false}
+          disabled={!isValid}
+        />
       </form>
     </Dialog>
   );

@@ -14,17 +14,17 @@
     background-color: #fff;
   }
   
-  .caption {
-    caption-side: top;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    font-weight: 500;
-    font-size: 1rem;
-    padding: 8px 0;
-    color: rgba(0, 0, 0, 0.87);
-  } 
-  
+.caption {
+  caption-side: top;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 8px 0;
+  color: rgba(0, 0, 0, 0.87);
+} 
+
   .captionMessage {
     text-align: right;
     color: rgba(0, 0, 0, 0.6);
@@ -56,3 +56,12 @@
     cursor: default;
   }
   
+  .validRow td {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .invalidRow td {
+    background-color: #ffebee; 
+    color: #c62828;
+  }
