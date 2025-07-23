@@ -1,15 +1,14 @@
 .container {
-    display: block;      /* para que ocupe el ancho completo del td */
-    width: 100%;         /* ocupa todo el ancho del td */
-    min-width: 4rem;     /* ancho mínimo */
-    padding: 4px 8px;    
-    border-radius: 4px;
+    display: block;
+    height: 100%;
+    width: 100%;
+    min-width: 4rem;
+    padding: 0;    
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     border-width: 1px;
     border-style: solid;
     border-color: rgba(0, 0, 0, 0);
     cursor: text;
-    box-sizing: border-box; /* importante para que padding no aumente el ancho */
   }
   
   .container:hover {
@@ -26,10 +25,10 @@
     height: 100%;
     border: none;
     border-radius: 0;
-    padding: 0;
+    padding: 6px 14px;
     font-size: inherit;
     outline: none;
     background: transparent;
-    box-sizing: border-box; /* para el padding */
+    box-sizing: border-box;
   }
   

@@ -10,7 +10,7 @@ import ModalActions from '../../molecules/modal-actions';
 import { initialStateI18N, ModalMassUploadProps } from './index.types';
 import { DisplayData, IconList } from '@/components';
 import ModalHeader from '@/components/molecules/modal-header';
-import EditableTable from '../editable-table';
+import EditableTable from '../inventory-editable-table';
 
 const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   open,
@@ -56,7 +56,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
         <DialogContent>
           <Box display="flex" gap={2}>
             <Box flex={2}>
-              <EditableTable />
+              <EditableTable total={{ quantity: 100, weight: 1000 }} />
             </Box>
           </Box>
         </DialogContent>

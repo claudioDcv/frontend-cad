@@ -38,8 +38,11 @@
   
   th, td {
     text-align: left;
-    padding: 8px 16px;
+    padding: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    & > div {
+      padding: 8px 16px;
+    }
   }
   
   th {
@@ -49,7 +52,7 @@
   }
   
   tbody tr:hover {
-    background-color: rgba(25, 118, 210, 0.04); /* Primary color hover */
+    background-color: rgba(25, 118, 210, 0.04);
     cursor: default;
   }
   

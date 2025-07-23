@@ -9,12 +9,26 @@ interface Data {
   weight: number;
 }
 
-const EditableTable = () => {
+interface Total {
+  quantity: number;
+  weight: number;
+}
+
+interface EditableTableProps {
+  total: Total;
+}
+
+const InventoryEditableTable = (props: EditableTableProps) => {
   const [data, setData] = useState<Data[]>([
-    { inventory: 'INV001', quantity: 10, weight: 50 },
-    { inventory: 'INV002', quantity: 5, weight: 30 },
-    { inventory: 'INV003', quantity: 8, weight: 45 },
-    { inventory: 'INV004', quantity: 2, weight: 20 },
+    // TODO
+    //se parte en 0, no se puede distribuir y otorgar mas peso que el del total,
+    //boton que solo se activa si es valido
+    // si quantity o weight se pasan, quedan en color rojo
+    // y cuando esta todo distribuido queda en verde
+    { inventory: 'INV001', quantity: 0, weight: 0 },
+    { inventory: 'INV002', quantity: 0, weight: 0 },
+    { inventory: 'INV003', quantity: 0, weight: 0 },
+    { inventory: 'INV004', quantity: 0, weight: 0 },
   ]);
 
   const handleChange = (
@@ -44,15 +58,23 @@ const EditableTable = () => {
         <table className={styles.table}>
           <thead className={styles.thead}>
             <tr>
-              <th style={thStyle}>Inventario</th>
-              <th style={thStyle}>Cantidad</th>
-              <th style={thStyle}>Peso Neto (gr)</th>
+              <th style={thStyle}>
+                <div>Inventario</div>
+              </th>
+              <th style={thStyle}>
+                <div>Cantidad</div>
+              </th>
+              <th style={thStyle}>
+                <div>Peso Neto (gr)</div>
+              </th>
             </tr>
           </thead>
           <tbody>
             {data.map((row, index) => (
               <tr key={row.inventory}>
-                <td>{row.inventory}</td>
+                <td>
+                  <div>{row.inventory}</div>
+                </td>
                 <td>
                   <EditableRow
                     value={String(row.quantity)}
@@ -74,4 +96,4 @@ const EditableTable = () => {
   );
 };
 
-export default EditableTable;
+export default InventoryEditableTable;

@@ -27,10 +27,9 @@ const EditableRow: React.FC<EditableRowProps> = ({
 
       if (!isNaN(parsed)) {
         const stringified = parsed.toString();
-        onChange(stringified); // Devuelve siempre con punto
-        setInputValue(stringified.replace('.', ',')); // Se vuelve a mostrar con coma
+        onChange(stringified);
+        setInputValue(stringified.replace('.', ','));
       } else {
-        // Si no es válido, se revierte al valor original formateado con coma
         setInputValue(value.replace('.', ','));
       }
     } else {
@@ -56,21 +55,25 @@ const EditableRow: React.FC<EditableRowProps> = ({
     }
   };
 
-  // Refresca el input si cambia el prop externo
   useEffect(() => {
     setInputValue(value.replace('.', ','));
   }, [value]);
 
   return (
-    <div ref={ref} onClick={handleClick} className={styles.container} data-focus={editable}>
-        <input
-          value={inputValue}
-          onChange={handleChange}
-          autoFocus
-          type="text"
-          className={styles.input}
-          readOnly={!editable}
-        />
+    <div
+      ref={ref}
+      onClick={handleClick}
+      className={styles.container}
+      data-focus={editable}
+    >
+      <input
+        value={inputValue}
+        onChange={handleChange}
+        autoFocus
+        type="text"
+        className={styles.input}
+        readOnly={!editable}
+      />
     </div>
   );
 };
