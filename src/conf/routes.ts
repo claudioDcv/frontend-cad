@@ -1,4 +1,4 @@
-import { validRoles } from "@/constants";
+import { validRoles } from '@/constants';
 
 const prefix = import.meta.env.VITE_URL_PREFIX || '';
 
@@ -28,6 +28,12 @@ const operator = {
       appendPrefix(`/${validRoles.operator}/resolutions/${id}`),
     label: 'routes.resolutions',
   },
+  packinglistDetail: {
+    link: appendPrefix(`/${validRoles.operator}/packinglist/:id`),
+    path: (id: string) =>
+      appendPrefix(`/${validRoles.operator}/packinglist/${id}`),
+    label: 'routes.packingList',
+  },
   notifications: {
     link: appendPrefix(`/${validRoles.operator}/notifications`),
     label: 'routes.notifications',
@@ -44,6 +50,12 @@ const cordinator = {
     path: (id: string) =>
       appendPrefix(`/${validRoles.cordinator}/resolutions/${id}`),
     label: 'routes.resolutions',
+  },
+  packinglistDetail: {
+    link: appendPrefix(`/${validRoles.cordinator}/packinglist/:id`),
+    path: (id: string) =>
+      appendPrefix(`/${validRoles.cordinator}/packinglist/${id}`),
+    label: 'routes.packingList',
   },
   notifications: {
     link: appendPrefix(`/${validRoles.cordinator}/notifications`),

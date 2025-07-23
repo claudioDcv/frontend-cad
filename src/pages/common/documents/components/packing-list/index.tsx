@@ -33,6 +33,7 @@ import {
   defaultPackingListFormValues,
   isEmpty,
 } from '../../utils';
+import PackingListDetailButton from './components/PackinglistDetailButton';
 
 const PackingList = () => {
   const { t } = useTranslation();
@@ -248,6 +249,18 @@ const PackingList = () => {
                 getMaterialType(categoryName, categoryId, 'tooltip'),
             },
             { id: 'documentType', label: t('packinglist.documentType') },
+            {
+              id: 'actions',
+              label: t('common.actions'),
+              render: ({ packinglistId }) => (
+                <Box display="flex" gap={1}>
+                  <PackingListDetailButton
+                    id={String(packinglistId)}
+                    label={t('common.viewContracts')}
+                  />
+                </Box>
+              ),
+            },
           ]}
           rows={packingList}
           messageVoidData={t('common.noData')}

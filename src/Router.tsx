@@ -7,6 +7,7 @@ import { Header } from './components';
 import Index from './pages/common/index';
 import Documents from './pages/common/documents';
 import ResolutionDetail from './pages/common/resolution-detail';
+import PackingListDetail from './pages/common/packinglist-detail';
 
 const Router = (props: { hostUrl: string }) => {
   const [location, setLocation] = useLocation();
@@ -42,6 +43,10 @@ const Router = (props: { hostUrl: string }) => {
           component={ResolutionDetail}
         />
         <Route
+          path={routes.operator.packinglistDetail.link}
+          component={PackingListDetail}
+        />
+        <Route
           path={routes.operator.notifications.link}
           component={Notifications}
         />
@@ -49,6 +54,10 @@ const Router = (props: { hostUrl: string }) => {
         <Route
           path={routes.cordinator.resolutionDetail.link}
           component={ResolutionDetail}
+        />
+        <Route
+          path={routes.cordinator.packinglistDetail.link}
+          component={PackingListDetail}
         />
         <Route
           path={routes.cordinator.notifications.link}

@@ -4,6 +4,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { TAB_PACKING_LIST, TAB_RESOLUTIONS } from '@/constants';
 import PackingList from './components/packing-list';
 import Resolutions from './components/resolutions';
+import ResolutionMassiveModal from './components/resolutions/components/ResolutionMassiveModal';
 
 const Documents = () => {
   const { t } = useTranslation();
@@ -15,6 +16,7 @@ const Documents = () => {
 
   return (
     <Box>
+      <ResolutionMassiveModal id={String(1)} label={t('common.massUpload')} />
       <Tabs value={tabIndex} onChange={handleTabChange}>
         <Tab label={t('common.resolutions')} />
         <Tab label={t('common.packingList')} />
