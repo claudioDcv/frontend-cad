@@ -165,9 +165,9 @@ const ResolutionDetail = () => {
     setContract(null);
   };
 
-  const isAllContractReviewed = services.getResolutionContracts.data.every(
-    (c) => c.cadMetadata?.reviewed
-  );
+  const isAllContractReviewed =
+    services.getResolutionContracts.data.length > 0 &&
+    services.getResolutionContracts.data.every((c) => c.cadMetadata?.reviewed);
 
   return (
     <div>

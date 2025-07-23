@@ -26,9 +26,9 @@ function App() {
     <Container maxWidth="xl">
       <NotificationProvider>
         <WebSocketProvider
-          config={{ 
-            ...wsConfig, 
-            token: jwtNotification.token || '' // Asegurar que no sea undefined
+          config={{
+            ...wsConfig,
+            token: jwtNotification.token || '',
           }}
         >
           <Router hostUrl={jwtNotification.hostUrl} />

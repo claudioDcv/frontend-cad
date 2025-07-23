@@ -18,12 +18,14 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
-      <Card variant="outlined" sx={{ backgroundColor: '#f5f5f5' }}>
+      <Card
+        variant="outlined"
+        sx={{ backgroundColor: '#f5f5f5', borderRadius: 0 }}
+      >
         <ModalHeader onClose={onClose}>
           <IconList name="box" />
           Documento Número 1561651565
         </ModalHeader>
-        <Divider />
       </Card>
 
       <form onSubmit={handleSuccess}>
