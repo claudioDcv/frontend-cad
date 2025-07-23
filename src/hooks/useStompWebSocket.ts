@@ -68,22 +68,30 @@ export const useStompWebSocket = (config: StompConfig): StompConnection => {
 
   const subscribeToTopics = useCallback(() => {
     const client = stompClientRef.current;
-    if (!client || !isConnected) {
-      addDebugMessage("No hay conexión STOMP activa", 'error');
+    if (!client) {
+      addDebugMessage("❌ No hay cliente STOMP disponible para subscripción", 'error');
+      return;
+    }
+
+    if (!client.connected) {
+      addDebugMessage("❌ Cliente STOMP no está conectado para subscripción", 'error');
       return;
     }
 
     try {
+      addDebugMessage("🔄 Iniciando subscripciones automáticas...", 'info');
+      
       // Suscribirse al tópico principal de notificaciones
       client.subscribe('/topic/notifications', (message) => {
         try {
           const notification: StompMessage = JSON.parse(message.body);
-          addDebugMessage(`📢 NOTIFICACIÓN recibida: ${JSON.stringify(notification, null, 2)}`, 'success');
+          addDebugMessage(`📢 NOTIFICACIÓN recibida en /topic/notifications: ${JSON.stringify(notification, null, 2)}`, 'success');
           setLastNotification(notification);
         } catch (error) {
           addDebugMessage(`Error parseando notificación: ${error}`, 'error');
         }
       });
+      addDebugMessage("✅ Suscripción a /topic/notifications exitosa", 'success');
 
       // Suscribirse a mensajes de pong personales
       client.subscribe('/user/queue/pong', (message) => {
@@ -94,12 +102,13 @@ export const useStompWebSocket = (config: StompConfig): StompConnection => {
           addDebugMessage(`Error parseando pong: ${error}`, 'error');
         }
       });
+      addDebugMessage("✅ Suscripción a /user/queue/pong exitosa", 'success');
 
-      addDebugMessage('📡 Suscrito a /topic/notifications y /user/queue/pong', 'success');
+      addDebugMessage('📡 Suscrito a /topic/notifications y /user/queue/pong - Auto-subscripción completa!', 'success');
     } catch (error) {
-      addDebugMessage(`Error en suscripciones: ${error}`, 'error');
+      addDebugMessage(`❌ Error en suscripciones: ${error}`, 'error');
     }
-  }, [isConnected, addDebugMessage]);
+  }, [addDebugMessage]);
 
   const connect = useCallback(() => {
     if (isConnected || isConnecting) {
@@ -128,11 +137,14 @@ export const useStompWebSocket = (config: StompConfig): StompConnection => {
       // Crear socket SockJS
       const socket = new SockJS(config.url);
       
+      // Headers de conexión con JWT
+      const authHeader = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+      
       // Crear cliente STOMP
       const client = new Client({
         webSocketFactory: () => socket,
         connectHeaders: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': authHeader
         },
         debug: config.debug ? (str) => console.log('STOMP Debug:', str) : undefined,
         reconnectDelay: 5000,
@@ -150,8 +162,10 @@ export const useStompWebSocket = (config: StompConfig): StompConnection => {
         setError(null);
         setReconnectAttempts(0);
         
-        // Auto-suscribirse a los tópicos
-        subscribeToTopics();
+        // Auto-suscribirse a los tópicos con un pequeño delay para asegurar conexión completa
+        setTimeout(() => {
+          subscribeToTopics();
+        }, 100);
       };
 
       client.onStompError = (frame) => {

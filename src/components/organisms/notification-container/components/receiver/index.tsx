@@ -28,10 +28,11 @@ const Receiver = () => {
   // Manejar notificaciones STOMP
   useEffect(() => {
     if (config?.connectionType === 'stomp' && lastNotification) {
-      console.log('[Receiver] Nueva notificación STOMP:', lastNotification);
+      console.log('[Receiver] Nueva notificación STOMP desde /topic/notifications:', lastNotification);
       
       // Verificar si es una notificación válida
       if (lastNotification.contenido || lastNotification.tipo) {
+        console.log('[Receiver] Incrementando contador de notificaciones');
         add();
       }
     }
