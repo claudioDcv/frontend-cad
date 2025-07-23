@@ -33,7 +33,7 @@ import {
   defaultPackingListFormValues,
   isEmpty,
 } from '../../utils';
-import PackingListDetailButton from './components/PackinglistDetailButton';
+import PackingListDetailButton from './components/PackingListDetailButton';
 
 const PackingList = () => {
   const { t } = useTranslation();
