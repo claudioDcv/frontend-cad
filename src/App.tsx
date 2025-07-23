@@ -26,7 +26,10 @@ function App() {
     <Container maxWidth="xl">
       <NotificationProvider>
         <WebSocketProvider
-          config={{ ...wsConfig, token: `${jwtNotification.token}` }}
+          config={{ 
+            ...wsConfig, 
+            token: jwtNotification.token || '' // Asegurar que no sea undefined
+          }}
         >
           <Router hostUrl={jwtNotification.hostUrl} />
         </WebSocketProvider>
@@ -34,7 +37,7 @@ function App() {
     </Container>
   ) : (
     <Alert severity="info" sx={{ marginTop: 2 }}>
-      Cargando
+      Cargando token de autenticación...
     </Alert>
   );
 }

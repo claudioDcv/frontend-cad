@@ -276,15 +276,24 @@ export const useStompWebSocket = (config: StompConfig): StompConnection => {
 
   // Auto-conectar cuando cambie el token (si es válido)
   useEffect(() => {
-    if (config.token && !isConnected && !isConnecting) {
-      // Pequeño delay para evitar conexiones múltiples
-      const timer = setTimeout(() => {
-        connect();
-      }, 1000);
-      
-      return () => clearTimeout(timer);
+    if (config.token && config.token.length > 0 && !isConnected && !isConnecting) {
+      // Validar formato JWT antes de intentar conectar
+      const jwtParts = config.token.split('.');
+      if (jwtParts.length === 3) {
+        // Pequeño delay para evitar conexiones múltiples
+        const timer = setTimeout(() => {
+          addDebugMessage(`Auto-conectando con token válido...`);
+          connect();
+        }, 1000);
+        
+        return () => clearTimeout(timer);
+      } else {
+        addDebugMessage('Token no tiene formato JWT válido, no auto-conectando', 'error');
+      }
+    } else if (!config.token || config.token.length === 0) {
+      addDebugMessage('Token vacío, esperando token válido...', 'info');
     }
-  }, [config.token, isConnected, isConnecting, connect]);
+  }, [config.token, isConnected, isConnecting, connect, addDebugMessage]);
 
   return {
     isConnected,
