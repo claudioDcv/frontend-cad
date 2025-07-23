@@ -1,6 +1,6 @@
 import { ReadyState } from 'react-use-websocket';
 
-// Tipos para los mensajes WebSocket
+// Tipos para los mensajes WebSocket - Mantenemos compatibilidad pero agregamos STOMP
 export enum MessageType {
   WELCOME = 'welcome',
   SUBSCRIBED = 'subscribed',
@@ -18,6 +18,15 @@ export interface WebSocketMessage {
   message?: string;
 }
 
+// Nuevos tipos para STOMP
+export interface StompNotification {
+  contenido?: string;
+  tipo?: string;
+  importante?: boolean;
+  timestamp?: string;
+  [key: string]: unknown;
+}
+
 export interface WebSocketConfig {
   url: string;
   token?: string;
@@ -26,6 +35,8 @@ export interface WebSocketConfig {
   reconnectInterval?: number;
   heartbeatInterval?: number;
   debug?: boolean;
+  // Nuevo: tipo de conexión
+  connectionType?: 'websocket' | 'stomp';
 }
 
 export interface WebSocketContextValue {
@@ -34,17 +45,25 @@ export interface WebSocketContextValue {
   isConnecting: boolean;
   readyState: ReadyState;
   
-  // Acciones
+  // Acciones - mantener compatibilidad
   sendMessage: (message: WebSocketMessage) => void;
   subscribe: (topic: string) => void;
+  
+  // Nuevas acciones STOMP
+  sendNotification?: (notification: StompNotification) => void;
+  sendPing?: () => void;
   
   // Último mensaje recibido
   lastMessage: MessageEvent<string> | null;
   lastJsonMessage: WebSocketMessage | null;
+  lastNotification?: StompNotification | null;
   
   // Error
   error: string | null;
   
   // Configuración
   config: WebSocketConfig | null;
+  
+  // Stats
+  reconnectAttempts?: number;
 }

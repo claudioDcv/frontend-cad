@@ -8,6 +8,7 @@ import Index from './pages/common/index';
 import Documents from './pages/common/documents';
 import ResolutionDetail from './pages/common/resolution-detail';
 import PackingListDetail from './pages/common/packinglist-detail';
+import StompTestPage from './pages/common/stomp-test';
 
 const Router = (props: { hostUrl: string }) => {
   const [location, setLocation] = useLocation();
@@ -63,6 +64,7 @@ const Router = (props: { hostUrl: string }) => {
           path={routes.cordinator.notifications.link}
           component={Notifications}
         />
+        <Route path="/stomp-test" component={StompTestPage} />
         <Route component={NotFound} />
       </Switch>
     </div>

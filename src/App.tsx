@@ -7,10 +7,12 @@ import { WebSocketProvider } from './contexts/websocket';
 import NotificationProvider from './contexts/notification/NotificationProvider';
 
 const wsConfig = {
-  url: 'ws://172.16.22.240:3003/ws/notifications',
+  url: 'http://172.16.22.240:3003/ws/notifications',
   token: '',
   heartbeatInterval: 30000,
-  debug: false,
+  debug: true, // Habilitar debug para ver los logs STOMP
+  connectionType: 'stomp' as const, // Forzar el uso de STOMP
+  maxReconnectAttempts: 5,
 };
 
 function App() {
