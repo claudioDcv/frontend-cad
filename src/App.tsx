@@ -2,16 +2,16 @@ import { useEffect } from 'react';
 import { Alert, Container } from '@mui/material';
 import Router from './Router';
 import useJWTNotification from './hooks/useJWTNotification';
-import { VITE_MOCK_API } from './conf/http';
+import { VITE_MOCK_API, WEBSOCKET_BASE } from './conf/http';
 import { WebSocketProvider } from './contexts/websocket';
 import NotificationProvider from './contexts/notification/NotificationProvider';
 
 const wsConfig = {
-  url: 'http://172.16.22.240:3003/ws/notifications',
+  url: WEBSOCKET_BASE,
   token: '',
   heartbeatInterval: 30000,
-  debug: true, // Habilitar debug para ver los logs STOMP
-  connectionType: 'stomp' as const, // Forzar el uso de STOMP
+  debug: false,
+  connectionType: 'stomp' as const,
   maxReconnectAttempts: 5,
 };
 

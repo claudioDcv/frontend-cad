@@ -20,6 +20,17 @@ interface EditableTableProps {
   onValid?: (isValid: boolean) => void;
 }
 
+// TODO: que diga grs pero si es 1 es gr, si es 0 es und , sino unds, blanco de la izquierda al plomo
+// y que los colores sean individuales, tambien preparar los 3 clientes para los endpoints
+// solo pongo color si es exacto, el guardar guarda, sacar la restriccion
+// agregar boton resolucionar, que hara: al presionar levanta modal y que pida confirmacion, dentro
+// ver un alert y dentro de ese salga un warning si es que falta cantidad/distribucion,
+// mostrar las diferencia si es el caso "faltan 14grs por asignar"
+// Preguntar si tiene metadata, si es el caso, no permitir enviar
+// decirle a Carolina que no permita enviar a cad si tiene metadata
+// para el operador solo debe de mostrar las resoluciones que tienen metadata
+// agregar un filtro hasMetadata (true/false) / Carolina tambien
+
 const InventoryEditableTable = (props: EditableTableProps) => {
   const [data, setData] = useState<Data[]>([
     { inventory: 'Anillos (Refaccion)', quantity: 0, weight: 0 },

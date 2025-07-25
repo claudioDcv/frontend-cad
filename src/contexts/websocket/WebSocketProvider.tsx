@@ -1,10 +1,12 @@
-import React, { createContext, ReactNode, useCallback, useEffect } from 'react';
+import React, { createContext, ReactNode, useCallback, useEffect, useMemo } from 'react';
 import useWebSocketHook, { ReadyState } from 'react-use-websocket';
+import { useStompWebSocket } from '../../hooks/useStompWebSocket';
 import { 
   WebSocketContextValue, 
   WebSocketConfig, 
   WebSocketMessage, 
-  MessageType 
+  MessageType,
+  StompNotification
 } from './types';
 
 const WebSocketContext = createContext<WebSocketContextValue | null>(null);
@@ -20,24 +22,40 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
   children, 
   config 
 }) => {
-  // Construir la URL con el token
+  // Determinar el tipo de conexión basado en la URL o configuración
+  const connectionType = useMemo(() => {
+    return config.connectionType || 
+           (config.url.includes('/ws/notifications') ? 'stomp' : 'websocket');
+  }, [config.connectionType, config.url]);
+
+  // Hook STOMP - solo se usa si connectionType es 'stomp'
+  const stompConnection = useStompWebSocket({
+    url: config.url,
+    token: config.token || '',
+    debug: config.debug,
+    maxReconnectAttempts: config.reconnectAttempts,
+    heartbeatInterval: config.heartbeatInterval
+  });
+
+  // Construir la URL para WebSocket tradicional (fallback)
   const socketUrl = React.useMemo(() => {
-    if (!config.token) return null;
+    if (connectionType === 'stomp' || !config.token) return null;
     
     const url = new URL(config.url);
     if (config.token) {
       url.searchParams.set('token', config.token);
     }
     return url.toString();
-  }, [config.url, config.token]);
+  }, [config.url, config.token, connectionType]);
 
+  // Hook WebSocket tradicional - solo se usa si connectionType es 'websocket'
   const {
     sendJsonMessage,
     lastMessage,
     lastJsonMessage,
     readyState,
   } = useWebSocketHook(
-    socketUrl,
+    connectionType === 'websocket' ? socketUrl : null,
     {
       // Habilitar compartir conexión entre pestañas
       share: true,
@@ -88,32 +106,36 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
         }
       },
     },
-    !!socketUrl // Solo conectar si tenemos una URL válida
+    connectionType === 'websocket' && !!socketUrl // Solo conectar si es websocket y tenemos URL
   );
 
-  // Estado derivado
-  const isConnected = readyState === ReadyState.OPEN;
-  const isConnecting = readyState === ReadyState.CONNECTING;
-  
-  // Estado de error
-  const [error, setError] = React.useState<string | null>(null);
+  // Estados derivados según el tipo de conexión
+  const isConnected = useMemo(() => {
+    return connectionType === 'stomp' 
+      ? stompConnection.isConnected 
+      : readyState === ReadyState.OPEN;
+  }, [connectionType, stompConnection.isConnected, readyState]);
 
-  // Limpiar error cuando se conecta
-  useEffect(() => {
-    if (isConnected) {
-      setError(null);
+  const isConnecting = useMemo(() => {
+    return connectionType === 'stomp' 
+      ? stompConnection.isConnecting 
+      : readyState === ReadyState.CONNECTING;
+  }, [connectionType, stompConnection.isConnecting, readyState]);
+
+  const error = useMemo(() => {
+    if (connectionType === 'stomp') {
+      return stompConnection.error;
     }
-  }, [isConnected]);
+    return readyState === ReadyState.CLOSED && !isConnected ? 'Conexión WebSocket cerrada' : null;
+  }, [connectionType, stompConnection.error, readyState, isConnected]);
 
-  // Manejar errores
-  useEffect(() => {
-    if (readyState === ReadyState.CLOSED && !isConnected) {
-      setError('Conexión WebSocket cerrada');
-    }
-  }, [readyState, isConnected]);
-
-  // Función para enviar mensajes
+  // Función para enviar mensajes WebSocket tradicional
   const sendMessage = useCallback((message: WebSocketMessage) => {
+    if (connectionType === 'stomp') {
+      console.warn('[WebSocket] sendMessage no soportado en modo STOMP, usa sendNotification');
+      return;
+    }
+
     if (!isConnected) {
       console.warn('[WebSocket] Intentando enviar mensaje sin conexión');
       return;
@@ -125,26 +147,67 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
     };
     
     sendJsonMessage(messageWithTimestamp);
-  }, [isConnected, sendJsonMessage]);
+  }, [connectionType, isConnected, sendJsonMessage]);
 
-  // Función para suscribirse a un topic
+  // Función para suscribirse a un topic (WebSocket tradicional)
   const subscribe = useCallback((topic: string) => {
+    if (connectionType === 'stomp') {
+      console.warn('[WebSocket] subscribe automático en modo STOMP');
+      return;
+    }
+
     sendMessage({
       type: MessageType.SUBSCRIBE,
       topic,
     });
-  }, [sendMessage]);
+  }, [connectionType, sendMessage]);
+
+  // Función para enviar notificaciones STOMP
+  const sendNotification = useCallback((notification: StompNotification) => {
+    if (connectionType !== 'stomp') {
+      console.warn('[WebSocket] sendNotification solo disponible en modo STOMP');
+      return;
+    }
+    stompConnection.sendNotification(notification);
+  }, [connectionType, stompConnection]);
+
+  // Función para enviar ping STOMP
+  const sendPing = useCallback(() => {
+    if (connectionType !== 'stomp') {
+      console.warn('[WebSocket] sendPing solo disponible en modo STOMP');
+      return;
+    }
+    stompConnection.sendPing();
+  }, [connectionType, stompConnection]);
+
+  // Logs de debug
+  useEffect(() => {
+    if (config.debug) {
+      console.log(`[WebSocket] Modo de conexión: ${connectionType}`);
+      console.log(`[WebSocket] Estado conectado: ${isConnected}`);
+      console.log(`[WebSocket] Estado conectando: ${isConnecting}`);
+    }
+  }, [connectionType, isConnected, isConnecting, config.debug]);
 
   const contextValue: WebSocketContextValue = {
     isConnected,
     isConnecting,
-    readyState,
+    readyState: connectionType === 'stomp' 
+      ? (isConnected ? ReadyState.OPEN : isConnecting ? ReadyState.CONNECTING : ReadyState.CLOSED)
+      : readyState,
     sendMessage,
     subscribe,
-    lastMessage,
-    lastJsonMessage: lastJsonMessage as WebSocketMessage | null,
+    sendNotification: connectionType === 'stomp' ? sendNotification : undefined,
+    sendPing: connectionType === 'stomp' ? sendPing : undefined,
+    lastMessage: connectionType === 'websocket' ? lastMessage : null,
+    lastJsonMessage: connectionType === 'websocket' ? lastJsonMessage as WebSocketMessage | null : null,
+    lastNotification: connectionType === 'stomp' ? stompConnection.lastNotification : undefined,
     error,
-    config,
+    config: {
+      ...config,
+      connectionType
+    },
+    reconnectAttempts: connectionType === 'stomp' ? stompConnection.reconnectAttempts : undefined,
   };
 
   return (

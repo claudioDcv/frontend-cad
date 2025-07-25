@@ -1,5 +1,5 @@
-import { useWebSocket } from '../contexts/websocket';
 import { useCallback } from 'react';
+import { useWebSocket } from '../contexts/websocket';
 import { StompNotification } from '../contexts/websocket/types';
 
 export interface UseStompNotificationsReturn {
@@ -25,31 +25,31 @@ export const useStompNotifications = (): UseStompNotificationsReturn => {
     sendPing: contextSendPing,
     error,
     reconnectAttempts = 0,
-    config
+    config,
   } = useWebSocket();
 
-  const sendNotification = useCallback((notification: Partial<StompNotification>) => {
-    if (config?.connectionType !== 'stomp') {
-      console.warn('[useStompNotifications] Solo disponible en modo STOMP');
-      return;
-    }
+  const sendNotification = useCallback(
+    (notification: Partial<StompNotification>) => {
+      if (config?.connectionType !== 'stomp') {
+        console.warn('[useStompNotifications] Solo disponible en modo STOMP');
+        return;
+      }
 
-    if (!contextSendNotification) {
-      console.warn('[useStompNotifications] sendNotification no disponible');
-      return;
-    }
+      if (!contextSendNotification) {
+        console.warn('[useStompNotifications] sendNotification no disponible');
+        return;
+      }
 
-    // Agregar valores por defecto
-    const notificationWithDefaults: StompNotification = {
-      contenido: notification.contenido || '',
-      tipo: notification.tipo || 'GENERAL',
-      importante: notification.importante || false,
-      timestamp: notification.timestamp || new Date().toISOString(),
-      ...notification
-    };
+      // Agregar valores por defecto
+      const notificationWithDefaults: StompNotification = {
+        type: notification.type || 'default',
+        payload: notification.payload,
+      };
 
-    contextSendNotification(notificationWithDefaults);
-  }, [contextSendNotification, config?.connectionType]);
+      contextSendNotification(notificationWithDefaults);
+    },
+    [contextSendNotification, config?.connectionType]
+  );
 
   const sendPing = useCallback(() => {
     if (config?.connectionType !== 'stomp') {
@@ -72,6 +72,6 @@ export const useStompNotifications = (): UseStompNotificationsReturn => {
     sendNotification,
     sendPing,
     error,
-    reconnectAttempts
+    reconnectAttempts,
   };
 };

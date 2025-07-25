@@ -20,11 +20,9 @@ export interface WebSocketMessage {
 
 // Nuevos tipos para STOMP
 export interface StompNotification {
-  contenido?: string;
-  tipo?: string;
-  importante?: boolean;
-  timestamp?: string;
-  [key: string]: unknown;
+  type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  payload: any;
 }
 
 export interface WebSocketConfig {
@@ -44,26 +42,26 @@ export interface WebSocketContextValue {
   isConnected: boolean;
   isConnecting: boolean;
   readyState: ReadyState;
-  
+
   // Acciones - mantener compatibilidad
   sendMessage: (message: WebSocketMessage) => void;
   subscribe: (topic: string) => void;
-  
+
   // Nuevas acciones STOMP
   sendNotification?: (notification: StompNotification) => void;
   sendPing?: () => void;
-  
+
   // Último mensaje recibido
   lastMessage: MessageEvent<string> | null;
   lastJsonMessage: WebSocketMessage | null;
   lastNotification?: StompNotification | null;
-  
+
   // Error
   error: string | null;
-  
+
   // Configuración
   config: WebSocketConfig | null;
-  
+
   // Stats
   reconnectAttempts?: number;
 }

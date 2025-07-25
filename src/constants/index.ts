@@ -65,3 +65,5 @@ export const validRoles = {
   admin: 'admin-role',
   cordinator: 'cordinator-role',
 };
+
+export const commonNotificationTypes = ['resolution_notification'];

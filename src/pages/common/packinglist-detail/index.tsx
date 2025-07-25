@@ -224,7 +224,6 @@ const PackingListDetail = () => {
         open={openConfirm}
         onClose={() => setOpenConfirm(false)}
         onSuccess={() => {
-          console.log('Resolución enviada!');
           setOpenConfirm(false);
           setSuccessConfirmNotification(true);
         }}
