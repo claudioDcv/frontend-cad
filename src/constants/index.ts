@@ -50,6 +50,7 @@ export const LOCATION_INACTIVE = false;
 export const SEARCH_DELAY = 300;
 
 export const emptyOption = { value: 'all', label: 'TODOS' };
+export const emptyTotal = { quantity: 0, weight: 0 };
 
 export const materialMap: Record<string, Material> = {
   '1': 'Gold',

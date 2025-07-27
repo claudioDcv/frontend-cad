@@ -1,31 +1,30 @@
-import { Alert, AlertColor, AlertTitle, Collapse } from '@mui/material';
+import { Alert, AlertTitle, Box, Collapse } from '@mui/material';
+import { alertCardProps, initialState18N } from './index.types';
 
-interface I18N {
-  title: string;
-  text: string;
-}
-
-const initialState18N: I18N = {
-  title: 'Title',
-  text: 'Text',
-};
-
-interface alertCardProps {
-  i18n?: Partial<I18N>;
-  severity: AlertColor,
-  open: boolean;
-  onClose: () => void;
-}
-
-const AlertCard: React.FC<alertCardProps> = ({ i18n, severity, open, onClose }) => {
+const AlertCard: React.FC<alertCardProps> = ({
+  i18n,
+  severity,
+  open,
+  onClose,
+}) => {
   const lang = i18n ? { ...initialState18N, ...i18n } : initialState18N;
 
   return (
     <Collapse in={open}>
-      <Alert severity={severity} onClose={onClose}>
-        <AlertTitle>{lang.title}</AlertTitle>
-        {lang.text}
-      </Alert>
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 24,
+          left: 24,
+          zIndex: 1400,
+          width: 650,
+        }}
+      >
+        <Alert severity={severity} onClose={onClose}>
+          <AlertTitle>{lang.title}</AlertTitle>
+          <Box sx={{ whiteSpace: 'pre-line', textAlign: 'left' }}>{lang.text}</Box>
+        </Alert>
+      </Box>
     </Collapse>
   );
 };

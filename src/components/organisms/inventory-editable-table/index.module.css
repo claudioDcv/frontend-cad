@@ -56,12 +56,11 @@
     cursor: default;
   }
   
-  .validRow td {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+  .validCell {
+    color: #2e7d32 !important;
   }
   
-  .invalidRow td {
-    background-color: #ffebee; 
-    color: #c62828;
+  .invalidCell {
+    color: #c62828 !important;
   }
+  

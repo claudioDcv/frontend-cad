@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, Box, Card, Divider } from '@mui/material';
-import ModalActions from '../../molecules/modal-actions';
 import { DisplayData, EditableTable, IconList } from '@/components';
 import { initialStateI18N, ModalMassUploadProps } from './index.types';
 import ModalHeader from '@/components/molecules/modal-header';
-import styles from './index.module.css'; // Asegúrate que esté apuntando bien
+import styles from './index.module.css';
+import ButtonResolution from './components/button-resolution';
 
 const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   open,
@@ -12,12 +12,21 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   i18n,
 }) => {
   const lang = i18n ? { ...initialStateI18N, ...i18n } : initialStateI18N;
-  const [isValid, setIsValid] = useState(false);
+  const expectedTotal = { quantity: 100, weight: 1000 };
+  const [currentTotal, setCurrentTotal] = useState({ quantity: 0, weight: 0 });
+
+  const handleTotalsChange = (totals: { quantity: number; weight: number }) => {
+    setCurrentTotal(totals);
+  };
+
+  const handleClose = () => {
+    onClose();
+  };
 
   const handleSuccess = () => {};
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth>
       <Card
         variant="outlined"
         sx={{ backgroundColor: '#f5f5f5', borderRadius: 0 }}
@@ -51,18 +60,18 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
 
             <Box flex={2}>
               <EditableTable
-                total={{ quantity: 100, weight: 1000 }}
-                onValid={setIsValid}
+                total={expectedTotal}
+                onTotalsChange={handleTotalsChange}
               />
             </Box>
           </Box>
         </DialogContent>
-
-        <ModalActions
-          i18n={lang}
-          onClose={onClose}
+        <ButtonResolution
+          onClose={handleClose}
           loading={false}
-          disabled={!isValid}
+          onSuccess={handleSuccess}
+          expected={expectedTotal}
+          actual={currentTotal}
         />
       </form>
     </Dialog>

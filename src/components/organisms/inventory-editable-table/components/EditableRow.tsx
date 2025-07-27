@@ -4,7 +4,7 @@ import styles from './EditableRow.module.css';
 
 interface EditableRowProps {
   value: string;
-  onChange: (value: string) => boolean;
+  onChange: (value: string) => void;
   type?: 'text' | 'number';
 }
 
@@ -46,17 +46,16 @@ const EditableRow: React.FC<EditableRowProps> = ({
 
     if (type === 'number') {
       const validRegex = /^-?\d*,?\d*$/;
-      if (validRegex.test(val) || val === '' || val === '-') {
-        const accepted = onChange(val.replace(',', '.'));
-
-        if (accepted) {
-          setInputValue(val);
-        } else {
-          setInputValue(value.replace('.', ','));
-        }
+      if (
+        (validRegex.test(val) || val === '' || val === '-') &&
+        val.length <= 10
+      ) {
+        setInputValue(val);
+        onChange(val.replace(',', '.'));
       }
     } else {
       setInputValue(val);
+      onChange(val);
     }
   };
 

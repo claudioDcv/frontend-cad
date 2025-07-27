@@ -76,11 +76,11 @@ export const formatDateHour = (dateInput?: Date | string | number) => {
   // Verifica si la fecha es válida
   if (isNaN(date.getTime())) {
     console.error('Fecha y hora inválida proporcionada:', dateInput);
-    return ''; // Retorna una cadena vacía o maneja el error como prefieras
+    return '';
   }
 
   const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() es base 0
+  const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
@@ -194,3 +194,8 @@ export function preciseSum(numbers: number[]): number {
 
   return Number(total) / Number(multiplier);
 }
+
+export const pluralize = (value: number, singular: string, plural: string) => {
+  if (value === 1) return singular;
+  return plural;
+};

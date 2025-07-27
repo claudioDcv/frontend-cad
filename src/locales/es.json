@@ -196,6 +196,7 @@
     "statusOlimpo": "Estado Olimpo",
     "save": "Guardar",
     "successText": "Enviado con éxito.",
+    "requestApproval": "Solicitar Aprobación",
     "successTitle": "Éxito",
     "type": "Tipo",
     "viewContracts": "Ver",
@@ -256,12 +257,22 @@
     "sendTruckSuccess": "La PR {{id}} se envió con éxito.",
     "sendTruckCancel": "La PR {{id}} no se envió."
   },
+  "alert": {
+    "confirmationTitle": "Confirmación de Envío",
+    "diffWarning": "Solicitud enviada exitosamente, pero existen diferencias entre lo esperado y lo asignado:",
+    "quantityMissing": "• Faltan {{quantity}} unds por asignar.",
+    "quantityExceeded": "• Excedente de {{quantity}} unds.",
+    "weightMissing": "• Faltan {{weight}} grs por asignar.",
+    "weightExceeded": "• Excedente de {{weight}} grs.",
+    "warning": "Advertencia"
+  },
   "modalConfirm": {
     "confirmationTitle": "Confirmación de Envío",
     "resolveDescription": "¿Estás seguro que deseas enviar la PR {{id}} a CAD?",
     "truckDocumentDescription": "¿Estás seguro que deseas enviar la PR {{id}} con fecha {{date}}?",
     "massiveLoadTitle": "Confirmación Carga Masiva",
-    "massiveLoadDescription": "¿Estás seguro que deseas modificar el envío normal a Carga Masiva para el documento {{id}}?"
+    "massiveLoadDescription": "¿Estás seguro que deseas modificar el envío normal a Carga Masiva para el documento {{id}}?",
+    "approvalConfirm": "¿Estás seguro que deseas solicitar la aprobación?"
   },
   "modalInput": {
     "truckDocumentTitle": "Envío de Documento en Camión",
