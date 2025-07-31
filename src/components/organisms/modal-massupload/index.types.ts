@@ -3,18 +3,6 @@ export type Item = {
   label: string;
 };
 
-export interface I18N {
-  label: string;
-  success: string;
-  cancel: string;
-}
-
-export const initialStateI18N: I18N = {
-  label: 'Label',
-  success: 'Guardar',
-  cancel: 'Cancelar',
-};
-
 type SuccessData = {
   units: number;
   grams: number;
@@ -22,8 +10,8 @@ type SuccessData = {
 };
 
 export interface ModalMassUploadProps {
+  documentId: string;
   open: boolean;
   onClose: () => void;
   onSuccess: (data: SuccessData) => void;
-  i18n?: Partial<I18N>;
 }

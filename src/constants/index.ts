@@ -68,3 +68,18 @@ export const validRoles = {
 };
 
 export const commonNotificationTypes = ['resolution_notification'];
+
+// TODO: Averiguar cuales se necesitan realmente
+
+export const allowedInventories = [
+  'anillo',
+  'aro',
+  'colgante',
+  'cadena',
+  'pulcera',
+  'joyaespecial',
+  'moneda',
+  'lingote',
+  'relojneto',
+  'scrap',
+];

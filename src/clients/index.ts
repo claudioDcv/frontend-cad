@@ -9,3 +9,5 @@ export { default as useGetAllNotifications } from './get-all-notifications';
 export { default as useGetResolutionContracts } from './get-resolution-contracts';
 export { default as usePatchResolutionResolve } from './patch-resolve-resolution';
 export { default as useGetResolution } from './get-resolution';
+export { default as useGetResolutionInventory } from './get-resolution-inventory';
+export { default as useGetAllInventoryTypes } from './get-all-inventory-type';

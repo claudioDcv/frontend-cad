@@ -15,4 +15,5 @@ export interface alertCardProps {
   severity: AlertColor;
   open: boolean;
   onClose: () => void;
+  closable?: boolean;
 }

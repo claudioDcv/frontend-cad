@@ -5,7 +5,7 @@ interface Total {
 
 export interface ButtonResolutionProps {
   expected: Total;
-  actual: Total;
+  current: Total;
   onClose: () => void;
   onSuccess: () => void;
   loading: boolean;

@@ -1,8 +1,4 @@
-export interface Data {
-  inventory: string;
-  quantity: number;
-  weight: number;
-}
+import { InventoryResolution } from '@/entities/InventoryResolution.entity';
 
 interface Total {
   quantity: number;
@@ -11,5 +7,6 @@ interface Total {
 
 export interface EditableTableProps {
   total: Total;
+  resolutionInventory: InventoryResolution[];
   onTotalsChange: (totals: Total) => void;
 }

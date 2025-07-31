@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
-import { Box } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import {
   emptyOption,
@@ -28,6 +28,7 @@ import {
   Notification,
   Input,
   Access,
+  IconList,
 } from '@components/index';
 import useServices from './hooks/useServices';
 import {
@@ -46,6 +47,7 @@ const Resolutions = () => {
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
     defaultValues: defaultResolutionsFormValues(),
   });
+  const [massiveId, setMassiveId] = useState<number | null>(null);
 
   const services = useServices();
 
@@ -163,6 +165,14 @@ const Resolutions = () => {
     services.getAllResolutions.call(newFilters);
   };
 
+  const handleMassiveId = (id: number) => () => {
+    setMassiveId(id);
+  };
+
+  const handleCloseMassiveId = () => {
+    setMassiveId(null);
+  };
+
   return (
     <div>
       <Box>
@@ -256,20 +266,24 @@ const Resolutions = () => {
               label: t('common.actions'),
               render: ({ resolutionId }) => (
                 <Box display="flex" gap={1}>
-                  <ResolutionDetailButton
-                    id={String(resolutionId)}
-                    label={t('common.viewContracts')}
-                  />
-                  <Access roles={[validRoles.operator]}>
-                    <ResolutionMassiveModal
+                  {/*
+                    <ResolutionDetailButton
                       id={String(resolutionId)}
-                      label={t('common.massUpload')}
+                      label={t('common.viewContracts')}
                     />
-                  </Access>
-                  <ResolutionSendTruckModal
-                    id={String(resolutionId)}
-                    label={t('common.sendTruck')}
-                  />
+                    */}
+                  <Tooltip title={t('common.massUpload')}>
+                    <IconButton onClick={handleMassiveId(resolutionId)}>
+                      <IconList name="box" />
+                    </IconButton>
+                  </Tooltip>
+
+                  {/*
+                    <ResolutionSendTruckModal
+                      id={String(resolutionId)}
+                      label={t('common.sendTruck')}
+                    />
+                    */}
                 </Box>
               ),
             },
@@ -295,6 +309,10 @@ const Resolutions = () => {
           text: t(services.getAllResolutions.error),
         }}
       />
+
+      <Access roles={[validRoles.operator]}>
+        <ResolutionMassiveModal id={massiveId} onClose={handleCloseMassiveId} />
+      </Access>
     </div>
   );
 };

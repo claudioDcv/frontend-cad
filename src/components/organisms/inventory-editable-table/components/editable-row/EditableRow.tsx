@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import useClickOutside from '../hooks/useClickOutside';
+import useClickOutside from '../../hooks/useClickOutside';
 import styles from './EditableRow.module.css';
 
 interface EditableRowProps {

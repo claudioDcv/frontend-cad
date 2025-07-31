@@ -6,23 +6,19 @@ const AlertCard: React.FC<alertCardProps> = ({
   severity,
   open,
   onClose,
+  closable,
 }) => {
   const lang = i18n ? { ...initialState18N, ...i18n } : initialState18N;
+  const alertOnClose = closable !== false ? onClose ?? (() => {}) : undefined;
 
   return (
     <Collapse in={open}>
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 24,
-          left: 24,
-          zIndex: 1400,
-          width: 650,
-        }}
-      >
-        <Alert severity={severity} onClose={onClose}>
+      <Box>
+        <Alert severity={severity} onClose={alertOnClose}>
           <AlertTitle>{lang.title}</AlertTitle>
-          <Box sx={{ whiteSpace: 'pre-line', textAlign: 'left' }}>{lang.text}</Box>
+          <Box sx={{ whiteSpace: 'pre-line', textAlign: 'left' }}>
+            {lang.text}
+          </Box>
         </Alert>
       </Box>
     </Collapse>

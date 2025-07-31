@@ -5,6 +5,7 @@ import useJWTNotification from './hooks/useJWTNotification';
 import { VITE_MOCK_API, WEBSOCKET_BASE } from './conf/http';
 import { WebSocketProvider } from './contexts/websocket';
 import NotificationProvider from './contexts/notification/NotificationProvider';
+import InitialDataProvider from './contexts/initial-data/InitialDataProvider';
 
 const wsConfig = {
   url: WEBSOCKET_BASE,
@@ -24,16 +25,18 @@ function App() {
 
   return jwtNotification.token || VITE_MOCK_API ? (
     <Container maxWidth="xl">
-      <NotificationProvider>
-        <WebSocketProvider
-          config={{
-            ...wsConfig,
-            token: jwtNotification.token || '',
-          }}
-        >
-          <Router hostUrl={jwtNotification.hostUrl} />
-        </WebSocketProvider>
-      </NotificationProvider>
+      <InitialDataProvider>
+        <NotificationProvider>
+          <WebSocketProvider
+            config={{
+              ...wsConfig,
+              token: jwtNotification.token || '',
+            }}
+          >
+            <Router hostUrl={jwtNotification.hostUrl} />
+          </WebSocketProvider>
+        </NotificationProvider>
+      </InitialDataProvider>
     </Container>
   ) : (
     <Alert severity="info" sx={{ marginTop: 2 }}>

@@ -1,5 +1,4 @@
 export interface ButtonResolutionsProps {
-  id: string;
-  label: string;
-  disabled?: boolean;
+  id: number | null;
+  onClose: () => void;
 }

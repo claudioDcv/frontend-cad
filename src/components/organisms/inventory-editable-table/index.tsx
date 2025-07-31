@@ -1,54 +1,89 @@
-import { useState } from 'react';
-import EditableRow from './components/EditableRow';
+import { useEffect, useState } from 'react';
+import { Inventory } from '@/entities/Inventory.entity';
+import EditableRow from './components/editable-row/EditableRow';
 import styles from './index.module.css';
 import Token from '@/tokens';
 import { pluralize, preciseSum } from '@/utils';
-import { Data, EditableTableProps } from './index.types';
-import { emptyTotal } from '@/constants';
+import { EditableTableProps } from './index.types';
+import { useInitialData } from '@/contexts/initial-data/useInitialData';
+import { useTranslation } from 'react-i18next';
+import { useGetResolutionInventory } from '@/clients';
 
 // TODO:
 // tambien preparar los 3 clientes para los endpoints
-// ver un alert y dentro de ese salga un warning si es que falta cantidad/distribucion,
 // Preguntar si tiene metadata, si es el caso, no permitir enviar
 // decirle a Carolina que no permita enviar a cad si tiene metadata
 // para el operador solo debe de mostrar las resoluciones que tienen metadata
 // agregar un filtro hasMetadata (true/false) / Carolina tambien
 
-const InventoryEditableTable = (props: EditableTableProps) => {
-  const [data, setData] = useState<Data[]>([
-    { inventory: 'Anillos (Refaccion)', ...emptyTotal },
-    { inventory: 'Aros (Refaccion) ', ...emptyTotal },
-    { inventory: 'Colgantes (Refaccion)', ...emptyTotal },
-    { inventory: 'Cadenas (Refaccion)', ...emptyTotal },
-    { inventory: 'Pulseras (Refaccion)', ...emptyTotal },
-    { inventory: 'Joyas Especiales', ...emptyTotal },
-    { inventory: 'Monedas', ...emptyTotal },
-    { inventory: 'Lingotes', ...emptyTotal },
-    { inventory: 'Reloj Neto', ...emptyTotal },
-    { inventory: 'Scrap', ...emptyTotal },
-  ]);
+// Vista coordinador solo debe ver los documentos pre resolucionados (con y sin metadata)
+// Operador: pre resoluciones (con metadata), resoluciones, aceptadas y cerradas.
 
-  const totalQuantity = preciseSum(data.map((item) => item.quantity));
-  const totalWeight = preciseSum(data.map((item) => item.weight));
+const InventoryEditableTable = (props: EditableTableProps) => {
+  const { t } = useTranslation();
+  const [initialized, setInitialized] = useState(false);
+
+  const initialDataCtx = useInitialData();
+
+  const [data, setData] = useState<Inventory[]>([]);
+
+  useEffect(() => {
+    if (data.length === 0 && initialDataCtx.inventoryTypes.length) {
+      setData(
+        initialDataCtx.inventoryTypes.map((it) => ({
+          inventoryType: it,
+          quantity: 0,
+          weight: 0,
+        }))
+      );
+    }
+  }, [data, initialDataCtx.inventoryTypes]);
+
+  useEffect(() => {
+    if (
+      props.resolutionInventory.length > 0 &&
+      data.length > 0 &&
+      !initialized
+    ) {
+      console.log({ ri: props.resolutionInventory, data });
+      setInitialized(true);
+      const res = data.map((d) => {
+        const resD = { ...d };
+        const finded = props.resolutionInventory.find(
+          (ri) => ri.inventoryTypeId === Number(d.inventoryType.value)
+        );
+        if (finded) {
+          resD.quantity = finded.quantity;
+          resD.weight = finded.weight;
+        }
+        return resD;
+      });
+      setData(res);
+    }
+  }, [props.resolutionInventory, data, initialized]);
+
+  const totalQuantity = preciseSum(
+    data.map((item) => Number(item.quantity) || 0)
+  );
+  const totalWeight = preciseSum(data.map((item) => Number(item.weight) || 0));
 
   const handleChange = (
     index: number,
-    key: keyof Omit<Data, 'inventory'>,
+    key: keyof Omit<Inventory, 'inventory'>,
     value: string
   ): void => {
     const newValue = Number(value);
     if (isNaN(newValue) || newValue < 0) return;
 
-    if (data[index][key] === newValue) return;
-
     const newData = [...data];
-    newData[index][key] = newValue;
+    (newData[index][key] as number) = newValue;
     setData(newData);
 
     const totalQuantity = preciseSum(newData.map((item) => item.quantity));
     const totalWeight = preciseSum(newData.map((item) => item.weight));
-
+    //  TODO: onchange nomas
     if (props.onTotalsChange) {
+      console.log('On Tontal Change');
       props.onTotalsChange({ quantity: totalQuantity, weight: totalWeight });
     }
   };
@@ -83,9 +118,9 @@ const InventoryEditableTable = (props: EditableTableProps) => {
           </thead>
           <tbody>
             {data.map((row, index) => (
-              <tr key={row.inventory}>
+              <tr key={row.inventoryType.value}>
                 <td>
-                  <div>{row.inventory}</div>
+                  <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
                 </td>
                 <td>
                   <EditableRow

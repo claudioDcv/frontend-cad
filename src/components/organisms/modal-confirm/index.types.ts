@@ -17,4 +17,5 @@ export interface ModalConfirmProps {
   onClose: () => void;
   onSuccess: () => void | Promise<void>;
   i18n?: Partial<I18N>;
+  children?: React.ReactNode;
 }

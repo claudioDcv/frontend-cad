@@ -174,26 +174,28 @@ export const getStatusLabel = (
 };
 
 export function preciseSum(numbers: number[]): number {
+  if (numbers.length === 0) return 0;
+
   const decimalCounts = numbers.map((n) => {
     const [, decimals] = n.toString().split('.');
     return decimals ? decimals.length : 0;
   });
 
-  const maxDecimals = Math.max(...decimalCounts);
+  const maxDecimals = decimalCounts.length > 0 ? Math.max(...decimalCounts) : 0;
   const multiplier = BigInt('1' + '0'.repeat(maxDecimals));
 
   const total = numbers.reduce((acc, n) => {
-    const scaled = BigInt(
-      n
-        .toString()
-        .replace('.', '')
-        .padEnd(maxDecimals + n.toString().split('.')[0].length, '0')
-    );
+    const [integerPart, decimalPart = ''] = n.toString().split('.');
+    const scaledString =
+      integerPart + decimalPart.padEnd(maxDecimals, '0');
+
+    const scaled = BigInt(scaledString);
     return acc + scaled;
   }, BigInt(0));
 
   return Number(total) / Number(multiplier);
 }
+
 
 export const pluralize = (value: number, singular: string, plural: string) => {
   if (value === 1) return singular;

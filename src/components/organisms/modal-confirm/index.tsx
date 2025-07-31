@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogContentText } from '@mui/material';
+import { Box, Dialog, DialogContent, DialogContentText } from '@mui/material';
 import ModalHeader from '../../molecules/modal-header';
 import ModalActions from '../../molecules/modal-actions';
 import { initialStateI18n, ModalConfirmProps } from './index.types';
@@ -9,6 +9,7 @@ const ModalConfirm: React.FC<ModalConfirmProps> = ({
   onClose,
   onSuccess,
   i18n,
+  children,
 }) => {
   const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
 
@@ -28,6 +29,7 @@ const ModalConfirm: React.FC<ModalConfirmProps> = ({
       <ModalHeader onClose={onClose}>{lang.title}</ModalHeader>
       <DialogContent>
         <DialogContentText>{lang.text}</DialogContentText>
+        {children && <Box mt={2}>{children}</Box>}
       </DialogContent>
       <ModalActions
         i18n={lang}

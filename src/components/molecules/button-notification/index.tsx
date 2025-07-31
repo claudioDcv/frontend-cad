@@ -1,13 +1,6 @@
 import { Button, Chip, Typography } from '@mui/material';
 import styles from './index.module.css';
-
-interface I18N {
-  label: string;
-}
-
-const initialStateI18n: I18N = {
-  label: 'Label',
-};
+import { I18N, initialStateI18n } from './index.types';
 
 export interface ButtonNotificationProps {
   i18n?: Partial<I18N>;

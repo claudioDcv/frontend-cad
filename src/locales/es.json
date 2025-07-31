@@ -196,7 +196,7 @@
     "statusOlimpo": "Estado Olimpo",
     "save": "Guardar",
     "successText": "Enviado con éxito.",
-    "requestApproval": "Solicitar Aprobación",
+    "requestResolution": "Resolucionar",
     "successTitle": "Éxito",
     "type": "Tipo",
     "viewContracts": "Ver",
@@ -241,6 +241,8 @@
     "patchReviewedContractParse": "Error al interpretar los datos del contrato revisado del servidor.",
     "patchResolveResolutionFetch": "Error al enviar la resolución. Por favor, inténtalo de nuevo más tarde.",
     "patchResolveResolutionParse": "Error al interpretar la respuesta del servidor al resolver la resolución.",
+    "error.getAllInventoryTypesFetch": "Error al obtener los tipos de inventario. Por favor, inténtalo de nuevo más tarde.",
+    "error.getAllInventoryTypesParse": "Error al interpretar la respuesta del servidor al obtener los tipos de inventario.",
     "getUnviewedNotificationsFetch": "Error al obtener las notificaciones no vistas. Por favor, inténtalo de nuevo más tarde.",
     "getUnviewedNotificationsParse": "Error al interpretar los datos de notificaciones del servidor.",
     "error.getAllNotificationsFetch": "Error al obtener la lista de notificaciones. Por favor, inténtalo de nuevo más tarde.",
@@ -257,14 +259,13 @@
     "sendTruckSuccess": "La PR {{id}} se envió con éxito.",
     "sendTruckCancel": "La PR {{id}} no se envió."
   },
-  "alert": {
+  "alertResolutionSolve": {
     "confirmationTitle": "Confirmación de Envío",
-    "diffWarning": "Solicitud enviada exitosamente, pero existen diferencias entre lo esperado y lo asignado:",
     "quantityMissing": "• Faltan {{quantity}} unds por asignar.",
     "quantityExceeded": "• Excedente de {{quantity}} unds.",
     "weightMissing": "• Faltan {{weight}} grs por asignar.",
     "weightExceeded": "• Excedente de {{weight}} grs.",
-    "warning": "Advertencia"
+    "warning": "Aún queda material por asignar"
   },
   "modalConfirm": {
     "confirmationTitle": "Confirmación de Envío",
@@ -277,6 +278,39 @@
   "modalInput": {
     "truckDocumentTitle": "Envío de Documento en Camión",
     "truckDocumentLabel": "Mensaje",
-    "truckDocumentSuccess": "Marcar como enviado"
+    "truckDocumentSuccess": "Marcar como, enviado"
+  },
+  "modalMassUpload": {
+    "documentNumber": "Documento Número",
+    "totalWeight": "Peso total",
+    "salePrice": "Compra venta",
+    "averagePurchase": "Promedio Compra",
+    "responsible": "Responsable",
+    "expirationDate": "Vencimiento",
+    "client": "Cliente",
+    "rut": "RUT"
+  },
+  "inventoryType": {
+    "anillo": "Anillo (Refacción)",
+    "aro": "Aro (Refacción)",
+    "barraylaminado": "Barra y Laminado",
+    "cadena": "Cadena (Refacción)",
+    "colgante": "Colgante (Refacción)",
+    "joyaespecial": "Joya Especial",
+    "joyaespecialconsignacion": "Joya Especial (Consignación)",
+    "lingote": "Lingote",
+    "materialbajaley": "Material Baja Ley",
+    "materialfalso": "Material Falso",
+    "materialfaltante": "Material Faltante",
+    "moneda": "Moneda",
+    "otro": "Otro",
+    "piedra": "Piedra",
+    "piedrapreciosa": "Piedra Preciosa",
+    "piedrapreciosaconsignacion": "Piedra Preciosa (Consignación)",
+    "prendedor": "Prendedor",
+    "pulcera": "Pulsera (Refacción)",
+    "relojbruto": "Reloj Bruto",
+    "relojneto": "Reloj Neto",
+    "scrap": "Scrap"
   }
 }
