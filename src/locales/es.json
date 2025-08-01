@@ -278,7 +278,7 @@
   "modalInput": {
     "truckDocumentTitle": "Envío de Documento en Camión",
     "truckDocumentLabel": "Mensaje",
-    "truckDocumentSuccess": "Marcar como, enviado"
+    "truckDocumentSuccess": "Marcar como enviado"
   },
   "modalMassUpload": {
     "documentNumber": "Documento Número",

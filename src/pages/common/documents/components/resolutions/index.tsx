@@ -40,6 +40,7 @@ import { ResolutionFormModel } from '../../types';
 import ResolutionDetailButton from './components/ResolutionDetailButton';
 import ResolutionSendTruckModal from './components/ResolutionSendTruckModal';
 import ResolutionMassiveModal from './components/ResolutionMassiveModal';
+import { Resolution } from '@/entities/Resolution.entity';
 
 const Resolutions = () => {
   const { t } = useTranslation();
@@ -47,7 +48,10 @@ const Resolutions = () => {
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
     defaultValues: defaultResolutionsFormValues(),
   });
-  const [massiveId, setMassiveId] = useState<number | null>(null);
+  const [massiveResolution, setMassiveResolution] = useState<Resolution | null>(
+    null
+  );
+  const [truckId, setTruckId] = useState<number | null>(null);
 
   const services = useServices();
 
@@ -165,12 +169,20 @@ const Resolutions = () => {
     services.getAllResolutions.call(newFilters);
   };
 
-  const handleMassiveId = (id: number) => () => {
-    setMassiveId(id);
+  const handleMassiveResolution = (resolution: Resolution) => () => {
+    setMassiveResolution(resolution);
   };
 
-  const handleCloseMassiveId = () => {
-    setMassiveId(null);
+  const handleCloseMassiveResolution = () => {
+    setMassiveResolution(null);
+  };
+
+  const handleSendTruckId = (id: number) => () => {
+    setTruckId(id);
+  };
+
+  const handleCloseTruckId = () => {
+    setTruckId(null);
   };
 
   return (
@@ -264,26 +276,26 @@ const Resolutions = () => {
             {
               id: 'actions',
               label: t('common.actions'),
-              render: ({ resolutionId }) => (
+              render: (resolution) => (
                 <Box display="flex" gap={1}>
-                  {/*
-                    <ResolutionDetailButton
-                      id={String(resolutionId)}
-                      label={t('common.viewContracts')}
-                    />
-                    */}
-                  <Tooltip title={t('common.massUpload')}>
-                    <IconButton onClick={handleMassiveId(resolutionId)}>
-                      <IconList name="box" />
+                  <ResolutionDetailButton
+                    id={String(resolution.resolutionId)}
+                    label={t('common.viewContracts')}
+                  />
+                  <Access roles={[validRoles.operator]}>
+                    <Tooltip title={t('common.massUpload')}>
+                      <IconButton onClick={handleMassiveResolution(resolution)}>
+                        <IconList name="box" />
+                      </IconButton>
+                    </Tooltip>
+                  </Access>
+                  <Tooltip title={t('common.sendTruck')}>
+                    <IconButton
+                      onClick={handleSendTruckId(resolution.resolutionId)}
+                    >
+                      <IconList name="truckDoc" />
                     </IconButton>
                   </Tooltip>
-
-                  {/*
-                    <ResolutionSendTruckModal
-                      id={String(resolutionId)}
-                      label={t('common.sendTruck')}
-                    />
-                    */}
                 </Box>
               ),
             },
@@ -310,9 +322,11 @@ const Resolutions = () => {
         }}
       />
 
-      <Access roles={[validRoles.operator]}>
-        <ResolutionMassiveModal id={massiveId} onClose={handleCloseMassiveId} />
-      </Access>
+      <ResolutionMassiveModal
+        resolution={massiveResolution}
+        onClose={handleCloseMassiveResolution}
+      />
+      <ResolutionSendTruckModal id={truckId} onClose={handleCloseTruckId} />
     </div>
   );
 };

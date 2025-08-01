@@ -1,21 +1,24 @@
 import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, Box, Card, Divider } from '@mui/material';
 import { DisplayData, EditableTable, IconList } from '@/components';
-import { ModalMassUploadProps } from './index.types';
+import { ModalMassUploadProps, SuccessData } from './index.types';
 import ModalHeader from '@/components/molecules/modal-header';
 import styles from './index.module.css';
-import ButtonResolution from './components/button-resolution';
+import ActionsResolution from './components/actions-resolution';
 import { useTranslation } from 'react-i18next';
 import useServices from './hooks/useServices';
 
 const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   open,
+  resolution,
   onClose,
-  documentId,
+  onSuccess,
 }) => {
   const { t } = useTranslation();
 
-  const services = useServices(documentId);
+  const { resolutionId } = resolution ?? {};
+
+  const services = useServices(String(resolution.resolutionId));
 
   // TODO:
   //  Resolucionar , debe de aparecer cuando al menos haya un guardado, cuando se resolucione
@@ -28,16 +31,19 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   const [currentTotal, setCurrentTotal] = useState({ quantity: 0, weight: 0 });
 
   useEffect(() => {
-    if (!currentTotal.quantity && !currentTotal.weight) {
-      const total = { quantity: 0, weight: 0 };
-      services.getResolutionInventory.data.forEach((ri) => {
-        total.quantity += ri.quantity;
-        total.weight += ri.weight;
-      });
+    const data = services.getResolutionInventory.data;
+    if (!data || !Array.isArray(data)) return;
 
-      setCurrentTotal(total);
-    }
-  }, [currentTotal, services.getResolutionInventory]);
+    const total = data.reduce(
+      (acc, ri) => ({
+        quantity: acc.quantity + ri.quantity,
+        weight: acc.weight + ri.weight,
+      }),
+      { quantity: 0, weight: 0 }
+    );
+
+    setCurrentTotal(total);
+  }, [services.getResolutionInventory.data]);
 
   const handleTotalsChange = (totals: { quantity: number; weight: number }) => {
     setCurrentTotal(totals);
@@ -45,7 +51,14 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
 
   const handleClose = () => onClose();
 
-  const handleSuccess = () => {};
+  const handleSuccess = () => {
+    const data: SuccessData = {
+      units: currentTotal.quantity,
+      grams: currentTotal.weight,
+    };
+
+    onSuccess(data);
+  };
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth>
@@ -55,7 +68,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
       >
         <ModalHeader onClose={onClose}>
           <IconList name="box" />
-          {`${t('modalMassUpload.documentNumber')} ${documentId}`}
+          {`${t('modalMassUpload.documentNumber')} ${resolutionId}`}
         </ModalHeader>
       </Card>
 
@@ -105,13 +118,13 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
                 <EditableTable
                   total={expectedTotal}
                   resolutionInventory={services.getResolutionInventory.data}
-                  onTotalsChange={handleTotalsChange}
+                  onChange={handleTotalsChange}
                 />
               </Box>
             </Box>
           </Box>
         </DialogContent>
-        <ButtonResolution
+        <ActionsResolution
           onClose={handleClose}
           loading={false}
           onSuccess={handleSuccess}

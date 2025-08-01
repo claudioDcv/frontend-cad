@@ -8,5 +8,5 @@ interface Total {
 export interface EditableTableProps {
   total: Total;
   resolutionInventory: InventoryResolution[];
-  onTotalsChange: (totals: Total) => void;
+  onChange: (totals: Total) => void;
 }

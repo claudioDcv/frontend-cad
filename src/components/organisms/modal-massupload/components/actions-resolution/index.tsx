@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, DialogActions } from '@mui/material';
-import { ButtonResolutionProps } from './index.types';
+import { ActionsResolutionProps } from './index.types';
 import { useTranslation } from 'react-i18next';
 import { ModalActions, ModalConfirm } from '@/components';
 import AlertCard from '@/components/atoms/alert-card';
 import { diffInitialState, getDiff } from './index.utils';
 
-const ButtonResolution: React.FC<ButtonResolutionProps> = ({
+const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   onSuccess,
   onClose,
   loading,
@@ -63,7 +63,7 @@ const ButtonResolution: React.FC<ButtonResolutionProps> = ({
     <>
       <DialogActions>
         <Box display="flex" justifyContent="space-between" width="100%">
-          <Button variant="contained" size="small">
+          <Button variant="contained" size="small" disabled>
             Cuentas por cobrar
           </Button>
 
@@ -113,4 +113,4 @@ const ButtonResolution: React.FC<ButtonResolutionProps> = ({
   );
 };
 
-export default ButtonResolution;
+export default ActionsResolution;

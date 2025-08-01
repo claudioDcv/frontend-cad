@@ -4,13 +4,9 @@ import { Link } from 'wouter';
 import routes from '@/conf/routes';
 import useAccess from '@/components/atoms/access/useAccess';
 import { validRoles } from '@/constants';
-import { ButtonResolutionsProps } from './types';
+import { ResolutionDetailButtonProps } from './types';
 
-const ResolutionDetailButton = ({
-  id,
-  label,
-  disabled,
-}: ButtonResolutionsProps) => {
+const ResolutionDetailButton = ({ id, label }: ResolutionDetailButtonProps) => {
   const access = useAccess();
   const getLink = () => {
     if (access([validRoles.admin])) return '';
@@ -22,7 +18,7 @@ const ResolutionDetailButton = ({
   return (
     <Link to={getLink()}>
       <Tooltip title={label}>
-        <IconButton disabled={disabled}>{<Visibility />}</IconButton>
+        <IconButton>{<Visibility />}</IconButton>
       </Tooltip>
     </Link>
   );

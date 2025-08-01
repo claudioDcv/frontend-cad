@@ -3,7 +3,7 @@ interface Total {
   weight: number;
 }
 
-export interface ButtonResolutionProps {
+export interface ActionsResolutionProps {
   expected: Total;
   current: Total;
   onClose: () => void;

@@ -7,7 +7,6 @@ import { pluralize, preciseSum } from '@/utils';
 import { EditableTableProps } from './index.types';
 import { useInitialData } from '@/contexts/initial-data/useInitialData';
 import { useTranslation } from 'react-i18next';
-import { useGetResolutionInventory } from '@/clients';
 
 // TODO:
 // tambien preparar los 3 clientes para los endpoints
@@ -18,14 +17,14 @@ import { useGetResolutionInventory } from '@/clients';
 
 // Vista coordinador solo debe ver los documentos pre resolucionados (con y sin metadata)
 // Operador: pre resoluciones (con metadata), resoluciones, aceptadas y cerradas.
+// mandar resolucion completa en vez de solo el id
 
 const InventoryEditableTable = (props: EditableTableProps) => {
   const { t } = useTranslation();
   const [initialized, setInitialized] = useState(false);
+  const [data, setData] = useState<Inventory[]>([]);
 
   const initialDataCtx = useInitialData();
-
-  const [data, setData] = useState<Inventory[]>([]);
 
   useEffect(() => {
     if (data.length === 0 && initialDataCtx.inventoryTypes.length) {
@@ -45,7 +44,6 @@ const InventoryEditableTable = (props: EditableTableProps) => {
       data.length > 0 &&
       !initialized
     ) {
-      console.log({ ri: props.resolutionInventory, data });
       setInitialized(true);
       const res = data.map((d) => {
         const resD = { ...d };
@@ -81,10 +79,9 @@ const InventoryEditableTable = (props: EditableTableProps) => {
 
     const totalQuantity = preciseSum(newData.map((item) => item.quantity));
     const totalWeight = preciseSum(newData.map((item) => item.weight));
-    //  TODO: onchange nomas
-    if (props.onTotalsChange) {
-      console.log('On Tontal Change');
-      props.onTotalsChange({ quantity: totalQuantity, weight: totalWeight });
+
+    if (props.onChange) {
+      props.onChange({ quantity: totalQuantity, weight: totalWeight });
     }
   };
 

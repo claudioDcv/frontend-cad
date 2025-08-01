@@ -13,18 +13,18 @@ const useGetResolutionInventory = () => {
     setError(null);
   };
 
-  /*
-
-  const replaceInventory = (inventory: Inventory) => {
+  const replaceInventoryResolution = (
+    inventoryResolution: InventoryResolution
+  ) => {
     const inventories = data.map((i) => {
-      if (i.contractNumber === contract.contractNumber) {
-        return inventory;
+      if (i.id === inventoryResolution.id) {
+        return inventoryResolution;
       }
       return i;
     });
     setData(inventories);
   };
-*/
+
   const call = useCallback(
     async (resolutionId: string) => {
       if (status === FetchStatus.ERROR) {
@@ -54,7 +54,14 @@ const useGetResolutionInventory = () => {
     [status]
   );
 
-  return { status, data, error, call, onResetError };
+  return {
+    status,
+    data,
+    error,
+    call,
+    onResetError,
+    replaceInventoryResolution,
+  };
 };
 
 export default useGetResolutionInventory;

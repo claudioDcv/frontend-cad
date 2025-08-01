@@ -1,20 +1,15 @@
 import { useState } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
+
 import { useTranslation } from 'react-i18next';
-import { IconList, ModalConfirm, Notification } from '@/components';
+import { ModalConfirm, Notification } from '@/components';
 import ModalInput from '@/components/organisms/modal-input';
 import { formatDateHour, toDay } from '@/utils';
-import { ButtonResolutionsProps } from './types';
+import { ResolutionSendTruckModalProps } from './types';
 
-const ResolutionSendTruckModal = ({
-  id,
-  label,
-  disabled,
-}: ButtonResolutionsProps) => {
+const ResolutionSendTruckModal = ({ id, onClose }: ResolutionSendTruckModalProps) => {
   const { t } = useTranslation();
   const date = formatDateHour(toDay());
 
-  const [openInput, setOpenInput] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [notificationOpen, setNotificationOpen] = useState(false);
@@ -27,18 +22,7 @@ const ResolutionSendTruckModal = ({
     setInputValue(e.target.value);
   };
 
-  const handleOpenInput = () => {
-    setOpenInput(true);
-  };
-
-  const handleCloseInput = () => {
-    setOpenInput(false);
-  };
-
   const handleSuccessInput = async () => {
-    console.log('✅ Enviar valor actualizado:', inputValue);
-    console.log('ID Resolución:', id);
-    setOpenInput(false);
     setOpenConfirm(true);
   };
 
@@ -47,6 +31,7 @@ const ResolutionSendTruckModal = ({
     setNotificationSeverity('success');
     setNotificationOpen(true);
     setOpenConfirm(false);
+    onClose();
   };
 
   const handleCancelConfirm = () => {
@@ -54,6 +39,7 @@ const ResolutionSendTruckModal = ({
     setNotificationSeverity('error');
     setNotificationOpen(true);
     setOpenConfirm(false);
+    onClose();
   };
 
   const handleCloseNotification = () => {
@@ -62,15 +48,9 @@ const ResolutionSendTruckModal = ({
 
   return (
     <>
-      <Tooltip title={label}>
-        <IconButton disabled={disabled} onClick={handleOpenInput}>
-          <IconList name="truckDoc" />
-        </IconButton>
-      </Tooltip>
-
       <ModalInput
-        open={openInput}
-        onClose={handleCloseInput}
+        open={!!id}
+        onClose={onClose}
         value={inputValue}
         onChange={handleChange}
         onSuccess={handleSuccessInput}
@@ -82,20 +62,22 @@ const ResolutionSendTruckModal = ({
         }}
       />
 
-      <ModalConfirm
-        open={openConfirm}
-        onClose={handleCancelConfirm}
-        onSuccess={handleConfirm}
-        i18n={{
-          title: t('modalConfirm.confirmationTitle'),
-          text: t('modalConfirm.truckDocumentDescription', {
-            id,
-            date,
-          }),
-          cancel: t('common.cancel'),
-          success: t('common.send'),
-        }}
-      />
+      {id && (
+        <ModalConfirm
+          open={openConfirm}
+          onClose={handleCancelConfirm}
+          onSuccess={handleConfirm}
+          i18n={{
+            title: t('modalConfirm.confirmationTitle'),
+            text: t('modalConfirm.truckDocumentDescription', {
+              id,
+              date,
+            }),
+            cancel: t('common.cancel'),
+            success: t('common.send'),
+          }}
+        />
+      )}
 
       <Notification
         open={notificationOpen}
