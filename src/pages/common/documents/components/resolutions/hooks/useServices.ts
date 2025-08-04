@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FetchStatus, STATUS_RESOLUTION } from '@/constants';
+import { FetchStatus, STATUS_RESOLUTION, validRoles } from '@/constants';
 import { defaultResolutionsFormValues } from '../../../utils';
 import {
   useGetAllInvestments,
@@ -8,6 +8,7 @@ import {
   useGetAllResolutions,
   useGetAllStatus,
 } from '@/clients';
+import useAccess from '@/components/atoms/access/useAccess';
 
 const useServices = () => {
   const getAllResolutions = useGetAllResolutions();
@@ -16,10 +17,14 @@ const useServices = () => {
   const getAllLocations = useGetAllLocations();
   const getAllInvestments = useGetAllInvestments();
 
+  const access = useAccess();
+  const isOperator = access([validRoles.operator]);
+
   useEffect(() => {
     if (getAllResolutions.status === FetchStatus.IDLE) {
       getAllResolutions.call({
         ...defaultResolutionsFormValues(),
+        hasMetadata: isOperator ? true : undefined,
       });
     }
     if (getAllStatus.status === FetchStatus.IDLE) {
@@ -31,7 +36,7 @@ const useServices = () => {
     if (getAllInvestments.status === FetchStatus.IDLE) {
       getAllInvestments.call();
     }
-  }, [getAllInvestments, getAllMaterialType, getAllResolutions, getAllStatus]);
+  }, [getAllInvestments, getAllMaterialType, getAllResolutions, getAllStatus, isOperator]);
 
   return {
     getAllMaterialType,

@@ -40,8 +40,9 @@ const useGetAllResolutions = () => {
           startDate: props?.range?.[0]?.toISOString(),
           endDate: props?.range?.[1]?.toISOString(),
           resolutionNumber: toOptional(props.resolutionNumber),
+          hasMetadata: props.hasMetadata,
         });
-        
+
         setData(result);
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {

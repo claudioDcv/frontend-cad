@@ -10,6 +10,7 @@ import {
   Divider,
   FormControlLabel,
   Switch,
+  Tooltip,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import {
@@ -169,6 +170,9 @@ const ResolutionDetail = () => {
     services.getResolutionContracts.data.length > 0 &&
     services.getResolutionContracts.data.every((c) => c.cadMetadata?.reviewed);
 
+  const hasMetadata = services.getResolution.data?.hasMetadata;
+  const hasContracts = services.getResolutionContracts.data.length > 0;
+
   return (
     <div>
       <Card variant="outlined" sx={{ backgroundColor: '#f5f5f5' }}>
@@ -183,13 +187,29 @@ const ResolutionDetail = () => {
                 {t('common.bag')}
               </Button>
               <Access roles={[validRoles.cordinator]}>
-                <Button
-                  variant="contained"
-                  disabled={!isAllContractReviewed}
-                  onClick={handleOpenConfirm}
+                <Tooltip
+                  title={
+                    !hasContracts
+                      ? t('resolutionDetail.noContracts')
+                      : !isAllContractReviewed
+                      ? t('resolutionDetail.allContractsMustBeReviewed')
+                      : hasMetadata
+                      ? t('resolutionDetail.hasMetadataAlready')
+                      : ''
+                  }
                 >
-                  {t('common.sendCAD')}
-                </Button>
+                  <span>
+                    <Button
+                      variant="contained"
+                      disabled={
+                        !hasContracts || !isAllContractReviewed || hasMetadata
+                      }
+                      onClick={handleOpenConfirm}
+                    >
+                      {t('common.sendCAD')}
+                    </Button>
+                  </span>
+                </Tooltip>
               </Access>
             </ButtonGroup>
           }

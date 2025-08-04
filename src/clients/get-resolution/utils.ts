@@ -17,5 +17,6 @@ export const initialResolutionData: Resolution = {
   investmentRut: '',
   securityBag: '',
   statusId: 0,
-  cadMetadata: null
+  metadata: null,
+  hasMetadata: false,
 };

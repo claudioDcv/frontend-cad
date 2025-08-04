@@ -31,16 +31,19 @@ import {
   IconList,
 } from '@components/index';
 import useServices from './hooks/useServices';
+import useAccess from '@/components/atoms/access/useAccess';
 import {
   addOptionAll,
   defaultResolutionsFormValues,
   isEmpty,
 } from '../../utils';
-import { ResolutionFormModel } from '../../types';
-import ResolutionDetailButton from './components/ResolutionDetailButton';
-import ResolutionSendTruckModal from './components/ResolutionSendTruckModal';
-import ResolutionMassiveModal from './components/ResolutionMassiveModal';
 import { Resolution } from '@/entities/Resolution.entity';
+import { ResolutionFormModel } from '../../types';
+import {
+  ResolutionDetailButton,
+  ResolutionMassiveModal,
+  ResolutionSendTruckModal,
+} from './components';
 
 const Resolutions = () => {
   const { t } = useTranslation();
@@ -54,6 +57,16 @@ const Resolutions = () => {
   const [truckId, setTruckId] = useState<number | null>(null);
 
   const services = useServices();
+  const access = useAccess();
+
+  const isOperator = access([validRoles.operator]);
+
+  const withHasMetadata = (
+    filters: ResolutionFormModel
+  ): ResolutionFormModel => ({
+    ...filters,
+    hasMetadata: isOperator ? true : undefined,
+  });
 
   const materialTypeOptions = addOptionAll(services.getAllMaterialType.data);
   const statusOptions = addOptionAll(services.getAllStatus.data);
@@ -76,7 +89,7 @@ const Resolutions = () => {
         resolutionNumber: resolutionNumber,
         page: FIRST_PAGE,
       };
-      services.getAllResolutions.call(newFilters);
+      services.getAllResolutions.call(withHasMetadata(newFilters));
     }, SEARCH_DELAY)
   );
 
@@ -86,16 +99,16 @@ const Resolutions = () => {
     services.getAllLocations.clearData();
     services.getAllInvestments.clearData();
 
-    services.getAllResolutions.call({
-      ...defaultResolutionsFormValues(),
-    });
+    services.getAllResolutions.call(
+      withHasMetadata(defaultResolutionsFormValues())
+    );
   };
 
   const handleChangeStatus =
     (field: ControllerRenderProps<ResolutionFormModel>) => (value: Option) => {
       field.onChange(value);
       const newFilters = { ...getValues(), status: value, page: FIRST_PAGE };
-      services.getAllResolutions.call(newFilters);
+      services.getAllResolutions.call(withHasMetadata(newFilters));
     };
 
   const handleChangeMaterialType =
@@ -106,7 +119,7 @@ const Resolutions = () => {
         categoryId: value,
         page: FIRST_PAGE,
       };
-      services.getAllResolutions.call(newFilters);
+      services.getAllResolutions.call(withHasMetadata(newFilters));
     };
 
   const handleChangeInvestment =
@@ -127,7 +140,7 @@ const Resolutions = () => {
         location: emptyOption,
         page: FIRST_PAGE,
       };
-      services.getAllResolutions.call(newFilters);
+      services.getAllResolutions.call(withHasMetadata(newFilters));
     };
 
   const handleChangeLocation =
@@ -138,7 +151,7 @@ const Resolutions = () => {
         location: value,
         page: FIRST_PAGE,
       };
-      services.getAllResolutions.call(newFilters);
+      services.getAllResolutions.call(withHasMetadata(newFilters));
     };
 
   const handleChangeRange = (newRange: [Date, Date]) => {
@@ -149,7 +162,7 @@ const Resolutions = () => {
       page: FIRST_PAGE,
     };
     setValue('range', newRange);
-    services.getAllResolutions.call(newFilters);
+    services.getAllResolutions.call(withHasMetadata(newFilters));
   };
 
   const handleDocNumberChange = (
@@ -166,7 +179,7 @@ const Resolutions = () => {
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page: page };
     setValue('page', page);
-    services.getAllResolutions.call(newFilters);
+    services.getAllResolutions.call(withHasMetadata(newFilters));
   };
 
   const handleMassiveResolution = (resolution: Resolution) => () => {

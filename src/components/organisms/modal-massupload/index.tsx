@@ -7,6 +7,7 @@ import styles from './index.module.css';
 import ActionsResolution from './components/actions-resolution';
 import { useTranslation } from 'react-i18next';
 import useServices from './hooks/useServices';
+import { formatToDDMMYYYY } from '@/utils';
 
 const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   open,
@@ -18,7 +19,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
 
   const { resolutionId } = resolution ?? {};
 
-  const services = useServices(String(resolution.resolutionId));
+  const services = useServices(String(resolutionId));
 
   // TODO:
   //  Resolucionar , debe de aparecer cuando al menos haya un guardado, cuando se resolucione
@@ -27,7 +28,10 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   // consumir el servicio para llenar los valores iniciales
   // falta servicio que retorna el total esperado a asignar
 
-  const expectedTotal = { quantity: 100, weight: 1000 };
+  const expectedTotal = {
+    quantity: services.getResolution.data.totalJewels ?? 0,
+    weight: 1000,
+  };
   const [currentTotal, setCurrentTotal] = useState({ quantity: 0, weight: 0 });
 
   useEffect(() => {
@@ -79,7 +83,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
               <Box>
                 <DisplayData
                   label={t('modalMassUpload.totalWeight')}
-                  value="500 grs"
+                  value={`12 grs`}
                 />
                 <DisplayData
                   label={t('modalMassUpload.salePrice')}
@@ -98,7 +102,9 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
                 />
                 <DisplayData
                   label={t('modalMassUpload.expirationDate')}
-                  value="12/05/2024"
+                  value={`${formatToDDMMYYYY(
+                    services.getResolution.data.closeDate
+                  )}`}
                 />
               </Box>
               <Divider />

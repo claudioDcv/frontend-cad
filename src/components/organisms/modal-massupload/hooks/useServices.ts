@@ -1,18 +1,24 @@
 import { useEffect } from 'react';
 import { FetchStatus } from '@/constants';
-import { useGetResolutionInventory } from '@/clients';
+import { useGetResolution, useGetResolutionInventory } from '@/clients';
 
 const useServices = (resolutionId: string) => {
   const getResolutionInventory = useGetResolutionInventory();
+  const getResolution = useGetResolution();
 
   useEffect(() => {
     if (resolutionId && getResolutionInventory.status === FetchStatus.IDLE) {
       getResolutionInventory.call(resolutionId);
     }
-  }, [getResolutionInventory, resolutionId]);
+
+    if (resolutionId && getResolution.status === FetchStatus.IDLE) {
+      getResolution.call(resolutionId);
+    }
+  }, [getResolution, getResolutionInventory, resolutionId]);
 
   return {
     getResolutionInventory,
+    getResolution,
   };
 };
 

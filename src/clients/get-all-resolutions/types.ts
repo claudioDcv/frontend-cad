@@ -13,6 +13,7 @@ export type ResolutionQuery = {
   statusName?: string;
   startDate?: string;
   endDate?: string;
+  hasMetadata?: boolean;
   page: number;
   size?: number;
   sort?: string;

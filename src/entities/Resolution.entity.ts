@@ -24,5 +24,6 @@ export type Resolution = {
   securityBag: string;
   statusId: number;
   categoryId: number;
-  cadMetadata: ResolutionMetadata | null;
+  metadata: ResolutionMetadata | null;
+  hasMetadata: boolean;
 };

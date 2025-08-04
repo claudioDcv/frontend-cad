@@ -247,6 +247,8 @@
     "getUnviewedNotificationsParse": "Error al interpretar los datos de notificaciones del servidor.",
     "error.getAllNotificationsFetch": "Error al obtener la lista de notificaciones. Por favor, inténtalo de nuevo más tarde.",
     "error.getAllNotificationsParse": "Error al interpretar los datos de notificaciones del servidor.",
+    "getResolutionInventoryFetch": "Error al actualizar la el inventario de la resolucion. Por favor, inténtalo de nuevo más tarde.",
+    "getResolutionInventoryParse": "Error al interpretar los datos del inventario de la resolucion revisado del servidor.",
     "jsonError": "Error al procesar la respuesta del servidor."
   },
   "notification": {
@@ -312,5 +314,10 @@
     "relojbruto": "Reloj Bruto",
     "relojneto": "Reloj Neto",
     "scrap": "Scrap"
+  },
+  "resolutionDetail": {
+    "allContractsMustBeReviewed": "Todos los contratos deben estar revisados",
+    "hasMetadataAlready": "Resolucion ya enviada a CAD",
+    "noContracts": "No hay contratos asociados a esta resolución"
   }
 }

@@ -9,15 +9,11 @@ import { useInitialData } from '@/contexts/initial-data/useInitialData';
 import { useTranslation } from 'react-i18next';
 
 // TODO:
-// tambien preparar los 3 clientes para los endpoints
-// Preguntar si tiene metadata, si es el caso, no permitir enviar
-// decirle a Carolina que no permita enviar a cad si tiene metadata
 // para el operador solo debe de mostrar las resoluciones que tienen metadata
-// agregar un filtro hasMetadata (true/false) / Carolina tambien
+// agregar un filtro hasMetadata (true/false)
 
 // Vista coordinador solo debe ver los documentos pre resolucionados (con y sin metadata)
 // Operador: pre resoluciones (con metadata), resoluciones, aceptadas y cerradas.
-// mandar resolucion completa en vez de solo el id
 
 const InventoryEditableTable = (props: EditableTableProps) => {
   const { t } = useTranslation();

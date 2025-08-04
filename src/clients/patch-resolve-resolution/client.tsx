@@ -10,7 +10,7 @@ const client = async (props: Resolution): Promise<Resolution> => {
     credentials: 'include',
     method: 'PATCH',
     body: JSON.stringify({
-      metadata: props.cadMetadata,
+      metadata: props.metadata,
     }),
   });
 

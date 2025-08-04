@@ -22,7 +22,8 @@ const mockResolution: Resolution = {
   securityBag: '',
   statusId: 0,
   categoryId: 0,
-  cadMetadata: null,
+  metadata: null,
+  hasMetadata: false
 };
 
 describe('usePatchResolutionResolve', () => {

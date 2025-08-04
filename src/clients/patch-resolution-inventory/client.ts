@@ -8,20 +8,21 @@ const client = async (resolutionId: string): Promise<InventoryResolution[]> => {
   const response = await fetch(url, {
     headers: getHeader(),
     credentials: 'include',
+    method: 'PATCH',
   });
 
   if (!response.ok) {
-    throw new Error('error.getResolutionInventoryFetch');
+    throw new Error('error.getAllContractsFetch');
   }
 
   try {
     const data = await response.json();
     if (!Array.isArray(data)) {
-      throw new Error('error.getResolutionInventoryParse');
+      throw new Error('error.getAllContractsParse');
     }
     return data;
   } catch {
-    throw new Error('error.getResolutionInventoryParse');
+    throw new Error('error.getAllContractsParse');
   }
 };
 

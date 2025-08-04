@@ -8,6 +8,7 @@ export interface ResolutionFormModel {
   location: Option;
   range: [Date, Date];
   resolutionNumber: string;
+  hasMetadata?: boolean;
 }
 
 export interface PackingListFormModel {
