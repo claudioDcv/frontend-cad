@@ -9,9 +9,6 @@ import { useInitialData } from '@/contexts/initial-data/useInitialData';
 import { useTranslation } from 'react-i18next';
 
 // TODO:
-// para el operador solo debe de mostrar las resoluciones que tienen metadata
-// agregar un filtro hasMetadata (true/false)
-
 // Vista coordinador solo debe ver los documentos pre resolucionados (con y sin metadata)
 // Operador: pre resoluciones (con metadata), resoluciones, aceptadas y cerradas.
 

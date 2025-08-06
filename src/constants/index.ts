@@ -70,7 +70,6 @@ export const validRoles = {
 export const commonNotificationTypes = ['resolution_notification'];
 
 // TODO: Averiguar cuales se necesitan realmente
-
 export const allowedInventories = [
   'anillo',
   'aro',

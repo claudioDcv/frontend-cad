@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Badge,
   Box,
@@ -23,6 +23,14 @@ const NotificationContainer = () => {
   const notificationCtx = useNotification();
   const setter = notificationCtx.setUnviewedCounter;
 
+  const openDrawer = useCallback(() => {
+    setDrawerOpen(true);
+  }, []);
+
+  const closeDrawer = useCallback(() => {
+    setDrawerOpen(false);
+  }, []);
+
   useEffect(() => {
     const { status, data } = services.getUnviewedNotifications;
     if (status === FetchStatus.SUCCESS) {
@@ -35,7 +43,7 @@ const NotificationContainer = () => {
 
   return (
     <>
-      <IconButton onClick={() => setDrawerOpen(true)}>
+      <IconButton onClick={openDrawer}>
         <Badge
           badgeContent={notificationCtx.unviewedCounter}
           color="error"
@@ -45,11 +53,7 @@ const NotificationContainer = () => {
         </Badge>
       </IconButton>
 
-      <Drawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
+      <Drawer anchor="right" open={drawerOpen} onClose={closeDrawer}>
         <Box display="flex" flexDirection="column" height="100%" width={360}>
           <Box px={2} py={1}>
             <Typography variant="subtitle1">Notificaciones</Typography>

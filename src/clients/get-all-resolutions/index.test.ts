@@ -51,6 +51,9 @@ describe('useGetAllResolutions', () => {
           categoryId: 0,
           metadata: null,
           hasMetadata: false,
+          totalWeight: 0,
+          totalPurchase: 0,
+          averagePurchase: 0
         },
       ],
       totalElements: 1,

@@ -19,4 +19,7 @@ export const initialResolutionData: Resolution = {
   statusId: 0,
   metadata: null,
   hasMetadata: false,
+  totalWeight: 0,
+  totalPurchase: 0,
+  averagePurchase: 0,
 };

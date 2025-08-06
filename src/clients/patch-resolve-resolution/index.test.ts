@@ -23,7 +23,10 @@ const mockResolution: Resolution = {
   statusId: 0,
   categoryId: 0,
   metadata: null,
-  hasMetadata: false
+  hasMetadata: false,
+  totalWeight: 0,
+  totalPurchase: 0,
+  averagePurchase: 0,
 };
 
 describe('usePatchResolutionResolve', () => {
@@ -50,7 +53,7 @@ describe('usePatchResolutionResolve', () => {
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
     expect(result.current.data).toEqual(mockResolution);
-    expect(result.current.error).toBeNull(); 
+    expect(result.current.error).toBeNull();
   });
 
   test('should return error and ERROR status on failed call', async () => {
