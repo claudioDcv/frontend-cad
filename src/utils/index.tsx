@@ -73,7 +73,6 @@ export const formatDateHour = (dateInput?: Date | string | number) => {
       ? new Date(dateInput)
       : dateInput;
 
-  // Verifica si la fecha es válida
   if (isNaN(date.getTime())) {
     console.error('Fecha y hora inválida proporcionada:', dateInput);
     return '';
@@ -186,8 +185,7 @@ export function preciseSum(numbers: number[]): number {
 
   const total = numbers.reduce((acc, n) => {
     const [integerPart, decimalPart = ''] = n.toString().split('.');
-    const scaledString =
-      integerPart + decimalPart.padEnd(maxDecimals, '0');
+    const scaledString = integerPart + decimalPart.padEnd(maxDecimals, '0');
 
     const scaled = BigInt(scaledString);
     return acc + scaled;
@@ -195,7 +193,6 @@ export function preciseSum(numbers: number[]): number {
 
   return Number(total) / Number(multiplier);
 }
-
 
 export const pluralize = (value: number, singular: string, plural: string) => {
   if (value === 1) return singular;

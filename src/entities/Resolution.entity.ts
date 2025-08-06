@@ -25,5 +25,8 @@ export type Resolution = {
   statusId: number;
   categoryId: number;
   metadata: ResolutionMetadata | null;
+  totalWeight: number ;
+  totalPurchase: number;
+  averagePurchase: number;
   hasMetadata: boolean;
 };

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ModalActions, ModalConfirm } from '@/components';
 import AlertCard from '@/components/atoms/alert-card';
 import { diffInitialState, getDiff } from './index.utils';
+import { usePostResolutionSend } from '@/clients';
 
 const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   onSuccess,
@@ -12,8 +13,11 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   loading,
   expected,
   current,
+  resolution,
 }) => {
   const { t } = useTranslation();
+  const postResolutionSend = usePostResolutionSend();
+
   const [openConfirm, setOpenConfirm] = useState(false);
   const [diff, setDiff] = useState({ ...diffInitialState });
 
@@ -31,9 +35,30 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   };
 
   const handleSuccess = async () => {
-    await onSuccess();
+    // TODO:
+    // implementar logica del post resolution send
+    if (!resolution) {
+      return;
+    }
+    await postResolutionSend.call({
+      ...resolution,
+      success: false,
+      message: '',
+      legacyId: 0,
+      itemsProcessed: 1,
+    });
+
+    onSuccess(resolution);
     setOpenConfirm(false);
   };
+
+  const handleModalSuccess = () => {
+    if (resolution) {
+      onSuccess(resolution);
+    }
+  };
+
+  const handleAlertClose = () => {};
 
   const getText = () => {
     const message = [];
@@ -64,13 +89,13 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
       <DialogActions>
         <Box display="flex" justifyContent="space-between" width="100%">
           <Button variant="contained" size="small" disabled>
-            Cuentas por cobrar
+            {t('common.accountsReceivable')}
           </Button>
 
           <Box display="flex" gap={1}>
             <ModalActions
               wrap={false}
-              onSuccess={onSuccess}
+              onSuccess={handleModalSuccess}
               onClose={onClose}
               loading={loading}
             />
@@ -79,7 +104,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
               size="small"
               onClick={handleOpenConfirm}
             >
-              {t('common.requestResolution')}
+              {t('common.requesCAD')}
             </Button>
           </Box>
         </Box>
@@ -101,7 +126,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
             severity="warning"
             open={true}
             closable={false}
-            onClose={() => undefined}
+            onClose={handleAlertClose}
             i18n={{
               title: t('alertResolutionSolve.warning'),
               text: getText(),

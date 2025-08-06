@@ -1,6 +1,6 @@
 import { API_BASE } from '../../conf/http';
-import { Contract } from '@/entities/Contract.entity';
 import { clearProp, getHeader } from '../utils';
+import { Contract } from '@/entities/Contract.entity';
 
 const client = async (props: Contract): Promise<Contract> => {
   const url = `${API_BASE}/contracts/${props.contractId}/reviewed`;

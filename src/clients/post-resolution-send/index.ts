@@ -1,20 +1,20 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
-import { Contract } from '@/entities/Contract.entity';
+import { Send } from '@/entities/Send.entity';
 import client from './client';
 
-const usePatchReviewedContract = () => {
+const usePostResolutionSend = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Contract>();
+  const [data, setData] = useState<Send | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
-    setData(undefined);
+    setData(null);
     setError(null);
   };
 
   const call = useCallback(
-    async (props: Contract) => {
+    async (props: Send) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -32,10 +32,9 @@ const usePatchReviewedContract = () => {
 
         setData(result);
         setStatus(FetchStatus.SUCCESS);
-        return result;
       } catch (err) {
         const messageKey =
-          (err as Error)?.message ?? 'error.patchReviewedContractFetch';
+          (err as Error)?.message ?? 'error.getAllContractsFetch';
         setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
@@ -43,7 +42,13 @@ const usePatchReviewedContract = () => {
     [status]
   );
 
-  return { status, data, error, call, onResetError };
+  return {
+    status,
+    data,
+    error,
+    call,
+    onResetError,
+  };
 };
 
-export default usePatchReviewedContract;
+export default usePostResolutionSend;

@@ -130,12 +130,48 @@ const InventoryEditableTable = (props: EditableTableProps) => {
               </tr>
             ))}
           </tbody>
+        </table>
+        <table className={styles.table}>
+          <tbody>
+            <tr>
+              <td>
+                <div>Material Falso</div>
+              </td>
+              <td>
+                <EditableRow value="0" onChange={() => {}} />
+              </td>
+              <td>
+                <EditableRow value="0" onChange={() => {}} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>Material Faltante</div>
+              </td>
+              <td>
+                <EditableRow value="0" onChange={() => {}} />
+              </td>
+              <td>
+                <EditableRow value="0" onChange={() => {}} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>Material con Baja Ley</div>
+              </td>
+              <td>
+                <EditableRow value="0" onChange={() => {}} />
+              </td>
+              <td>
+                <EditableRow value="0" onChange={() => {}} />
+              </td>
+            </tr>
+          </tbody>
           <tfoot>
             <tr>
               <td>
                 <div style={{ fontWeight: 'bold' }}>Totales</div>
               </td>
-
               <td
                 className={
                   totalQuantity === props.total.quantity ? styles.validCell : ''

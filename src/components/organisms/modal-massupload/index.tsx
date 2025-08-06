@@ -7,7 +7,7 @@ import styles from './index.module.css';
 import ActionsResolution from './components/actions-resolution';
 import { useTranslation } from 'react-i18next';
 import useServices from './hooks/useServices';
-import { formatToDDMMYYYY } from '@/utils';
+import { formatCurrency, formatToDDMMYYYY } from '@/utils';
 
 const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   open,
@@ -30,7 +30,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
 
   const expectedTotal = {
     quantity: services.getResolution.data.totalJewels ?? 0,
-    weight: 1000,
+    weight: services.getResolution.data.totalWeight ?? 0,
   };
   const [currentTotal, setCurrentTotal] = useState({ quantity: 0, weight: 0 });
 
@@ -83,15 +83,19 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
               <Box>
                 <DisplayData
                   label={t('modalMassUpload.totalWeight')}
-                  value={`12 grs`}
+                  value={`${services.getResolution.data.totalWeight} grs`}
                 />
                 <DisplayData
                   label={t('modalMassUpload.salePrice')}
-                  value="$234.000"
+                  value={formatCurrency(
+                    services.getResolution.data.totalPurchase
+                  )}
                 />
                 <DisplayData
                   label={t('modalMassUpload.averagePurchase')}
-                  value="$12.550"
+                  value={formatCurrency(
+                    services.getResolution.data.averagePurchase
+                  )}
                 />
               </Box>
               <Divider />
@@ -136,6 +140,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
           onSuccess={handleSuccess}
           expected={expectedTotal}
           current={currentTotal}
+          resolution={resolution}
         />
       </form>
     </Dialog>
