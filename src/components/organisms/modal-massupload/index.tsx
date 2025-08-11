@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, Box, Card, Divider } from '@mui/material';
 import { DisplayData, EditableTable, IconList } from '@/components';
-import { ModalMassUploadProps, SuccessData } from './index.types';
+import { ModalMassUploadProps } from './index.types';
 import ModalHeader from '@/components/molecules/modal-header';
 import styles from './index.module.css';
 import ActionsResolution from './components/actions-resolution';
@@ -21,12 +21,15 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
 
   const services = useServices(String(resolutionId));
 
+  const [currentInventory, setCurrentInventory] = useState(
+    services.getResolutionInventory.data || []
+  );
+
   // TODO:
   //  Resolucionar , debe de aparecer cuando al menos haya un guardado, cuando se resolucione
   // el boton guardar se dshabilite
-
-  // consumir el servicio para llenar los valores iniciales
-  // falta servicio que retorna el total esperado a asignar
+  // Peso total: null grs
+  // arreglar el send, para que si envie los datos
 
   const expectedTotal = {
     quantity: services.getResolution.data.totalJewels ?? 0,
@@ -49,6 +52,12 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
     setCurrentTotal(total);
   }, [services.getResolutionInventory.data]);
 
+  useEffect(() => {
+    if (services.getResolutionInventory.data) {
+      setCurrentInventory(services.getResolutionInventory.data);
+    }
+  }, [services.getResolutionInventory.data]);
+
   const handleTotalsChange = (totals: { quantity: number; weight: number }) => {
     setCurrentTotal(totals);
   };
@@ -56,12 +65,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   const handleClose = () => onClose();
 
   const handleSuccess = () => {
-    const data: SuccessData = {
-      units: currentTotal.quantity,
-      grams: currentTotal.weight,
-    };
-
-    onSuccess(data);
+    onSuccess(currentInventory);
   };
 
   return (
@@ -138,6 +142,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
           onClose={handleClose}
           loading={false}
           onSuccess={handleSuccess}
+          items={services.getResolutionInventory.data}
           expected={expectedTotal}
           current={currentTotal}
           resolution={resolution}

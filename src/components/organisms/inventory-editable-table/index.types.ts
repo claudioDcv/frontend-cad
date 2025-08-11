@@ -1,4 +1,5 @@
 import { InventoryResolution } from '@/entities/InventoryResolution.entity';
+import { InventoryItem } from '@/entities/Send.entity';
 
 interface Total {
   quantity: number;
@@ -8,5 +9,5 @@ interface Total {
 export interface EditableTableProps {
   total: Total;
   resolutionInventory: InventoryResolution[];
-  onChange: (totals: Total) => void;
+  onChange: (updatedItem: InventoryItem) => void;
 }

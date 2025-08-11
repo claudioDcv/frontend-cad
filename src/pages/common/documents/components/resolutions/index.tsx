@@ -31,7 +31,6 @@ import {
   IconList,
 } from '@components/index';
 import useServices from './hooks/useServices';
-import useAccess from '@/components/atoms/access/useAccess';
 import {
   addOptionAll,
   defaultResolutionsFormValues,
@@ -57,16 +56,6 @@ const Resolutions = () => {
   const [truckId, setTruckId] = useState<number | null>(null);
 
   const services = useServices();
-  const access = useAccess();
-
-  const isOperator = access([validRoles.operator]);
-
-  const withHasMetadata = (
-    filters: ResolutionFormModel
-  ): ResolutionFormModel => ({
-    ...filters,
-    hasMetadata: isOperator ? true : undefined,
-  });
 
   const materialTypeOptions = addOptionAll(services.getAllMaterialType.data);
   const statusOptions = addOptionAll(services.getAllStatus.data);
@@ -89,7 +78,7 @@ const Resolutions = () => {
         resolutionNumber: resolutionNumber,
         page: FIRST_PAGE,
       };
-      services.getAllResolutions.call(withHasMetadata(newFilters));
+      services.getAllResolutions.call(newFilters);
     }, SEARCH_DELAY)
   );
 
@@ -100,7 +89,7 @@ const Resolutions = () => {
     services.getAllInvestments.clearData();
 
     services.getAllResolutions.call(
-      withHasMetadata(defaultResolutionsFormValues())
+      (defaultResolutionsFormValues())
     );
   };
 
@@ -108,7 +97,7 @@ const Resolutions = () => {
     (field: ControllerRenderProps<ResolutionFormModel>) => (value: Option) => {
       field.onChange(value);
       const newFilters = { ...getValues(), status: value, page: FIRST_PAGE };
-      services.getAllResolutions.call(withHasMetadata(newFilters));
+      services.getAllResolutions.call(newFilters);
     };
 
   const handleChangeMaterialType =
@@ -119,7 +108,7 @@ const Resolutions = () => {
         categoryId: value,
         page: FIRST_PAGE,
       };
-      services.getAllResolutions.call(withHasMetadata(newFilters));
+      services.getAllResolutions.call(newFilters);
     };
 
   const handleChangeInvestment =
@@ -140,7 +129,7 @@ const Resolutions = () => {
         location: emptyOption,
         page: FIRST_PAGE,
       };
-      services.getAllResolutions.call(withHasMetadata(newFilters));
+      services.getAllResolutions.call(newFilters);
     };
 
   const handleChangeLocation =
@@ -151,7 +140,7 @@ const Resolutions = () => {
         location: value,
         page: FIRST_PAGE,
       };
-      services.getAllResolutions.call(withHasMetadata(newFilters));
+      services.getAllResolutions.call(newFilters);
     };
 
   const handleChangeRange = (newRange: [Date, Date]) => {
@@ -162,7 +151,7 @@ const Resolutions = () => {
       page: FIRST_PAGE,
     };
     setValue('range', newRange);
-    services.getAllResolutions.call(withHasMetadata(newFilters));
+    services.getAllResolutions.call(newFilters);
   };
 
   const handleDocNumberChange = (
@@ -179,7 +168,7 @@ const Resolutions = () => {
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page: page };
     setValue('page', page);
-    services.getAllResolutions.call(withHasMetadata(newFilters));
+    services.getAllResolutions.call(newFilters);
   };
 
   const handleMassiveResolution = (resolution: Resolution) => () => {

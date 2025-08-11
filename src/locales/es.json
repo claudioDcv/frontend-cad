@@ -304,9 +304,6 @@
     "joyaespecial": "Joya Especial",
     "joyaespecialconsignacion": "Joya Especial (Consignación)",
     "lingote": "Lingote",
-    "materialbajaley": "Material Baja Ley",
-    "materialfalso": "Material Falso",
-    "materialfaltante": "Material Faltante",
     "moneda": "Moneda",
     "otro": "Otro",
     "piedra": "Piedra",
@@ -316,7 +313,10 @@
     "pulcera": "Pulsera (Refacción)",
     "relojbruto": "Reloj Bruto",
     "relojneto": "Reloj Neto",
-    "scrap": "Scrap"
+    "scrap": "Scrap",
+    "materialbajaley": "Material Baja Ley",
+    "materialfalso": "Material Falso",
+    "materialfaltante": "Material Faltante"
   },
   "resolutionDetail": {
     "allContractsMustBeReviewed": "Todos los contratos deben estar revisados",

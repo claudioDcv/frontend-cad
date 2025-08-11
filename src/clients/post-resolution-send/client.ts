@@ -1,17 +1,16 @@
 import { API_BASE } from '../../conf/http';
 import { getHeader } from '../utils';
 import { Send } from '@/entities/Send.entity';
+import { SendRequest } from './index.types';
 
-const client = async (props: Send): Promise<Send> => {
+const client = async (props: SendRequest): Promise<Send> => {
   const url = `${API_BASE}/resolutions/${props.resolutionId}/send`;
 
   const response = await fetch(url, {
     headers: getHeader(),
     credentials: 'include',
     method: 'POST',
-    body: JSON.stringify([{
-      inventoryTypeId: 1, quantity: 10,
-    }]),
+    body: JSON.stringify(props.items),
   });
 
   if (!response.ok) {

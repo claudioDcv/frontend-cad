@@ -14,6 +14,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   expected,
   current,
   resolution,
+  items,
 }) => {
   const { t } = useTranslation();
   const postResolutionSend = usePostResolutionSend();
@@ -35,18 +36,18 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   };
 
   const handleSuccess = async () => {
-    // TODO:
-    // implementar logica del post resolution send
-    if (!resolution) {
-      return;
-    }
+    if (!resolution) return;
+
     await postResolutionSend.call({
-      ...resolution,
-      success: false,
-      message: '',
-      legacyId: 0,
-      itemsProcessed: 1,
+      resolutionId: resolution.resolutionId,
+      items: items.map((item) => ({
+        inventoryTypeId: item.inventoryTypeId,
+        weight: item.weight,
+        quantity: item.quantity,
+      })),
     });
+
+    console.log('Post resolution send response:', postResolutionSend.data);
 
     onSuccess(resolution);
     setOpenConfirm(false);

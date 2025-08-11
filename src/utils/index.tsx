@@ -198,3 +198,23 @@ export const pluralize = (value: number, singular: string, plural: string) => {
   if (value === 1) return singular;
   return plural;
 };
+
+export function sortCustom<T>(
+  items: T[],
+  orderList: string[],
+  key: (item: T) => string
+): T[] {
+  return [...items].sort((a, b) => {
+    const aKey = key(a);
+    const bKey = key(b);
+
+    const aIndex = orderList.indexOf(aKey);
+    const bIndex = orderList.indexOf(bKey);
+
+    if (aIndex === -1 && bIndex === -1) return 0;
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+
+    return aIndex - bIndex;
+  });
+}

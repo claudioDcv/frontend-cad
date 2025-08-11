@@ -25,6 +25,7 @@ describe('usePostResolutionSend', () => {
       legacyId: 1,
       resolutionId: 123,
       itemsProcessed: 10,
+      items: []
     };
 
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockSend);
@@ -53,6 +54,7 @@ describe('usePostResolutionSend', () => {
       legacyId: 1,
       resolutionId: 123,
       itemsProcessed: 10,
+      items: []
     };
 
     const { result } = renderHook(() => usePostResolutionSend());

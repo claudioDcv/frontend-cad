@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
 import { Send } from '@/entities/Send.entity';
 import client from './client';
+import { SendRequest } from './index.types';
 
 const usePostResolutionSend = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -14,7 +15,7 @@ const usePostResolutionSend = () => {
   };
 
   const call = useCallback(
-    async (props: Send) => {
+    async (props: SendRequest) => {
       if (status === FetchStatus.ERROR) {
         return;
       }

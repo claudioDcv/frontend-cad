@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Inventory } from '@/entities/Inventory.entity';
+import { allowedInventories } from '@/constants';
+import { pluralize, preciseSum, sortCustom } from '@/utils';
+import { useInitialData } from '@/contexts/initial-data/useInitialData';
+import Token from '@/tokens';
+import { EditableTableProps } from './index.types';
 import EditableRow from './components/editable-row/EditableRow';
 import styles from './index.module.css';
-import Token from '@/tokens';
-import { pluralize, preciseSum } from '@/utils';
-import { EditableTableProps } from './index.types';
-import { useInitialData } from '@/contexts/initial-data/useInitialData';
-import { useTranslation } from 'react-i18next';
 
 // TODO:
 // Vista coordinador solo debe ver los documentos pre resolucionados (con y sin metadata)
@@ -21,8 +22,14 @@ const InventoryEditableTable = (props: EditableTableProps) => {
 
   useEffect(() => {
     if (data.length === 0 && initialDataCtx.inventoryTypes.length) {
+      const sortedInventoryTypes = sortCustom(
+        initialDataCtx.inventoryTypes,
+        allowedInventories,
+        (item) => item.label
+      );
+
       setData(
-        initialDataCtx.inventoryTypes.map((it) => ({
+        sortedInventoryTypes.map((it) => ({
           inventoryType: it,
           quantity: 0,
           weight: 0,
@@ -74,7 +81,11 @@ const InventoryEditableTable = (props: EditableTableProps) => {
     const totalWeight = preciseSum(newData.map((item) => item.weight));
 
     if (props.onChange) {
-      props.onChange({ quantity: totalQuantity, weight: totalWeight });
+      props.onChange({
+        quantity: totalQuantity,
+        weight: totalWeight,
+        inventoryTypeId: Number(newData[index].inventoryType.value),
+      });
     }
   };
 
@@ -126,43 +137,6 @@ const InventoryEditableTable = (props: EditableTableProps) => {
                 </td>
               </tr>
             ))}
-          </tbody>
-        </table>
-        <table className={styles.table}>
-          <tbody>
-            <tr>
-              <td>
-                <div>Material Falso</div>
-              </td>
-              <td>
-                <EditableRow value="0" onChange={() => {}} />
-              </td>
-              <td>
-                <EditableRow value="0" onChange={() => {}} />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div>Material Faltante</div>
-              </td>
-              <td>
-                <EditableRow value="0" onChange={() => {}} />
-              </td>
-              <td>
-                <EditableRow value="0" onChange={() => {}} />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div>Material con Baja Ley</div>
-              </td>
-              <td>
-                <EditableRow value="0" onChange={() => {}} />
-              </td>
-              <td>
-                <EditableRow value="0" onChange={() => {}} />
-              </td>
-            </tr>
           </tbody>
           <tfoot>
             <tr>
