@@ -1,0 +1,14 @@
+.caption {
+  caption-side: top;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 8px 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.validCell {
+  color: #2e7d32 !important;
+}

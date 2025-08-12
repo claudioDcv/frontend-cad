@@ -209,9 +209,11 @@
     "averagePurchaseValue": "Promedio de Compra",
     "responsible": "Responsable",
     "expiration": "vencimiento",
-    "client": "Cliente"
+    "client": "Cliente",
+    "all": "Todos",
+    "notReviewed": "No Revisados",
+    "reviewedPlural": "Revisados"
   },
-
   "routes": {
     "operatorDocuments": "Operador",
     "cordinatorDocuments": "Cordinador",
@@ -296,11 +298,11 @@
     "rut": "RUT"
   },
   "inventoryType": {
-    "anillo": "Anillo (Refacción)",
-    "aro": "Aro (Refacción)",
+    "anillo": "Anillo",
+    "aro": "Aro",
     "barraylaminado": "Barra y Laminado",
-    "cadena": "Cadena (Refacción)",
-    "colgante": "Colgante (Refacción)",
+    "cadena": "Cadena",
+    "colgante": "Colgante",
     "joyaespecial": "Joya Especial",
     "joyaespecialconsignacion": "Joya Especial (Consignación)",
     "lingote": "Lingote",
@@ -310,7 +312,7 @@
     "piedrapreciosa": "Piedra Preciosa",
     "piedrapreciosaconsignacion": "Piedra Preciosa (Consignación)",
     "prendedor": "Prendedor",
-    "pulcera": "Pulsera (Refacción)",
+    "pulcera": "Pulsera",
     "relojbruto": "Reloj Bruto",
     "relojneto": "Reloj Neto",
     "scrap": "Scrap",

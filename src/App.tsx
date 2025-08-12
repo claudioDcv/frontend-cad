@@ -6,12 +6,13 @@ import { VITE_MOCK_API, WEBSOCKET_BASE } from './conf/http';
 import { WebSocketProvider } from './contexts/websocket';
 import NotificationProvider from './contexts/notification/NotificationProvider';
 import InitialDataProvider from './contexts/initial-data/InitialDataProvider';
+import { DEBUG } from './conf/envs';
 
 const wsConfig = {
   url: WEBSOCKET_BASE,
   token: '',
   heartbeatInterval: 30000,
-  debug: false,
+  debug: DEBUG,
   connectionType: 'stomp' as const,
   maxReconnectAttempts: 5,
 };

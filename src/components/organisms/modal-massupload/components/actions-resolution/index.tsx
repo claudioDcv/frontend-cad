@@ -14,7 +14,6 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   expected,
   current,
   resolution,
-  items,
 }) => {
   const { t } = useTranslation();
   const postResolutionSend = usePostResolutionSend();
@@ -38,6 +37,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   const handleSuccess = async () => {
     if (!resolution) return;
 
+    /*
     await postResolutionSend.call({
       resolutionId: resolution.resolutionId,
       items: items.map((item) => ({
@@ -46,6 +46,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
         quantity: item.quantity,
       })),
     });
+    */
 
     console.log('Post resolution send response:', postResolutionSend.data);
 
@@ -59,7 +60,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
     }
   };
 
-  const handleAlertClose = () => {};
+  const handleAlertClose = () => { };
 
   const getText = () => {
     const message = [];

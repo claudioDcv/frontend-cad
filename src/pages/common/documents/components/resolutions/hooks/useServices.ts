@@ -24,7 +24,7 @@ const useServices = () => {
     if (getAllResolutions.status === FetchStatus.IDLE) {
       getAllResolutions.call({
         ...defaultResolutionsFormValues(),
-        hasMetadata: isOperator ? true : undefined,
+        hasMetadata: isOperator || undefined,
       });
     }
     if (getAllStatus.status === FetchStatus.IDLE) {

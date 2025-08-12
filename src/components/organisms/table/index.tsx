@@ -75,16 +75,16 @@ const Header = <T,>({
               onClick={
                 column.id !== undefined
                   ? () =>
-                      column.sortable &&
-                      onSort &&
-                      onSort(
-                        column.id || '',
-                        sortField === column.id
-                          ? sortDirection === 'ASC'
-                            ? 'DESC'
-                            : 'ASC'
+                    column.sortable &&
+                    onSort &&
+                    onSort(
+                      column.id || '',
+                      sortField === column.id
+                        ? sortDirection === 'ASC'
+                          ? 'DESC'
                           : 'ASC'
-                      )
+                        : 'ASC'
+                    )
                   : undefined
               }
             >
@@ -171,8 +171,8 @@ const Body = <T,>({
                     {column.render
                       ? column.render(row)
                       : column.field && column.id
-                      ? column.field(row[column.id as keyof T])
-                      : value}
+                        ? column.field(row[column.id as keyof T])
+                        : value}
                   </td>
                 );
               })}

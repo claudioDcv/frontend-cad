@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, Box, Card, Divider } from '@mui/material';
-import { DisplayData, EditableTable, IconList } from '@/components';
+import { DisplayData, InventoryEditableTable, IconList } from '@/components';
 import { ModalMassUploadProps } from './index.types';
 import ModalHeader from '@/components/molecules/modal-header';
 import styles from './index.module.css';
@@ -21,7 +21,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
 
   const services = useServices(String(resolutionId));
 
-  const [currentInventory, setCurrentInventory] = useState(
+  const [, setCurrentInventory] = useState(
     services.getResolutionInventory.data || []
   );
 
@@ -65,7 +65,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   const handleClose = () => onClose();
 
   const handleSuccess = () => {
-    onSuccess(currentInventory);
+    onSuccess();
   };
 
   return (
@@ -129,7 +129,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
             </Box>
             <Box flex={2}>
               <Box sx={{ height: 'calc(100vh - 20rem)' }}>
-                <EditableTable
+                <InventoryEditableTable
                   total={expectedTotal}
                   resolutionInventory={services.getResolutionInventory.data}
                   onChange={handleTotalsChange}
@@ -142,7 +142,6 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
           onClose={handleClose}
           loading={false}
           onSuccess={handleSuccess}
-          items={services.getResolutionInventory.data}
           expected={expectedTotal}
           current={currentTotal}
           resolution={resolution}

@@ -44,6 +44,7 @@ import {
   ModalContractDetail,
   Notification,
   Table,
+  TripleToggleSwitch,
 } from '@/components';
 import { addOptionAll, isEmpty } from '../documents/utils';
 import Access from '@/components/atoms/access';
@@ -64,32 +65,39 @@ const ResolutionDetail = () => {
 
   const [contract, setContract] = useState<Contract | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>(emptyOption.value);
-  const [showOnlyNotReviewed, setShowOnlyNotReviewed] = useState(false);
+  const [showOnlyNotReviewed, setShowOnlyNotReviewed] = useState<0 | 1 | 2>(0);
 
   const [successNoteNotification, setSuccessNoteNotification] = useState(false);
   const [successConfirmNotification, setSuccessConfirmNotification] =
     useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-
   const services = useServices(resolutionId);
-
   const statusOptions = addOptionAll(services.getAllStatus.data);
-
   const isStatusDisabled = isEmpty(services.getAllStatus.data);
 
-  const filteredContracts = services.getResolutionContracts.data
-    .filter((contract) =>
+  const getFilteredContracts = () => {
+    const model = services.getResolutionContracts.data;
+    // Aplicar filtro de búsqueda
+    const filtered = model.filter((contract) =>
       contract.contractNumber?.toString().includes(searchTerm)
-    )
-    .filter(
+    );
+    // Aplicar filtro de estado
+    const filteredByStatus = filtered.filter(
       (contract) =>
         statusFilter === emptyOption.value ||
         contract.statusId === Number(statusFilter)
-    )
-    .filter((contract) =>
-      showOnlyNotReviewed ? !contract.cadMetadata?.reviewed : true
     );
+    // Aplicar filtro de revisión
+    console.log('Filtros:', { filteredByStatus, searchTerm, statusFilter, showOnlyNotReviewed });
+    // 0 all, 1 not reviewed, 2 reviewed
+    return filteredByStatus.filter((contract) => {
+      if (showOnlyNotReviewed === 0) return true; // All
+      if (showOnlyNotReviewed === 1) return !contract.cadMetadata?.reviewed; // Not reviewed
+      if (showOnlyNotReviewed === 2) return contract.cadMetadata?.reviewed; // Reviewed
+      return true; // Default case
+    });
+  };
 
   const materialType = getMaterial(
     String(services.getResolution.data?.categoryId)
@@ -142,16 +150,10 @@ const ResolutionDetail = () => {
     (
       field: ControllerRenderProps<{ contractNumber: string; status: Option }>
     ) =>
-    (selectedOption: Option) => {
-      field.onChange(selectedOption);
-      setStatusFilter(selectedOption.value);
-    };
-
-  const handleShowOnlyNotReviewedChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setShowOnlyNotReviewed(event.target.checked);
-  };
+      (selectedOption: Option) => {
+        field.onChange(selectedOption);
+        setStatusFilter(selectedOption.value);
+      };
 
   const handleSuccess = (contract: Contract) => {
     if (!contract) {
@@ -192,10 +194,10 @@ const ResolutionDetail = () => {
                     !hasContracts
                       ? t('resolutionDetail.noContracts')
                       : !isAllContractReviewed
-                      ? t('resolutionDetail.allContractsMustBeReviewed')
-                      : hasMetadata
-                      ? t('resolutionDetail.hasMetadataAlready')
-                      : ''
+                        ? t('resolutionDetail.allContractsMustBeReviewed')
+                        : hasMetadata
+                          ? t('resolutionDetail.hasMetadataAlready')
+                          : ''
                   }
                 >
                   <span>
@@ -306,14 +308,14 @@ const ResolutionDetail = () => {
             name="status"
             control={control}
           />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={showOnlyNotReviewed}
-                onChange={handleShowOnlyNotReviewedChange}
-              />
-            }
-            label={t('common.onlyNotReviewed')}
+          <TripleToggleSwitch
+            value={showOnlyNotReviewed}
+            options={[
+              { value: 0, label: t('common.all') },
+              { value: 1, label: t('common.notReviewed') },
+              { value: 2, label: t('common.reviewedPlural') },
+            ]}
+            onChange={(value) => setShowOnlyNotReviewed(value as 0 | 1 | 2)}
           />
         </Box>
         <Table
@@ -334,27 +336,27 @@ const ResolutionDetail = () => {
             {
               id: 'averagePurchaseValue',
               label: t('contract.averagePurchaseValue'),
-              field: (f) => formatCurrency(f as number),
+              field: formatCurrency,
             },
             {
               id: 'totalWeight',
               label: t('contract.totalWeight'),
-              field: (f) => formatNumberWithGr(f as number),
+              field: formatNumberWithGr,
             },
             {
               id: 'startDate',
               label: t('contract.startDate'),
-              field: (f) => formatToDDMMYYYY(f as string),
+              field: formatToDDMMYYYY,
             },
             {
               id: 'endDate',
               label: t('contract.endDate'),
-              field: (f) => formatToDDMMYYYY(f as string),
+              field: formatToDDMMYYYY,
             },
             {
               id: 'statusId',
               label: t('common.statusOlimpo'),
-              field: (f) => getStatusLabel(f as number, statusOptions),
+              field: (f) => getStatusLabel(f, statusOptions),
             },
             {
               id: 'actions',
@@ -368,7 +370,7 @@ const ResolutionDetail = () => {
               ),
             },
           ]}
-          rows={filteredContracts}
+          rows={getFilteredContracts()}
           messageVoidData={t('common.noData')}
           size="small"
         />

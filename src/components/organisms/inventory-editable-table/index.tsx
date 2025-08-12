@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Inventory } from '@/entities/Inventory.entity';
-import { allowedInventories } from '@/constants';
-import { pluralize, preciseSum, sortCustom } from '@/utils';
+import { Inventory, InventoryValue } from '@/entities/Inventory.entity';
+import { allowedInventories, inventoryCategories } from '@/constants';
+import { filterByInventory, outputInventorySum, pluralize, sortCustom } from '@/utils';
 import { useInitialData } from '@/contexts/initial-data/useInitialData';
 import Token from '@/tokens';
 import { EditableTableProps } from './index.types';
-import EditableRow from './components/editable-row/EditableRow';
+import EditableRow from './components/editable-row';
 import styles from './index.module.css';
+import Footer from './components/footer';
 
 // TODO:
 // Vista coordinador solo debe ver los documentos pre resolucionados (con y sin metadata)
@@ -29,10 +30,11 @@ const InventoryEditableTable = (props: EditableTableProps) => {
       );
 
       setData(
-        sortedInventoryTypes.map((it) => ({
+        sortedInventoryTypes.map((it, i: number) => ({
           inventoryType: it,
           quantity: 0,
           weight: 0,
+          internalId: i,
         }))
       );
     }
@@ -48,7 +50,7 @@ const InventoryEditableTable = (props: EditableTableProps) => {
       const res = data.map((d) => {
         const resD = { ...d };
         const finded = props.resolutionInventory.find(
-          (ri) => ri.inventoryTypeId === Number(d.inventoryType.value)
+          (ri) => ri.inventoryTypeId === d.inventoryType.value
         );
         if (finded) {
           resD.quantity = finded.quantity;
@@ -60,34 +62,35 @@ const InventoryEditableTable = (props: EditableTableProps) => {
     }
   }, [props.resolutionInventory, data, initialized]);
 
-  const totalQuantity = preciseSum(
-    data.map((item) => Number(item.quantity) || 0)
-  );
-  const totalWeight = preciseSum(data.map((item) => Number(item.weight) || 0));
-
   const handleChange = (
-    index: number,
-    key: keyof Omit<Inventory, 'inventory'>,
+    inventoryType: Inventory['inventoryType'],
+    key: InventoryValue,
     value: string
   ): void => {
     const newValue = Number(value);
     if (isNaN(newValue) || newValue < 0) return;
 
-    const newData = [...data];
-    (newData[index][key] as number) = newValue;
+    const newData = data.map((item) => {
+      if (item.inventoryType.value === inventoryType.value) {
+        return { ...item, [key]: newValue };
+      }
+      return item;
+    });
     setData(newData);
 
-    const totalQuantity = preciseSum(newData.map((item) => item.quantity));
-    const totalWeight = preciseSum(newData.map((item) => item.weight));
+    const output = outputInventorySum(newData);
 
     if (props.onChange) {
       props.onChange({
-        quantity: totalQuantity,
-        weight: totalWeight,
-        inventoryTypeId: Number(newData[index].inventoryType.value),
+        quantity: output.quantity,
+        weight: output.weight,
+        // TODO: Revisar, pues esto no deberia ir.
+        inventoryTypeId: 0,
       });
     }
   };
+
+  const outputRefaction = outputInventorySum(filterByInventory(data, inventoryCategories.refaction));
 
   const thStyle = {
     backgroundColor: Token.Color.PrimaryMain,
@@ -118,7 +121,18 @@ const InventoryEditableTable = (props: EditableTableProps) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((row, index) => (
+            <tr className={styles.categoryRow}>
+              <td>
+                <div>Refacción</div>
+              </td>
+              <td>
+                <div className={styles.headerValue}>{pluralize(outputRefaction.quantity, 'und', 'unds')}</div>
+              </td>
+              <td>
+                <div className={styles.headerValue}>{pluralize(outputRefaction.weight, 'gr', 'grs')}</div>
+              </td>
+            </tr>
+            {filterByInventory(data, inventoryCategories.refaction).map((row) => (
               <tr key={row.inventoryType.value}>
                 <td>
                   <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
@@ -126,47 +140,61 @@ const InventoryEditableTable = (props: EditableTableProps) => {
                 <td>
                   <EditableRow
                     value={String(row.quantity)}
-                    onChange={(val) => handleChange(index, 'quantity', val)}
+                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Quantity, val)}
                   />
                 </td>
                 <td>
                   <EditableRow
                     value={String(row.weight)}
-                    onChange={(val) => handleChange(index, 'weight', val)}
+                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Weight, val)}
                   />
                 </td>
               </tr>
             ))}
           </tbody>
-          <tfoot>
-            <tr>
-              <td>
-                <div style={{ fontWeight: 'bold' }}>Totales</div>
-              </td>
-              <td
-                className={
-                  totalQuantity === props.total.quantity ? styles.validCell : ''
-                }
-              >
-                <div>
-                  {totalQuantity} {pluralize(totalQuantity, 'und', 'unds')} /{' '}
-                  {props.total.quantity}{' '}
-                  {pluralize(props.total.quantity, 'und', 'unds')}
-                </div>
-              </td>
-              <td
-                className={
-                  totalWeight === props.total.weight ? styles.validCell : ''
-                }
-              >
-                <div>
-                  {totalWeight} {pluralize(totalWeight, 'gr', 'grs')} /{' '}
-                  {props.total.weight}{' '}
-                  {pluralize(props.total.weight, 'gr', 'grs')}
-                </div>
-              </td>
-            </tr>
-          </tfoot>
+          <tbody>
+            {filterByInventory(data, inventoryCategories.common).map((row) => (
+              <tr key={row.inventoryType.value}>
+                <td>
+                  <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
+                </td>
+                <td>
+                  <EditableRow
+                    value={String(row.quantity)}
+                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Quantity, val)}
+                  />
+                </td>
+                <td>
+                  <EditableRow
+                    value={String(row.weight)}
+                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Weight, val)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tbody>
+            {filterByInventory(data, inventoryCategories.bad).map((row) => (
+              <tr key={row.inventoryType.value}>
+                <td>
+                  <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
+                </td>
+                <td>
+                  <EditableRow
+                    value={String(row.quantity)}
+                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Quantity, val)}
+                  />
+                </td>
+                <td>
+                  <EditableRow
+                    value={String(row.weight)}
+                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Weight, val)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <Footer data={data} props={props} />
         </table>
       </div>
     </>

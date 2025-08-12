@@ -1,0 +1,86 @@
+/*
+// TripleToggleSwitch css animated
+import styles from './index.module.css';
+
+interface TripleToggleSwitchProps<T extends string | number> {
+    value: T;
+    options: { value: T; label: string }[];
+    label?: string;
+    onChange: (value: T) => void;
+}
+
+const TripleToggleSwitch = <T extends string | number>({ value, options, label, onChange }: TripleToggleSwitchProps<T>) => {
+    return (
+        <div className={styles.tripleToggleSwitchContainer} data-value={value}>
+            {label && <label>{label}</label>}
+            <div className={styles.tripleToggleSwitch}>
+                {options.map((option) => (
+                    <div
+                        key={`option-${option.value}`}
+                        className={`${styles.option} ${value === option.value ? styles.active : ''}`}
+                        onClick={() => onChange(option.value)}
+                    >
+                        {option.label}
+                    </div>
+                ))}
+                <div
+                    className={styles.slider}
+                    style={{ transform: `translateX(${options.findIndex(o => o.value === value) * 100}%)` }}
+                ></div>
+            </div>
+        </div>
+    );
+};
+
+export default TripleToggleSwitch;
+
+*/
+
+.tripleToggleSwitchContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.tripleToggleSwitchContainer label {
+    margin-bottom: 8px;
+}
+
+.tripleToggleSwitchContainer>div {
+    position: relative;
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.option {
+    white-space: nowrap;
+    padding: 7px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: color 0.3s;
+    position: relative;
+    z-index: 2;
+}
+
+.option:hover {
+    opacity: 0.8;
+}
+
+.option:not(.active):hover {
+    background-color: #e0e0e0;
+}
+
+.active {
+    color: white;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background-color: #007bff;
+    transition: left 0.3s ease, width 0.3s ease;
+    z-index: 1;
+    border-radius: 3px;
+}

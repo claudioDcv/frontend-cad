@@ -9,7 +9,11 @@ export interface ContractNoteProps {
   editable?: boolean;
 }
 
-export const initialState: ContractMetadata = {
+const getCreatedAt = (): string => {
+  return toDay().toString();
+};
+
+export const initialState = (): ContractMetadata => ({
   contractId: 0,
   note: null,
   reviewed: false,
@@ -17,6 +21,6 @@ export const initialState: ContractMetadata = {
   reviewedAt: null,
   confirmedBy: null,
   confirmedAt: null,
-  createdAt: toDay().toString(),
+  createdAt: getCreatedAt(),
   updatedAt: null,
-};
+});

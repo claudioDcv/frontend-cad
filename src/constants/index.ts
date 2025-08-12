@@ -69,18 +69,37 @@ export const validRoles = {
 
 export const commonNotificationTypes = ['resolution_notification'];
 
-export const allowedInventories = [
+/* DISTRIBUCION DE INVENTARIOS */
+const refactionInventories = [
   'anillo',
   'aro',
   'colgante',
   'cadena',
   'pulcera',
+]
+
+const commonInventories = [
   'joyaespecial',
   'moneda',
   'lingote',
   'relojneto',
   'scrap',
+]
+
+const badInventories = [
   'materialfalso',
   'materialfaltante',
   'materialbajaley',
+]
+
+export const inventoryCategories = {
+  refaction: refactionInventories,
+  common: commonInventories,
+  bad: badInventories,
+};
+
+export const allowedInventories = [
+  ...inventoryCategories.refaction,
+  ...inventoryCategories.common,
+  ...inventoryCategories.bad,
 ];

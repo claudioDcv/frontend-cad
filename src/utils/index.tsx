@@ -11,8 +11,10 @@ import { icons } from '../components/molecules/icon/icons';
 import { MaterialType } from '../components/molecules/material-type';
 import { Material, Size } from '../components/molecules/material-type/types';
 import { Option } from '@/entities/Option.entity';
+import { Inventory } from '@/entities/Inventory.entity';
+import { DEBUG } from '@/conf/envs';
 
-export const toDay = () => new Date();
+export const toDay = () => Date.now() ? new Date(Date.now()) : new Date();
 
 export const defaultEndDate = new Date(
   toDay().getFullYear(),
@@ -87,7 +89,8 @@ export const formatDateHour = (dateInput?: Date | string | number) => {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
-export function formatToDDMMYYYY(dateInput: string | undefined) {
+export function formatToDDMMYYYY(externalDateInput: string | undefined | unknown): string {
+  const dateInput = typeof externalDateInput === 'string' ? externalDateInput : undefined;
   if (!dateInput) return '';
   const date = new Date(dateInput);
   if (isNaN(date.getTime())) return '';
@@ -97,13 +100,15 @@ export function formatToDDMMYYYY(dateInput: string | undefined) {
   return `${day}/${month}/${year}`;
 }
 
-export function formatNumberWithGr(value: string | number | null) {
+export function formatNumberWithGr(externalValue: number | null | string | unknown) {
+  const value = typeof externalValue === 'string' ? parseFloat(externalValue) : externalValue;
   if (typeof value !== 'number' || isNaN(value)) return '';
   const formattedNumber = value.toLocaleString('es-ES');
   return `${formattedNumber} gr`;
 }
 
-export const formatCurrency = (value: number | null) => {
+export const formatCurrency = (externalValue: number | null | string | unknown) => {
+  const value = typeof externalValue === 'string' ? parseFloat(externalValue) : externalValue;
   if (typeof value !== 'number' || isNaN(value)) return '';
   return new Intl.NumberFormat('es-CL', {
     style: 'currency',
@@ -164,9 +169,11 @@ export const getMaterial = (categoryId: string): Material => {
 };
 
 export const getStatusLabel = (
-  id: string | number,
+  externalId: string | number | unknown,
   options: Option[] = []
 ): string => {
+  const id = typeof externalId === 'string' ? parseInt(externalId, 10) : `${externalId
+    }`;
   const idStr = id.toString();
   const found = options.find((opt) => opt.value === idStr);
   return found?.label ?? idStr;
@@ -195,8 +202,8 @@ export function preciseSum(numbers: number[]): number {
 }
 
 export const pluralize = (value: number, singular: string, plural: string) => {
-  if (value === 1) return singular;
-  return plural;
+  const sufix = value === 1 ? singular : plural;
+  return `${value} ${sufix}`;
 };
 
 export function sortCustom<T>(
@@ -218,3 +225,33 @@ export function sortCustom<T>(
     return aIndex - bIndex;
   });
 }
+
+/**
+ * Toma todo el enventario para distribucion
+ * de inventario y retorna un set en especifico
+ * @param data 
+ * @param inventory 
+ * @returns 
+ */
+export const filterByInventory = (data: Inventory[], inventory: string[]) => {
+  return data.filter((item) => inventory.includes(item.inventoryType.label));
+};
+
+/**
+ * Esta funcion calcula la suma total de cantidad y peso de un inventario.
+ * @param newData
+ * @returns 
+ */
+export const outputInventorySum = (newData: Inventory[]) => {
+  const totalQuantity = preciseSum(newData.map((item) => item.quantity));
+  const totalWeight = preciseSum(newData.map((item) => item.weight));
+
+  return { quantity: totalQuantity, weight: totalWeight };
+};
+
+
+export const log = (...args: unknown[]) => {
+  if (DEBUG) {
+    console.log(...args);
+  }
+};

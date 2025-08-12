@@ -22,7 +22,7 @@ const ContractNote: React.FC<ContractNoteProps> = ({
     access([validRoles.admin, validRoles.operator]);
 
   const [metadata, setMetadata] = useState<ContractMetadata>({
-    ...initialState,
+    ...initialState(),
     ...initialContract,
     note: orVoidString(initialContract?.note),
     reviewed: orFalseBoolean(initialContract?.reviewed),
