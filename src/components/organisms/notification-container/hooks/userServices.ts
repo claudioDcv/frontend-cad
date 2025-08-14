@@ -13,6 +13,7 @@ const useServices = () => {
     }
 
     if (getAllNotifications.status === FetchStatus.IDLE) {
+      console.log("Calling getAllNotifications...");
       getAllNotifications.call({
         ...defaultNotificationFormValues(),
       });

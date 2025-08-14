@@ -17,19 +17,18 @@ import Footer from './components/footer';
 const InventoryEditableTable = (props: EditableTableProps) => {
   const { t } = useTranslation();
   const [initialized, setInitialized] = useState(false);
-  const [data, setData] = useState<Inventory[]>([]);
 
   const initialDataCtx = useInitialData();
 
   useEffect(() => {
-    if (data.length === 0 && initialDataCtx.inventoryTypes.length) {
+    if (props.data.length === 0 && initialDataCtx.inventoryTypes.length) {
       const sortedInventoryTypes = sortCustom(
         initialDataCtx.inventoryTypes,
         allowedInventories,
         (item) => item.label
       );
 
-      setData(
+      props.setData(
         sortedInventoryTypes.map((it, i: number) => ({
           inventoryType: it,
           quantity: 0,
@@ -38,16 +37,16 @@ const InventoryEditableTable = (props: EditableTableProps) => {
         }))
       );
     }
-  }, [data, initialDataCtx.inventoryTypes]);
+  }, [props.data, initialDataCtx.inventoryTypes, props]);
 
   useEffect(() => {
     if (
       props.resolutionInventory.length > 0 &&
-      data.length > 0 &&
+      props.data.length > 0 &&
       !initialized
     ) {
       setInitialized(true);
-      const res = data.map((d) => {
+      const res = props.data.map((d) => {
         const resD = { ...d };
         const finded = props.resolutionInventory.find(
           (ri) => ri.inventoryTypeId === d.inventoryType.value
@@ -58,9 +57,9 @@ const InventoryEditableTable = (props: EditableTableProps) => {
         }
         return resD;
       });
-      setData(res);
+      props.setData(res);
     }
-  }, [props.resolutionInventory, data, initialized]);
+  }, [props.resolutionInventory, props.data, initialized, props]);
 
   const handleChange = (
     inventoryType: Inventory['inventoryType'],
@@ -70,13 +69,13 @@ const InventoryEditableTable = (props: EditableTableProps) => {
     const newValue = Number(value);
     if (isNaN(newValue) || newValue < 0) return;
 
-    const newData = data.map((item) => {
+    const newData = props.data.map((item) => {
       if (item.inventoryType.value === inventoryType.value) {
         return { ...item, [key]: newValue };
       }
       return item;
     });
-    setData(newData);
+    props.setData(newData);
 
     const output = outputInventorySum(newData);
 
@@ -90,7 +89,7 @@ const InventoryEditableTable = (props: EditableTableProps) => {
     }
   };
 
-  const outputRefaction = outputInventorySum(filterByInventory(data, inventoryCategories.refaction));
+  const outputRefaction = outputInventorySum(filterByInventory(props.data, inventoryCategories.refaction));
 
   const thStyle = {
     backgroundColor: Token.Color.PrimaryMain,
@@ -132,7 +131,7 @@ const InventoryEditableTable = (props: EditableTableProps) => {
                 <div className={styles.headerValue}>{pluralize(outputRefaction.weight, 'gr', 'grs')}</div>
               </td>
             </tr>
-            {filterByInventory(data, inventoryCategories.refaction).map((row) => (
+            {filterByInventory(props.data, inventoryCategories.refaction).map((row) => (
               <tr key={row.inventoryType.value}>
                 <td>
                   <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
@@ -153,7 +152,7 @@ const InventoryEditableTable = (props: EditableTableProps) => {
             ))}
           </tbody>
           <tbody>
-            {filterByInventory(data, inventoryCategories.common).map((row) => (
+            {filterByInventory(props.data, inventoryCategories.common).map((row) => (
               <tr key={row.inventoryType.value}>
                 <td>
                   <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
@@ -174,7 +173,7 @@ const InventoryEditableTable = (props: EditableTableProps) => {
             ))}
           </tbody>
           <tbody>
-            {filterByInventory(data, inventoryCategories.bad).map((row) => (
+            {filterByInventory(props.data, inventoryCategories.bad).map((row) => (
               <tr key={row.inventoryType.value}>
                 <td>
                   <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
@@ -194,7 +193,7 @@ const InventoryEditableTable = (props: EditableTableProps) => {
               </tr>
             ))}
           </tbody>
-          <Footer data={data} props={props} />
+          <Footer data={props.data} props={props} />
         </table>
       </div>
     </>

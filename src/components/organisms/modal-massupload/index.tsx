@@ -8,6 +8,7 @@ import ActionsResolution from './components/actions-resolution';
 import { useTranslation } from 'react-i18next';
 import useServices from './hooks/useServices';
 import { formatCurrency, formatToDDMMYYYY } from '@/utils';
+import { Inventory } from '@/entities/Inventory.entity';
 
 const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   open,
@@ -16,7 +17,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   onSuccess,
 }) => {
   const { t } = useTranslation();
-
+  const [data, setData] = useState<Inventory[]>([]);
   const { resolutionId } = resolution ?? {};
 
   const services = useServices(String(resolutionId));
@@ -60,12 +61,12 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
 
   const handleTotalsChange = (totals: { quantity: number; weight: number }) => {
     setCurrentTotal(totals);
+    console.log('Current totals:', totals);
   };
 
   const handleClose = () => onClose();
-
   const handleSuccess = () => {
-    onSuccess();
+    onSuccess(data);
   };
 
   return (
@@ -80,7 +81,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
         </ModalHeader>
       </Card>
 
-      <form onSubmit={handleSuccess}>
+      <form name="MasiveModalForm">
         <DialogContent>
           <Box display="flex" gap={2}>
             <Box className={styles.leftPanel}>
@@ -130,6 +131,8 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
             <Box flex={2}>
               <Box sx={{ height: 'calc(100vh - 20rem)' }}>
                 <InventoryEditableTable
+                  data={data}
+                  setData={setData}
                   total={expectedTotal}
                   resolutionInventory={services.getResolutionInventory.data}
                   onChange={handleTotalsChange}
@@ -140,11 +143,10 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
         </DialogContent>
         <ActionsResolution
           onClose={handleClose}
-          loading={false}
           onSuccess={handleSuccess}
+          loading={false}
           expected={expectedTotal}
           current={currentTotal}
-          resolution={resolution}
         />
       </form>
     </Dialog>

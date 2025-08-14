@@ -14,7 +14,7 @@ const client = async (props: ResolutionQuery) => {
     statusId: clearProp(props.statusId),
     startDate: clearProp(props.startDate),
     endDate: clearProp(props.endDate),
-    //hasMetadata: clearProp(props.hasMetadata),
+    hasMetadata: clearProp(props.hasMetadata),
   };
 
   const query = new URLSearchParams(clearAllProps(params));

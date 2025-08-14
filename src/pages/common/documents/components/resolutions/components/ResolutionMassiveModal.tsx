@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ModalConfirm, ModalMassUpload } from '@/components';
 import { ResolutionMassiveModalProps } from './types';
+import { Inventory } from '@/entities/Inventory.entity';
+import usePatchResolutionInventory from '@/clients/patch-resolution-inventory';
 
 const ResolutionMassiveModal = ({
   resolution,
@@ -10,6 +12,7 @@ const ResolutionMassiveModal = ({
   const { t } = useTranslation();
   const [openInventory, setOpenInventory] = useState(false);
   const [showConfirm, setShowConfirm] = useState(!!resolution);
+  const patchResolutionInventory = usePatchResolutionInventory();
 
   const { resolutionId } = resolution ?? {};
 
@@ -29,10 +32,18 @@ const ResolutionMassiveModal = ({
     onClose();
   };
 
-  const handleSuccess = () => {
-    setOpenInventory(false);
-    setShowConfirm(false);
-    onClose();
+  const handleSuccess = (inventories: Inventory[]) => {
+    console.log('Inventory data:', inventories);
+    if (resolutionId) {
+      patchResolutionInventory.call({
+        id: resolutionId,
+        inventories,
+      });
+    }
+
+    // setOpenInventory(false);
+    // setShowConfirm(false);
+    // onClose();
   };
 
   return (

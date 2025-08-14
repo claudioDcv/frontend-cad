@@ -1,3 +1,4 @@
+import { Inventory } from '@/entities/Inventory.entity';
 import { Resolution } from '@/entities/Resolution.entity';
 
 export type Item = {
@@ -9,5 +10,5 @@ export interface ModalMassUploadProps {
   resolution: Resolution;
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (data: Inventory[]) => void;
 }

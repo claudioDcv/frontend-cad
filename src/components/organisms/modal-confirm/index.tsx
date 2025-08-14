@@ -15,10 +15,10 @@ const ModalConfirm: React.FC<ModalConfirmProps> = ({
 
   const [loading, setLoading] = useState(false);
 
-  const handleSuccessClick = async () => {
+  const handleSuccessClick = () => {
     try {
       setLoading(true);
-      await onSuccess();
+      onSuccess();
     } finally {
       setLoading(false);
     }

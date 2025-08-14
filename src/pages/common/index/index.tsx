@@ -1,6 +1,7 @@
 import routes from '@/conf/routes';
 import { Box, Button, Stack, Paper } from '@mui/material';
 import { Link } from 'wouter';
+import ResolutionReset from '@/modules/resolution-reset/components';
 
 const Index = () => {
   return (
@@ -13,6 +14,7 @@ const Index = () => {
     >
       <Paper elevation={3} sx={{ p: 5, borderRadius: 3, minWidth: 300 }}>
         <Stack spacing={2} mt={3}>
+          <ResolutionReset />
           <Link href={routes.operator.documents.link}>
             <Button
               variant="contained"

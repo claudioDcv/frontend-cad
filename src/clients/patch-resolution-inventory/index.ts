@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
 import { InventoryResolution } from '@/entities/InventoryResolution.entity';
 import client from './client';
+import { ResolutionInventory } from '@/entities/ResolutionInventory.entity';
 
 const usePatchResolutionInventory = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -14,7 +15,7 @@ const usePatchResolutionInventory = () => {
   };
 
   const call = useCallback(
-    async (resolutionId: string) => {
+    async (resolutionInventory: ResolutionInventory) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -28,7 +29,7 @@ const usePatchResolutionInventory = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client(resolutionId);
+        const result = await client(resolutionInventory);
 
         setData(result);
         setStatus(FetchStatus.SUCCESS);

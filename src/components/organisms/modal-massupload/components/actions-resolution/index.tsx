@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { ModalActions, ModalConfirm } from '@/components';
 import AlertCard from '@/components/atoms/alert-card';
 import { diffInitialState, getDiff } from './index.utils';
-import { usePostResolutionSend } from '@/clients';
 
 const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   onSuccess,
@@ -13,11 +12,8 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   loading,
   expected,
   current,
-  resolution,
 }) => {
   const { t } = useTranslation();
-  const postResolutionSend = usePostResolutionSend();
-
   const [openConfirm, setOpenConfirm] = useState(false);
   const [diff, setDiff] = useState({ ...diffInitialState });
 
@@ -34,30 +30,8 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
     setOpenConfirm(false);
   };
 
-  const handleSuccess = async () => {
-    if (!resolution) return;
-
-    /*
-    await postResolutionSend.call({
-      resolutionId: resolution.resolutionId,
-      items: items.map((item) => ({
-        inventoryTypeId: item.inventoryTypeId,
-        weight: item.weight,
-        quantity: item.quantity,
-      })),
-    });
-    */
-
-    console.log('Post resolution send response:', postResolutionSend.data);
-
-    onSuccess(resolution);
-    setOpenConfirm(false);
-  };
-
   const handleModalSuccess = () => {
-    if (resolution) {
-      onSuccess(resolution);
-    }
+    onSuccess();
   };
 
   const handleAlertClose = () => { };
@@ -106,7 +80,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
               size="small"
               onClick={handleOpenConfirm}
             >
-              {t('common.requesCAD')}
+              {t('common.requestCAD')}
             </Button>
           </Box>
         </Box>
@@ -115,7 +89,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
       <ModalConfirm
         open={openConfirm}
         onClose={handleCloseConfirm}
-        onSuccess={handleSuccess}
+        onSuccess={onSuccess}
         i18n={{
           title: t('modalConfirm.confirmationTitle'),
           text: t('modalConfirm.approvalConfirm'),

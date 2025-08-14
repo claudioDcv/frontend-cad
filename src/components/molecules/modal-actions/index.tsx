@@ -44,7 +44,6 @@ const ModalActions: React.FC<ModalActionsProps> = ({
       <Button
         onClick={onSuccess}
         variant="contained"
-        type="submit"
         size="small"
         loading={loading}
         disabled={loading || disabled}
