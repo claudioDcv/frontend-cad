@@ -73,7 +73,8 @@ const EditableRow: React.FC<EditableRowProps> = ({
       <input
         value={inputValue}
         onChange={handleChange}
-        autoFocus
+        onFocus={() => setEditable(true)}
+        onBlur={() => setEditable(false)}
         type="text"
         className={styles.input}
         readOnly={!editable}

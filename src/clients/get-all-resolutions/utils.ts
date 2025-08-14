@@ -1,7 +1,9 @@
+import { Resolution } from '@/entities/Resolution.entity';
+import { PageResponse } from '../types';
 import { mapMeta } from '../utils';
-import { PageResponse, ResolutionPaginated } from './types';
+import { ResolutionPaginated } from './types';
 
-export const remap = (data: PageResponse): ResolutionPaginated => ({
+export const remap = (data: PageResponse<Resolution>): ResolutionPaginated => ({
   resolutions: data.content,
   meta: mapMeta(data),
 });

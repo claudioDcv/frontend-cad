@@ -43,9 +43,11 @@ import {
   ResolutionMassiveModal,
   ResolutionSendTruckModal,
 } from './components';
+import { useReceivablesContext } from '@/modules/receivables/context/useReceivablesContext';
 
 const Resolutions = () => {
   const { t } = useTranslation();
+  const receivablesContext = useReceivablesContext();
 
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
     defaultValues: defaultResolutionsFormValues(),
@@ -298,6 +300,15 @@ const Resolutions = () => {
                       <IconList name="truckDoc" />
                     </IconButton>
                   </Tooltip>
+                  <Access roles={[validRoles.operator]}>
+                    <Tooltip title={t('accountsReceivable.tooltipOpen')}>
+                      <IconButton
+                        onClick={() => receivablesContext.setResolutionId(resolution.resolutionId)}
+                      >
+                        <IconList name="receivables" />
+                      </IconButton>
+                    </Tooltip>
+                  </Access>
                 </Box>
               ),
             },

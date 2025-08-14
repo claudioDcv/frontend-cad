@@ -2,7 +2,7 @@ import { API_BASE } from '@/conf/http';
 import { getHeader } from '../utils';
 import { InventoryResolution } from '@/entities/InventoryResolution.entity';
 
-const client = async (resolutionId: string): Promise<InventoryResolution[]> => {
+const client = async (resolutionId: number): Promise<InventoryResolution[]> => {
   const url = `${API_BASE}/resolutions/${resolutionId}/inventory`;
 
   const response = await fetch(url, {

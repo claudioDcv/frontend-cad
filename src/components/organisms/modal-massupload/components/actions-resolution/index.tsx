@@ -63,11 +63,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   return (
     <>
       <DialogActions>
-        <Box display="flex" justifyContent="space-between" width="100%">
-          <Button variant="contained" size="small" disabled>
-            {t('common.accountsReceivable')}
-          </Button>
-
+        <Box display="flex" justifyContent="end" width="100%">
           <Box display="flex" gap={1}>
             <ModalActions
               wrap={false}

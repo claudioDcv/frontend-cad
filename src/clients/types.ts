@@ -21,3 +21,17 @@ export type Sort = {
   empty: boolean;
   unsorted: boolean;
 };
+
+export type PageResponse<T> = {
+  totalPages: number;
+  totalElements: number;
+  pageable: Pageable;
+  size: number;
+  content: T[];
+  number: number;
+  sort: Sort[];
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
+};

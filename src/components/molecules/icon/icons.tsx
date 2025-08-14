@@ -11,7 +11,7 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ExpenditureIcon from './icons/ExpenditureIcon';
 import IncomeIcon from './icons/IncomeIcon';
-import NoteIcon from './icons/NoteIcon';
+import NoteIcon from './icons/Note';
 import MovementIcon from './icons/Movement';
 import IncomeMovementIcon from './icons/IncomeMovement';
 import BoxIcon from './icons/BoxIcon';
@@ -19,6 +19,7 @@ import CIcon from './icons/CIcon';
 import InfoIcon from './icons/IIcon';
 import { ElementType } from 'react';
 import ExpenditureMovementIcon from './icons/ExpenditureMovement';
+import Receivable from './icons/Receivable';
 
 interface Props {
   color?: string;
@@ -46,7 +47,7 @@ const createCustomIcon = (IconComponent: ElementType) => {
 export const icons = {
   // Delete icon
   delete: createMuiIcon(DeleteIcon),
-  
+
   // Send icons
   sent: createMuiIcon(SendIcon),
 
@@ -87,4 +88,7 @@ export const icons = {
 
   // Account receivable icons
   info: createCustomIcon(InfoIcon),
+
+  // Receivables icons
+  receivables: createCustomIcon(Receivable),
 };

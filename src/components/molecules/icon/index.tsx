@@ -14,12 +14,20 @@ const IconList: React.FC<IconListProps> = ({
     color,
     size,
 }) => {
+    const style = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: size,
+        height: size,
+        color,
+    };
     return (
         description ? (
             <Tooltip title={description} arrow placement="top">
-                <span>{icons[name]({ color, size })}</span>
+                <span style={style}>{icons[name]({ color, size })}</span>
             </Tooltip>
-        ) : <span>{icons[name]({ color, size })}</span>
+        ) : <span style={style}>{icons[name]({ color, size })}</span>
     );
 };
 

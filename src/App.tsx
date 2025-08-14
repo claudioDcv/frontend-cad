@@ -7,6 +7,8 @@ import { WebSocketProvider } from './contexts/websocket';
 import NotificationProvider from './contexts/notification/NotificationProvider';
 import InitialDataProvider from './contexts/initial-data/InitialDataProvider';
 import { DEBUG } from './conf/envs';
+import { AlertProvider } from './contexts/alert/AlertProvider';
+import ReceivablesProvider from './modules/receivables/context/ReceivablesProvider';
 
 const wsConfig = {
   url: WEBSOCKET_BASE,
@@ -26,18 +28,22 @@ function App() {
 
   return jwtNotification.token || VITE_MOCK_API ? (
     <Container maxWidth="xl">
-      <InitialDataProvider>
-        <NotificationProvider>
-          <WebSocketProvider
-            config={{
-              ...wsConfig,
-              token: jwtNotification.token || '',
-            }}
-          >
-            <Router hostUrl={jwtNotification.hostUrl} />
-          </WebSocketProvider>
-        </NotificationProvider>
-      </InitialDataProvider>
+      <AlertProvider>
+        <InitialDataProvider>
+          <NotificationProvider>
+            <WebSocketProvider
+              config={{
+                ...wsConfig,
+                token: jwtNotification.token || '',
+              }}
+            >
+              <ReceivablesProvider>
+                <Router hostUrl={jwtNotification.hostUrl} />
+              </ReceivablesProvider>
+            </WebSocketProvider>
+          </NotificationProvider>
+        </InitialDataProvider>
+      </AlertProvider>
     </Container>
   ) : (
     <Alert severity="info" sx={{ marginTop: 2 }}>

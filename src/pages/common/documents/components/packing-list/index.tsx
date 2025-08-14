@@ -146,14 +146,14 @@ const PackingList = () => {
 
   const handleDocNumberChange =
     (field: ControllerRenderProps<PackingListFormModel>) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const rawValue = event.target.value;
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        const rawValue = event.target.value;
 
-      if (isOnlyNumbersOrEmpty(rawValue)) {
-        field.onChange(rawValue);
-        debouncedSearchRef.current(rawValue);
-      }
-    };
+        if (isOnlyNumbersOrEmpty(rawValue)) {
+          field.onChange(rawValue);
+          debouncedSearchRef.current(rawValue);
+        }
+      };
 
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page };

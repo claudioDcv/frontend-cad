@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './index.module.css';
+import theme from '@/conf/theme';
 
 interface TripleToggleSwitchProps {
     value: unknown;
@@ -47,6 +48,9 @@ const TripleToggleSwitch: React.FC<TripleToggleSwitchProps> = ({ value, options,
                         ref={(el) => { optionRefs.current[index] = el; }}
                         className={`${styles.option} ${value === option.value ? styles.active : ''}`}
                         onClick={() => onChange(option.value)}
+                        style={{
+                            color: value === option.value ? theme.palette.text.primary : theme.palette.text.secondary,
+                        }}
                     >
                         {option.label}
                     </div>
@@ -55,7 +59,9 @@ const TripleToggleSwitch: React.FC<TripleToggleSwitchProps> = ({ value, options,
                     className={styles.slider}
                     style={{
                         left: `${sliderStyle.left}px`,
-                        width: `${sliderStyle.width}px`
+                        width: `${sliderStyle.width}px`,
+                        color: theme.palette.text.primary,
+                        backgroundColor: theme.palette.primary.main,
                     }}
                 ></div>
             </div>

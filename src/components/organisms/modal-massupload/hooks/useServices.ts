@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FetchStatus } from '@/constants';
 import { useGetResolution, useGetResolutionInventory } from '@/clients';
 
-const useServices = (resolutionId: string) => {
+const useServices = (resolutionId: number) => {
   const getResolutionInventory = useGetResolutionInventory();
   const getResolution = useGetResolution();
 

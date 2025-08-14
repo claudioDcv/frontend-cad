@@ -1,5 +1,4 @@
 import { Resolution } from '@/entities/Resolution.entity';
-import { Pageable, Sort } from '../types';
 
 export type ResolutionQuery = {
   resolutionId?: string;
@@ -25,18 +24,4 @@ export type ResolutionPaginated = {
     page: number;
     count: number;
   };
-};
-
-export type PageResponse = {
-  totalPages: number;
-  totalElements: number;
-  pageable: Pageable;
-  size: number;
-  content: Resolution[];
-  number: number;
-  sort: Sort[];
-  first: boolean;
-  last: boolean;
-  numberOfElements: number;
-  empty: boolean;
 };

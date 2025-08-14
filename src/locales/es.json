@@ -103,9 +103,6 @@
       "sendToInv": "Enviar a Inventario",
       "sendToInvLabel": "Enviar a Inventario",
       "sendToInvCheckbox": "Enviar",
-      "accountsReceivable": "Cuentas por Cobrar",
-      "accountsReceivableLabel": "Cuentas por Cobrar",
-      "accountsReceivableCheckbox": "Cobrar",
       "newCPC": "Nueva CPC",
       "newCPCTitle": "Nueva CPC",
       "newCPCLabel": "Código CPC",
@@ -197,7 +194,6 @@
     "save": "Guardar",
     "successText": "Enviado con éxito.",
     "requestCAD": "Enviar a CAD",
-    "accountsReceivable": "Cuentas por Cobrar",
     "successTitle": "Éxito",
     "type": "Tipo",
     "viewContracts": "Ver",
@@ -212,7 +208,11 @@
     "client": "Cliente",
     "all": "Todos",
     "notReviewed": "No Revisados",
-    "reviewedPlural": "Revisados"
+    "reviewedPlural": "Revisados",
+    "success": "Éxito",
+    "close": "Cerrar",
+    "create": "Crear",
+    "selectContract": "Seleccione el contrato"
   },
   "routes": {
     "operatorDocuments": "Operador",
@@ -279,7 +279,7 @@
     "resolveDescription": "¿Estás seguro que deseas enviar la PR {{id}} a CAD?",
     "truckDocumentDescription": "¿Estás seguro que deseas enviar la PR {{id}} con fecha {{date}}?",
     "massiveLoadTitle": "Confirmación Carga Masiva",
-    "massiveLoadDescription": "¿Estás seguro que deseas modificar el envío normal a Carga Masiva para el documento {{id}}?",
+    "massiveLoadDescription": "¿Estás seguro que deseas modificar el envío normal a Carga Masiva para el documento {{resolutionId}}?",
     "approvalConfirm": "¿Estás seguro que deseas solicitar la aprobación?"
   },
   "modalInput": {
@@ -324,5 +324,15 @@
     "allContractsMustBeReviewed": "Todos los contratos deben estar revisados",
     "hasMetadataAlready": "Resolucion ya enviada a CAD",
     "noContracts": "No hay contratos asociados a esta resolución"
+  },
+  "patchResolutionInventory": {
+    "successMessage": "Inventario de la resolución <strong>{{id}}</strong> actualizado con éxito.",
+    "errorMessage": "Error al actualizar el inventario."
+  },
+  "accountsReceivable": {
+    "title": "Cuentas por Cobrar",
+    "tooltipOpen": "Abrir Cuentas por Cobrar",
+    "description": "Aquí puedes ver y editar los detalles de la cuenta por cobrar seleccionada.",
+    "newReceivable": "Nueva Cuenta por Cobrar"
   }
 }

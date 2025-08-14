@@ -4,24 +4,26 @@ import { ModalConfirm, ModalMassUpload } from '@/components';
 import { ResolutionMassiveModalProps } from './types';
 import { Inventory } from '@/entities/Inventory.entity';
 import usePatchResolutionInventory from '@/clients/patch-resolution-inventory';
+import { useAlertContext } from '@/contexts/alert/useAlertContext';
+import { AlertType } from '@/contexts/alert/types';
+import { FetchStatus } from '@/constants';
 
 const ResolutionMassiveModal = ({
   resolution,
   onClose,
 }: ResolutionMassiveModalProps) => {
   const { t } = useTranslation();
+  const alertContext = useAlertContext();
   const [openInventory, setOpenInventory] = useState(false);
   const [showConfirm, setShowConfirm] = useState(!!resolution);
   const patchResolutionInventory = usePatchResolutionInventory();
-
-  const { resolutionId } = resolution ?? {};
 
   useEffect(() => {
     setShowConfirm(!!resolution);
   }, [resolution]);
 
   const handleConfirmSuccess = () => {
-    if (!resolutionId) return;
+    if (!resolution?.resolutionId) return;
     setShowConfirm(false);
     setOpenInventory(true);
   };
@@ -32,46 +34,65 @@ const ResolutionMassiveModal = ({
     onClose();
   };
 
+  useEffect(() => {
+    if (patchResolutionInventory.status === FetchStatus.SUCCESS) {
+      patchResolutionInventory.reset();
+      alertContext.addAlert({
+        type: AlertType.SUCCESS,
+        title: t('common.success'),
+        message: t('patchResolutionInventory.successMessage', {
+          id: resolution?.resolutionId,
+        }),
+        callback: () => {
+          setOpenInventory(false);
+          setShowConfirm(false);
+          onClose();
+        },
+      });
+    }
+    if (patchResolutionInventory.status === FetchStatus.ERROR) {
+      patchResolutionInventory.reset();
+      alertContext.addAlert({
+        type: AlertType.ERROR,
+        title: t('common.error'),
+        message: t('patchResolutionInventory.errorMessage'),
+        dismissible: true,
+      });
+    }
+  }, [alertContext, onClose, patchResolutionInventory, resolution, t]);
+
   const handleSuccess = (inventories: Inventory[]) => {
-    console.log('Inventory data:', inventories);
-    if (resolutionId) {
+    if (resolution?.resolutionId) {
       patchResolutionInventory.call({
-        id: resolutionId,
+        id: resolution?.resolutionId,
         inventories,
       });
     }
-
-    // setOpenInventory(false);
-    // setShowConfirm(false);
-    // onClose();
   };
+
+  if (!resolution) return null;
 
   return (
     <>
-      {showConfirm && (
-        <ModalConfirm
-          open={showConfirm}
-          onClose={handleOnClose}
-          onSuccess={handleConfirmSuccess}
-          i18n={{
-            title: t('modalConfirm.massiveLoadTitle'),
-            text: t('modalConfirm.massiveLoadDescription', {
-              id: resolutionId,
-            }),
-            cancel: t('common.cancel'),
-            success: t('common.accept'),
-          }}
-        />
-      )}
+      <ModalConfirm
+        open={showConfirm}
+        onClose={handleOnClose}
+        onSuccess={handleConfirmSuccess}
+        i18n={{
+          title: t('modalConfirm.massiveLoadTitle'),
+          text: t('modalConfirm.massiveLoadDescription', resolution),
+          cancel: t('common.cancel'),
+          success: t('common.accept'),
+        }}
+      />
 
-      {resolution && (
-        <ModalMassUpload
-          open={openInventory}
-          onClose={handleOnClose}
-          resolution={resolution}
-          onSuccess={handleSuccess}
-        />
-      )}
+      <ModalMassUpload
+        open={openInventory}
+        onClose={handleOnClose}
+        resolution={resolution}
+        onSuccess={handleSuccess}
+        loading={patchResolutionInventory.loading}
+      />
     </>
   );
 };

@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
 import client from './client';
-import { Contract } from '@/entities/Contract.entity';
+import { Receivable } from '@/entities/Receivable.entity';
 
-const useGetResolutionContracts = () => {
+const useGetReceivables = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Contract[]>([]);
+  const [data, setData] = useState<Receivable[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
@@ -13,18 +13,8 @@ const useGetResolutionContracts = () => {
     setError(null);
   };
 
-  const replaceContract = (contract: Contract) => {
-    const contracts = data.map((c) => {
-      if (c.contractNumber === contract.contractNumber) {
-        return contract;
-      }
-      return c;
-    });
-    setData(contracts);
-  };
-
   const call = useCallback(
-    async (resolutionId: string | number) => {
+    async (resolutionId: number) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -44,7 +34,7 @@ const useGetResolutionContracts = () => {
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         const messageKey =
-          (err as Error)?.message ?? 'error.getAllContractsFetch';
+          (err as Error)?.message ?? 'error.getAllReceivablesFetch';
         setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
@@ -52,7 +42,7 @@ const useGetResolutionContracts = () => {
     [status]
   );
 
-  return { status, data, error, call, onResetError, replaceContract };
+  return { status, data, error, call, onResetError };
 };
 
-export default useGetResolutionContracts;
+export default useGetReceivables;

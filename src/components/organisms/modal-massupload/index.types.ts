@@ -11,4 +11,5 @@ export interface ModalMassUploadProps {
   open: boolean;
   onClose: () => void;
   onSuccess: (data: Inventory[]) => void;
+  loading: boolean;
 }

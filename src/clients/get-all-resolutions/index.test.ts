@@ -3,9 +3,10 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
 import useGetAllResolutions from '.';
-import { PageResponse } from './types';
 import { remap } from './utils';
 import { ResolutionFormModel } from '@/pages/common/documents/types';
+import { PageResponse } from '../types';
+import { Resolution } from '@/entities/Resolution.entity';
 
 const mockFilters: ResolutionFormModel = {
   page: 0,
@@ -30,7 +31,7 @@ describe('useGetAllResolutions', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData: PageResponse = {
+    const mockData: PageResponse<Resolution> = {
       content: [
         {
           resolutionId: 0,

@@ -1,11 +1,12 @@
 :root {
-    --variant-containedBg: #a69259;
+    --variant-containedBg: #7b7b7b;
 }
 
 .container {
     position: relative;
     display: inline-block;
     width: 100%;
+    min-width: 13rem;
 }
 
 .toggleButton {
@@ -57,7 +58,7 @@
 .label {
     margin-bottom: 8px;
     font-size: 14px;
-    color: #a69259;
+    color: var(--variant-containedBg);
 }
 
 .gridContainer {

@@ -11,7 +11,7 @@ i18n.use(initReactI18next).init({
   lng: 'es',
   fallbackLng: 'es',
   interpolation: {
-    escapeValue: false,
+    escapeValue: false, // no escaping to allow HTML tags like <strong>
   },
 });
 

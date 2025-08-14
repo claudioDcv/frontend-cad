@@ -26,7 +26,7 @@ const useGetResolutionInventory = () => {
   };
 
   const call = useCallback(
-    async (resolutionId: string) => {
+    async (resolutionId: number) => {
       if (status === FetchStatus.ERROR) {
         return;
       }

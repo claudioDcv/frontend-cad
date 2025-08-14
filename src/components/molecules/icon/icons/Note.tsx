@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface NoteIconProps {
+interface NoteProps {
     color?: string;
     width?: string | number;
     height?: string | number;
 }
 
-const NoteIcon: React.FC<NoteIconProps> = ({
+const Note: React.FC<NoteProps> = ({
     color = 'currentColor',
     width = 24,
     height = 24,
@@ -32,4 +32,4 @@ const NoteIcon: React.FC<NoteIconProps> = ({
     );
 };
 
-export default NoteIcon;
+export default Note;

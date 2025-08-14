@@ -1,21 +1,9 @@
 import { API_BASE } from '../../conf/http';
 import { Contract } from '@/entities/Contract.entity';
 import { getHeader } from '../utils';
-import { formatToDDMMYYYY } from '@/utils';
+import { remap } from './utils';
 
-const remap = (data: Contract[]): Contract[] =>
-  data.map((contract) => ({
-    ...contract,
-    totalWeight: contract.totalWeight || 0,
-    averagePurchaseValue: contract.averagePurchaseValue || 0,
-    totalContractValue: contract.totalContractValue || 0,
-    responsibleName: contract.responsibleName || '',
-    endDate: formatToDDMMYYYY(contract.endDate),
-    clientName: contract.clientName || '',
-    clientRut: contract.clientRut || '',
-  }));
-
-const client = async (resolutionId: string): Promise<Contract[]> => {
+const client = async (resolutionId: string | number): Promise<Contract[]> => {
   const url = `${API_BASE}/resolutions/${resolutionId}/contracts`;
 
   const response = await fetch(url, {

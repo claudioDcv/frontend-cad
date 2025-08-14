@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './index.module.css';
 import { useTheme } from '@mui/material';
 import { addExtraVoidData } from './index.utils';
-import Token from '../../../tokens';
+import theme from '@/conf/theme';
 
 export interface Column<T> {
   id?: string;
@@ -64,8 +64,8 @@ const Header = <T,>({
           .map((column, index) => (
             <th
               style={{
-                backgroundColor: Token.Color.PrimaryMain,
-                color: Token.Color.Dark,
+                backgroundColor: theme.palette.background.default,
+                color: theme.palette.text.primary,
                 textAlign: column.align,
                 whiteSpace: headerNoWrap ? 'nowrap' : 'normal',
               }}

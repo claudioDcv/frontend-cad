@@ -28,7 +28,7 @@ describe('usePatchResolutionInventory', () => {
         totalWeight: 15,
         createdBy: 1001,
         updatedBy: 1002,
-        inventoryTypeId: ''
+        inventoryTypeId: 0
       },
       {
         id: 2,
@@ -38,7 +38,7 @@ describe('usePatchResolutionInventory', () => {
         totalWeight: 10,
         createdBy: 1003,
         updatedBy: 1004,
-        inventoryTypeId: ''
+        inventoryTypeId: 0
       },
     ];
 

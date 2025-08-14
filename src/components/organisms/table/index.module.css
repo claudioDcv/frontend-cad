@@ -3,7 +3,7 @@
     overflow-x: auto;
     position: relative;
     border-radius: 0.25rem;
-    background-color: #ffffff;
+    background-color: var(--mui-palette-background-paper);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 

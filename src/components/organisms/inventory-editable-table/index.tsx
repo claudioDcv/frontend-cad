@@ -1,42 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Inventory, InventoryValue } from '@/entities/Inventory.entity';
 import { allowedInventories, inventoryCategories } from '@/constants';
-import { filterByInventory, outputInventorySum, pluralize, sortCustom } from '@/utils';
+import { filterByInventory, outputInventorySum, pluralize } from '@/utils';
 import { useInitialData } from '@/contexts/initial-data/useInitialData';
-import Token from '@/tokens';
 import { EditableTableProps } from './index.types';
-import EditableRow from './components/editable-row';
-import styles from './index.module.css';
+import TableBody from './components/table-body';
+import { handleInventoryChange, initializeData, updateResolutionInventory } from './index.utils';
 import Footer from './components/footer';
-
-// TODO:
-// Vista coordinador solo debe ver los documentos pre resolucionados (con y sin metadata)
-// Operador: pre resoluciones (con metadata), resoluciones, aceptadas y cerradas.
+import styles from './index.module.css';
+import theme from '@/conf/theme';
 
 const InventoryEditableTable = (props: EditableTableProps) => {
-  const { t } = useTranslation();
   const [initialized, setInitialized] = useState(false);
 
   const initialDataCtx = useInitialData();
 
   useEffect(() => {
-    if (props.data.length === 0 && initialDataCtx.inventoryTypes.length) {
-      const sortedInventoryTypes = sortCustom(
-        initialDataCtx.inventoryTypes,
-        allowedInventories,
-        (item) => item.label
-      );
-
-      props.setData(
-        sortedInventoryTypes.map((it, i: number) => ({
-          inventoryType: it,
-          quantity: 0,
-          weight: 0,
-          internalId: i,
-        }))
-      );
-    }
+    const initializedData = initializeData(props.data, initialDataCtx.inventoryTypes, allowedInventories);
+    props.setData(initializedData);
   }, [props.data, initialDataCtx.inventoryTypes, props]);
 
   useEffect(() => {
@@ -46,17 +27,8 @@ const InventoryEditableTable = (props: EditableTableProps) => {
       !initialized
     ) {
       setInitialized(true);
-      const res = props.data.map((d) => {
-        const resD = { ...d };
-        const finded = props.resolutionInventory.find(
-          (ri) => ri.inventoryTypeId === d.inventoryType.value
-        );
-        if (finded) {
-          resD.quantity = finded.quantity;
-          resD.weight = finded.weight;
-        }
-        return resD;
-      });
+      const res = updateResolutionInventory(props.data, props.resolutionInventory);
+
       props.setData(res);
     }
   }, [props.resolutionInventory, props.data, initialized, props]);
@@ -66,34 +38,15 @@ const InventoryEditableTable = (props: EditableTableProps) => {
     key: InventoryValue,
     value: string
   ): void => {
-    const newValue = Number(value);
-    if (isNaN(newValue) || newValue < 0) return;
-
-    const newData = props.data.map((item) => {
-      if (item.inventoryType.value === inventoryType.value) {
-        return { ...item, [key]: newValue };
-      }
-      return item;
-    });
+    const newData = handleInventoryChange(props.data, inventoryType, key, value, props.onChange);
     props.setData(newData);
-
-    const output = outputInventorySum(newData);
-
-    if (props.onChange) {
-      props.onChange({
-        quantity: output.quantity,
-        weight: output.weight,
-        // TODO: Revisar, pues esto no deberia ir.
-        inventoryTypeId: 0,
-      });
-    }
   };
 
   const outputRefaction = outputInventorySum(filterByInventory(props.data, inventoryCategories.refaction));
 
   const thStyle = {
-    backgroundColor: Token.Color.PrimaryMain,
-    color: Token.Color.Dark,
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.text.primary,
   };
 
   return (
@@ -131,68 +84,19 @@ const InventoryEditableTable = (props: EditableTableProps) => {
                 <div className={styles.headerValue}>{pluralize(outputRefaction.weight, 'gr', 'grs')}</div>
               </td>
             </tr>
-            {filterByInventory(props.data, inventoryCategories.refaction).map((row) => (
-              <tr key={row.inventoryType.value}>
-                <td>
-                  <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
-                </td>
-                <td>
-                  <EditableRow
-                    value={String(row.quantity)}
-                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Quantity, val)}
-                  />
-                </td>
-                <td>
-                  <EditableRow
-                    value={String(row.weight)}
-                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Weight, val)}
-                  />
-                </td>
-              </tr>
-            ))}
           </tbody>
-          <tbody>
-            {filterByInventory(props.data, inventoryCategories.common).map((row) => (
-              <tr key={row.inventoryType.value}>
-                <td>
-                  <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
-                </td>
-                <td>
-                  <EditableRow
-                    value={String(row.quantity)}
-                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Quantity, val)}
-                  />
-                </td>
-                <td>
-                  <EditableRow
-                    value={String(row.weight)}
-                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Weight, val)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          <tbody>
-            {filterByInventory(props.data, inventoryCategories.bad).map((row) => (
-              <tr key={row.inventoryType.value}>
-                <td>
-                  <div>{t(`inventoryType.${row.inventoryType.label}`)}</div>
-                </td>
-                <td>
-                  <EditableRow
-                    value={String(row.quantity)}
-                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Quantity, val)}
-                  />
-                </td>
-                <td>
-                  <EditableRow
-                    value={String(row.weight)}
-                    onChange={(val) => handleChange(row.inventoryType, InventoryValue.Weight, val)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          <TableBody
+            data={filterByInventory(props.data, inventoryCategories.refaction)}
+            onChange={handleChange}
+          />
+          <TableBody
+            data={filterByInventory(props.data, inventoryCategories.common)}
+            onChange={handleChange}
+          />
+          <TableBody
+            data={filterByInventory(props.data, inventoryCategories.bad)}
+            onChange={handleChange}
+          />
           <Footer data={props.data} props={props} />
         </table>
       </div>

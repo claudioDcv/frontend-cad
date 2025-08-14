@@ -14,7 +14,7 @@ const useGetResolution = () => {
     setError('');
   };
 
-  const call = useCallback(async (id: string) => {
+  const call = useCallback(async (id: number | string) => {
     setStatus(FetchStatus.LOADING);
     setError('');
     try {

@@ -2,7 +2,7 @@ import { Resolution } from '@/entities/Resolution.entity';
 import { API_BASE } from '@/conf/http';
 import { getHeader } from '../utils';
 
-const client = async (id: string): Promise<Resolution | null> => {
+const client = async (id: number | string): Promise<Resolution | null> => {
   const url = new URL(`${API_BASE}/resolutions/${id}`);
 
   const response = await fetch(url.toString(), {

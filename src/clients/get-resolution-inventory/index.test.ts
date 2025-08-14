@@ -28,7 +28,7 @@ describe('useGetResolutionInventory', () => {
         totalWeight: 15,
         createdBy: 1001,
         updatedBy: 1002,
-        inventoryTypeId: ''
+        inventoryTypeId: 0,
       },
       {
         id: 2,
@@ -38,7 +38,7 @@ describe('useGetResolutionInventory', () => {
         totalWeight: 10,
         createdBy: 1003,
         updatedBy: 1004,
-        inventoryTypeId: ''
+        inventoryTypeId: 0,
       },
     ];
 
@@ -47,7 +47,7 @@ describe('useGetResolutionInventory', () => {
     const { result } = renderHook(() => useGetResolutionInventory());
 
     await act(async () => {
-      await result.current.call('123');
+      await result.current.call(0);
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
@@ -65,7 +65,7 @@ describe('useGetResolutionInventory', () => {
     const { result } = renderHook(() => useGetResolutionInventory());
 
     await act(async () => {
-      await result.current.call('123');
+      await result.current.call(0);
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
@@ -95,7 +95,7 @@ describe('useGetResolutionInventory', () => {
         totalWeight: 15,
         createdBy: 1001,
         updatedBy: 1002,
-        inventoryTypeId: ''
+        inventoryTypeId: 0,
       },
       {
         id: 2,
@@ -105,14 +105,14 @@ describe('useGetResolutionInventory', () => {
         totalWeight: 10,
         createdBy: 1003,
         updatedBy: 1004,
-        inventoryTypeId: ''
+        inventoryTypeId: 0,
       },
     ];
 
     const updatedItem: InventoryResolution = {
       id: 2,
       resolutionId: 102,
-      inventoryTypeId: '202',
+      inventoryTypeId: 0,
       weight: 2.5,
       quantity: 99,
       totalWeight: 99,
@@ -125,7 +125,7 @@ describe('useGetResolutionInventory', () => {
     const { result } = renderHook(() => useGetResolutionInventory());
 
     await act(async () => {
-      await result.current.call('123');
+      await result.current.call(0);
     });
 
     act(() => {

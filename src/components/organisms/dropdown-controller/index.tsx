@@ -12,7 +12,8 @@ const DropdownController = (props: DropdownControllerProps) => {
       render={({ field }) => (
         <Dropdown
           {...field}
-          onChange={props.onChange(field)}
+          value={field.value || ''} // Ensure the initial value is valid
+          onChange={props.onChange ? props.onChange(field) : field.onChange}
           options={props.options}
           label={t(props.label)}
           disabled={props.disabled}

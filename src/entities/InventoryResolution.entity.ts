@@ -1,7 +1,7 @@
 export interface InventoryResolution {
   id: number;
   resolutionId: number;
-  inventoryTypeId: string;
+  inventoryTypeId: number;
   weight: number;
   quantity: number;
   totalWeight: number;
