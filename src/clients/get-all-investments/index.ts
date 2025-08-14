@@ -1,47 +1,23 @@
-import { useCallback, useState } from 'react';
-import { FetchStatus } from '@/constants';
 import client from './client';
-import { Option } from '@/entities/Option.entity';
 import { remap } from './utils';
+import useFetch from '@/hooks/useFetch';
+import { Option } from '@/entities/Option.entity';
+
 
 const useGetAllInvestments = () => {
-  const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Option[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { status, data, error, call, clearData } = useFetch<Option[]>({
+    client,
+    remap,
+    initialData: [],
+  });
 
-  const call = useCallback(async () => {
-    if (status === FetchStatus.ERROR) {
-      return;
-    }
-    if (
-      status === FetchStatus.LOADING ||
-      status === FetchStatus.SUCCESS ||
-      data.length
-    ) {
-      setStatus(FetchStatus.SUCCESS);
-      setError(null);
-      return;
-    }
-    setStatus(FetchStatus.LOADING);
-    try {
-      const result = await client();
-      const model = remap(result);
-      setData(model);
-      setStatus(FetchStatus.SUCCESS);
-    } catch (err) {
-      const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-      setError(messageKey);
-      setStatus(FetchStatus.ERROR);
-    }
-  }, [status, data.length]);
-
-  const clearData = () => {
-    setData([]);
-    setStatus(FetchStatus.IDLE);
-    setError(null);
+  return {
+    status,
+    data: data || [],
+    error,
+    call,
+    clearData: () => clearData([]),
   };
-
-  return { status, data, error, call, clearData };
 };
 
 export default useGetAllInvestments;

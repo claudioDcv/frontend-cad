@@ -1,43 +1,20 @@
-import { useCallback, useState } from 'react';
-import { FetchStatus } from '@/constants';
 import client from './client';
+import useFetch from '@/hooks/useFetch';
 import { remap } from './utils';
 import { InventoryType } from '@/entities/InventoryType.entity';
 
 const useGetAllInventoryTypes = () => {
-  const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<InventoryType[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { status, data, error, call } = useFetch({
+    client,
+    remap,
+  });
 
-  const call = useCallback(async () => {
-    if (status === FetchStatus.ERROR) {
-      return;
-    }
-    if (
-      status === FetchStatus.LOADING ||
-      status === FetchStatus.SUCCESS ||
-      data.length
-    ) {
-      setStatus(FetchStatus.SUCCESS);
-      setError(null);
-      return;
-    }
-
-    setStatus(FetchStatus.LOADING);
-
-    try {
-      const result = await client();
-      const model = remap(result);
-      setData(model);
-      setStatus(FetchStatus.SUCCESS);
-    } catch (err) {
-      const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-      setError(messageKey);
-      setStatus(FetchStatus.ERROR);
-    }
-  }, [status, data.length]);
-
-  return { status, data, error, call };
+  return {
+    status,
+    data: (data || []) as InventoryType[],
+    error,
+    call
+  };
 };
 
 export default useGetAllInventoryTypes;

@@ -7,7 +7,7 @@ export type NotificationQuery = {
   userId?: number;
   message?: string;
   timestamp?: string;
-  viewed?: boolean;
+  viewed?: boolean | null;
   viewedAt?: string;
   viewedBy?: number;
   page: number;

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { FetchStatus } from '@/constants';
 import { useGetAllNotifications, useGetUnviewedNotifications } from '@/clients';
 import { defaultNotificationFormValues } from '@/pages/common/documents/utils';
+import usePathViewedNotification from '@/clients/path-viewed-notification';
 
 interface UseServicesProps {
   unviewedNotifications?: boolean;
@@ -12,8 +13,9 @@ const useServices = ({
   unviewedNotifications,
   allNotifications,
 }: UseServicesProps) => {
+  const pathViewedNotification = usePathViewedNotification();
   const getUnviewedNotifications = useGetUnviewedNotifications();
-  const getAllNotifications = useGetAllNotifications();
+  const getAllNotifications = useGetAllNotifications({ isReinvocable: true });
 
   useEffect(() => {
     if (getUnviewedNotifications.status === FetchStatus.IDLE && unviewedNotifications) {
@@ -28,6 +30,7 @@ const useServices = ({
   return {
     getUnviewedNotifications,
     getAllNotifications,
+    pathViewedNotification,
   };
 };
 

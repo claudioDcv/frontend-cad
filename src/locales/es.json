@@ -334,5 +334,11 @@
     "tooltipOpen": "Abrir Cuentas por Cobrar",
     "description": "Aquí puedes ver y editar los detalles de la cuenta por cobrar seleccionada.",
     "newReceivable": "Nueva Cuenta por Cobrar"
+  },
+  "confirm": {
+    "confirmation": "Confirmación",
+    "areYouSure": "¿Estás seguro que deseas realizar esta acción?",
+    "no": "No",
+    "yes": "Sí"
   }
 }

@@ -4,7 +4,11 @@ import { Link } from 'wouter';
 import routes from '@/conf/routes';
 import useAccess from '@/components/atoms/access/useAccess';
 import { validRoles } from '@/constants';
-import { ResolutionDetailButtonProps } from './types';
+
+interface ResolutionDetailButtonProps {
+  id: string | number;
+  label: string;
+}
 
 const ResolutionDetailButton = ({ id, label }: ResolutionDetailButtonProps) => {
   const access = useAccess();

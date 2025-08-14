@@ -9,8 +9,3 @@ export interface ResolutionSendTruckModalProps {
   id: number | null;
   onClose: () => void;
 }
-
-export interface ResolutionDetailButtonProps {
-  id: string;
-  label?: string;
-}

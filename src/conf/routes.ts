@@ -24,13 +24,13 @@ const operator = {
   },
   resolutionDetail: {
     link: appendPrefix(`/${validRoles.operator}/resolutions/:id`),
-    path: (id: string) =>
+    path: (id: string | number) =>
       appendPrefix(`/${validRoles.operator}/resolutions/${id}`),
     label: 'routes.resolutions',
   },
   packinglistDetail: {
     link: appendPrefix(`/${validRoles.operator}/packinglist/:id`),
-    path: (id: string) =>
+    path: (id: string | number) =>
       appendPrefix(`/${validRoles.operator}/packinglist/${id}`),
     label: 'routes.packingList',
   },
@@ -47,13 +47,13 @@ const cordinator = {
   },
   resolutionDetail: {
     link: appendPrefix(`/${validRoles.cordinator}/resolutions/:id`),
-    path: (id: string) =>
+    path: (id: string | number) =>
       appendPrefix(`/${validRoles.cordinator}/resolutions/${id}`),
     label: 'routes.resolutions',
   },
   packinglistDetail: {
     link: appendPrefix(`/${validRoles.cordinator}/packinglist/:id`),
-    path: (id: string) =>
+    path: (id: string | number) =>
       appendPrefix(`/${validRoles.cordinator}/packinglist/${id}`),
     label: 'routes.packingList',
   },

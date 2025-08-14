@@ -29,6 +29,7 @@ import {
   Input,
   Access,
   IconList,
+  ResolutionDetailButton,
 } from '@components/index';
 import useServices from './hooks/useServices';
 import {
@@ -39,7 +40,6 @@ import {
 import { Resolution } from '@/entities/Resolution.entity';
 import { ResolutionFormModel } from '../../types';
 import {
-  ResolutionDetailButton,
   ResolutionMassiveModal,
   ResolutionSendTruckModal,
 } from './components';

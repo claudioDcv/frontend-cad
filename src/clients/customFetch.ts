@@ -3,7 +3,10 @@ import { API_BASE } from '@/conf/http';
 import { getHeader } from './utils';
 
 export interface FetchOptions extends RequestInit {
-    queryParams?: Record<string, string | number | boolean>;
+    query?: Record<string, string | number | boolean>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    remap?: (data: any) => any;
+    withoutBodyResponse?: boolean;
 }
 
 export const customFetch = Object.assign(
@@ -15,7 +18,7 @@ export const customFetch = Object.assign(
             defaultError: 'errors.defaultError',
         }
     ): Promise<T> => {
-        const { queryParams, headers, ...restOptions } = options;
+        const { query, headers, ...restOptions } = options;
 
         // Leer BASE_URL dinámicamente
         const BASE_URL = API_BASE || 'https://api.example.com';
@@ -24,8 +27,8 @@ export const customFetch = Object.assign(
         const url = new URL(
             endpoint.startsWith('/') ? `${BASE_URL}${endpoint}` : `${BASE_URL}/${endpoint}`
         );
-        if (queryParams) {
-            Object.entries(queryParams).forEach(([key, value]) => {
+        if (query) {
+            Object.entries(query).forEach(([key, value]) => {
                 url.searchParams.append(key, String(value));
             });
         }
@@ -49,7 +52,14 @@ export const customFetch = Object.assign(
             };
         }
 
+        if (options.withoutBodyResponse) {
+            return {} as T;
+        }
+
         // Parsear la respuesta como JSON
+        if (options.remap) {
+            return options.remap(await response.json());
+        }
         return (await response.json()) as T;
     },
     {
@@ -106,6 +116,25 @@ export const customFetch = Object.assign(
         ): Promise<T> => {
             return customFetch<T>(endpoint, { ...options, method: 'DELETE' }, errorMessages);
         },
+        patch: async <T>(
+            endpoint: string,
+            body?: unknown,
+            options: FetchOptions = {},
+            errorMessages: { responseError: string; defaultError: string } = {
+                responseError: 'errors.responseError',
+                defaultError: 'errors.defaultError',
+            }
+        ): Promise<T> => {
+            return customFetch<T>(
+                endpoint,
+                {
+                    ...options,
+                    method: 'PATCH',
+                    ...(body ? { body: JSON.stringify(body) } : {}),
+                },
+                errorMessages
+            );
+        },
     }
 );
 
@@ -113,3 +142,4 @@ export const getFetch = customFetch.get;
 export const postFetch = customFetch.post;
 export const putFetch = customFetch.put;
 export const deleteFetch = customFetch.delete;
+export const patchFetch = customFetch.patch;

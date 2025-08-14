@@ -80,7 +80,7 @@ describe('customFetch', () => {
         });
 
         const result = await customFetch.get('/test-endpoint', {
-            queryParams: { key: 'value', anotherKey: 123 },
+            query: { key: 'value', anotherKey: 123 },
         });
 
         expect(mockFetch).toHaveBeenCalledWith(

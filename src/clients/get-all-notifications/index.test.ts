@@ -80,7 +80,7 @@ describe('useGetAllNotifications', () => {
     const { result } = renderHook(() => useGetAllNotifications());
 
     act(() => {
-      result.current.onResetError();
+      result.current.call(mockFilters);
     });
 
     expect(result.current.data).toEqual(initialPaginatedData);
