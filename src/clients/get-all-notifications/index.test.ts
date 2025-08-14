@@ -84,6 +84,6 @@ describe('useGetAllNotifications', () => {
     });
 
     expect(result.current.data).toEqual(initialPaginatedData);
-    expect(result.current.error).toBe('');
+    expect(result.current.error).toBe(null);
   });
 });
