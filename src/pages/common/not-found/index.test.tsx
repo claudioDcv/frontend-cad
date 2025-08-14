@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 import * as useAccessModule from '@components/atoms/access/useAccess';
@@ -12,7 +12,7 @@ describe('NotFoundPage', () => {
     });
 
     test('renders correctly', () => {
-        (useAccessModule.default as vi.Mock).mockReturnValue(() => true);
+        (useAccessModule.default as Mock).mockReturnValue(() => true);
         render(<NotFoundPage />);
         expect(screen.getByText('error.404Error')).toBeInTheDocument();
     });

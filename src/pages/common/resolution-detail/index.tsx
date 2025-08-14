@@ -8,8 +8,6 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  FormControlLabel,
-  Switch,
   Tooltip,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';

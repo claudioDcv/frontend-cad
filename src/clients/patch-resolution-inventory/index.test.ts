@@ -23,22 +23,22 @@ describe('usePatchResolutionInventory', () => {
       {
         id: 1,
         resolutionId: 101,
-        inventoryTypeId: 201,
         weight: 1.5,
         quantity: 10,
         totalWeight: 15,
         createdBy: 1001,
         updatedBy: 1002,
+        inventoryTypeId: ''
       },
       {
         id: 2,
         resolutionId: 102,
-        inventoryTypeId: 202,
         weight: 2.0,
         quantity: 5,
         totalWeight: 10,
         createdBy: 1003,
         updatedBy: 1004,
+        inventoryTypeId: ''
       },
     ];
 
@@ -47,7 +47,16 @@ describe('usePatchResolutionInventory', () => {
     const { result } = renderHook(() => usePatchResolutionInventory());
 
     await act(async () => {
-      await result.current.call('123');
+      await result.current.call({
+        id: 12,
+        inventories: [
+          {
+            inventoryType: { value: 'type1', label: 'Type 1' },
+            weight: 1.5,
+            quantity: 10,
+          },
+        ],
+      });
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
@@ -65,7 +74,16 @@ describe('usePatchResolutionInventory', () => {
     const { result } = renderHook(() => usePatchResolutionInventory());
 
     await act(async () => {
-      await result.current.call('123');
+      await result.current.call({
+        id: 12,
+        inventories: [
+          {
+            inventoryType: { value: 'type1', label: 'Type 1' },
+            weight: 1.5,
+            quantity: 10,
+          },
+        ],
+      });
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);

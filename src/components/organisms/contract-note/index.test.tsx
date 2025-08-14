@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, beforeEach, describe, test, expect } from 'vitest';
 import ContractNote from '.';
 import * as accessHook from '@/components/atoms/access/useAccess';
-import { initialState } from './index.types';
+import { ContractNoteProps } from './index.types';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
@@ -44,19 +44,7 @@ beforeEach(() => {
 });
 
 describe('ContractNote alternative test', () => {
-  const baseMetadata = {
-    ...initialState,
-    contractId: 123,
-    note: 'Initial note',
-    reviewed: false,
-    reviewedBy: null,
-    reviewedAt: null,
-    confirmedBy: null,
-    confirmedAt: null,
-  };
-
-  const baseProps = {
-    metadata: baseMetadata,
+  const baseProps: ContractNoteProps = {
     onSuccess: vi.fn(),
     onClose: vi.fn(),
     loading: false,

@@ -23,22 +23,22 @@ describe('useGetResolutionInventory', () => {
       {
         id: 1,
         resolutionId: 101,
-        inventoryTypeId: 201,
         weight: 1.5,
         quantity: 10,
         totalWeight: 15,
         createdBy: 1001,
         updatedBy: 1002,
+        inventoryTypeId: ''
       },
       {
         id: 2,
         resolutionId: 102,
-        inventoryTypeId: 202,
         weight: 2.0,
         quantity: 5,
         totalWeight: 10,
         createdBy: 1003,
         updatedBy: 1004,
+        inventoryTypeId: ''
       },
     ];
 
@@ -86,33 +86,33 @@ describe('useGetResolutionInventory', () => {
   });
 
   test('should replace inventory item correctly', async () => {
-    const initialData = [
+    const initialData: InventoryResolution[] = [
       {
         id: 1,
         resolutionId: 101,
-        inventoryTypeId: 201,
         weight: 1.5,
         quantity: 10,
         totalWeight: 15,
         createdBy: 1001,
         updatedBy: 1002,
+        inventoryTypeId: ''
       },
       {
         id: 2,
         resolutionId: 102,
-        inventoryTypeId: 202,
         weight: 2.0,
         quantity: 5,
         totalWeight: 10,
         createdBy: 1003,
         updatedBy: 1004,
+        inventoryTypeId: ''
       },
     ];
 
-    const updatedItem = {
+    const updatedItem: InventoryResolution = {
       id: 2,
       resolutionId: 102,
-      inventoryTypeId: 202,
+      inventoryTypeId: '202',
       weight: 2.5,
       quantity: 99,
       totalWeight: 99,
