@@ -23,3 +23,8 @@ Elimina todo lo relacionado con esa resolucion, CxC, distribucion de inventario,
 Este endpoint es para poder hacer pruebas con esa resolucion.
 
 Lo mismo aplica a PL
+
+|File            | % Stmts | % Branch | % Funcs | % Lines |
+|:---------------|:--------|:---------|:--------|:--------|
+|14 Agosto 13:30 |   41.82 |    63.08 |   49.84 |   41.82 |                    
+|14 Agosto 15:00 |   42.39 |    63.23 |   50.31 |   42.39 |
