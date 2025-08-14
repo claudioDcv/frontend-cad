@@ -4,7 +4,9 @@ import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
 import useGetAllNotifications from '.';
 import { NotificationFormModel } from '@/pages/common/documents/types';
-import { initialNotificationData } from './utils';
+import { Paginated } from '../types';
+import { Notification } from '@/entities/Notification.entity';
+import { initialPaginatedData } from '../utils';
 
 const mockFilters: NotificationFormModel = {
   page: 0,
@@ -16,8 +18,8 @@ describe('useGetAllNotifications', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData = {
-      notifications: [
+    const mockData: Paginated<Notification> = {
+      content: [
         {
           id: 0,
           type: 'string',
@@ -62,7 +64,7 @@ describe('useGetAllNotifications', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
-    expect(result.current.data).toEqual(initialNotificationData);
+    expect(result.current.data).toEqual(initialPaginatedData);
     expect(result.current.error).toBe('API call failed');
   });
 
@@ -70,7 +72,7 @@ describe('useGetAllNotifications', () => {
     const { result } = renderHook(() => useGetAllNotifications());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
-    expect(result.current.data).toEqual(initialNotificationData);
+    expect(result.current.data).toEqual(initialPaginatedData);
     expect([null, ''].includes(result.current.error)).toBe(true);
   });
 
@@ -81,7 +83,7 @@ describe('useGetAllNotifications', () => {
       result.current.onResetError();
     });
 
-    expect(result.current.data).toEqual(initialNotificationData);
+    expect(result.current.data).toEqual(initialPaginatedData);
     expect(result.current.error).toBe('');
   });
 });

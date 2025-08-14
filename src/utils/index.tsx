@@ -100,6 +100,19 @@ export function formatToDDMMYYYY(externalDateInput: string | undefined | unknown
   return `${day}/${month}/${year}`;
 }
 
+export function formatToFullDateHour(externalDateInput: string | undefined | unknown): string {
+  const dateInput = typeof externalDateInput === 'string' ? externalDateInput : undefined;
+  if (!dateInput) return '';
+  const date = new Date(dateInput);
+  if (isNaN(date.getTime())) return '';
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
 export function formatNumberWithGr(externalValue: number | null | string | unknown) {
   const value = typeof externalValue === 'string' ? parseFloat(externalValue) : externalValue;
   if (typeof value !== 'number' || isNaN(value)) return '';

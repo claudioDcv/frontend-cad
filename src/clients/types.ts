@@ -35,3 +35,8 @@ export type PageResponse<T> = {
   numberOfElements: number;
   empty: boolean;
 };
+
+export type Paginated<T> = {
+  content: T[];
+  meta: PaginationMeta;
+};

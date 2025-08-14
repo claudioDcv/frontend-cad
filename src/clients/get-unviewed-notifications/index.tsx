@@ -34,7 +34,8 @@ const useGetUnviewedNotifications = () => {
     }
   }, [status, data.length]);
 
-  return { status, data, error, call };
+  const count = data.reduce((acc, curr) => acc + curr.count, 0);
+  return { status, data, error, call, count };
 };
 
 export default useGetUnviewedNotifications;

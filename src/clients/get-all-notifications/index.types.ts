@@ -1,6 +1,3 @@
-import { Notification } from '@/entities/Notification.entity';
-import { Pageable, Sort } from '../types';
-
 export type NotificationQuery = {
   id?: number;
   type?: string;
@@ -16,26 +13,4 @@ export type NotificationQuery = {
   page: number;
   size?: number;
   sort?: string;
-};
-
-export type NotificationPaginated = {
-  notifications: Notification[];
-  meta: {
-    page: number;
-    count: number;
-  };
-};
-
-export type PageResponse = {
-  totalPages: number;
-  totalElements: number;
-  pageable: Pageable;
-  size: number;
-  content: Notification[];
-  number: number;
-  sort: Sort[];
-  first: boolean;
-  last: boolean;
-  numberOfElements: number;
-  empty: boolean;
 };

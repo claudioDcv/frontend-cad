@@ -1,9 +1,10 @@
 import { API_BASE } from '@/conf/http';
-import { clearAllProps, clearProp, getHeader } from '../utils';
+import { clearAllProps, clearProp, getHeader, pageableToPaginated } from '../utils';
 import { NotificationQuery } from './index.types';
-import { remap } from './utils';
+import { Paginated } from '../types';
+import { Notification } from '@/entities/Notification.entity';
 
-const client = async (props: NotificationQuery) => {
+const client = async (props: NotificationQuery): Promise<Paginated<Notification>> => {
   const params = {
     page: clearProp(props.page - 1),
     resolutionNumber: clearProp(props.userId),
@@ -24,7 +25,7 @@ const client = async (props: NotificationQuery) => {
 
   try {
     const res = await response.json();
-    return remap(res);
+    return pageableToPaginated<Notification>(res);
   } catch {
     throw new Error('error.getAllNotificationsParse');
   }

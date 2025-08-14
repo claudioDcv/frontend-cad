@@ -1,5 +1,5 @@
 import { getToken } from '../hooks/useJWTNotification';
-import { PaginationMeta } from './types';
+import { PageResponse, Paginated, PaginationMeta } from './types';
 
 export const getHeader = () => {
   const key = getToken();
@@ -34,3 +34,49 @@ export function mapMeta<T extends { number: number; totalPages: number }>(
     count: data.totalPages,
   };
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const initialPageableData: PageResponse<any> = {
+  totalPages: 0,
+  totalElements: 0,
+  pageable: {
+    pageNumber: 0,
+    pageSize: 0,
+    sort: {
+      sorted: false,
+      empty: false,
+      unsorted: false
+    },
+    offset: 0,
+    paged: undefined,
+    unpaged: undefined
+  },
+  size: 0,
+  content: [],
+  number: 0,
+  sort: [],
+  first: false,
+  last: false,
+  numberOfElements: 0,
+  empty: false
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const initialPaginatedData: Paginated<any> = {
+  content: [],
+  meta: {
+    page: 0,
+    count: 0
+  }
+};
+
+
+export const pageableToPaginated = <T>(data: PageResponse<T>): Paginated<T> => {
+  return {
+    content: data.content,
+    meta: {
+      page: data.number + 1,
+      count: data.totalPages
+    }
+  };
+};

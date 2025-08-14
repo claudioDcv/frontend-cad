@@ -1,19 +1,20 @@
 import { useState, useCallback } from 'react';
 import { FetchStatus } from '@/constants';
 import client from './client';
-import { NotificationPaginated } from './index.types';
-import { initialNotificationData } from './utils';
 import { NotificationFormModel } from '@/pages/common/documents/types';
+import { Notification } from '@/entities/Notification.entity';
+import { Paginated } from '../types';
+import { initialPaginatedData } from '../utils';
 
 const useGetAllNotifications = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<NotificationPaginated>(
-    initialNotificationData
+  const [data, setData] = useState<Paginated<Notification>>(
+    initialPaginatedData
   );
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
-    setData(initialNotificationData);
+    setData(initialPaginatedData);
     setError('');
   };
 
@@ -32,9 +33,7 @@ const useGetAllNotifications = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client({
-          page: props.page,
-        });
+        const result = await client(props);
 
         setData(result);
         setStatus(FetchStatus.SUCCESS);

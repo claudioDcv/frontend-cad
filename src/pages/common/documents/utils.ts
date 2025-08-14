@@ -34,6 +34,6 @@ export const defaultPackingListFormValues = (): PackingListFormModel => ({
   docNumber: '',
 });
 
-export const defaultNotificationFormValues = (): NotificationFormModel => ({
+export const defaultNotificationFormValues: NotificationFormModel = {
   page: FIRST_PAGE,
-});
+};

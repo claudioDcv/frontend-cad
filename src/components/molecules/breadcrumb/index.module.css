@@ -1,6 +1,31 @@
+:root {
+  --color-text-primary: #333;
+  --color-text-secondary: #777;
+  --color-primary: #007bff;
+}
+
 .container {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.container a {
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.container a:visited {
+  color: var(--color-text-secondary);
+}
+
+.container a:focus {
+  outline: 2px solid var(--color-primary);
+  border-radius: 4px;
+}
+
+.container a:hover {
+  text-decoration: underline;
+  color: var(--color-primary);
 }

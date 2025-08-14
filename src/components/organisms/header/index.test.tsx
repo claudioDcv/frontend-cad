@@ -14,7 +14,7 @@ vi.mock('@/components', () => ({
   Breadcrumb: ({ items }: { items: string[] }) => (
     <div data-testid="breadcrumb">{items.join(' > ')}</div>
   ),
-  NotificationContainer: () => <div data-testid="notification-container" />,
+  NotificationsContainer: () => <div data-testid="notification-container" />,
 }));
 
 vi.mock('../notification-container/components/receiver', () => ({
@@ -22,7 +22,7 @@ vi.mock('../notification-container/components/receiver', () => ({
 }));
 
 describe('Header component', () => {
-  test('renders Breadcrumb, Receiver and NotificationContainer correctly', () => {
+  test('renders Breadcrumb, Receiver and NotificationsContainer correctly', () => {
     render(<Header />);
     expect(screen.getByTestId('breadcrumb')).toHaveTextContent('Home > Dashboard');
     expect(screen.getByTestId('receiver')).toBeInTheDocument();

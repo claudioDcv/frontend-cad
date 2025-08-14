@@ -1,3 +1,4 @@
+import theme from '@/conf/theme';
 import { Notification } from '@/entities/Notification.entity';
 import { formatDateHour } from '@/utils';
 import {
@@ -16,7 +17,7 @@ interface CardNotificationProps {
 
 const CardNotification: React.FC<CardNotificationProps> = ({ data }) => {
   return (
-    <Card variant="outlined" sx={{ mx: 1, mt: 1, backgroundColor: '#f5f5f5' }}>
+    <Card variant="outlined" sx={{ mx: 1, mt: 1, backgroundColor: theme.palette.grey[100] }}>
       <CardActions>
         <Box
           sx={{
