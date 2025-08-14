@@ -41,6 +41,7 @@ const Receiver = () => {
 
   return (
     <div
+      data-testid="receiver"
       style={{
         display: 'flex',
         alignItems: 'center',

@@ -27,7 +27,7 @@ const NotificationsContainer = () => {
   }, [services.getUnviewedNotifications, setter]);
 
   return (
-    <>
+    <div data-testid="notifications-container">
       <IconButton onClick={toggle.open}>
         <Badge
           badgeContent={notificationCtx.unviewedCounter}
@@ -41,7 +41,7 @@ const NotificationsContainer = () => {
       <Drawer anchor="right" open={toggle.isOpen} onClose={toggle.close}>
         {toggle.isOpen && <NotificationsDialog onClose={toggle.close} />}
       </Drawer>
-    </>
+    </div>
   );
 };
 
