@@ -32,9 +32,10 @@ interface NewReceivableFormProps {
     contracts: Contract[];
     inventoryTypes: InventoryType[];
     onSubmit: (data: CreateReceivable) => void;
+    loading: boolean;
 }
 
-const NewReceivableFormDialog = ({ open, onClose, contracts, inventoryTypes, onSubmit }: NewReceivableFormProps) => {
+const NewReceivableFormDialog = ({ open, onClose, contracts, inventoryTypes, onSubmit, loading }: NewReceivableFormProps) => {
     const { t } = useTranslation();
     const { control, getValues, setValue, reset, watch } = useForm<ReceivableForm>({
         defaultValues: {
@@ -212,10 +213,10 @@ const NewReceivableFormDialog = ({ open, onClose, contracts, inventoryTypes, onS
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleClose} color="primary" disabled={loading}>
                     {t('common.cancel')}
                 </Button>
-                <Button onClick={handleSubmit} color="secondary" disabled={isDisabled()}>
+                <Button onClick={handleSubmit} color="secondary" disabled={isDisabled()} loading={loading}>
                     {t('common.create')}
                 </Button>
             </DialogActions>

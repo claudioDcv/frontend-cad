@@ -337,7 +337,9 @@
     "viewReceivable": "Ver Cuenta por Cobrar",
     "receivableDetails": "Detalles de la Cuenta por Cobrar",
     "open": "Abrir",
-    "formDescription": "Primero debes seleccionar un contrato."
+    "formDescription": "Primero debes seleccionar un contrato.",
+    "successMessage": "La cuenta por cobrar {{id}} se creó con éxito.",
+    "errorMessage": "Error al crear la cuenta por cobrar."
   },
   "confirm": {
     "confirmation": "Confirmación",

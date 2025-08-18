@@ -10,6 +10,8 @@ import useServices from "../../hooks/useServices";
 import { inventoryCategories } from "@/constants";
 import { filterInventoryType } from "@/utils";
 import { CreateReceivable } from "@/entities/CreateReceivable.entity";
+import { useAlertContext } from "@/contexts/alert/useAlertContext";
+import { AlertType } from "@/contexts/alert/types";
 
 interface ReceivablesOperatorProps {
     resolutionId: number;
@@ -18,6 +20,7 @@ interface ReceivablesOperatorProps {
 }
 const ReceivablesOperator = ({ resolutionId, openNewReceivableForm, setOpenNewReceivableForm }: ReceivablesOperatorProps) => {
     const { t } = useTranslation();
+    const alertContext = useAlertContext();
     const [selectedReceivable, setSelectedReceivable] = useState<Receivable | null>(null);
     const { contracts, receivables, loading, inventoryTypes, createReceivable, receivablesResend } = useServices(resolutionId);
     const badInventoryTypes = filterInventoryType(inventoryTypes, inventoryCategories.bad).map(type => ({
@@ -29,11 +32,25 @@ const ReceivablesOperator = ({ resolutionId, openNewReceivableForm, setOpenNewRe
             const res = (await createReceivable(receivable)) as { id: number };
             if (res.id) {
                 receivablesResend(resolutionId);
+                alertContext.addAlert({
+                    type: AlertType.SUCCESS,
+                    title: t('common.success'),
+                    message: t('accountsReceivable.successMessage', {
+                        id: res.id,
+                    }),
+                    callback: () => {
+                        setOpenNewReceivableForm(false);
+                    },
+                });
             }
         } catch (error) {
             console.error(error);
-        } finally {
-            setOpenNewReceivableForm(false);
+            alertContext.addAlert({
+                type: AlertType.ERROR,
+                title: t('common.error'),
+                message: t('accountsReceivable.errorMessage'),
+                dismissible: true,
+            });
         }
     };
     return (
@@ -44,6 +61,7 @@ const ReceivablesOperator = ({ resolutionId, openNewReceivableForm, setOpenNewRe
                 contracts={contracts}
                 inventoryTypes={badInventoryTypes}
                 onSubmit={handleReceivableSubmit}
+                loading={loading}
             />
             <Box mt={2}>
                 <Table
