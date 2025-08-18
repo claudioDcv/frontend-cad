@@ -7,6 +7,7 @@ import { useAlertContext } from '@/contexts/alert/useAlertContext';
 import { AlertType } from '@/contexts/alert/types';
 import { FetchStatus } from '@/constants';
 import { Resolution } from '@/entities/Resolution.entity';
+import usePatchResolutionResolve from '@/clients/patch-resolution-resolve';
 
 export interface ResolutionMassiveModalProps {
   resolution: Resolution | null;
@@ -23,6 +24,7 @@ const ResolutionMassiveModal = ({
   const [openInventory, setOpenInventory] = useState(false);
   const [showConfirm, setShowConfirm] = useState(!!resolution);
   const patchResolutionInventory = usePatchResolutionInventory();
+  const patchResolutionResolve = usePatchResolutionResolve();
 
   useEffect(() => {
     setShowConfirm(!!resolution);
@@ -67,6 +69,34 @@ const ResolutionMassiveModal = ({
     }
   }, [alertContext, onClose, patchResolutionInventory, resolution, t]);
 
+  // Resolve
+  useEffect(() => {
+    if (patchResolutionResolve.status === FetchStatus.SUCCESS) {
+      patchResolutionResolve.reset();
+      alertContext.addAlert({
+        type: AlertType.SUCCESS,
+        title: t('common.success'),
+        message: t('patchResolutionResolve.successMessage', {
+          id: resolution?.resolutionId,
+        }),
+        callback: () => {
+          setOpenInventory(false);
+          setShowConfirm(false);
+          onClose();
+        },
+      });
+    }
+    if (patchResolutionResolve.status === FetchStatus.ERROR) {
+      patchResolutionResolve.reset();
+      alertContext.addAlert({
+        type: AlertType.ERROR,
+        title: t('common.error'),
+        message: t('patchResolutionResolve.errorMessage'),
+        dismissible: true,
+      });
+    }
+  }, [alertContext, onClose, patchResolutionResolve, resolution, t]);
+
   const handleSuccess = (inventories: Inventory[]) => {
     if (resolution?.resolutionId) {
       patchResolutionInventory.call({
@@ -76,6 +106,10 @@ const ResolutionMassiveModal = ({
     }
   };
 
+  const handleSendOutput = () => {
+    if (!resolution) return;
+    patchResolutionResolve.call(resolution?.resolutionId);
+  }
   if (!resolution) return null;
 
   return (
@@ -97,6 +131,7 @@ const ResolutionMassiveModal = ({
         onClose={handleOnClose}
         resolution={resolution}
         onSuccess={handleSuccess}
+        onSendOutput={handleSendOutput}
         loading={patchResolutionInventory.loading}
       />
     </>

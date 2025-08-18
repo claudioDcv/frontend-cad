@@ -54,7 +54,8 @@ describe('useGetAllResolutions', () => {
           hasMetadata: false,
           totalWeight: 0,
           totalPurchase: 0,
-          averagePurchase: 0
+          averagePurchase: 0,
+          responsible: ''
         },
       ],
       totalElements: 1,

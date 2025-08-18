@@ -8,5 +8,6 @@ export interface ActionsResolutionProps {
   current: Total;
   onClose: () => void;
   onSuccess: () => void;
+  onSendOutput: () => void;
   loading: boolean;
 }

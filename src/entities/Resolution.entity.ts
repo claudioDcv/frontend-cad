@@ -29,4 +29,5 @@ export type Resolution = {
   totalPurchase: number;
   averagePurchase: number;
   hasMetadata: boolean;
+  responsible: string;
 };

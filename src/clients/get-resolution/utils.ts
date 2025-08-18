@@ -22,4 +22,5 @@ export const initialResolutionData: Resolution = {
   totalWeight: 0,
   totalPurchase: 0,
   averagePurchase: 0,
+  responsible: ''
 };

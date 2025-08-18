@@ -16,6 +16,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   resolution,
   onClose,
   onSuccess,
+  onSendOutput,
   loading,
 }) => {
   const { t } = useTranslation();
@@ -64,6 +65,10 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
     onSuccess(data);
   };
 
+  const handleSendOutput = () => {
+    onSendOutput(data);
+  };
+
   const inventoriesSuccess = services.getResolutionInventory.status === FetchStatus.SUCCESS;
   const inventories = services.getResolutionInventory.data || [];
   return (
@@ -104,7 +109,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
             <Box>
               <DisplayData
                 label={t('modalMassUpload.responsible')}
-                value="Alejandro Cisternas"
+                value={services.getResolution.data.responsible}
               />
               <DisplayData
                 label={t('modalMassUpload.expirationDate')}
@@ -117,11 +122,11 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
             <Box>
               <DisplayData
                 label={t('modalMassUpload.client')}
-                value="Nestor Cantillana Perez"
+                value="[Dato no existe en resolución]"
               />
               <DisplayData
                 label={t('modalMassUpload.rut')}
-                value="10.548.548-5"
+                value="[Dato no existe en resolución]"
               />
             </Box>
           </Box>
@@ -137,6 +142,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
         </Box>
       </DialogContent>
       <ActionsResolution
+        onSendOutput={handleSendOutput}
         onClose={handleClose}
         onSuccess={handleSuccess}
         loading={loading}

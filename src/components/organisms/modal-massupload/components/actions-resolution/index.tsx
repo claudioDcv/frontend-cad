@@ -7,6 +7,7 @@ import AlertCard from '@/components/atoms/alert-card';
 import { diffInitialState, getDiff } from './index.utils';
 
 const ActionsResolution: React.FC<ActionsResolutionProps> = ({
+  onSendOutput,
   onSuccess,
   onClose,
   loading,
@@ -76,7 +77,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
               size="small"
               onClick={handleOpenConfirm}
             >
-              {t('common.requestCAD')}
+              {t('common.sendToOutput')}
             </Button>
           </Box>
         </Box>
@@ -85,7 +86,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
       <ModalConfirm
         open={openConfirm}
         onClose={handleCloseConfirm}
-        onSuccess={onSuccess}
+        onSuccess={onSendOutput}
         i18n={{
           title: t('modalConfirm.confirmationTitle'),
           text: t('modalConfirm.approvalConfirm'),

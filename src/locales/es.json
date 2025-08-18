@@ -193,7 +193,7 @@
     "statusOlimpo": "Estado Olimpo",
     "save": "Guardar",
     "successText": "Enviado con éxito.",
-    "requestCAD": "Enviar a CAD",
+    "sendToOutput": "Enviar a Olimpo",
     "successTitle": "Éxito",
     "type": "Tipo",
     "viewContracts": "Ver",
@@ -369,5 +369,9 @@
     "areYouSure": "¿Estás seguro que deseas realizar esta acción?",
     "no": "No",
     "yes": "Sí"
+  },
+  "patchResolutionResolve": {
+    "successMessage": "Inventario de la resolución <strong>{{id}}</strong> actualizado con éxito.",
+    "errorMessage": "Error al actualizar el inventario."
   }
 }

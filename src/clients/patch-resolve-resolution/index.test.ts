@@ -27,6 +27,7 @@ const mockResolution: Resolution = {
   totalWeight: 0,
   totalPurchase: 0,
   averagePurchase: 0,
+  responsible: ''
 };
 
 describe('usePatchResolutionResolve', () => {
