@@ -90,7 +90,7 @@ const Notifications = () => {
         <div>
           <ResolutionDetailButton
             id={String(row.entityId)}
-            label={t('common.viewContracts')}
+            label={t('common.view')}
           />
           <ReviewStatus value={row.viewed} onView={() => handleNotificationClick(row)} /></div>),
     },

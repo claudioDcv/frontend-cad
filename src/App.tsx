@@ -9,6 +9,7 @@ import InitialDataProvider from './contexts/initial-data/InitialDataProvider';
 import { DEBUG } from './conf/envs';
 import { AlertProvider } from './contexts/alert/AlertProvider';
 import ReceivablesProvider from './modules/receivables/context/ReceivablesProvider';
+import MassiveResolutionProvider from './modules/massive-resolution/context/ReceivablesProvider';
 
 const wsConfig = {
   url: WEBSOCKET_BASE,
@@ -17,6 +18,33 @@ const wsConfig = {
   debug: DEBUG,
   connectionType: 'stomp' as const,
   maxReconnectAttempts: 5,
+};
+
+interface ContextsProps {
+  children: React.ReactNode;
+  jwtNotification: ReturnType<typeof useJWTNotification>;
+}
+
+const Contexts = ({ children, jwtNotification }: ContextsProps) => {
+  return (<AlertProvider>
+    <InitialDataProvider>
+      <NotificationProvider>
+        <WebSocketProvider
+          config={{
+            ...wsConfig,
+            token: jwtNotification.token || '',
+          }}
+        >
+          <ReceivablesProvider>
+            <MassiveResolutionProvider>
+              {children}
+            </MassiveResolutionProvider>
+          </ReceivablesProvider>
+        </WebSocketProvider>
+      </NotificationProvider>
+    </InitialDataProvider>
+  </AlertProvider>
+  );
 };
 
 function App() {
@@ -28,22 +56,9 @@ function App() {
 
   return jwtNotification.token || VITE_MOCK_API ? (
     <Container maxWidth="xl">
-      <AlertProvider>
-        <InitialDataProvider>
-          <NotificationProvider>
-            <WebSocketProvider
-              config={{
-                ...wsConfig,
-                token: jwtNotification.token || '',
-              }}
-            >
-              <ReceivablesProvider>
-                <Router hostUrl={jwtNotification.hostUrl} />
-              </ReceivablesProvider>
-            </WebSocketProvider>
-          </NotificationProvider>
-        </InitialDataProvider>
-      </AlertProvider>
+      <Contexts jwtNotification={jwtNotification}>
+        <Router hostUrl={jwtNotification.hostUrl} />
+      </Contexts>
     </Container>
   ) : (
     <Alert severity="info" sx={{ marginTop: 2 }}>

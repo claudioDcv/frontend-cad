@@ -48,6 +48,7 @@ import {
 import { addOptionAll, isEmpty } from '../documents/utils';
 import Access from '@/components/atoms/access';
 import { useReceivablesContext } from '@/modules/receivables/context/useReceivablesContext';
+import { useMassiveResolutionContext } from '@/modules/massive-resolution/context/useMassiveResolutionContext';
 
 const ResolutionDetail = () => {
   const { id: resolutionId } = useParams<{ id: string }>();
@@ -64,6 +65,7 @@ const ResolutionDetail = () => {
   });
 
   const receivablesContext = useReceivablesContext();
+  const massiveResolutionContext = useMassiveResolutionContext();
 
   const [contract, setContract] = useState<Contract | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>(emptyOption.value);
@@ -213,6 +215,16 @@ const ResolutionDetail = () => {
                       {t('common.sendCAD')}
                     </Button>
                   </span>
+                </Tooltip>
+              </Access>
+              <Access roles={[validRoles.operator]}>
+                <Tooltip title={t('common.massUpload')}>
+                  <Button
+                    startIcon={<IconList name="box" />}
+                    onClick={() => massiveResolutionContext.setResolutionId(resolutionId)}
+                  >
+                    {t('massUpload.open')}
+                  </Button>
                 </Tooltip>
               </Access>
               <Access roles={[validRoles.operator]}>

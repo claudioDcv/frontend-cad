@@ -75,10 +75,18 @@ const cordinator = {
   },
 };
 
+const admin = {
+  receivable: {
+    link: appendPrefix(`/${validRoles.admin}/receivables`),
+    label: 'routes.adminReceivables',
+  },
+};
+
 const routes = {
   common,
   operator,
   cordinator,
+  admin,
 };
 
 export default routes;

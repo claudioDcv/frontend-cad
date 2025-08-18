@@ -40,6 +40,10 @@ const breadcrumbs = {
     routes.cordinator.documents,
     routes.cordinator.notifications,
   ],
+  [`/${validRoles.admin}/receivables`]: [
+    routes.common.index,
+    routes.admin.receivable,
+  ],
 };
 
 export default breadcrumbs;

@@ -40,21 +40,19 @@ import {
 import { Resolution } from '@/entities/Resolution.entity';
 import { ResolutionFormModel } from '../../types';
 import {
-  ResolutionMassiveModal,
   ResolutionSendTruckModal,
 } from './components';
 import { useReceivablesContext } from '@/modules/receivables/context/useReceivablesContext';
+import { useMassiveResolutionContext } from '@/modules/massive-resolution/context/useMassiveResolutionContext';
 
 const Resolutions = () => {
   const { t } = useTranslation();
+  const massiveResolutionContext = useMassiveResolutionContext();
   const receivablesContext = useReceivablesContext();
 
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
     defaultValues: defaultResolutionsFormValues(),
   });
-  const [massiveResolution, setMassiveResolution] = useState<Resolution | null>(
-    null
-  );
   const [truckId, setTruckId] = useState<number | null>(null);
 
   const services = useServices();
@@ -174,11 +172,7 @@ const Resolutions = () => {
   };
 
   const handleMassiveResolution = (resolution: Resolution) => () => {
-    setMassiveResolution(resolution);
-  };
-
-  const handleCloseMassiveResolution = () => {
-    setMassiveResolution(null);
+    massiveResolutionContext.setResolutionId(resolution.resolutionId);
   };
 
   const handleSendTruckId = (id: number) => () => {
@@ -284,7 +278,7 @@ const Resolutions = () => {
                 <Box display="flex" gap={1}>
                   <ResolutionDetailButton
                     id={String(resolution.resolutionId)}
-                    label={t('common.viewContracts')}
+                    label={t('common.view')}
                   />
                   <Access roles={[validRoles.operator]}>
                     <Tooltip title={t('common.massUpload')}>
@@ -333,11 +327,6 @@ const Resolutions = () => {
           title: t('common.error'),
           text: t(services.getAllResolutions.error),
         }}
-      />
-
-      <ResolutionMassiveModal
-        resolution={massiveResolution}
-        onClose={handleCloseMassiveResolution}
       />
       <ResolutionSendTruckModal id={truckId} onClose={handleCloseTruckId} />
     </div>

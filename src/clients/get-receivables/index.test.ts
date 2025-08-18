@@ -35,12 +35,39 @@ describe('useGetReceivables', () => {
       typeName: ''
     };
 
-    vi.spyOn(clientModule, 'default').mockResolvedValue([mockData]);
+    vi.spyOn(clientModule, 'default').mockResolvedValue({
+      content: [mockData],
+      totalPages: 0,
+      totalElements: 0,
+      pageable: {
+        sort: {
+          sorted: false,
+          unsorted: true,
+          empty: true
+        },
+        offset: 0,
+        pageNumber: 0,
+        pageSize: 0,
+        unpaged: false,
+        paged: false
+      },
+      size: 0,
+      number: 0,
+      sort: [],
+      first: false,
+      last: false,
+      numberOfElements: 0,
+      empty: false
+    });
 
     const { result } = renderHook(() => useGetAllContracts());
 
     await act(async () => {
-      await result.current.call(0);
+      await result.current.call({
+        resolutionId: 0,
+        size: 15,
+        page: 1,
+      });
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
@@ -55,7 +82,10 @@ describe('useGetReceivables', () => {
     const { result } = renderHook(() => useGetAllContracts());
 
     await act(async () => {
-      await result.current.call(0);
+      await result.current.call({
+        size: 15,
+        page: 1,
+      });
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);

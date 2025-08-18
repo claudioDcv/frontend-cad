@@ -1,20 +1,22 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
-import client from './client';
+import client, { ReceivableProps } from './client';
 import { Receivable } from '@/entities/Receivable.entity';
+import { initialPaginatedData, pageableToPaginated } from '../utils';
+import { Paginated } from '../types';
 
 const useGetReceivables = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Receivable[]>([]);
+  const [data, setData] = useState<Paginated<Receivable>>(initialPaginatedData);
   const [error, setError] = useState<string | null>(null);
 
   const onResetError = () => {
-    setData([]);
+    setData(initialPaginatedData);
     setError(null);
   };
 
   const call = useCallback(
-    async (resolutionId: number) => {
+    async (props: ReceivableProps) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -28,9 +30,9 @@ const useGetReceivables = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client(resolutionId);
+        const result = await client(props);
 
-        setData(result);
+        setData(pageableToPaginated(result));
         setStatus(FetchStatus.SUCCESS);
       } catch (err) {
         const messageKey =
@@ -44,7 +46,7 @@ const useGetReceivables = () => {
 
   const reset = useCallback(() => {
     setStatus(FetchStatus.IDLE);
-    setData([]);
+    setData(initialPaginatedData);
     setError(null);
   }, []);
 

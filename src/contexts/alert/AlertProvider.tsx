@@ -33,7 +33,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
                 if (alert.callback) {
                     alert.callback();
                 }
-            }, alert.duration || 2000);
+            }, alert.duration || 1500);
         }
     }, [removeAlert]);
 

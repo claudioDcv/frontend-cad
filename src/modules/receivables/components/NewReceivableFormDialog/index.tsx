@@ -1,5 +1,6 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Skeleton } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, Divider, Skeleton } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useTranslation } from "react-i18next";
 import { Contract } from "@/entities/Contract.entity";
 import AutocompleteDropdown from "@/components/atoms/autocomplete-dropdown";
@@ -7,6 +8,7 @@ import { InventoryType } from "@/entities/InventoryType.entity";
 import { createItem } from "@/components/atoms/autocomplete-dropdown/index.utils";
 import { ContractSummaryCard, Dropdown, Input } from "@/components";
 import { CreateReceivable } from "@/entities/CreateReceivable.entity";
+import ModalHeader from "@/components/molecules/modal-header";
 
 const getContractByNumber = (contracts: Contract[], contractNumber: string) => {
     return contracts.find(contract => contract.contractNumber.toString() === contractNumber);
@@ -31,7 +33,7 @@ interface NewReceivableFormProps {
     onClose: () => void;
     contracts: Contract[];
     inventoryTypes: InventoryType[];
-    onSubmit: (data: CreateReceivable) => void;
+    onSubmit: (data: CreateReceivable, onSuccess: () => void) => void;
     loading: boolean;
 }
 
@@ -78,7 +80,9 @@ const NewReceivableFormDialog = ({ open, onClose, contracts, inventoryTypes, onS
             operatorNote: values.operatorNote,
             averagePrice: Number(values.averagePrice)
         }
-        onSubmit(data);
+        onSubmit(data, () => {
+            reset();
+        });
     }
 
     const isDisabled = () => {
@@ -102,7 +106,7 @@ const NewReceivableFormDialog = ({ open, onClose, contracts, inventoryTypes, onS
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-            <DialogTitle>{t('accountsReceivable.newReceivable')}</DialogTitle>
+            <ModalHeader title={t('accountsReceivable.newReceivable')} onClose={handleClose} icon={<AddCircleIcon />} />
             <DialogContent>
                 <DialogContentText>
                     {t('accountsReceivable.formDescription')}

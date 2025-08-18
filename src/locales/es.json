@@ -197,6 +197,7 @@
     "successTitle": "Éxito",
     "type": "Tipo",
     "viewContracts": "Ver",
+    "view": "Ver",
     "closureDate": "Fecha de Cierre",
     "markAsReviewed": "Marcar Contrato como Revisado",
     "massUpload": "Carga Masiva",
@@ -219,7 +220,8 @@
     "cordinatorDocuments": "Cordinador",
     "resolutions": "Lista de Resoluciones",
     "notifications": "Notificaciones",
-    "packingList": "Packing List"
+    "packingList": "Packing List",
+    "adminReceivables": "Cuentas por Cobrar"
   },
   "error": {
     "404Error": "Error 404 - Página no encontrada",
@@ -255,6 +257,9 @@
     "getResolutionInventoryFetch": "Error al actualizar la el inventario de la resolucion. Por favor, inténtalo de nuevo más tarde.",
     "getResolutionInventoryParse": "Error al interpretar los datos del inventario de la resolucion revisado del servidor.",
     "jsonError": "Error al procesar la respuesta del servidor."
+  },
+  "massUpload": {
+    "open": "Carga Masiva"
   },
   "notification": {
     "error": "Error",
@@ -331,10 +336,10 @@
   },
   "accountsReceivable": {
     "title": "Cuentas por Cobrar",
-    "tooltipOpen": "Abrir Cuentas por Cobrar",
+    "tooltipOpen": "Cuentas por Cobrar",
     "description": "Aquí puedes ver y editar los detalles de la cuenta por cobrar seleccionada.",
-    "newReceivable": "Nueva Cuenta por Cobrar",
-    "viewReceivable": "Ver Cuenta por Cobrar",
+    "newReceivable": "Crear Cuenta por Cobrar",
+    "viewReceivable": "Cuenta por Cobrar",
     "receivableDetails": "Detalles de la Cuenta por Cobrar",
     "open": "Abrir",
     "formDescription": "Primero debes seleccionar un contrato.",

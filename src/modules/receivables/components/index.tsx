@@ -1,4 +1,5 @@
 import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useReceivablesContext } from "../context/useReceivablesContext";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -18,7 +19,7 @@ const ReceivablesOperatorDialog = () => {
                     onClose={() => setResolutionId(null)}
                     icon={<IconList name="receivables" />}
                     title={t('accountsReceivable.title')}
-                    actions={<Button variant="contained" color="secondary" onClick={() => setOpenNewReceivableForm(true)}>{t('accountsReceivable.newReceivable')}</Button>}
+                    actions={<Button startIcon={<AddCircleIcon />} variant="contained" color="secondary" onClick={() => setOpenNewReceivableForm(true)}>{t('accountsReceivable.newReceivable')}</Button>}
                 />
             </AppBar>
             <DialogContent>
@@ -28,9 +29,6 @@ const ReceivablesOperatorDialog = () => {
                 {resolutionId && <ReceivablesOperator resolutionId={resolutionId} openNewReceivableForm={openNewReceivableForm} setOpenNewReceivableForm={setOpenNewReceivableForm} />}
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => { }} color="primary">
-                    {t('common.save')}
-                </Button>
                 <Button onClick={() => setResolutionId(null)} color="secondary">
                     {t('common.close')}
                 </Button>

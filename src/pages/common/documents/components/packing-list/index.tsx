@@ -256,7 +256,7 @@ const PackingList = () => {
                 <Box display="flex" gap={1}>
                   <PackingListDetailButton
                     id={String(packinglistId)}
-                    label={t('common.viewContracts')}
+                    label={t('common.view')}
                   />
                 </Box>
               ),

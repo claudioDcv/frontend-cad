@@ -2,6 +2,7 @@ import routes from '@/conf/routes';
 import { Box, Button, Stack, Paper } from '@mui/material';
 import { Link } from 'wouter';
 import ResolutionReset from '@/modules/resolution-reset/components';
+import theme from '@/conf/theme';
 
 const Index = () => {
   return (
@@ -10,16 +11,15 @@ const Index = () => {
       justifyContent="center"
       alignItems="center"
       height="100vh"
-      bgcolor="#f4f6f8"
+      bgcolor={theme.palette.background.default}
     >
       <Paper elevation={3} sx={{ p: 5, borderRadius: 3, minWidth: 300 }}>
         <Stack spacing={2} mt={3}>
           <ResolutionReset />
           <Link href={routes.operator.documents.link}>
             <Button
-              variant="contained"
+              variant="outlined"
               fullWidth
-              sx={{ textTransform: 'none' }}
             >
               Operador
             </Button>
@@ -29,9 +29,17 @@ const Index = () => {
             <Button
               variant="outlined"
               fullWidth
-              sx={{ textTransform: 'none' }}
             >
               Cordinador
+            </Button>
+          </Link>
+
+          <Link href={routes.admin.receivable.link}>
+            <Button
+              variant="outlined"
+              fullWidth
+            >
+              Administrador
             </Button>
           </Link>
         </Stack>

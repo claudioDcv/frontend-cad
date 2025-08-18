@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ModalConfirm, ModalMassUpload } from '@/components';
-import { ResolutionMassiveModalProps } from './types';
 import { Inventory } from '@/entities/Inventory.entity';
 import usePatchResolutionInventory from '@/clients/patch-resolution-inventory';
 import { useAlertContext } from '@/contexts/alert/useAlertContext';
 import { AlertType } from '@/contexts/alert/types';
 import { FetchStatus } from '@/constants';
+import { Resolution } from '@/entities/Resolution.entity';
+
+export interface ResolutionMassiveModalProps {
+  resolution: Resolution | null;
+  onClose: () => void;
+
+}
 
 const ResolutionMassiveModal = ({
   resolution,
