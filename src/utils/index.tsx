@@ -13,6 +13,7 @@ import { Material, Size } from '../components/molecules/material-type/types';
 import { Option } from '@/entities/Option.entity';
 import { Inventory } from '@/entities/Inventory.entity';
 import { DEBUG } from '@/conf/envs';
+import { InventoryType } from '@/entities/InventoryType.entity';
 
 export const toDay = () => Date.now() ? new Date(Date.now()) : new Date();
 
@@ -239,6 +240,9 @@ export function sortCustom<T>(
   });
 }
 
+export const filterInventoryType = (data: InventoryType[], inventory: string[]) => {
+  return data.filter((item) => inventory.includes(item.label));
+};
 /**
  * Toma todo el enventario para distribucion
  * de inventario y retorna un set en especifico

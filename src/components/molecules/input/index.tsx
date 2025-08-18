@@ -8,7 +8,7 @@ interface InputProps {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     icon?: React.ReactNode;
     iconPosition?: 'start' | 'end';
-    type?: 'text' | 'number' | 'password' | 'email' | 'search';
+    type?: 'text' | 'number' | 'password' | 'email' | 'search' | 'textarea';
     id?: string;
     placeholder?: string;
     required?: boolean;
@@ -81,6 +81,7 @@ const Input: React.FC<InputProps> = ({
                 startAdornment={startAdornment}
                 endAdornment={endAdornment}
                 placeholder={placeholder}
+                {...(type === 'textarea' ? { multiline: true, minRows: 3 } : {})}
             />
         </FormControl>
     );

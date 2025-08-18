@@ -42,7 +42,13 @@ const useGetReceivables = () => {
     [status]
   );
 
-  return { status, data, error, call, onResetError };
+  const reset = useCallback(() => {
+    setStatus(FetchStatus.IDLE);
+    setData([]);
+    setError(null);
+  }, []);
+
+  return { status, data, error, call, onResetError, reset };
 };
 
 export default useGetReceivables;

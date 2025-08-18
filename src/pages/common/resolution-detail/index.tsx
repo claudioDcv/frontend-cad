@@ -37,6 +37,7 @@ import { Key as IconKey } from '@mui/icons-material';
 import {
   DisplayData,
   DropdownController,
+  IconList,
   Input,
   ModalConfirm,
   ModalContractDetail,
@@ -46,6 +47,7 @@ import {
 } from '@/components';
 import { addOptionAll, isEmpty } from '../documents/utils';
 import Access from '@/components/atoms/access';
+import { useReceivablesContext } from '@/modules/receivables/context/useReceivablesContext';
 
 const ResolutionDetail = () => {
   const { id: resolutionId } = useParams<{ id: string }>();
@@ -60,6 +62,8 @@ const ResolutionDetail = () => {
       status: emptyOption,
     },
   });
+
+  const receivablesContext = useReceivablesContext();
 
   const [contract, setContract] = useState<Contract | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>(emptyOption.value);
@@ -209,6 +213,16 @@ const ResolutionDetail = () => {
                       {t('common.sendCAD')}
                     </Button>
                   </span>
+                </Tooltip>
+              </Access>
+              <Access roles={[validRoles.operator]}>
+                <Tooltip title={t('accountsReceivable.tooltipOpen')}>
+                  <Button
+                    startIcon={<IconList name="receivables" />}
+                    onClick={() => receivablesContext.setResolutionId(resolutionId)}
+                  >
+                    {t('accountsReceivable.open')}
+                  </Button>
                 </Tooltip>
               </Access>
             </ButtonGroup>
@@ -436,13 +450,6 @@ const ResolutionDetail = () => {
           success: t('common.save'),
           cancel: t('common.cancel'),
           checkboxLabel: t('common.markAsReviewed'),
-          weight: t('common.contractWeight'),
-          totalContractValue: t('common.totalContractValue'),
-          averagePurchaseValue: t('common.averagePurchaseValue'),
-          responsible: t('common.responsible'),
-          expiration: t('common.expiration'),
-          client: t('common.client'),
-          clientRut: t('common.rut'),
         }}
       />
     </div>

@@ -37,6 +37,7 @@ const useFetch = <T,>(options: UseFetchOptions<T>) => {
             const model = remap ? remap(result) : result;
             setData(model as T);
             setStatus(FetchStatus.SUCCESS);
+            return model as T;
         } catch (err) {
             const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
             setError(messageKey);

@@ -6,13 +6,6 @@ export interface I18N {
   checkboxLabel: string;
   success: string;
   cancel: string;
-  weight: string;
-  totalContractValue: string;
-  averagePurchaseValue: string;
-  responsible: string;
-  expiration: string;
-  client: string;
-  clientRut: string;
 }
 
 export const initialStateI18n: I18N = {
@@ -20,13 +13,6 @@ export const initialStateI18n: I18N = {
   checkboxLabel: 'Check Label',
   success: 'Success',
   cancel: 'Cancel',
-  weight: 'Contract weight',
-  totalContractValue: 'Purchase amount',
-  averagePurchaseValue: 'Average purchase',
-  responsible: 'Responsible',
-  expiration: 'Expiration',
-  client: 'Client',
-  clientRut: 'RUT',
 };
 
 export interface ModalContractDetailProps {

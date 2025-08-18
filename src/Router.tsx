@@ -47,11 +47,6 @@ const Router = (props: { hostUrl: string }) => {
           component={PackingListDetail}
         />
         <Route
-          path={routes.operator.notifications.link}
-          component={Notifications}
-        />
-        <Route path={routes.cordinator.documents.link} component={Documents} />
-        <Route
           path={routes.cordinator.resolutionDetail.link}
           component={ResolutionDetail}
         />
@@ -59,6 +54,11 @@ const Router = (props: { hostUrl: string }) => {
           path={routes.cordinator.packinglistDetail.link}
           component={PackingListDetail}
         />
+        <Route
+          path={routes.operator.notifications.link}
+          component={Notifications}
+        />
+        <Route path={routes.cordinator.documents.link} component={Documents} />
         <Route
           path={routes.cordinator.notifications.link}
           component={Notifications}

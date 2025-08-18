@@ -9,8 +9,12 @@ interface ReceivablesProviderProps {
 const ReceivablesProvider = ({ children }: ReceivablesProviderProps) => {
     const [resolutionId, setResolutionId] = useState<number | null>(null);
 
+    const handleSetResolutionId = (id: number | string | null) => {
+        setResolutionId(Number.isNaN(Number(id)) ? null : Number(id));
+    };
+
     return (
-        <ReceivablesContext.Provider value={{ resolutionId, setResolutionId }}>
+        <ReceivablesContext.Provider value={{ resolutionId, setResolutionId: handleSetResolutionId }}>
             {children}
             <ReceivablesOperatorDialog />
         </ReceivablesContext.Provider>

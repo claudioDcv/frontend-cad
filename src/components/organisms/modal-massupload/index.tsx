@@ -67,7 +67,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   const inventoriesSuccess = services.getResolutionInventory.status === FetchStatus.SUCCESS;
   const inventories = services.getResolutionInventory.data || [];
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen>
+    <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth>
       <AppBar position="static">
         <ModalHeader onClose={onClose}>
           <Box display="flex" alignItems="center" gap={1}>

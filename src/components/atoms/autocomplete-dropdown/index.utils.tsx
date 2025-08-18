@@ -1,3 +1,4 @@
+import { Item } from '@/components/organisms/modal-inventory-delivery/index.types';
 import { AutocompleteRenderInputParams, TextField } from '@mui/material';
 
 export const handleAutocompleteChange = (
@@ -11,3 +12,16 @@ export const handleAutocompleteChange = (
 export const renderInputHandler = (label: string) => (params: AutocompleteRenderInputParams) => (
   <TextField {...params} label={label} />
 );
+
+export const createItem = (value: string | number | Item | null | undefined): Item => {
+  if (value === null || value === undefined) {
+    return { label: '', value: '' };
+  }
+  if (typeof value === 'string') {
+    return { label: value, value };
+  }
+  if (typeof value === 'number') {
+    return { label: value.toString(), value: value.toString() };
+  }
+  return { label: value.label, value: value.value };
+};

@@ -38,6 +38,12 @@ const operator = {
     link: appendPrefix(`/${validRoles.operator}/notifications`),
     label: 'routes.notifications',
   },
+  resolutionList: {
+    link: appendPrefix(`/${validRoles.operator}`),
+    path: (id: string | number) =>
+      appendPrefix(`/${validRoles.cordinator}?q=${id}`),
+    label: 'routes.resolutionList',
+  },
 };
 
 const cordinator = {
@@ -60,6 +66,12 @@ const cordinator = {
   notifications: {
     link: appendPrefix(`/${validRoles.cordinator}/notifications`),
     label: 'routes.notifications',
+  },
+  resolutionList: {
+    link: appendPrefix(`/${validRoles.cordinator}`),
+    path: (id: string | number) =>
+      appendPrefix(`/${validRoles.cordinator}?q=${id}`),
+    label: 'routes.resolutionList',
   },
 };
 

@@ -44,7 +44,7 @@ const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
       <Autocomplete
         size="small"
         id={`autocomplete-dropdown-${id}`}
-        value={selectedOption}
+        value={selectedOption || null}
         onChange={handleChange}
         options={options}
         getOptionLabel={getOptionLabel}

@@ -23,3 +23,4 @@ export { default as TripleToggleSwitch } from './atoms/triple-toggle-switch';
 export { default as ReviewStatus } from './molecules/review-status';
 export { default as Confirm } from './molecules/confirm';
 export { default as ResolutionDetailButton } from './molecules/resolution-detail-button';
+export { default as ContractSummaryCard } from './organisms/contract-summary-card';

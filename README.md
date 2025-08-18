@@ -10,10 +10,10 @@ http://172.16.22.240:8086/login
 DOCKER
 ————————————————————————————————
 
-1 - docker load -i olimpo-test-arm64.tar
-2 - docker images
-3 - docker run -p 8180:8180 --name olimpo-test-container olimpo-test
-4 -  docker ps
+1) docker load -i olimpo-test-arm64.tar
+2) docker images
+3) docker run -p 8180:8180 --name olimpo-test-container olimpo-test
+4) docker ps
 
 
 http://localhost:8180/cad#/?role=GERENTE%20ZONAL
@@ -28,4 +28,4 @@ Lo mismo aplica a PL
 |:---------------|:--------|:---------|:--------|:--------|
 |14 Agosto 13:30 |   41.82 |    63.08 |   49.84 |   41.82 |                    
 |14 Agosto 15:00 |   42.39 |    63.23 |   50.31 |   42.39 |
-|14 Agosto 19:00 |   42.23 |    65.43 |   50.76 |   42.23 | 
+|14 Agosto 19:00 |   42.23 |    65.43 |   50.76 |   42.23 |

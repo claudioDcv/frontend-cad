@@ -13,9 +13,12 @@ interface ResolutionDetailButtonProps {
 const ResolutionDetailButton = ({ id, label }: ResolutionDetailButtonProps) => {
   const access = useAccess();
   const getLink = () => {
-    if (access([validRoles.admin])) return '';
-    else if (access([validRoles.cordinator]))
+    if (access([validRoles.admin])) {
+      return '';
+    }
+    else if (access([validRoles.cordinator])) {
       return routes.cordinator.resolutionDetail.path(id);
+    }
     return routes.operator.resolutionDetail.path(id);
   };
 

@@ -28,16 +28,6 @@ describe('ModalContractDetail', () => {
         onSuccess={() => {}}
         material="Gold"
         contract={mockContract}
-        i18n={{
-          label: 'Label',
-          weight: 'Contract weight',
-          totalContractValue: 'Purchase amount',
-          averagePurchaseValue: 'Average purchase',
-          responsible: 'Responsible',
-          expiration: 'Expiration',
-          client: 'Client',
-          clientRut: 'Client RUT',
-        }}
       />
     );
 

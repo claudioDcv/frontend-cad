@@ -204,7 +204,7 @@
     "totalContractValue": "Compra venta",
     "averagePurchaseValue": "Promedio de Compra",
     "responsible": "Responsable",
-    "expiration": "vencimiento",
+    "expiration": "Vencimiento",
     "client": "Cliente",
     "all": "Todos",
     "notReviewed": "No Revisados",
@@ -333,7 +333,11 @@
     "title": "Cuentas por Cobrar",
     "tooltipOpen": "Abrir Cuentas por Cobrar",
     "description": "Aquí puedes ver y editar los detalles de la cuenta por cobrar seleccionada.",
-    "newReceivable": "Nueva Cuenta por Cobrar"
+    "newReceivable": "Nueva Cuenta por Cobrar",
+    "viewReceivable": "Ver Cuenta por Cobrar",
+    "receivableDetails": "Detalles de la Cuenta por Cobrar",
+    "open": "Abrir",
+    "formDescription": "Primero debes seleccionar un contrato."
   },
   "confirm": {
     "confirmation": "Confirmación",
