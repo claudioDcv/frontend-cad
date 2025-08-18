@@ -30,7 +30,6 @@ const ContractSummaryCard: React.FC<ContractSummaryCardProps> = ({ contract, hid
                 display="grid"
                 gridTemplateColumns={hiddenClient ? "repeat(2, 1fr)" : "repeat(3, 1fr)"}
                 gap={2}
-                mb={2}
             >
                 <Box>
                     <DisplayData

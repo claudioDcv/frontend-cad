@@ -79,7 +79,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
         {contract && (
           <>
             <ContractSummaryCard contract={contract} />
-            <Divider sx={{ mb: 2 }} />
+            <Divider sx={{ my: 2 }} />
             <Table<Jewel>
               columns={columns}
               rows={getContractJewels.data}

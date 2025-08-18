@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Visibility } from '@mui/icons-material';
@@ -12,6 +12,7 @@ import { filterInventoryType } from "@/utils";
 import { CreateReceivable } from "@/entities/CreateReceivable.entity";
 import { useAlertContext } from "@/contexts/alert/useAlertContext";
 import { AlertType } from "@/contexts/alert/types";
+import ModalHeader from "@/components/molecules/modal-header";
 
 interface ReceivablesOperatorProps {
     resolutionId: number;
@@ -79,8 +80,8 @@ const ReceivablesOperator = ({ resolutionId, openNewReceivableForm, setOpenNewRe
                     loading={loading}
                 />
             </Box>
-            <Dialog open={Boolean(selectedReceivable)} onClose={() => setSelectedReceivable(null)}>
-                <DialogTitle>{t('accountsReceivable.viewReceivable')}</DialogTitle>
+            <Dialog open={Boolean(selectedReceivable)} onClose={() => setSelectedReceivable(null)} fullWidth maxWidth="md">
+                <ModalHeader title={t('accountsReceivable.viewReceivable')} onClose={() => setSelectedReceivable(null)} />
                 <DialogContent>
                     <DialogContentText>
                         {t('accountsReceivable.receivableDetails')}

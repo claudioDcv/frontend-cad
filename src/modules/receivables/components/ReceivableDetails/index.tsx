@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import useGetContract from "@/clients/get-contract";
 import { FetchStatus } from "@/constants";
 import { Receivable } from "@/entities/Receivable.entity";
+import { ContractSummaryCard, ReceivableSummaryCard } from "@/components";
 
 interface ReceivableDetailsProps {
     receivable: Receivable;
@@ -22,10 +23,8 @@ const ReceivableDetails = ({ receivable }: ReceivableDetailsProps) => {
 
     return (
         <Box>
-            <pre>
-                {JSON.stringify(receivable, null, 2)}
-                {JSON.stringify(contract.data, null, 2)}
-            </pre>
+            <ContractSummaryCard contract={contract.data} />
+            <ReceivableSummaryCard receivable={receivable} />
         </Box>
     );
 };
