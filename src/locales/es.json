@@ -356,7 +356,8 @@
     "updatedAt": "Actualizado el",
     "createdByName": "Nombre del Creador",
     "reviewedByName": "Nombre del Revisor",
-    "typeName": "Nombre del Tipo"
+    "typeName": "Nombre del Tipo",
+    "contractTitle": "Detalle del Contrato"
   },
   "confirm": {
     "confirmation": "Confirmación",

@@ -31,7 +31,7 @@ const ReceivableSummaryCard: React.FC<ReceivableSummaryCardProps> = ({ receivabl
         typeName: t('accountsReceivable.typeName'),
     }
     return (
-        <Card variant="outlined" sx={{ backgroundColor: theme.palette.background.paper, mt: 2 }}>
+        <Card variant="outlined" sx={{ backgroundColor: theme.palette.background.paper }}>
             <Box
                 p={2}
                 gap={2}

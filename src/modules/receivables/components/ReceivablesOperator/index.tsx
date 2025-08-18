@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, IconButton } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Visibility } from '@mui/icons-material';
@@ -83,9 +83,6 @@ const ReceivablesOperator = ({ resolutionId, openNewReceivableForm, setOpenNewRe
             <Dialog open={Boolean(selectedReceivable)} onClose={() => setSelectedReceivable(null)} fullWidth maxWidth="md">
                 <ModalHeader title={t('accountsReceivable.viewReceivable')} onClose={() => setSelectedReceivable(null)} />
                 <DialogContent>
-                    <DialogContentText>
-                        {t('accountsReceivable.receivableDetails')}
-                    </DialogContentText>
                     {selectedReceivable && (
                         <ReceivableDetails receivable={selectedReceivable} />
                     )}
