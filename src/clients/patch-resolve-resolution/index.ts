@@ -3,6 +3,10 @@ import { FetchStatus } from '@/constants';
 import client from './client';
 import { Resolution } from '@/entities/Resolution.entity';
 
+/**
+ * Este servicio se utiliza para que el coordinador envie la resolución a CAD.
+ * @returns 
+ */
 const usePatchResolutionResolve = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
   const [data, setData] = useState<Resolution>();

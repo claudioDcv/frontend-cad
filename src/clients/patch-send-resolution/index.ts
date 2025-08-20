@@ -1,21 +1,19 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
-import { Send } from '@/entities/Send.entity';
 import client from './client';
-import { SendRequest } from './index.types';
+import { Resolution } from '@/entities/Resolution.entity';
 
-const usePostResolutionSend = () => {
+/**
+ * Este servicio se utiliza para que el operador envie la resolución a Olimpo y al Admin.
+ * @returns 
+ */
+const usePatchSendResolution = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Send | null>(null);
+  const [data, setData] = useState<Resolution>();
   const [error, setError] = useState<string | null>(null);
 
-  const onResetError = () => {
-    setData(null);
-    setError(null);
-  };
-
   const call = useCallback(
-    async (props: SendRequest) => {
+    async (resolutionId: number) => {
       if (status === FetchStatus.ERROR) {
         return;
       }
@@ -29,13 +27,14 @@ const usePostResolutionSend = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client(props);
+        const result = await client(resolutionId);
 
         setData(result);
         setStatus(FetchStatus.SUCCESS);
+        return result;
       } catch (err) {
         const messageKey =
-          (err as Error)?.message ?? 'error.getAllContractsFetch';
+          (err as Error)?.message ?? 'error.patchSendResolutionFetch';
         setError(messageKey);
         setStatus(FetchStatus.ERROR);
       }
@@ -43,13 +42,14 @@ const usePostResolutionSend = () => {
     [status]
   );
 
-  return {
-    status,
-    data,
-    error,
-    call,
-    onResetError,
-  };
+  const reset = useCallback(() => {
+    setStatus(FetchStatus.IDLE);
+    setData(undefined);
+    setError(null);
+  }, []);
+
+
+  return { status, data, error, call, reset };
 };
 
-export default usePostResolutionSend;
+export default usePatchSendResolution;

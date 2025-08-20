@@ -370,7 +370,7 @@
     "no": "No",
     "yes": "Sí"
   },
-  "patchResolutionResolve": {
+  "patchResolutionSend": {
     "successMessage": "Inventario de la resolución <strong>{{id}}</strong> actualizado con éxito.",
     "errorMessage": "Error al actualizar el inventario."
   }
