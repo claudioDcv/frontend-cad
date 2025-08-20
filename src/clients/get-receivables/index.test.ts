@@ -71,7 +71,33 @@ describe('useGetReceivables', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual([mockData]);
+    expect(result.current.data).toEqual({
+      "content": [
+        {
+          "administratorNote": "",
+          "averagePrice": 0,
+          "contractId": "",
+          "createdAt": "",
+          "createdBy": 0,
+          "createdByName": "",
+          "id": 0,
+          "observation": "",
+          "operatorNote": "",
+          "quantity": 0,
+          "reviewedBy": 0,
+          "reviewedByName": "",
+          "status": false,
+          "typeId": 0,
+          "typeName": "",
+          "updatedAt": "",
+          "weight": 0,
+        },
+      ],
+      "meta": {
+        "count": 0,
+        "page": 1,
+      },
+    });
     expect(result.current.error).toBe(null);
   });
 
@@ -89,7 +115,13 @@ describe('useGetReceivables', () => {
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
-    expect(result.current.data).toEqual([]);
+    expect(result.current.data).toEqual({
+      "content": [],
+      "meta": {
+        "count": 0,
+        "page": 0,
+      },
+    });
     expect(result.current.error).toBe('API call failed');
   });
 
@@ -97,7 +129,13 @@ describe('useGetReceivables', () => {
     const { result } = renderHook(() => useGetAllContracts());
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
-    expect(result.current.data).toEqual([]);
+    expect(result.current.data).toEqual({
+      "content": [],
+      "meta": {
+        "count": 0,
+        "page": 0,
+      },
+    });
     expect(result.current.error).toBe(null);
   });
 });

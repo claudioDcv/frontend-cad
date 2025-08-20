@@ -33,7 +33,7 @@ describe('ModalContractDetail', () => {
 
     expect(screen.getByText(/label/i)).toBeInTheDocument();
 
-    expect(screen.getByText(/contract weight/i)).toBeInTheDocument();
+    expect(screen.getByText(/Peso/i)).toBeInTheDocument();
     expect(screen.getByText(/0 gr/i)).toBeInTheDocument();
     expect(screen.getAllByText('$0').length).toBeGreaterThan(0);
   });

@@ -1,2 +1,3 @@
 echo "Running tests..."
+npm run build
 npm test
