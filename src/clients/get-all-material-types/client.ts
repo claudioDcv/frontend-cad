@@ -1,25 +1,10 @@
-import { MaterialType } from '@/entities/MaterialType.entity';
-import { API_BASE, VITE_MOCK_API } from '../../conf/http';
-import faker, { FakeServices } from '../../fake-clients/get-all-resolutions';
-import { getHeader } from '../utils';
+import { Option } from '@/entities/Option.entity';
+import { getFetch } from '../customFetch';
+import { remap } from './utils';
 
-const client = async (): Promise<MaterialType[]> => {
-  const url = `${API_BASE}/material-categories`;
-  if (VITE_MOCK_API) return faker(FakeServices.MaterialTypes);
-  const response = await fetch(url, {
-    headers: getHeader(),
-    credentials: 'include',
-  });
-
-  if (!response.ok) {
-    throw new Error('error.getAllMaterialTypesFetch'); 
-  }
-
-  try {
-    return response.json();
-  } catch {
-    throw new Error('error.getAllMaterialTypesParse');
-  }
-};
-
-export default client;
+export default async (): Promise<Option[]> => getFetch<Option[]>('material-categories', {
+  remap
+}, {
+  responseError: 'error.getAllMaterialTypesFetch',
+  defaultError: 'error.getAllMaterialTypesParse',
+});

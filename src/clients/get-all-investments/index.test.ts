@@ -3,6 +3,7 @@ import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
 import useGetAllInvestments from '.';
 import { act, renderHook } from '@testing-library/react';
+import { Option } from '@/entities/Option.entity';
 
 vi.mock('@/utils', () => ({
   toDay: () => new Date('2025-07-18T00:00:00Z'),
@@ -14,16 +15,10 @@ describe('useGetAllInvestments', () => {
   });
 
   test('returns data and SUCCESS when API call succeeds', async () => {
-    const mockRawData = [
+    const mockRawData: Option[] = [
       {
-        investmentId: 1,
-        investmentCode: 'IM',
-        investmentName: 'INVERSIÓN FICTICIA S.A.',
-        issuerRut: '12345678-9',
-        issuerBusinessName: 'INVERSIONES FICTICIAS S.A.',
-        issuerBusinessActivity: 'COMPRA Y VENTA DE ACTIVOS',
-        issuerAddress: 'AV. SIEMPRE VIVA 742',
-        economicActivity: '411010',
+        label: 'INVERSIÓN FICTICIA S.A.',
+        value: '1',
       },
     ];
 

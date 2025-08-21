@@ -80,6 +80,10 @@ const admin = {
     link: appendPrefix(`/${validRoles.admin}/receivables`),
     label: 'routes.adminReceivables',
   },
+  preInventory: {
+    link: appendPrefix(`/${validRoles.admin}/pre-inventory`),
+    label: 'routes.adminPreInventory',
+  },
 };
 
 const routes = {

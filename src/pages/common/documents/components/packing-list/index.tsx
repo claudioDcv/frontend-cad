@@ -75,9 +75,6 @@ const PackingList = () => {
   const handleClear = () => {
     reset(defaultPackingListFormValues);
     setRange([defaultStartDate, toDay()]);
-    services.getAllLocations.clearData();
-    services.getAllInvestments.clearData();
-
     services.getAllPackingList.call({
       ...defaultPackingListFormValues(),
     });
@@ -121,8 +118,6 @@ const PackingList = () => {
           investmentId: value.value,
           status: LOCATION_ACTIVE,
         });
-      } else {
-        services.getAllLocations.clearData();
       }
       const newFilters = {
         ...getValues(),

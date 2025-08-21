@@ -85,9 +85,6 @@ const Resolutions = () => {
   const handleClear = () => {
     reset(defaultResolutionsFormValues);
     setRange([defaultStartDate, toDay()]);
-    services.getAllLocations.clearData();
-    services.getAllInvestments.clearData();
-
     services.getAllResolutions.call(
       (defaultResolutionsFormValues())
     );
@@ -120,8 +117,6 @@ const Resolutions = () => {
           investmentId: value.value,
           status: LOCATION_ACTIVE,
         });
-      } else {
-        services.getAllLocations.clearData();
       }
       const newFilters = {
         ...getValues(),

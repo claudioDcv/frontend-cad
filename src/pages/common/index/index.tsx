@@ -42,6 +42,14 @@ const Index = () => {
               Administrador
             </Button>
           </Link>
+          <Link href={routes.admin.preInventory.link}>
+            <Button
+              variant="outlined"
+              fullWidth
+            >
+              Administrador Pre Inventario
+            </Button>
+          </Link>
         </Stack>
       </Paper>
     </Box>

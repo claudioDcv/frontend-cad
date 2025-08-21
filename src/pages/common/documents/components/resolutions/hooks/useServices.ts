@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FetchStatus, STATUS_RESOLUTION, validRoles } from '@/constants';
+import { FetchStatus, LOCATION_ACTIVE, STATUS_RESOLUTION, validRoles } from '@/constants';
 import { defaultResolutionsFormValues } from '../../../utils';
 import {
   useGetAllInvestments,
@@ -36,7 +36,12 @@ const useServices = () => {
     if (getAllInvestments.status === FetchStatus.IDLE) {
       getAllInvestments.call();
     }
-  }, [getAllInvestments, getAllMaterialType, getAllResolutions, getAllStatus, isOperator]);
+    if (getAllLocations.status === FetchStatus.IDLE) {
+      getAllLocations.call({
+        status: LOCATION_ACTIVE,
+      });
+    }
+  }, [getAllInvestments, getAllLocations, getAllMaterialType, getAllResolutions, getAllStatus, isOperator]);
 
   return {
     getAllMaterialType,

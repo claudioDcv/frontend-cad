@@ -40,9 +40,14 @@ const breadcrumbs = {
     routes.cordinator.documents,
     routes.cordinator.notifications,
   ],
+  // Administrador
   [`/${validRoles.admin}/receivables`]: [
     routes.common.index,
     routes.admin.receivable,
+  ],
+  [`/${validRoles.admin}/pre-inventory`]: [
+    routes.common.index,
+    routes.admin.preInventory,
   ],
 };
 

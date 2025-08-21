@@ -1,50 +1,18 @@
-import { useCallback, useState } from 'react';
-import { FetchStatus } from '@/constants';
 import client from './client';
 import { Props } from './types';
-import { remap } from './utils';
 import { Option } from '@/entities/Option.entity';
+import useAsyncCall from '@/hooks/useAsyncCall';
 
 const useGetAllLocations = () => {
-  const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Option[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const response = useAsyncCall<Props, Option[]>({
+    client,
+    initialData: [],
+  });
 
-  const call = useCallback(
-    async (props: Props) => {
-      if (status === FetchStatus.ERROR) {
-        return;
-      }
-
-      if (status === FetchStatus.LOADING) {
-        setStatus(FetchStatus.SUCCESS);
-        setError(null);
-        return;
-      }
-
-      setStatus(FetchStatus.LOADING);
-
-      try {
-        const result = await client(props);
-        const model = remap(result);
-        setData(model);
-        setStatus(FetchStatus.SUCCESS);
-      } catch (err) {
-        const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-        setError(messageKey);
-        setStatus(FetchStatus.ERROR);
-      }
-    },
-    [status]
-  );
-
-  const clearData = () => {
-    setData([]);
-    setStatus(FetchStatus.IDLE);
-    setError(null);
+  return {
+    ...response,
+    data: response.data || [],
   };
-
-  return { status, data, error, call, clearData };
 };
 
 export default useGetAllLocations;

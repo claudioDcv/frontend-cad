@@ -4,6 +4,8 @@ import { FetchStatus } from '@/constants';
 import useGetAllBranches from '.';
 import * as clientModule from './client';
 import { remap } from './utils';
+import { Option } from '@/entities/Option.entity';
+import { Location } from '@/entities/Location.entity';
 
 describe('useGetAllStatus', () => {
   beforeEach(() => {
@@ -11,19 +13,10 @@ describe('useGetAllStatus', () => {
   });
 
   test('should return data and SUCCESS if the call is successful', async () => {
-    const mockData = [
-      {
-        locationId: 1,
-        locationNumber: 101,
-        locationCode: 'LOC-001',
-        locationName: 'Sucursal Santiago Centro',
-        locationAlias: 'STGO-CENTRO',
-        locationAddress: 'Av. Libertador Bernardo O’Higgins 123',
-        locationManager: 'Juan Pérez',
-        managerEmail: 'juan.perez@empresa.cl',
-        managerPhone: '+56912345678',
-      },
-    ];
+    const mockData: Option[] = [{
+      label: 'Location 1',
+      value: '1',
+    }];
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useGetAllBranches());
@@ -32,8 +25,19 @@ describe('useGetAllStatus', () => {
       await result.current.call({ investmentId: '123', status: null });
     });
 
+    const locations: Location[] = [{
+      locationId: 1,
+      locationNumber: 100,
+      locationCode: 'LOC-001',
+      locationName: 'Location 1',
+      locationAlias: 'Loc 1',
+      locationAddress: '123 Main St',
+      locationManager: 'John Doe',
+      managerEmail: 'john.doe@example.com',
+      managerPhone: '555-1234',
+    }];
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(remap(mockData));
+    expect(result.current.data).toEqual(remap(locations));
     expect(result.current.error).toBe(null);
   });
 

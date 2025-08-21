@@ -266,9 +266,46 @@ export const outputInventorySum = (newData: Inventory[]) => {
   return { quantity: totalQuantity, weight: totalWeight };
 };
 
+export enum LogType {
+  INFO = 'info',
+  WARN = 'warn',
+  ERROR = 'error',
+  FETCH = 'fetch',
+}
 
+export const typeLog = (type: LogType = LogType.INFO, ...args: unknown[]) => {
+  let message = args.join(' ');
+  if (type === LogType.FETCH && args[0]) {
+    const url = (args[0] as URL);
+    message = `${url.pathname}${url.search ? url.search : ''}`;
+  }
+  log(`[${type}]`, message);
+}
+
+/**
+ * Función para registrar mensajes en la consola y en un div específico.
+ */
+const maxMessageLength = 100; // Limitar a 100 caracteres
+const maxLines = 5; // Limitar a 5 líneas
+const logDiv = document.getElementById('__LOG__');
+const deleteOldLogs = () => {
+  if (logDiv) {
+    const logEntries = logDiv.getElementsByTagName('div');
+    while (logEntries.length > maxLines) {
+      logDiv.removeChild(logEntries[0]);
+    }
+  }
+};
 export const log = (...args: unknown[]) => {
+  const timestamp = new Date().toISOString();
   if (DEBUG) {
     console.log(...args);
+    if (logDiv) {
+      deleteOldLogs();
+      const message = args.map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg))).join(' ');
+      const logEntry = document.createElement('div');
+      logEntry.textContent = `[${timestamp}] ${message.substring(0, maxMessageLength)}`; // Limitar a 100 caracteres
+      logDiv.appendChild(logEntry);
+    }
   }
 };

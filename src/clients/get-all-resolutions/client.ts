@@ -1,3 +1,4 @@
+import { typeLog, LogType } from '@/utils';
 import { API_BASE } from '../../conf/http';
 import { clearAllProps, clearProp, getHeader } from '../utils';
 import { ResolutionQuery } from './types';
@@ -19,8 +20,9 @@ const client = async (props: ResolutionQuery) => {
   };
 
   const query = new URLSearchParams(clearAllProps(params));
-  const url = `${API_BASE}/resolutions?${query}`;
+  const url = new URL(`${API_BASE}/resolutions?${query}`);
 
+  typeLog(LogType.FETCH, url);
   const response = await fetch(url, {
     headers: getHeader(),
     credentials: 'include',

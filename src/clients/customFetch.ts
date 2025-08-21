@@ -1,6 +1,7 @@
 // src/clients/customFetch.ts
 import { API_BASE } from '@/conf/http';
 import { getHeader } from './utils';
+import { typeLog, LogType } from '@/utils';
 
 export interface FetchOptions extends RequestInit {
     query?: Record<string, string | number | boolean>;
@@ -36,6 +37,7 @@ export const customFetch = Object.assign(
         // Configurar headers comunes usando getHeader
         const defaultHeaders: HeadersInit = getHeader();
 
+        typeLog(LogType.FETCH, url);
         const response = await fetch(url.toString(), {
             ...restOptions,
             headers: { ...defaultHeaders, ...headers },

@@ -8,9 +8,9 @@ import {
 } from './types';
 
 export const addOptionAll = (
-  options: Option[],
+  options: Option[] | undefined,
   allOption: Option = emptyOption
-) => [allOption, ...options];
+) => [allOption, ...(options || [])];
 
 export const isEmpty = (data?: unknown[]) => !data || data.length === 0;
 

@@ -4,6 +4,8 @@ import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
 import useGetAllMaterialTypes from '.';
 import { remap } from './utils';
+import { Option } from '@/entities/Option.entity';
+import { MaterialType } from '@/entities/MaterialType.entity';
 
 vi.mock('@/utils', () => ({
   toDay: () => new Date('2025-07-18T00:00:00Z'),
@@ -15,15 +17,10 @@ describe('useGetAllMaterialTypes', () => {
   });
 
   test('returns data and SUCCESS when API call succeeds', async () => {
-    const mockData = [
+    const mockData: Option[] = [
       {
-        value: 'approved',
-        label: 'Accepted',
-        categoryId: 1,
-        categoryCode: 'CAT001',
-        categoryName: 'Category Name',
-        measurementUnit: 'kg',
-        minimumProfitMargin: 10,
+        label: 'Category Name',
+        value: '1',
       },
     ];
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
@@ -34,8 +31,18 @@ describe('useGetAllMaterialTypes', () => {
       await result.current.call();
     });
 
+    const data: MaterialType[] = [
+      {
+        categoryId: 1,
+        categoryCode: '',
+        categoryName: 'Category Name',
+        measurementUnit: '',
+        minimumProfitMargin: 0
+      },
+    ];
+
     expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(remap(mockData));
+    expect(result.current.data).toEqual(remap(data));
     expect(result.current.error).toBe(null);
   });
 

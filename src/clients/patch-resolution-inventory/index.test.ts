@@ -90,16 +90,4 @@ describe('usePatchResolutionInventory', () => {
     expect(result.current.data).toEqual([]);
     expect(result.current.error).toBe(errorMessage);
   });
-
-  test('should reset error and data with onResetError', () => {
-    const { result } = renderHook(() => usePatchResolutionInventory());
-
-    act(() => {
-      result.current.onResetError();
-    });
-
-    expect(result.current.status).toBe(FetchStatus.IDLE);
-    expect(result.current.data).toEqual([]);
-    expect(result.current.error).toBe(null);
-  });
 });

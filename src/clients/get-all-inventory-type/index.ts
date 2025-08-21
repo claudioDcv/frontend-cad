@@ -1,17 +1,15 @@
 import client from './client';
-import useFetch from '@/hooks/useFetch';
-import { remap } from './utils';
 import { InventoryType } from '@/entities/InventoryType.entity';
+import useAsyncCall from '@/hooks/useAsyncCall';
 
 const useGetAllInventoryTypes = () => {
-  const { status, data, error, call } = useFetch({
+  const { status, data, error, call } = useAsyncCall<void, InventoryType[]>({
     client,
-    remap,
   });
 
   return {
     status,
-    data: (data || []) as InventoryType[],
+    data: data || [],
     error,
     call
   };

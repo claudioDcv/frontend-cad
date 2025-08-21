@@ -23,6 +23,8 @@ const ResolutionMassiveModal = ({
   const alertContext = useAlertContext();
   const [openInventory, setOpenInventory] = useState(false);
   const [showConfirm, setShowConfirm] = useState(!!resolution);
+  const [inventoryProcessed, setInventoryProcessed] = useState(false);
+  const [sendProcessed, setSendProcessed] = useState(false);
   const patchResolutionInventory = usePatchResolutionInventory();
   const patchSendResolution = usePatchSendResolution();
 
@@ -43,8 +45,8 @@ const ResolutionMassiveModal = ({
   };
 
   useEffect(() => {
-    if (patchResolutionInventory.status === FetchStatus.SUCCESS) {
-      patchResolutionInventory.reset();
+    if (patchResolutionInventory.status === FetchStatus.SUCCESS && !inventoryProcessed) {
+      setInventoryProcessed(true);
       alertContext.addAlert({
         type: AlertType.SUCCESS,
         title: t('common.success'),
@@ -58,8 +60,8 @@ const ResolutionMassiveModal = ({
         },
       });
     }
-    if (patchResolutionInventory.status === FetchStatus.ERROR) {
-      patchResolutionInventory.reset();
+    if (patchResolutionInventory.status === FetchStatus.ERROR && !inventoryProcessed) {
+      setInventoryProcessed(true);
       alertContext.addAlert({
         type: AlertType.ERROR,
         title: t('common.error'),
@@ -67,12 +69,12 @@ const ResolutionMassiveModal = ({
         dismissible: true,
       });
     }
-  }, [alertContext, onClose, patchResolutionInventory, resolution, t]);
+  }, [alertContext, onClose, patchResolutionInventory.status, resolution, t, inventoryProcessed]);
 
   // Resolve
   useEffect(() => {
-    if (patchSendResolution.status === FetchStatus.SUCCESS) {
-      patchSendResolution.reset();
+    if (patchSendResolution.status === FetchStatus.SUCCESS && !sendProcessed) {
+      setSendProcessed(true);
       alertContext.addAlert({
         type: AlertType.SUCCESS,
         title: t('common.success'),
@@ -86,8 +88,8 @@ const ResolutionMassiveModal = ({
         },
       });
     }
-    if (patchSendResolution.status === FetchStatus.ERROR) {
-      patchSendResolution.reset();
+    if (patchSendResolution.status === FetchStatus.ERROR && !sendProcessed) {
+      setSendProcessed(true);
       alertContext.addAlert({
         type: AlertType.ERROR,
         title: t('common.error'),
@@ -95,9 +97,10 @@ const ResolutionMassiveModal = ({
         dismissible: true,
       });
     }
-  }, [alertContext, onClose, patchSendResolution, resolution, t]);
+  }, [alertContext, onClose, patchSendResolution.status, resolution, t, sendProcessed]);
 
   const handleSuccess = (inventories: Inventory[]) => {
+    setInventoryProcessed(false); // Reset flag before new operation
     if (resolution?.resolutionId) {
       patchResolutionInventory.call({
         id: resolution?.resolutionId,
@@ -107,6 +110,7 @@ const ResolutionMassiveModal = ({
   };
 
   const handleSendOutput = () => {
+    setSendProcessed(false); // Reset flag before new operation
     if (!resolution) return;
     patchSendResolution.call(resolution.resolutionId);
   }

@@ -1,31 +1,19 @@
-import { Location } from '@/entities/Location.entity';
-import { API_BASE } from '../../conf/http';
-import { getHeader, clearProp, clearAllProps } from '../utils';
+import { clearProp, clearAllProps } from '../utils';
 import { Props } from './types';
+import { remap } from './utils';
+import { Option } from '@/entities/Option.entity';
+import { getFetch } from '../customFetch';
 
-const client = async (props: Props): Promise<Location[]> => {
+export default async (props: Props): Promise<Option[]> => {
   const params = {
     investmentId: clearProp(props.investmentId),
     status: clearProp(props.status),
   };
 
   const query = new URLSearchParams(clearAllProps(params));
-  const url = `${API_BASE}/locations?${query}`;
-
-  const response = await fetch(url, {
-    headers: getHeader(),
-    credentials: 'include',
+  const url = `locations?${query}`;
+  return getFetch<Option[]>(url, { remap }, {
+    responseError: 'error.getAllInvestmentsFetch',
+    defaultError: 'error.getAllInvestmentsParse',
   });
-
-  if (!response.ok) {
-    throw new Error('error.getAllLocationsFetch');
-  }
-
-  try {
-    return response.json();
-  } catch {
-    throw new Error('error.getAllLocationsFetchParse');
-  }
-};
-
-export default client;
+}

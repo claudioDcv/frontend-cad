@@ -1,29 +1,13 @@
-import { API_BASE } from '../../conf/http';
 import { Contract } from '@/entities/Contract.entity';
-import { getHeader } from '../utils';
 import { remap } from './utils';
+import { getFetch } from '../customFetch';
 
-const client = async (resolutionId: string | number): Promise<Contract[]> => {
-  const url = `${API_BASE}/resolutions/${resolutionId}/contracts`;
-
-  const response = await fetch(url, {
-    headers: getHeader(),
-    credentials: 'include',
+export default async (resolutionId: string | number): Promise<Contract[]> => {
+  const url = `resolutions/${resolutionId}/contracts`;
+  return getFetch<Contract[]>(url, {
+    remap,
+  }, {
+    responseError: 'error.getAllContractsFetch',
+    defaultError: 'error.getAllContractsParse',
   });
-
-  if (!response.ok) {
-    throw new Error('error.getAllContractsFetch');
-  }
-
-  try {
-    const data = await response.json();
-    if (!Array.isArray(data)) {
-      throw new Error('error.getAllContractsParse');
-    }
-    return remap(data);
-  } catch {
-    throw new Error('error.getAllContractsParse');
-  }
-};
-
-export default client;
+}

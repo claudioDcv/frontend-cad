@@ -221,7 +221,8 @@
     "resolutions": "Lista de Resoluciones",
     "notifications": "Notificaciones",
     "packingList": "Packing List",
-    "adminReceivables": "Cuentas por Cobrar"
+    "adminReceivables": "Cuentas por Cobrar",
+    "adminPreInventory": "Pre Inventario"
   },
   "error": {
     "404Error": "Error 404 - Página no encontrada",
@@ -373,5 +374,10 @@
   "patchResolutionSend": {
     "successMessage": "Inventario de la resolución <strong>{{id}}</strong> actualizado con éxito.",
     "errorMessage": "Error al actualizar el inventario."
+  },
+  "adminPreInventory": {
+    "title": "Pre Inventario",
+    "gramsChartTitle": "📊 Gramos por Inversión",
+    "salesChartTitle": "📈 Ventas por Inversión"
   }
 }

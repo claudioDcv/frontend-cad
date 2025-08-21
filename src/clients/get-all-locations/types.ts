@@ -1,4 +1,4 @@
 export interface Props {
-  investmentId: string;
+  investmentId?: string;
   status: boolean | null;
 }

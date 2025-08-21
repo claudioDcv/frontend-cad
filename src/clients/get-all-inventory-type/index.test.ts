@@ -3,6 +3,7 @@ import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
 import useGetAllInventoryTypes from '.';
 import { act, renderHook } from '@testing-library/react';
+import { InventoryType } from '@/entities/InventoryType.entity';
 
 describe('useGetAllInventoryTypes', () => {
   beforeEach(() => {
@@ -10,11 +11,10 @@ describe('useGetAllInventoryTypes', () => {
   });
 
   test('returns data and SUCCESS when API call succeeds', async () => {
-    const mockRawData = [
+    const mockRawData: InventoryType[] = [
       {
-        id: 1,
-        code: 'IT001',
-        name: 'anillo',
+        label: 'anillo',
+        value: '1',
       },
     ];
 

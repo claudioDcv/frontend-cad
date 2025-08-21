@@ -1,13 +1,11 @@
 import client from './client';
-import { remap } from './utils';
-import useFetch from '@/hooks/useFetch';
 import { Option } from '@/entities/Option.entity';
+import useAsyncCall from '@/hooks/useAsyncCall';
 
 
 const useGetAllInvestments = () => {
-  const { status, data, error, call, clearData } = useFetch<Option[]>({
+  const { status, data, error, call } = useAsyncCall<void, Option[]>({
     client,
-    remap,
     initialData: [],
   });
 
@@ -16,7 +14,6 @@ const useGetAllInvestments = () => {
     data: data || [],
     error,
     call,
-    clearData: () => clearData([]),
   };
 };
 

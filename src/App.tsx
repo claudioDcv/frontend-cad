@@ -6,7 +6,7 @@ import { VITE_MOCK_API, WEBSOCKET_BASE } from './conf/http';
 import { WebSocketProvider } from './contexts/websocket';
 import NotificationProvider from './contexts/notification/NotificationProvider';
 import InitialDataProvider from './contexts/initial-data/InitialDataProvider';
-import { DEBUG } from './conf/envs';
+import { DEBUG, DEBUG_STOMP } from './conf/envs';
 import { AlertProvider } from './contexts/alert/AlertProvider';
 import ReceivablesProvider from './modules/receivables/context/ReceivablesProvider';
 import MassiveResolutionProvider from './modules/massive-resolution/context/ReceivablesProvider';
@@ -15,7 +15,7 @@ const wsConfig = {
   url: WEBSOCKET_BASE,
   token: '',
   heartbeatInterval: 30000,
-  debug: DEBUG,
+  debug: DEBUG && DEBUG_STOMP,
   connectionType: 'stomp' as const,
   maxReconnectAttempts: 5,
 };
