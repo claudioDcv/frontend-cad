@@ -12,3 +12,4 @@ export { default as useGetResolution } from './get-resolution';
 export { default as useGetResolutionInventory } from './get-resolution-inventory';
 export { default as useGetAllInventoryTypes } from './get-all-inventory-type';
 export { default as usePatchSendResolution } from './patch-send-resolution';
+export { default as useGetReceivables } from './get-receivables';

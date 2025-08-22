@@ -25,7 +25,6 @@ import {
   MonthRangePicker,
   Pagination,
   Table,
-  Notification,
   Input,
   Access,
   IconList,
@@ -69,7 +68,7 @@ const Resolutions = () => {
 
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay()]);
 
-  const { resolutions, meta } = services.getAllResolutions.data;
+  const { content: resolutions, meta } = services.getAllResolutions.data;
 
   const debouncedSearchRef = useRef(
     debounce((resolutionNumber: string) => {
@@ -314,15 +313,6 @@ const Resolutions = () => {
           />
         </Box>
       </Box>
-      <Notification
-        open={!!services.getAllResolutions.error}
-        onClose={services.getAllResolutions.onResetError}
-        severity="error"
-        i18n={{
-          title: t('common.error'),
-          text: t(services.getAllResolutions.error),
-        }}
-      />
       <ResolutionSendTruckModal id={truckId} onClose={handleCloseTruckId} />
     </div>
   );

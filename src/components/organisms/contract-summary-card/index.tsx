@@ -1,4 +1,4 @@
-import { Card, Box } from '@mui/material';
+import { Card, Box, Typography } from '@mui/material';
 import { formatCurrency, formatNumberWithGr } from '../../../utils';
 import { DisplayData } from '../..';
 import { Contract } from '@/entities/Contract.entity';
@@ -25,8 +25,14 @@ const ContractSummaryCard: React.FC<ContractSummaryCardProps> = ({ contract, hid
     }
     return (
         <Card variant="outlined" sx={{ backgroundColor: theme.palette.background.paper }}>
+            <Box px={2} pt={1}>
+                <Typography variant="h6" component="h2" fontSize={theme.typography.h6.fontSize} fontWeight="regular">
+                    {t('contract.summaryTitle')}
+                </Typography>
+            </Box>
             <Box
-                p={2}
+                px={2}
+                pb={2}
                 display="grid"
                 gridTemplateColumns={hiddenClient ? "repeat(2, 1fr)" : "repeat(3, 1fr)"}
                 gap={2}

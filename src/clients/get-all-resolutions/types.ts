@@ -1,7 +1,4 @@
-import { Resolution } from '@/entities/Resolution.entity';
-
-export type ResolutionQuery = {
-  resolutionId?: string;
+export type Props = {
   resolutionNumber?: string;
   barcode?: string;
   dispatchGuide?: number;
@@ -16,12 +13,4 @@ export type ResolutionQuery = {
   page: number;
   size?: number;
   sort?: string;
-};
-
-export type ResolutionPaginated = {
-  resolutions: Resolution[];
-  meta: {
-    page: number;
-    count: number;
-  };
 };

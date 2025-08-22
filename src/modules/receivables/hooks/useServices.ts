@@ -1,5 +1,4 @@
-import { useGetAllInventoryTypes, useGetResolutionContracts } from "@/clients";
-import useGetReceivables from "@/clients/get-receivables";
+import { useGetAllInventoryTypes, useGetReceivables, useGetResolutionContracts } from "@/clients";
 import { ReceivableProps } from "@/clients/get-receivables/client";
 import usePostReceivable from "@/clients/post-contract";
 import { FetchStatus } from "@/constants";
@@ -32,7 +31,6 @@ const useServices = (props: ReceivableProps) => {
     };
 
     const receivablesResend = (props: ReceivableProps) => {
-        getReceivables.reset();
         getReceivables.call(props);
     };
 

@@ -15,12 +15,12 @@ export const clearProp = (param: number | string | boolean | null | undefined) =
   return param === undefined || param === null ? '' : param.toString();
 };
 
-export const clearAllProps = (props: Record<string, string>) => {
+export const clearAllProps = (props: Record<string, string | number | boolean>) => {
   const clearedProps: Record<string, string> = {};
   const allKey = 'all';
   Object.keys(props).forEach((key) => {
     if (props[key] !== allKey && props[key] !== '') {
-      clearedProps[key] = props[key];
+      clearedProps[key] = `${props[key]}`;
     }
   });
   return clearedProps;

@@ -6,7 +6,7 @@ import { ResolutionInventory } from '@/entities/ResolutionInventory.entity';
 const usePatchResolutionInventory = () => {
   return useAsyncCall<ResolutionInventory, InventoryResolution[]>({
     client,
-    initialData: [],
+    initial: [],
   });
 };
 

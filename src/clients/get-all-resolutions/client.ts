@@ -1,43 +1,34 @@
-import { typeLog, LogType } from '@/utils';
-import { API_BASE } from '../../conf/http';
-import { clearAllProps, clearProp, getHeader } from '../utils';
-import { ResolutionQuery } from './types';
+import { clearAllProps, clearProp } from '../utils';
+import { Props } from './types';
 import { remap } from './utils';
+import { getFetch } from '../customFetch';
+import { Paginated } from '../types';
+import { Resolution } from '@/entities/Resolution.entity';
+import { ResolutionFormModel } from '@/pages/common/documents/types';
 
-const client = async (props: ResolutionQuery) => {
-  const params = {
-    page: clearProp(props.page - 1),
+const client = async (props: ResolutionFormModel) => {
+  const params: Props = {
+    page: Number(clearProp(props.page - 1)),
     resolutionNumber: clearProp(props.resolutionNumber),
-    resolutionId: clearProp(props.resolutionId),
-    investmentId: clearProp(props.investmentId),
-    locationId: clearProp(props.locationId),
-    categoryId: clearProp(props.categoryId),
-    statusId: clearProp(props.statusId),
-    startDate: clearProp(props.startDate),
-    endDate: clearProp(props.endDate),
-    hasMetadata: clearProp(props.hasMetadata),
-    size: clearProp(props.size || 15),
+    investmentId: clearProp(props.investment.value),
+    locationId: clearProp(props.location.value),
+    categoryId: clearProp(props.categoryId.value),
+    statusId: clearProp(props.status.value),
+    startDate: clearProp(props?.range?.[0]?.toISOString()),
+    endDate: clearProp(props?.range?.[1]?.toISOString()),
+    size: 15,
   };
 
-  const query = new URLSearchParams(clearAllProps(params));
-  const url = new URL(`${API_BASE}/resolutions?${query}`);
+  if (typeof props.hasMetadata !== 'undefined') {
+    params.hasMetadata = props.hasMetadata;
+  }
 
-  typeLog(LogType.FETCH, url);
-  const response = await fetch(url, {
-    headers: getHeader(),
-    credentials: 'include',
+  const query = new URLSearchParams(clearAllProps(params)).toString();
+  const url = `resolutions?${query}`;
+  return getFetch<Paginated<Resolution>>(url, { remap }, {
+    responseError: 'error.getAllResolutionsFetch',
+    defaultError: 'error.getAllResolutionsParse',
   });
-
-  if (!response.ok) {
-    throw new Error('error.getAllResolutionsFetch');
-  }
-
-  try {
-    const res = await response.json();
-    return remap(res);
-  } catch {
-    throw new Error('error.getAllResolutionsParse');
-  }
-};
+}
 
 export default client;

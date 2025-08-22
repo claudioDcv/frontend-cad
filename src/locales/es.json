@@ -135,7 +135,8 @@
     "securityBagCode": "Código de Bolsa de Seguridad",
     "startDate": "Fecha de Inicio",
     "totalContractValue": "Valor Total del Contrato",
-    "totalWeight": "Peso Total"
+    "totalWeight": "Peso Total",
+    "summaryTitle": "Resumen del Contrato"
   },
   "packinglist": {
     "packinglistId": "Numero",
@@ -226,7 +227,7 @@
   },
   "error": {
     "404Error": "Error 404 - Página no encontrada",
-    "genericHttpError": "Error HTTP genérico",
+    "genericHttpError": "Error de HTTP genérico",
     "getAllContractsFetch": "Error al obtener la lista de Contratos. Por favor, inténtalo de nuevo más tarde.",
     "getAllContractsParse": "Error al interpretar los datos de contratos del servidor.",
     "getResolutionFetch": "Error al obtener Resolución. Por favor, inténtalo de nuevo más tarde.",
@@ -360,10 +361,17 @@
     "observation": "Observación",
     "createdAt": "Creado el",
     "updatedAt": "Actualizado el",
-    "createdByName": "Nombre del Creador",
-    "reviewedByName": "Nombre del Revisor",
+    "createdByName": "Nombre del Operador",
+    "reviewedByName": "Nombre del Administrador",
     "typeName": "Nombre del Tipo",
-    "contractTitle": "Detalle del Contrato"
+    "contractTitle": "Detalle del Contrato",
+    "averagePriceTooltipModified": "El precio promedio fue modificado",
+    "summaryTitle": "Cuenta por Cobrar",
+    "receivableStatus": {
+      "null": "Pendiente",
+      "true": "Aprobado",
+      "false": "Rechazado"
+    }
   },
   "confirm": {
     "confirmation": "Confirmación",

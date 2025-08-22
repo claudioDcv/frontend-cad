@@ -6,7 +6,7 @@ import useAsyncCall from '@/hooks/useAsyncCall';
 const useGetAllMaterialTypes = () => {
   return useAsyncCall<void, Option[]>({
     client,
-    initialData: [],
+    initial: [],
   });
 };
 

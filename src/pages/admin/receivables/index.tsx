@@ -1,14 +1,28 @@
-import useGetReceivables from "@/clients/get-receivables";
+import { useGetReceivables } from "@/clients";
 import { ReceivableProps } from "@/clients/get-receivables/client";
-import { ResolutionDetailButton } from "@/components";
+import { IconList } from "@/components";
 import Pagination from "@/components/molecules/pagination";
 import Table from "@/components/organisms/table";
 import { FetchStatus } from "@/constants";
-import { Box } from "@mui/material";
+import { Box, Chip, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import View from "./components/view";
+import { Receivable } from "@/entities/Receivable.entity";
+
+const StatusChip = ({ status }: { status: boolean | null }) => {
+    const { t } = useTranslation();
+    return (
+        <Chip
+            size="small"
+            label={t(`accountsReceivable.receivableStatus.${status}`)}
+            color={status === true ? "success" : status === false ? "error" : "default"}
+        />
+    );
+};
 
 const ReceivablesAdmin = () => {
+    const [receivable, setReceivable] = useState<Receivable | null>(null);
     const [filters, setFilters] = useState<ReceivableProps>({
         page: 1,
         size: 15,
@@ -37,18 +51,23 @@ const ReceivablesAdmin = () => {
                     messageVoidData="No hay cuentas por cobrar"
                     rows={receivables.data.content}
                     columns={[
+                        { id: 'status', label: 'Estado', render: (row) => <StatusChip status={row.status} /> },
                         { id: 'contractId', label: 'Contrato' },
                         { id: 'quantity', label: 'Cantidad' },
                         { id: 'weight', label: 'Peso' },
                         { id: 'createdByName', label: 'Creado por' },
-                        { id: 'reviewedByName', label: 'Revisado por' },
+                        { id: 'reviewedByName', label: 'Revisado por', render: (row) => row.reviewedByName || '-' },
                         { id: 'typeName', label: 'Tipo', render: (row) => t(`inventoryType.${row.typeName}`) },
                         {
-                            id: 'id', label: 'Ver', render: () => <ResolutionDetailButton
-                                id={''}
-                                label={t('common.view')}
-                            />
-                        },
+                            id: 'id', label: 'Ver', render: (row) => (
+                                <IconButton
+                                    aria-label={t('common.view')}
+                                    onClick={() => setReceivable(row)}
+                                >
+                                    <IconList name="visualize" />
+                                </IconButton>
+                            )
+                        }
                     ]}
                     loading={receivables.status === FetchStatus.LOADING}
                 />
@@ -59,6 +78,7 @@ const ReceivablesAdmin = () => {
                     />
                 </Box>
             </Box>
+            <View receivable={receivable} onClose={() => setReceivable(null)} />
         </div>
     );
 };
