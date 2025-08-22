@@ -1,6 +1,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import ButtonNotification from './index';
+import { initialStateI18n } from './index.types';
 
 describe('ButtonNotification', () => {
   const mockOnClick = vi.fn();
@@ -57,5 +58,12 @@ describe('ButtonNotification', () => {
     fireEvent.click(button);
 
     expect(mockOnClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('uses initialStateI18n when i18n is not provided', () => {
+    render(<ButtonNotification count={3} onClick={mockOnClick} />);
+
+    const label = screen.getByText(initialStateI18n.label);
+    expect(label).toBeInTheDocument();
   });
 });

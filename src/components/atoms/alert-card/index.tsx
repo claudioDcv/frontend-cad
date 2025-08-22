@@ -1,7 +1,7 @@
 import { Alert, AlertTitle, Box, Collapse } from '@mui/material';
-import { alertCardProps, initialState18N } from './index.types';
+import { AlertCardProps, initialState18N } from './index.types';
 
-const AlertCard: React.FC<alertCardProps> = ({
+const AlertCard: React.FC<AlertCardProps> = ({
   i18n,
   severity,
   open,
@@ -9,7 +9,7 @@ const AlertCard: React.FC<alertCardProps> = ({
   closable,
 }) => {
   const lang = i18n ? { ...initialState18N, ...i18n } : initialState18N;
-  const alertOnClose = closable !== false ? onClose ?? (() => {}) : undefined;
+  const alertOnClose = closable !== false ? onClose : undefined;
 
   return (
     <Collapse in={open}>

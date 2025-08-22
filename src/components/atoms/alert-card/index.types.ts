@@ -10,7 +10,7 @@ export const initialState18N: I18N = {
   text: 'Text',
 };
 
-export interface alertCardProps {
+export interface AlertCardProps {
   i18n?: Partial<I18N>;
   severity: AlertColor;
   open: boolean;

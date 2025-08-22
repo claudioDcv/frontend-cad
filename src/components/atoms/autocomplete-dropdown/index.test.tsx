@@ -6,16 +6,16 @@ import AutocompleteDropdown from './index';
 describe('AutocompleteDropdown', () => {
   const options = [
     { label: 'Oro', value: 'gold' },
-    { label: 'Plata', value: 'silver' }
+    { label: 'Plata', value: 'silver' },
   ];
 
-  test('should render the Autocomplete component with label', () => {
+  test('renders the Autocomplete component with label', () => {
     render(
       <AutocompleteDropdown
-        label='Seleccionar Opcion'
+        label="Seleccionar Opcion"
         options={options}
         value={undefined}
-        onChange={() => undefined}
+        onChange={() => {}}
       />
     );
 
@@ -23,18 +23,17 @@ describe('AutocompleteDropdown', () => {
     expect(input).toBeInTheDocument();
   });
 
-  test('should display options when clicked', async () => {
+  test('displays options when clicked', async () => {
     render(
       <AutocompleteDropdown
-        label='Seleccionar Opcion'
+        label="Seleccionar Opcion"
         options={options}
         value={undefined}
-        onChange={() => undefined}
+        onChange={() => {}}
       />
     );
 
     const input = screen.getByRole('combobox', { name: 'Seleccionar Opcion' });
-
     await userEvent.click(input);
 
     await waitFor(() => {
@@ -43,12 +42,12 @@ describe('AutocompleteDropdown', () => {
     });
   });
 
-  test('should select an option and call onChange with the correct value', async () => {
+  test('selects an option and calls onChange with the correct value', async () => {
     const handleChange = vi.fn();
 
     render(
       <AutocompleteDropdown
-        label='Seleccionar Opcion'
+        label="Seleccionar Opcion"
         options={options}
         value={undefined}
         onChange={handleChange}
@@ -56,7 +55,6 @@ describe('AutocompleteDropdown', () => {
     );
 
     const input = screen.getByRole('combobox', { name: 'Seleccionar Opcion' });
-
     await userEvent.click(input);
     const option = await screen.findByText('Oro');
     await userEvent.click(option);
@@ -66,13 +64,13 @@ describe('AutocompleteDropdown', () => {
     });
   });
 
-  test('should not display clearable option when disableClearable is true', () => {
+  test('does not display clear button when disableClearable is true', () => {
     render(
       <AutocompleteDropdown
-        label='Seleccionar Opcion'
+        label="Seleccionar Opcion"
         options={options}
         value={{ label: 'Oro', value: 'gold' }}
-        onChange={() => undefined}
+        onChange={() => {}}
         disableClearable={true}
       />
     );
@@ -81,17 +79,61 @@ describe('AutocompleteDropdown', () => {
     expect(clearButton).not.toBeInTheDocument();
   });
 
-  test('should display the selected option', () => {
+  test('displays the selected option', () => {
     render(
       <AutocompleteDropdown
-        label='Seleccionar Opcion'
+        label="Seleccionar Opcion"
         options={options}
         value={{ label: 'Oro', value: 'gold' }}
-        onChange={() => undefined}
+        onChange={() => {}}
       />
     );
 
     const input = screen.getByRole('combobox', { name: 'Seleccionar Opcion' });
     expect(input).toHaveValue('Oro');
+  });
+
+  test('calls handleAutocompleteChange indirectly when option is selected', async () => {
+    const handleChange = vi.fn();
+
+    render(
+      <AutocompleteDropdown
+        label="Seleccionar Opcion"
+        options={options}
+        value={undefined}
+        onChange={handleChange}
+      />
+    );
+
+    const input = screen.getByRole('combobox', { name: 'Seleccionar Opcion' });
+    await userEvent.click(input);
+    const option = await screen.findByText('Oro');
+    await userEvent.click(option);
+
+    await waitFor(() => {
+      expect(handleChange).toHaveBeenCalledWith(expect.any(Object), 'gold');
+    });
+  });
+
+  test('calls handleAutocompleteChange with empty string when newValue is null', async () => {
+    const handleChange = vi.fn();
+
+    render(
+      <AutocompleteDropdown
+        label="Seleccionar Opcion"
+        options={options}
+        value={{ label: 'Oro', value: 'gold' }}
+        onChange={handleChange}
+      />
+    );
+
+    const input = screen.getByRole('combobox', { name: 'Seleccionar Opcion' });
+    await userEvent.click(input);
+
+    await userEvent.keyboard('{Backspace}');
+
+    await waitFor(() => {
+      expect(handleChange).toHaveBeenCalledWith(expect.any(Object), '');
+    });
   });
 });
