@@ -1,7 +1,7 @@
 import { Receivable } from '@/entities/Receivable.entity';
-import { API_BASE } from '../../conf/http';
-import { clearAllProps, clearProp, getHeader } from '../utils';
-import { PageResponse } from '../types';
+import { clearAllProps, clearProp, pageableToPaginated } from '../utils';
+import { Paginated } from '../types';
+import { getFetch } from '../customFetch';
 
 export interface ReceivableProps {
   page: number;
@@ -9,29 +9,17 @@ export interface ReceivableProps {
   size?: number;
 }
 
-const client = async (props: ReceivableProps): Promise<PageResponse<Receivable>> => {
+const client = async (props: ReceivableProps) => {
   const query = new URLSearchParams(clearAllProps({
     resolutionId: clearProp(props.resolutionId),
     size: clearProp(props.size || 10),
     page: clearProp(props.page - 1),
   }));
-  const url = new URL(`${API_BASE}/receivables?${query}`);
-
-  const response = await fetch(url, {
-    headers: getHeader(),
-    credentials: 'include',
+  const url = `receivables?${query}`;
+  return getFetch<Paginated<Receivable>>(url, { remap: pageableToPaginated }, {
+    responseError: 'error.getAllReceivablesFetch',
+    defaultError: 'error.getAllReceivablesParse',
   });
-
-  if (!response.ok) {
-    throw new Error('error.getAllReceivablesFetch');
-  }
-
-  try {
-    const data = await response.json() as PageResponse<Receivable>;
-    return data;
-  } catch {
-    throw new Error('error.getAllReceivablesParse');
-  }
-};
+}
 
 export default client;

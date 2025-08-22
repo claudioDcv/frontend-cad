@@ -37,27 +37,10 @@ describe('useGetReceivables', () => {
 
     vi.spyOn(clientModule, 'default').mockResolvedValue({
       content: [mockData],
-      totalPages: 0,
-      totalElements: 0,
-      pageable: {
-        sort: {
-          sorted: false,
-          unsorted: true,
-          empty: true
-        },
-        offset: 0,
-        pageNumber: 0,
-        pageSize: 0,
-        unpaged: false,
-        paged: false
+      meta: {
+        count: 1,
+        page: 1,
       },
-      size: 0,
-      number: 0,
-      sort: [],
-      first: false,
-      last: false,
-      numberOfElements: 0,
-      empty: false
     });
 
     const { result } = renderHook(() => useGetAllContracts());
@@ -94,7 +77,7 @@ describe('useGetReceivables', () => {
         },
       ],
       "meta": {
-        "count": 0,
+        "count": 1,
         "page": 1,
       },
     });

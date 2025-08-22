@@ -9,7 +9,7 @@ import Documents from './pages/common/documents';
 import ResolutionDetail from './pages/common/resolution-detail';
 import PackingListDetail from './pages/common/packinglist-detail';
 import ReceivablesAdmin from './pages/admin/receivables';
-import PreInventoryPage from './pages/admin/receivables/pre-inventory';
+import PreInventoryPage from './pages/admin/pre-inventory';
 
 const Router = (props: { hostUrl: string }) => {
   const [location, setLocation] = useLocation();

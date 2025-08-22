@@ -1,13 +1,10 @@
 import { Contract } from '@/entities/Contract.entity';
 import client from './client';
-import useFetch from '@/hooks/useFetch';
+import useAsyncCall from '@/hooks/useAsyncCall';
 
-const useGetContract = () => {
-  const { status, data, error, call, clearData } = useFetch<Contract>({
-    client,
-  });
-
-  return { status, data, error, call, clearData };
-};
+const useGetContract = () => useAsyncCall<string | number, Contract | null>({
+  client,
+  initial: null,
+});
 
 export default useGetContract;

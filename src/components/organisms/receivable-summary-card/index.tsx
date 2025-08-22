@@ -1,4 +1,4 @@
-import { Card, Box } from '@mui/material';
+import { Card, Box, Typography, Tooltip } from '@mui/material';
 import { formatCurrency, formatDateHour, formatNumberWithGr } from '../../../utils';
 import { DisplayData } from '../..';
 import { useTranslation } from 'react-i18next';
@@ -7,9 +7,10 @@ import { Receivable } from '@/entities/Receivable.entity';
 
 interface ReceivableSummaryCardProps {
     receivable: Receivable;
+    contractAveragePurchaseValue?: number;
 }
 
-const ReceivableSummaryCard: React.FC<ReceivableSummaryCardProps> = ({ receivable }) => {
+const ReceivableSummaryCard: React.FC<ReceivableSummaryCardProps> = ({ receivable, contractAveragePurchaseValue }) => {
     const { t } = useTranslation();
     const lang = {
         id: t('accountsReceivable.id'),
@@ -30,12 +31,34 @@ const ReceivableSummaryCard: React.FC<ReceivableSummaryCardProps> = ({ receivabl
         reviewedByName: t('accountsReceivable.reviewedByName'),
         typeName: t('accountsReceivable.typeName'),
     }
+
+    const smallStyle = { fontSize: '0.75rem', color: theme.palette.text.secondary };
+    const getAveragePrice = () => {
+        if (contractAveragePurchaseValue) {
+            if (receivable.averagePrice !== contractAveragePurchaseValue) {
+                return <Tooltip title={t('accountsReceivable.averagePriceTooltipModified')}>
+                    <div>
+                        <strong>{formatCurrency(receivable.averagePrice)}</strong> <small style={smallStyle}>({formatCurrency(contractAveragePurchaseValue)})</small>
+                    </div>
+                </Tooltip>;
+            }
+            return formatCurrency(contractAveragePurchaseValue);
+        }
+        if (receivable.averagePrice) {
+            return formatCurrency(receivable.averagePrice);
+        }
+        return null;
+    }
     return (
         <Card variant="outlined" sx={{ backgroundColor: theme.palette.background.paper }}>
             <Box
                 p={2}
                 gap={2}
             >
+                <Typography variant="h6" component="h2" fontSize={theme.typography.h6.fontSize} fontWeight="regular">
+                    {t('accountsReceivable.summaryTitle')}
+                </Typography>
+
                 <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
                     <DisplayData
                         label={lang.weight}
@@ -47,7 +70,7 @@ const ReceivableSummaryCard: React.FC<ReceivableSummaryCardProps> = ({ receivabl
                     />
                     <DisplayData
                         label={lang.averagePrice}
-                        value={formatCurrency(receivable.averagePrice)}
+                        value={getAveragePrice()}
                     />
                 </Box>
                 <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
@@ -66,7 +89,7 @@ const ReceivableSummaryCard: React.FC<ReceivableSummaryCardProps> = ({ receivabl
                 </Box>
                 <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
                     <DisplayData label={lang.operatorNote} value={receivable.operatorNote} />
-                    <DisplayData label={lang.operatorNote} value={receivable.operatorNote} />
+                    <DisplayData label={lang.administratorNote} value={receivable.administratorNote} />
                 </Box>
             </Box>
         </Card>

@@ -42,7 +42,6 @@ const useServices = () => {
       });
     }
   }, [getAllInvestments, getAllLocations, getAllMaterialType, getAllResolutions, getAllStatus, isOperator]);
-
   return {
     getAllMaterialType,
     getAllResolutions,

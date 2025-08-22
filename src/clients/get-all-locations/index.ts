@@ -3,16 +3,9 @@ import { Props } from './types';
 import { Option } from '@/entities/Option.entity';
 import useAsyncCall from '@/hooks/useAsyncCall';
 
-const useGetAllLocations = () => {
-  const response = useAsyncCall<Props, Option[]>({
-    client,
-    initialData: [],
-  });
-
-  return {
-    ...response,
-    data: response.data || [],
-  };
-};
+const useGetAllLocations = () => useAsyncCall<Props, Option[]>({
+  client,
+  initial: [],
+});
 
 export default useGetAllLocations;

@@ -131,7 +131,7 @@ const NewReceivableFormDialog = ({ open, onClose, contracts, inventoryTypes, onS
                     />
                     {selectedContract ? (
                         <>
-                            <ContractSummaryCard contract={selectedContract} hiddenClient />
+                            <ContractSummaryCard contract={selectedContract} />
                             <Controller
                                 name="inventoryType"
                                 control={control}

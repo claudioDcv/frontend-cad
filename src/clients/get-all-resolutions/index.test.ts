@@ -88,7 +88,7 @@ describe('useGetAllResolutions', () => {
     };
 
     const transformedMockData = {
-      resolutions: mockData.content,
+      content: mockData.content,
       meta: {
         page: mockData.number + 1,
         count: mockData.totalElements,
@@ -120,7 +120,7 @@ describe('useGetAllResolutions', () => {
 
     expect(result.current.status).toBe(FetchStatus.ERROR);
     expect(result.current.data).toEqual({
-      resolutions: [],
+      content: [],
       meta: { page: 0, count: 0 },
     });
     expect(result.current.error).toBe('API call failed');
@@ -131,7 +131,7 @@ describe('useGetAllResolutions', () => {
 
     expect(result.current.status).toBe(FetchStatus.IDLE);
     expect(result.current.data).toEqual({
-      resolutions: [],
+      content: [],
       meta: { page: 0, count: 0 },
     });
     expect([null, ''].includes(result.current.error)).toBe(true);

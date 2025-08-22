@@ -26,6 +26,6 @@ describe('DisplayData component', () => {
     expect(spans?.length).toBe(2);
 
     const valueText = spans?.[1].textContent;
-    expect(valueText).toBe('');
+    expect(valueText).toBe('N/A');
   });
 });
