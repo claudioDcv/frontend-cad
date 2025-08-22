@@ -48,7 +48,7 @@ const mockContracts = [
     jewelQuantity: 10,
     totalContractValue: 500000,
     statusId: 1,
-    cadMetadata: { reviewed: false },
+    metadata: { reviewed: false },
   },
   {
     contractNumber: '0002',
@@ -56,7 +56,7 @@ const mockContracts = [
     jewelQuantity: 5,
     totalContractValue: 250000,
     statusId: 2,
-    cadMetadata: { reviewed: true },
+    metadata: { reviewed: true },
   },
 ];
 
@@ -88,9 +88,9 @@ const PackingListDetail = () => {
   const filteredContracts = mockContracts
     .filter((c) => c.contractNumber.includes(searchTerm))
     .filter((c) => statusFilter === '' || String(c.statusId) === statusFilter)
-    .filter((c) => (showOnlyNotReviewed ? !c.cadMetadata.reviewed : true));
+    .filter((c) => (showOnlyNotReviewed ? !c.metadata.reviewed : true));
 
-  const isAllReviewed = mockContracts.every((c) => c.cadMetadata.reviewed);
+  const isAllReviewed = mockContracts.every((c) => c.metadata.reviewed);
 
   const handleChangeStatus =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

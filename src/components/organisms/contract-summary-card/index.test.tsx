@@ -38,7 +38,7 @@ const baseContract: Contract = {
     securityBagCode: '',
     jewelQuantity: 0,
     startDate: '',
-    cadMetadata: null
+    metadata: null
 };
 
 describe('ContractSummaryCard', () => {

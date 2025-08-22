@@ -7,6 +7,8 @@ export interface FetchOptions extends RequestInit {
     query?: Record<string, string | number | boolean>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     remap?: (data: any) => any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    requestBody?: (data: any) => any;
     withoutBodyResponse?: boolean;
 }
 
@@ -85,9 +87,10 @@ export const customFetch = Object.assign(
                 defaultError: 'errors.defaultError',
             }
         ): Promise<T> => {
+            const processedBody = options.requestBody ? options.requestBody(body) : body;
             return customFetch<T>(
                 endpoint,
-                { ...options, method: 'POST', body: JSON.stringify(body) },
+                { ...options, method: 'POST', body: JSON.stringify(processedBody) },
                 errorMessages
             );
         },

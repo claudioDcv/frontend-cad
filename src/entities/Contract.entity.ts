@@ -24,5 +24,5 @@ export type Contract = {
   responsibleName: string;
   clientName: string;
   clientRut: string;
-  cadMetadata: ContractMetadata | null;
+  metadata: ContractMetadata | null;
 };

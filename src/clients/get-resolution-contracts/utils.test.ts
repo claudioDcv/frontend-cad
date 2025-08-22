@@ -21,7 +21,7 @@ describe('remap function for Contract', () => {
         responsibleName: '',
         clientName: '',
         clientRut: '',
-        cadMetadata: null,
+        metadata: null,
       },
     ];
 
@@ -46,7 +46,7 @@ describe('remap function for Contract', () => {
         responsibleName: '',
         clientName: '',
         clientRut: '',
-        cadMetadata: null,
+        metadata: null,
       },
     ]);
 

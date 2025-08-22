@@ -36,7 +36,7 @@ describe('useGetAllContracts', () => {
       responsibleName: '',
       clientName: '',
       clientRut: '',
-      cadMetadata: null,
+      metadata: null,
       statusId: 0,
     };
 

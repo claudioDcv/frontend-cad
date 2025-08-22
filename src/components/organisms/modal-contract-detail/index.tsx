@@ -35,7 +35,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
     confirmedAt: null,
     createdAt: '',
     updatedAt: null,
-    ...(contract?.cadMetadata ?? {}),
+    ...(contract?.metadata ?? {}),
     contractId: contract?.contractId ?? 0,
   };
 
@@ -50,7 +50,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
     }
     const result = await patchReviewedContract.call({
       ...contract,
-      cadMetadata: {
+      metadata: {
         ...metadata,
         note: data.note,
         reviewed: data.reviewed,

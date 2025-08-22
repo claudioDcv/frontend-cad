@@ -4,8 +4,8 @@ import Token from '@/tokens';
 import { IconList } from '@/components';
 
 const getContractStatusIcons = (contract: Contract) => {
-  const reviewed = contract.cadMetadata?.reviewed;
-  const hasNote = !!contract.cadMetadata?.note?.trim();
+  const reviewed = contract.metadata?.reviewed;
+  const hasNote = !!contract.metadata?.note?.trim();
 
   const statusIcon = reviewed
     ? Token.IconTemplate.ContractReviewed

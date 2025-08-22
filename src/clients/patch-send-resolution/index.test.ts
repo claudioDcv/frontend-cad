@@ -3,31 +3,11 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { FetchStatus } from '@/constants';
 import * as clientModule from './client';
 import usePatchSendResolution from '.';
-import { Resolution } from '@/entities/Resolution.entity';
+import { ResolutionSendResponse } from '@/entities/ResolutionSendResonse.entity';
 
-const mockResolution: Resolution = {
-  resolutionId: 0,
-  resolutionNumber: 0,
-  barcode: '',
-  dispatchGuide: 0,
-  investmentName: '',
-  locationName: '',
-  closeDate: '',
-  contractCount: 0,
-  totalJewels: 0,
-  categoryName: '',
-  stateName: '',
-  locationAddress: '',
-  investmentRut: '',
-  securityBag: '',
-  statusId: 0,
-  categoryId: 0,
-  metadata: null,
-  hasMetadata: false,
-  totalWeight: 0,
-  totalPurchase: 0,
-  averagePurchase: 0,
-  responsible: ''
+const mockResolution: ResolutionSendResponse = {
+  message: "OK: Inventory successfully processed. Generated ID: 196, CXC Records: 0",
+  resolutionId: "306402033"
 };
 
 describe('usePatchSendResolution', () => {
@@ -43,12 +23,18 @@ describe('usePatchSendResolution', () => {
   });
 
   test('should return data and SUCCESS status on successful call', async () => {
-    vi.spyOn(clientModule, 'default').mockResolvedValue(mockResolution);
+    vi.spyOn(clientModule, 'default').mockResolvedValue({
+      message: "OK: Inventory successfully processed. Generated ID: 196, CXC Records: 0",
+      resolutionId: "306402033"
+    });
 
     const { result } = renderHook(() => usePatchSendResolution());
 
     await act(async () => {
-      const response = await result.current.call(0);
+      const response = await result.current.call({
+        resolutionId: 306402033,
+        inventories: [],
+      });
       expect(response).toEqual(mockResolution);
     });
 
@@ -66,7 +52,10 @@ describe('usePatchSendResolution', () => {
     const { result } = renderHook(() => usePatchSendResolution());
 
     await act(async () => {
-      await result.current.call(0);
+      await result.current.call({
+        resolutionId: 306402033,
+        inventories: [],
+      });
     });
 
     expect(result.current.status).toBe(FetchStatus.ERROR);

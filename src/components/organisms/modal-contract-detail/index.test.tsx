@@ -16,7 +16,7 @@ const mockContract: Contract = {
   responsibleName: 'John Doe',
   clientName: 'Jane Smith',
   clientRut: '12345678-9',
-  cadMetadata: null,
+  metadata: null,
   statusId: 0
 };
 

@@ -109,15 +109,18 @@ const ResolutionMassiveModal = ({
     }
   };
 
-  const handleSendOutput = () => {
+  const handleSendOutput = (data: Inventory[]) => {
     setSendProcessed(false); // Reset flag before new operation
     if (!resolution) return;
-    patchSendResolution.call(resolution.resolutionId);
+    patchSendResolution.call({
+      resolutionId: resolution.resolutionId,
+      inventories: data,
+    });
   }
   if (!resolution) return null;
 
   return (
-    <>
+    <> 
       <ModalConfirm
         open={showConfirm}
         onClose={handleOnClose}

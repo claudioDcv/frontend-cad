@@ -69,7 +69,7 @@
         "responsibleName": "John Doe",
         "clientName": "Jane Smith",
         "clientRut": "12345678-9",
-        "cadMetadata": {
+        "metadata": {
             "contractId": 1,
             "note": "Reviewed contract",
             "reviewed": true,

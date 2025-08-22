@@ -10,8 +10,8 @@ const client = async (props: Contract): Promise<Contract> => {
     credentials: 'include',
     method: 'PATCH',
     body: JSON.stringify({
-      note: clearProp(props.cadMetadata?.note),
-      reviewed: props.cadMetadata?.reviewed ?? false,
+      note: clearProp(props.metadata?.note),
+      reviewed: props.metadata?.reviewed ?? false,
     }),
   });
 

@@ -1,25 +1,37 @@
-import { API_BASE } from '../../conf/http';
-import { Resolution } from '@/entities/Resolution.entity';
-import { getHeader } from '../utils';
+import { Inventory } from '@/entities/Inventory.entity';
+import { postFetch } from '../customFetch';
+import { ResolutionSendResponse } from '@/entities/ResolutionSendResonse.entity';
 
-const client = async (resolutionId: number): Promise<Resolution> => {
-  const url = `${API_BASE}/resolutions/${resolutionId}/send`;
+export interface Props {
+  resolutionId: number;
+  inventories: Inventory[];
+}
 
-  const response = await fetch(url, {
-    headers: getHeader(),
-    credentials: 'include',
-    method: 'PATCH',
+/* Cambiar response
+{
+  message: "OK: Inventory successfully processed. Generated ID: 196, CXC Records: 0",
+  resolutionId: "306402033"
+}
+
+{
+  resolutionId: 306402033,
+  sendedId: 196
+  receivableCount: 0
+}
+*/
+const client = async (data: Props): Promise<ResolutionSendResponse> => postFetch<ResolutionSendResponse>(
+  `resolutions/${data.resolutionId}/send`,
+  data,
+  {
+    requestBody: (data: Props) => (data.inventories.map(e => ({
+      inventoryTypeId: Number(e.inventoryType.value),
+      quantity: e.quantity,
+      weight: e.weight,
+    }))),
+  },
+  {
+    responseError: 'error.postResolutionSendFetch',
+    defaultError: 'error.postResolutionSendParse',
   });
-
-  if (!response.ok) {
-    throw new Error('error.patchSendResolutionFetch');
-  }
-
-  try {
-    return response.json();
-  } catch {
-    throw new Error('error.patchSendResolutionParse');
-  }
-};
 
 export default client;

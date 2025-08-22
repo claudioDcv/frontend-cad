@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { FetchStatus } from '@/constants';
-import client from './client';
-import { Resolution } from '@/entities/Resolution.entity';
+import client, { Props } from './client';
+import { ResolutionSendResponse } from '@/entities/ResolutionSendResonse.entity';
 
 /**
  * Este servicio se utiliza para que el operador envie la resolución a Olimpo y al Admin.
@@ -9,14 +9,14 @@ import { Resolution } from '@/entities/Resolution.entity';
  */
 const usePatchSendResolution = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Resolution>();
+  const [data, setData] = useState<ResolutionSendResponse>();
   const [error, setError] = useState<string | null>(null);
 
   const call = useCallback(
-    async (resolutionId: number) => {
+    async (data: Props) => {
       if (status === FetchStatus.ERROR) {
         return;
-      }
+      } 
 
       if (status === FetchStatus.LOADING) {
         setStatus(FetchStatus.SUCCESS);
@@ -27,7 +27,7 @@ const usePatchSendResolution = () => {
       setStatus(FetchStatus.LOADING);
 
       try {
-        const result = await client(resolutionId);
+        const result = await client(data);
 
         setData(result);
         setStatus(FetchStatus.SUCCESS);

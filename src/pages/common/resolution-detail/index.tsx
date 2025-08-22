@@ -97,8 +97,8 @@ const ResolutionDetail = () => {
     // 0 all, 1 not reviewed, 2 reviewed
     return filteredByStatus.filter((contract) => {
       if (showOnlyNotReviewed === 0) return true; // All
-      if (showOnlyNotReviewed === 1) return !contract.cadMetadata?.reviewed; // Not reviewed
-      if (showOnlyNotReviewed === 2) return contract.cadMetadata?.reviewed; // Reviewed
+      if (showOnlyNotReviewed === 1) return !contract.metadata?.reviewed; // Not reviewed
+      if (showOnlyNotReviewed === 2) return contract.metadata?.reviewed; // Reviewed
       return true; // Default case
     });
   };
@@ -174,7 +174,7 @@ const ResolutionDetail = () => {
 
   const isAllContractReviewed =
     services.getResolutionContracts.data.length > 0 &&
-    services.getResolutionContracts.data.every((c) => c.cadMetadata?.reviewed);
+    services.getResolutionContracts.data.every((c) => c.metadata?.reviewed);
 
   const hasMetadata = services.getResolution.data?.hasMetadata;
   const hasContracts = services.getResolutionContracts.data.length > 0;

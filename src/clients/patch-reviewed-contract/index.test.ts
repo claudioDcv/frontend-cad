@@ -33,7 +33,7 @@ describe('usePatchReviewedContract', () => {
       responsibleName: 'Juan Perez',
       clientName: 'Cliente Ejemplo',
       clientRut: '12345678-9',
-      cadMetadata: null,
+      metadata: null,
     };
 
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockContract);
@@ -71,7 +71,7 @@ describe('usePatchReviewedContract', () => {
       responsibleName: '',
       clientName: '',
       clientRut: '',
-      cadMetadata: null,
+      metadata: null,
     };
 
     const { result } = renderHook(() => usePatchReviewedContract());
