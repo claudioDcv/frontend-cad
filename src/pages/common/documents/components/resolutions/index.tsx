@@ -14,7 +14,6 @@ import {
   defaultStartDate,
   formatToDDMMYYYY,
   getMaterialType,
-  getStatusIcon,
   isOnlyNumbersOrEmpty,
   toDay,
 } from '@/utils';
@@ -29,6 +28,7 @@ import {
   Access,
   IconList,
   ResolutionDetailButton,
+  DocumentStatus,
 } from '@components/index';
 import useServices from './hooks/useServices';
 import {
@@ -245,8 +245,7 @@ const Resolutions = () => {
             {
               id: 'statusName',
               label: t('resolution.status'),
-              render: ({ statusId, stateName }) =>
-                getStatusIcon(statusId, stateName),
+              render: ({ statusId, stateName }) => <DocumentStatus statusId={statusId} statusName={stateName} />,
             },
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
             { id: 'barcode', label: t('resolution.barcode') },

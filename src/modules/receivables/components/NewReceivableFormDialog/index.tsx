@@ -105,8 +105,8 @@ const NewReceivableFormDialog = ({ open, onClose, contracts, inventoryTypes, onS
     const selectedContract = getContractByNumber(contracts, watch('contractNumber'));
 
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-            <ModalHeader title={t('accountsReceivable.newReceivable')} onClose={handleClose} icon={<AddCircleIcon />} />
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
+            <ModalHeader title={t('accountsReceivable.newReceivable')} onClose={handleClose} icon={<AddCircleIcon color="primary" />} />
             <DialogContent>
                 <DialogContentText>
                     {t('accountsReceivable.formDescription')}
@@ -220,7 +220,7 @@ const NewReceivableFormDialog = ({ open, onClose, contracts, inventoryTypes, onS
                 <Button onClick={handleClose} color="primary" disabled={loading}>
                     {t('common.cancel')}
                 </Button>
-                <Button onClick={handleSubmit} color="secondary" disabled={isDisabled()} loading={loading}>
+                <Button onClick={handleSubmit} variant="contained" color="secondary" disabled={isDisabled()} loading={loading}>
                     {t('common.create')}
                 </Button>
             </DialogActions>

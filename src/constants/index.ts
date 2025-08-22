@@ -1,23 +1,33 @@
 import { Material } from '@/components/molecules/material-type/types';
-import Token from '../tokens';
 
-export const statusToKeyMap: Record<number, keyof typeof Token.IconTemplate> = {
-  19: 'AcceptedPayment',
-  22: 'Deleted',
-  26: 'ContractAllSaved',
-  29: 'ContractReviewed',
-  30: 'RejectedPayment',
-  66: 'Sent',
-  67: 'TruckDocReceived',
-  68: 'ContractReviewed',
-  69: 'RejectedPayment',
-  70: 'ContractAllSaved',
-  81: 'IncomeMovement',
-  86: 'ContractNotSaved',
-  89: 'Expenditure',
-  90: 'Income',
-  91: 'RejectedPayment',
-  92: 'NotPendingPayment',
+export const statusToKeyMap: Record<
+  number, {
+    icon: string;
+    label: string;
+    color: 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'
+  }
+> = {
+  13: { icon: 'reserved', label: 'Reserved', color: 'default' },
+  19: { icon: 'accepted-payment', label: 'AcceptedPayment', color: 'default' },
+  22: { icon: 'deleted', label: 'Deleted', color: 'error' },
+  26: { icon: 'closed', label: 'Closed', color: 'success' },
+  29: { icon: 'accepted', label: 'Accepted', color: 'default' },
+  30: { icon: 'rejected', label: 'RejectedPayment', color: 'error' },
+  66: { icon: 'sent', label: 'Sent', color: 'default' },
+  67: { icon: 'truck-doc-received', label: 'TruckDocReceived', color: 'default' },
+  68: { icon: 'contract-reviewed', label: 'ContractReviewed', color: 'default' },
+  69: { icon: 'rejected', label: 'RejectedPayment', color: 'error' },
+  70: { icon: 'closed', label: 'Closed', color: 'default' },
+  81: { icon: 'income-movement', label: 'IncomeMovement', color: 'default' },
+  86: { icon: 'contract-not-saved', label: 'ContractNotSaved', color: 'error' },
+  89: { icon: 'expenditure', label: 'Expenditure', color: 'default' },
+  90: { icon: 'income', label: 'Income', color: 'default' },
+  91: { icon: 'rejected', label: 'RejectedPayment', color: 'error' },
+  92: { icon: 'not-pending', label: 'NotPendingPayment', color: 'warning' },
+  20: { icon: 'pre-resolved', label: 'PreResolved', color: 'info' },
+  11: { icon: 'resolved', label: 'Resolved', color: 'info' },
+  /* Estados no conocidos */
+  2: { icon: 'default', label: 'Default', color: 'default' }
 };
 
 export enum FetchStatus {

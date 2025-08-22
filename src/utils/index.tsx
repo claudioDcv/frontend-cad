@@ -1,13 +1,9 @@
-import { IconList } from '../components';
 import {
   FIRST_DAY,
   FIVE_YEARS_AGO,
   LAST_DAY_OF_PREVIOUS_MONTH,
   materialMap,
-  statusToKeyMap,
 } from '../constants';
-import Token from '../tokens';
-import { icons } from '../components/molecules/icon/icons';
 import { MaterialType } from '../components/molecules/material-type';
 import { Material, Size } from '../components/molecules/material-type/types';
 import { Option } from '@/entities/Option.entity';
@@ -143,23 +139,6 @@ export const orFalseBoolean = (value: boolean | undefined | null): boolean => {
   return value ?? false;
 };
 
-export const getStatusIcon = (statusId: number, statusName?: string) => {
-  const key = statusToKeyMap[statusId];
-  const fallback = {
-    name: 'note',
-    color: Token.Color.Neutral,
-    description: statusName ?? '',
-  };
-  const { name, color, description } = key ? Token.IconTemplate[key] : fallback;
-  return (
-    <IconList
-      name={name as keyof typeof icons}
-      color={color}
-      description={statusName || description}
-    />
-  );
-};
-
 export const getMaterialType = (
   label: string,
   categoryId: string,
@@ -275,9 +254,10 @@ export enum LogType {
 
 export const typeLog = (type: LogType = LogType.INFO, ...args: unknown[]) => {
   let message = args.join(' ');
-  if (type === LogType.FETCH && args[0]) {
+  if (type === LogType.FETCH && args[0] && args[1]) {
     const url = (args[0] as URL);
-    message = `${url.pathname}${url.search ? url.search : ''}`;
+    const method = args[1] as string;
+    message = `${method} ${url.pathname}${url.search ? url.search : ''}`;
   }
   log(`[${type}]`, message);
 }

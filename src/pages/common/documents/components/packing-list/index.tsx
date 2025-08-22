@@ -15,6 +15,7 @@ import {
   Input,
   Notification,
   DropdownController,
+  DocumentStatus,
 } from '@components/index';
 import useServices from './hooks/useServices';
 import { Option } from '@/entities/Option.entity';
@@ -23,7 +24,6 @@ import {
   defaultStartDate,
   formatToDDMMYYYY,
   getMaterialType,
-  getStatusIcon,
   isOnlyNumbersOrEmpty,
   toDay,
 } from '@/utils';
@@ -34,7 +34,6 @@ import {
   isEmpty,
 } from '../../utils';
 import PackingListDetailButton from './components/PackingListDetailButton';
-
 const PackingList = () => {
   const { t } = useTranslation();
 
@@ -223,8 +222,7 @@ const PackingList = () => {
             {
               id: 'statusName',
               label: t('packinglist.statusName'),
-              render: ({ statusId, statusName }) =>
-                getStatusIcon(statusId, statusName),
+              render: ({ statusId, statusName }) => <DocumentStatus statusId={statusId} statusName={statusName} />,
             },
             { id: 'packinglistId', label: t('packinglist.packinglistId') },
             { id: 'barcode', label: t('packinglist.barcode') },

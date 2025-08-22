@@ -37,7 +37,7 @@ export const customFetch = Object.assign(
         // Configurar headers comunes usando getHeader
         const defaultHeaders: HeadersInit = getHeader();
 
-        typeLog(LogType.FETCH, url);
+        typeLog(LogType.FETCH, url, restOptions.method || 'GET');
         const response = await fetch(url.toString(), {
             ...restOptions,
             headers: { ...defaultHeaders, ...headers },
