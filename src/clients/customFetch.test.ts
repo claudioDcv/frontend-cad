@@ -89,4 +89,78 @@ describe('customFetch', () => {
         );
         expect(result).toEqual(mockData);
     });
+
+    test('should make a PUT request with body and return data', async () => {
+        const mockData = { success: true };
+        const body = { key: 'value' };
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => mockData,
+        });
+
+        const result = await customFetch.put('/test-endpoint', body);
+
+        expect(mockFetch).toHaveBeenCalledWith(
+            'https://api.example.com/test-endpoint',
+            expect.objectContaining({
+                method: 'PUT',
+                body: JSON.stringify(body),
+            })
+        );
+        expect(result).toEqual(mockData);
+    });
+
+    test('should make a DELETE request and return data', async () => {
+        const mockData = { success: true };
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => mockData,
+        });
+
+        const result = await customFetch.delete('/test-endpoint');
+
+        expect(mockFetch).toHaveBeenCalledWith(
+            'https://api.example.com/test-endpoint',
+            expect.objectContaining({ method: 'DELETE' })
+        );
+        expect(result).toEqual(mockData);
+    });
+
+    test('should make a PATCH request with body and return data', async () => {
+        const mockData = { success: true };
+        const body = { key: 'value' };
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => mockData,
+        });
+
+        const result = await customFetch.patch('/test-endpoint', body);
+
+        expect(mockFetch).toHaveBeenCalledWith(
+            'https://api.example.com/test-endpoint',
+            expect.objectContaining({
+                method: 'PATCH',
+                body: JSON.stringify(body),
+            })
+        );
+        expect(result).toEqual(mockData);
+    });
+
+    test('should make a PATCH request without body and return data', async () => {
+        const mockData = { success: true };
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => mockData,
+        });
+
+        const result = await customFetch.patch('/test-endpoint');
+
+        expect(mockFetch).toHaveBeenCalledWith(
+            'https://api.example.com/test-endpoint',
+            expect.objectContaining({
+                method: 'PATCH',
+            })
+        );
+        expect(result).toEqual(mockData);
+    });
 });

@@ -58,13 +58,13 @@ const ContractSummaryCard: React.FC<ContractSummaryCardProps> = ({ contract, hid
                     />
                     <DisplayData label={lang.expiration} value={contract.endDate} />
                 </Box>
-                <Box sx={{ display: hiddenClient ? 'none' : 'block' }}>
+                {!hiddenClient && <Box>
                     <DisplayData label={lang.client} value={contract.clientName} />
                     <DisplayData
                         label={lang.clientRut}
                         value={contract.clientRut}
                     />
-                </Box>
+                </Box>}
             </Box>
         </Card>
     );
