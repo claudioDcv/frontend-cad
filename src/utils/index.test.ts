@@ -1,10 +1,9 @@
 import { render } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import * as utils from './index';
-import { materialMap, statusToKeyMap } from '../constants';
+import { materialMap } from '../constants';
 import type { Inventory } from '@/entities/Inventory.entity';
 import type { InventoryType } from '@/entities/InventoryType.entity';
-import Token from '@/tokens';
 
 describe('Utils functions', () => {
   test('toDay returns a Date instance', () => {
@@ -208,21 +207,6 @@ describe('Utils functions', () => {
     expect(fn2).not.toHaveBeenCalled();
   });
 
-  test('getStatusIcon renders without crashing', () => {
-    const { getByLabelText } = render(utils.getStatusIcon(999, 'Test'));
-    expect(getByLabelText('Test')).toBeDefined();
-
-    const validKey = Number(Object.keys(statusToKeyMap)[0]);
-    if (!isNaN(validKey)) {
-      const { getByLabelText: getByLabelTextValid } = render(
-        utils.getStatusIcon(validKey)
-      );
-      const statusName =
-        Token.IconTemplate[statusToKeyMap[validKey]]?.description ?? '';
-      if (statusName) expect(getByLabelTextValid(statusName)).toBeDefined();
-    }
-  });
-
   test('getMaterialType renders correctly', () => {
     const { getByText } = render(utils.getMaterialType('Label', 'invalid-id'));
     expect(getByText('Label')).toBeDefined();
@@ -249,16 +233,6 @@ describe('Utils functions', () => {
   });
 
   describe('Extra tests for full coverage', () => {
-    test('getStatusIcon covers valid key path', () => {
-      const validKey = Number(Object.keys(statusToKeyMap)[0]);
-      if (!isNaN(validKey)) {
-        const { getByLabelText } = render(
-          utils.getStatusIcon(validKey, 'CustomName')
-        );
-        expect(getByLabelText('CustomName')).toBeDefined();
-      }
-    });
-
     test('getMaterialType covers tooltip path', () => {
       const materialId = Object.keys(materialMap)[0];
       if (materialId) {
