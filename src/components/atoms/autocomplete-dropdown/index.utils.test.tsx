@@ -2,9 +2,11 @@ import { describe, expect, test, vi } from 'vitest';
 import { AutocompleteRenderInputParams } from '@mui/material';
 import { render, screen } from '@testing-library/react';
 import {
+  createItem,
   handleAutocompleteChange,
   renderInputHandler,
 } from './index.utils';
+import { Item } from '@/components/organisms/modal-massupload/index.types';
 
 describe('handleAutocompleteChange', () => {
   test('should call onChange with new value', () => {
@@ -49,5 +51,25 @@ describe('renderInputHandler', () => {
 
     const textField = screen.getByLabelText(label);
     expect(textField).toBeInTheDocument();
+  });
+
+  describe('createItem', () => {
+    test('should return empty Item for null or undefined', () => {
+      expect(createItem(null)).toEqual({ label: '', value: '' });
+      expect(createItem(undefined)).toEqual({ label: '', value: '' });
+    });
+
+    test('should return Item for string value', () => {
+      expect(createItem('Test')).toEqual({ label: 'Test', value: 'Test' });
+    });
+
+    test('should return Item for number value', () => {
+      expect(createItem(123)).toEqual({ label: '123', value: '123' });
+    });
+
+    test('should return same Item for existing Item object', () => {
+      const item: Item = { label: 'Test', value: 'test' };
+      expect(createItem(item)).toEqual(item);
+    });
   });
 });
