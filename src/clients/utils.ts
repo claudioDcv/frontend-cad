@@ -11,11 +11,15 @@ export const getHeader = () => {
   return headers;
 };
 
-export const clearProp = (param: number | string | boolean | null | undefined) => {
+export const clearProp = (
+  param: number | string | boolean | null | undefined
+) => {
   return param === undefined || param === null ? '' : param.toString();
 };
 
-export const clearAllProps = (props: Record<string, string | number | boolean>) => {
+export const clearAllProps = (
+  props: Record<string, string | number | boolean>
+) => {
   const clearedProps: Record<string, string> = {};
   const allKey = 'all';
   Object.keys(props).forEach((key) => {
@@ -45,11 +49,11 @@ export const initialPageableData: PageResponse<any> = {
     sort: {
       sorted: false,
       empty: false,
-      unsorted: false
+      unsorted: false,
     },
     offset: 0,
     paged: undefined,
-    unpaged: undefined
+    unpaged: undefined,
   },
   size: 0,
   content: [],
@@ -58,7 +62,7 @@ export const initialPageableData: PageResponse<any> = {
   first: false,
   last: false,
   numberOfElements: 0,
-  empty: false
+  empty: false,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,17 +70,16 @@ export const initialPaginatedData: Paginated<any> = {
   content: [],
   meta: {
     page: 0,
-    count: 0
-  }
+    count: 0,
+  },
 };
-
 
 export const pageableToPaginated = <T>(data: PageResponse<T>): Paginated<T> => {
   return {
     content: data.content,
     meta: {
       page: data.number + 1,
-      count: data.totalPages
-    }
+      count: data.totalPages,
+    },
   };
 };

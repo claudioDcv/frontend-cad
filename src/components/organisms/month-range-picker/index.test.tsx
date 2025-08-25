@@ -47,9 +47,11 @@ describe('MonthRangePicker', () => {
   });
 
   test('cierra el dropdown al hacer click fuera', async () => {
-    render(<MonthRangePicker value={initialValue} onChange={() => undefined} />);
+    render(
+      <MonthRangePicker value={initialValue} onChange={() => undefined} />
+    );
     fireEvent.click(screen.getByRole('button'));
-    // Simula click fuera
+
     fireEvent.mouseDown(document.body);
     await waitFor(() => {
       expect(screen.queryByText('Inicio del año')).not.toBeInTheDocument();
@@ -57,11 +59,13 @@ describe('MonthRangePicker', () => {
   });
 
   test('cambia el rango de años con los botones de navegación', async () => {
-    render(<MonthRangePicker value={initialValue} onChange={() => undefined} />);
+    render(
+      <MonthRangePicker value={initialValue} onChange={() => undefined} />
+    );
     fireEvent.click(screen.getByRole('button'));
     fireEvent.click(screen.getByLabelText(/Anterior/i));
     fireEvent.click(screen.getByLabelText(/Siguiente/i));
-    // No error = navega correctamente
+
     expect(screen.getByText('Inicio del año')).toBeInTheDocument();
   });
 });

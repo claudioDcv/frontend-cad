@@ -1,10 +1,18 @@
 import { Material } from '@/components/molecules/material-type/types';
 
 export const statusToKeyMap: Record<
-  number, {
+  number,
+  {
     icon: string;
     label: string;
-    color: 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'
+    color:
+      | 'default'
+      | 'primary'
+      | 'secondary'
+      | 'error'
+      | 'info'
+      | 'success'
+      | 'warning';
   }
 > = {
   13: { icon: 'reserved', label: 'Reserved', color: 'default' },
@@ -14,8 +22,16 @@ export const statusToKeyMap: Record<
   29: { icon: 'accepted', label: 'Accepted', color: 'default' },
   30: { icon: 'rejected', label: 'RejectedPayment', color: 'error' },
   66: { icon: 'sent', label: 'Sent', color: 'default' },
-  67: { icon: 'truck-doc-received', label: 'TruckDocReceived', color: 'default' },
-  68: { icon: 'contract-reviewed', label: 'ContractReviewed', color: 'default' },
+  67: {
+    icon: 'truck-doc-received',
+    label: 'TruckDocReceived',
+    color: 'default',
+  },
+  68: {
+    icon: 'contract-reviewed',
+    label: 'ContractReviewed',
+    color: 'default',
+  },
   69: { icon: 'rejected', label: 'RejectedPayment', color: 'error' },
   70: { icon: 'closed', label: 'Closed', color: 'default' },
   81: { icon: 'income-movement', label: 'IncomeMovement', color: 'default' },
@@ -27,7 +43,7 @@ export const statusToKeyMap: Record<
   20: { icon: 'pre-resolved', label: 'PreResolved', color: 'info' },
   11: { icon: 'resolved', label: 'Resolved', color: 'info' },
   /* Estados no conocidos */
-  2: { icon: 'default', label: 'Default', color: 'default' }
+  2: { icon: 'default', label: 'Default', color: 'default' },
 };
 
 export enum FetchStatus {
@@ -80,13 +96,7 @@ export const validRoles = {
 export const commonNotificationTypes = ['resolution_notification'];
 
 /* DISTRIBUCION DE INVENTARIOS */
-const refactionInventories = [
-  'anillo',
-  'aro',
-  'colgante',
-  'cadena',
-  'pulcera',
-]
+const refactionInventories = ['anillo', 'aro', 'colgante', 'cadena', 'pulcera'];
 
 const commonInventories = [
   'joyaespecial',
@@ -94,13 +104,9 @@ const commonInventories = [
   'lingote',
   'relojneto',
   'scrap',
-]
+];
 
-const badInventories = [
-  'materialfalso',
-  'materialfaltante',
-  'materialbajaley',
-]
+const badInventories = ['materialfalso', 'materialfaltante', 'materialbajaley'];
 
 export const inventoryCategories = {
   refaction: refactionInventories,
@@ -112,4 +118,15 @@ export const allowedInventories = [
   ...inventoryCategories.refaction,
   ...inventoryCategories.common,
   ...inventoryCategories.bad,
+];
+
+// Estados que se visualizaran
+export enum AllowedResolutionStatus {
+  PRE_RESOLVED = 20,
+  CLOSED = 26,
+}
+
+export const allowedResolutionStatus = [
+  AllowedResolutionStatus.PRE_RESOLVED,
+  AllowedResolutionStatus.CLOSED,
 ];

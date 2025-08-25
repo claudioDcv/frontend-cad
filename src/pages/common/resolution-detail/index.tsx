@@ -13,8 +13,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import {
   emptyOption,
+  FetchStatus,
   SEARCH_DELAY,
-  STATUS_PRE_RESOLUTION,
   validRoles,
 } from '@/constants';
 import {
@@ -22,6 +22,7 @@ import {
   formatCurrency,
   formatNumberWithGr,
   formatToDDMMYYYY,
+  getIsEditable,
   getMaterial,
   getMaterialType,
   getStatusLabel,
@@ -49,10 +50,12 @@ import { addOptionAll, isEmpty } from '../documents/utils';
 import Access from '@/components/atoms/access';
 import { useReceivablesContext } from '@/modules/receivables/context/useReceivablesContext';
 import { useMassiveResolutionContext } from '@/modules/massive-resolution/context/useMassiveResolutionContext';
+import useAccess from '@/components/atoms/access/useAccess';
 
 const ResolutionDetail = () => {
   const { id: resolutionId } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const access = useAccess();
 
   const { control, setValue } = useForm<{
     contractNumber: string;
@@ -99,14 +102,14 @@ const ResolutionDetail = () => {
       if (showOnlyNotReviewed === 0) return true; // All
       if (showOnlyNotReviewed === 1) return !contract.metadata?.reviewed; // Not reviewed
       if (showOnlyNotReviewed === 2) return contract.metadata?.reviewed; // Reviewed
-      return true; // Default case
+      return true;
     });
   };
 
   const materialType = getMaterial(
     String(services.getResolution.data?.categoryId)
   );
-  const isEditable = contract?.statusId === STATUS_PRE_RESOLUTION;
+  const isEditable = getIsEditable(services.getResolution.data, access);
 
   const debouncedSearchRef = useRef(
     debounce((contractNumber: string) => {
@@ -154,10 +157,10 @@ const ResolutionDetail = () => {
     (
       field: ControllerRenderProps<{ contractNumber: string; status: Option }>
     ) =>
-      (selectedOption: Option) => {
-        field.onChange(selectedOption);
-        setStatusFilter(selectedOption.value);
-      };
+    (selectedOption: Option) => {
+      field.onChange(selectedOption);
+      setStatusFilter(selectedOption.value);
+    };
 
   const handleSuccess = (contract: Contract) => {
     if (!contract) {
@@ -176,8 +179,12 @@ const ResolutionDetail = () => {
     services.getResolutionContracts.data.length > 0 &&
     services.getResolutionContracts.data.every((c) => c.metadata?.reviewed);
 
-  const hasMetadata = services.getResolution.data?.hasMetadata;
+  const hasMetadata = services.getResolution.data.hasMetadata;
   const hasContracts = services.getResolutionContracts.data.length > 0;
+
+  const filteredStatusOptions = statusOptions.filter(
+    (option) => option.value === emptyOption.value
+  );
 
   return (
     <div>
@@ -198,17 +205,23 @@ const ResolutionDetail = () => {
                     !hasContracts
                       ? t('resolutionDetail.noContracts')
                       : !isAllContractReviewed
-                        ? t('resolutionDetail.allContractsMustBeReviewed')
-                        : hasMetadata
-                          ? t('resolutionDetail.hasMetadataAlready')
-                          : ''
+                      ? t('resolutionDetail.allContractsMustBeReviewed')
+                      : hasMetadata
+                      ? t('resolutionDetail.hasMetadataAlready')
+                      : ''
                   }
                 >
                   <span>
                     <Button
                       variant="contained"
                       disabled={
-                        !hasContracts || !isAllContractReviewed || hasMetadata
+                        !hasContracts ||
+                        !isAllContractReviewed ||
+                        hasMetadata ||
+                        services.patchResolutionResolve.status ===
+                          FetchStatus.LOADING ||
+                        services.patchResolutionResolve.status ===
+                          FetchStatus.SUCCESS
                       }
                       onClick={handleOpenConfirm}
                     >
@@ -221,7 +234,9 @@ const ResolutionDetail = () => {
                 <Tooltip title={t('common.massUpload')}>
                   <Button
                     startIcon={<IconList name="box" />}
-                    onClick={() => massiveResolutionContext.setResolutionId(resolutionId)}
+                    onClick={() =>
+                      massiveResolutionContext.setResolutionId(resolutionId)
+                    }
                   >
                     {t('massUpload.open')}
                   </Button>
@@ -231,7 +246,9 @@ const ResolutionDetail = () => {
                 <Tooltip title={t('accountsReceivable.tooltipOpen')}>
                   <Button
                     startIcon={<IconList name="receivables" />}
-                    onClick={() => receivablesContext.setResolutionId(resolutionId)}
+                    onClick={() =>
+                      receivablesContext.setResolutionId(resolutionId)
+                    }
                   >
                     {t('accountsReceivable.open')}
                   </Button>
@@ -380,7 +397,7 @@ const ResolutionDetail = () => {
             {
               id: 'statusId',
               label: t('common.statusOlimpo'),
-              field: (f) => getStatusLabel(f, statusOptions),
+              field: (f) => getStatusLabel(f, filteredStatusOptions),
             },
             {
               id: 'actions',

@@ -5,6 +5,7 @@ import { getFetch } from '../customFetch';
 import { Paginated } from '../types';
 import { Resolution } from '@/entities/Resolution.entity';
 import { ResolutionFormModel } from '@/pages/common/documents/types';
+import { AllowedResolutionStatus } from '@/constants';
 
 const client = async (props: ResolutionFormModel) => {
   const params: Props = {
@@ -22,13 +23,23 @@ const client = async (props: ResolutionFormModel) => {
   if (typeof props.hasMetadata !== 'undefined') {
     params.hasMetadata = props.hasMetadata;
   }
+  
+  // Si el statusId es all o no existe, entonces se agregan los estados permitidos
+  const clearParams = clearAllProps(params);
+  const query = new URLSearchParams(clearParams);
+  if (!clearParams.statusId) {
+    query.append('statusId', AllowedResolutionStatus.CLOSED.toString());
+    query.append('statusId', AllowedResolutionStatus.PRE_RESOLVED.toString());
+  }
 
-  const query = new URLSearchParams(clearAllProps(params)).toString();
-  const url = `resolutions?${query}`;
-  return getFetch<Paginated<Resolution>>(url, { remap }, {
-    responseError: 'error.getAllResolutionsFetch',
-    defaultError: 'error.getAllResolutionsParse',
-  });
-}
+  return getFetch<Paginated<Resolution>>(
+    `resolutions?${query.toString()}`,
+    { remap },
+    {
+      responseError: 'error.getAllResolutionsFetch',
+      defaultError: 'error.getAllResolutionsParse',
+    }
+  );
+};
 
 export default client;
