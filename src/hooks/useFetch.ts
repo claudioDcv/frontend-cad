@@ -10,6 +10,8 @@ interface UseFetchOptions<T> {
     isReinvocable?: boolean;
 }
 
+// mock window for test: ReferenceError: window is not defined
+
 const useFetch = <T,>(options: UseFetchOptions<T>) => {
     const { client, remap, initialData, isReinvocable } = options;
     const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -51,7 +53,13 @@ const useFetch = <T,>(options: UseFetchOptions<T>) => {
         setError(null);
     };
 
-    return { status, data, error, call, clearData };
+    const reset = () => {
+        setData(options.initialData || null);
+        setStatus(FetchStatus.IDLE);
+        setError(null);
+    };
+
+    return { status, data, error, call, clearData, reset };
 };
 
 export default useFetch;

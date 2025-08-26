@@ -9,6 +9,9 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import View from "./components/view";
 import { Receivable } from "@/entities/Receivable.entity";
+import usePatchUpdateReceivable from "@/clients/patch-update-receivable";
+import { useAlertContext } from "@/contexts/alert/useAlertContext";
+import { AlertType } from "@/contexts/alert/types";
 
 const StatusChip = ({ status }: { status: boolean | null }) => {
     const { t } = useTranslation();
@@ -22,6 +25,8 @@ const StatusChip = ({ status }: { status: boolean | null }) => {
 };
 
 const ReceivablesAdmin = () => {
+    const alertContext = useAlertContext();
+    const update = usePatchUpdateReceivable();
     const [receivable, setReceivable] = useState<Receivable | null>(null);
     const [filters, setFilters] = useState<ReceivableProps>({
         page: 1,
@@ -42,6 +47,34 @@ const ReceivablesAdmin = () => {
             ...filters,
             page
         });
+    };
+
+    const handleAccept = async (data: Receivable) => {
+        try {
+            await update.call(data);
+            alertContext.addAlert({
+                type: AlertType.SUCCESS,
+                title: 'Cuenta por Cobrar Aceptada',
+            });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            update.reset();
+        }
+    };
+
+    const handleReject = async (data: Receivable) => {
+        try {
+            await update.call(data);
+            alertContext.addAlert({
+                type: AlertType.SUCCESS,
+                title: 'Cuenta por Cobrar Rechazada',
+            });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            update.reset();
+        }
     };
 
     return (
@@ -78,7 +111,7 @@ const ReceivablesAdmin = () => {
                     />
                 </Box>
             </Box>
-            <View receivable={receivable} onClose={() => setReceivable(null)} />
+            <View receivable={receivable} onClose={() => setReceivable(null)} onAccept={handleAccept} onReject={handleReject} />
         </div>
     );
 };

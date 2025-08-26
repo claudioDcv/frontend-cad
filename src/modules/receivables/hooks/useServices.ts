@@ -1,6 +1,5 @@
-import { useGetAllInventoryTypes, useGetReceivables, useGetResolutionContracts } from "@/clients";
+import { useGetAllInventoryTypes, useGetReceivables, useGetResolutionContracts, usePostCreateReceivable } from "@/clients";
 import { ReceivableProps } from "@/clients/get-receivables/client";
-import usePostReceivable from "@/clients/post-contract";
 import { FetchStatus } from "@/constants";
 import { useEffect } from "react";
 
@@ -8,7 +7,7 @@ const useServices = (props: ReceivableProps) => {
     const getReceivables = useGetReceivables();
     const getAllContracts = useGetResolutionContracts();
     const inventoryTypes = useGetAllInventoryTypes();
-    const createReceivable = usePostReceivable();
+    const createReceivable = usePostCreateReceivable();
 
     useEffect(() => {
         if (props.resolutionId && getReceivables.status === FetchStatus.IDLE) {

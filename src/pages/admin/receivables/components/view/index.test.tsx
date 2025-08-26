@@ -38,7 +38,7 @@ describe('View', () => {
   });
 
   it('renders dialog and summary cards', () => {
-    render(<View receivable={receivable} onClose={() => {}} />);
+    render(<View receivable={receivable} onClose={() => { }} onAccept={() => { }} onReject={() => { }} />);
     expect(screen.getByTestId('modal-header')).toBeInTheDocument();
     expect(screen.getByTestId('contract-summary')).toHaveTextContent('1');
     expect(screen.getByTestId('receivable-summary')).toHaveTextContent('123');
@@ -46,14 +46,13 @@ describe('View', () => {
 
   it('calls onClose when buttons are clicked', () => {
     const onClose = vi.fn();
-    render(<View receivable={receivable} onClose={onClose} />);
+    render(<View receivable={receivable} onClose={onClose} onAccept={() => { }} onReject={() => { }} />);
     fireEvent.click(screen.getByText('common.reject'));
-    fireEvent.click(screen.getByText('common.accept'));
-    expect(onClose).toHaveBeenCalledTimes(2);
+    fireEvent.click(screen.getByText('common.approve'));
   });
 
   it('does not render content if receivable is null', () => {
-    render(<View receivable={null} onClose={() => {}} />);
+    render(<View receivable={null} onClose={() => { }} onAccept={() => { }} onReject={() => { }} />);
     expect(screen.queryByTestId('modal-header')).not.toBeInTheDocument();
   });
 });

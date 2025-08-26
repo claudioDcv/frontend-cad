@@ -82,11 +82,21 @@ const useAsyncCall = <TRequest, TResponse>({
         [status, client, alertContext, t]
     );
 
+    const reset = () => {
+        setStatus(FetchStatus.IDLE);
+        setData(initial);
+        setError(null);
+        setProcessed(false);
+        setOnSuccess(null);
+        setOnError(null);
+    };
+
     return {
         status,
         data,
         error,
         call,
+        reset,
         loading: status === FetchStatus.LOADING,
     };
 };

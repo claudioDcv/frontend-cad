@@ -317,6 +317,14 @@ export const log = (...args: unknown[]) => {
       )}`; // Limitar a 100 caracteres
       logDiv.appendChild(logEntry);
     }
+  } else {
+    // delete node logDiv
+    if (logDiv) {
+      const parent = logDiv.parentNode;
+      if (parent) {
+        parent.removeChild(logDiv);
+      }
+    }
   }
 };
 

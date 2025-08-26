@@ -152,6 +152,7 @@
     "originBranch": "Sucursal Origen"
   },
   "common": {
+    "approve": "Aprobar",
     "accept": "Aceptar",
     "actions": "Acciones",
     "address": "Dirección",

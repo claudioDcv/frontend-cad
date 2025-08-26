@@ -1,7 +1,7 @@
 import client from './client';
 import useFetch from '@/hooks/useFetch';
 
-const usePostReceivable = () => {
+const usePostCreateReceivable = () => {
   const { status, data, error, call, clearData } = useFetch({
     client,
     isReinvocable: true,
@@ -10,4 +10,4 @@ const usePostReceivable = () => {
   return { status, data, error, call, clearData };
 };
 
-export default usePostReceivable;
+export default usePostCreateReceivable;
