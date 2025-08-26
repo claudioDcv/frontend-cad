@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
-import { FetchStatus, LOCATION_ACTIVE, STATUS_RESOLUTION, validRoles } from '@/constants';
+import {
+  FetchStatus,
+  LOCATION_ACTIVE,
+  STATUS_RESOLUTION,
+  validRoles,
+} from '@/constants';
 import { defaultResolutionsFormValues } from '../../../utils';
 import {
   useGetAllInvestments,
@@ -9,6 +14,7 @@ import {
   useGetAllStatus,
 } from '@/clients';
 import useAccess from '@/components/atoms/access/useAccess';
+import { getAllowedResolutionStatus } from '@/utils';
 
 const useServices = () => {
   const getAllResolutions = useGetAllResolutions();
@@ -41,11 +47,21 @@ const useServices = () => {
         status: LOCATION_ACTIVE,
       });
     }
-  }, [getAllInvestments, getAllLocations, getAllMaterialType, getAllResolutions, getAllStatus, isOperator]);
-  return {
+  }, [
+    getAllInvestments,
+    getAllLocations,
     getAllMaterialType,
     getAllResolutions,
     getAllStatus,
+    isOperator,
+  ]);
+  return {
+    getAllMaterialType,
+    getAllResolutions,
+    getAllStatus: {
+      ...getAllStatus,
+      data: getAllowedResolutionStatus(getAllStatus.data),
+    },
     getAllInvestments,
     getAllLocations,
   };

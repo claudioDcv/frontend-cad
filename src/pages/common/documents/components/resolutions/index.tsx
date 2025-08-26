@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -38,16 +38,17 @@ import {
 } from '../../utils';
 import { Resolution } from '@/entities/Resolution.entity';
 import { ResolutionFormModel } from '../../types';
-import {
-  ResolutionSendTruckModal,
-} from './components';
+import { ResolutionSendTruckModal } from './components';
 import { useReceivablesContext } from '@/modules/receivables/context/useReceivablesContext';
 import { useMassiveResolutionContext } from '@/modules/massive-resolution/context/useMassiveResolutionContext';
+import useAccess from '@/components/atoms/access/useAccess';
 
 const Resolutions = () => {
+  const access = useAccess();
   const { t } = useTranslation();
   const massiveResolutionContext = useMassiveResolutionContext();
   const receivablesContext = useReceivablesContext();
+  const [hasMetadata, setHasMetadata] = useState(true);
 
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
     defaultValues: defaultResolutionsFormValues(),
@@ -70,6 +71,10 @@ const Resolutions = () => {
 
   const { content: resolutions, meta } = services.getAllResolutions.data;
 
+  useEffect(() => {
+    setHasMetadata(access([validRoles.operator]));
+  }, [hasMetadata, access]);
+
   const debouncedSearchRef = useRef(
     debounce((resolutionNumber: string) => {
       const newFilters = {
@@ -82,11 +87,10 @@ const Resolutions = () => {
   );
 
   const handleClear = () => {
-    reset(defaultResolutionsFormValues);
+    const initial = { ...defaultResolutionsFormValues(), hasMetadata };
+    reset(initial);
     setRange([defaultStartDate, toDay()]);
-    services.getAllResolutions.call(
-      (defaultResolutionsFormValues())
-    );
+    services.getAllResolutions.call(initial);
   };
 
   const handleChangeStatus =
@@ -290,7 +294,11 @@ const Resolutions = () => {
                   <Access roles={[validRoles.operator]}>
                     <Tooltip title={t('accountsReceivable.tooltipOpen')}>
                       <IconButton
-                        onClick={() => receivablesContext.setResolutionId(resolution.resolutionId)}
+                        onClick={() =>
+                          receivablesContext.setResolutionId(
+                            resolution.resolutionId
+                          )
+                        }
                       >
                         <IconList name="receivables" />
                       </IconButton>
@@ -317,3 +325,10 @@ const Resolutions = () => {
   );
 };
 export default Resolutions;
+
+
+// el coordinador solo puede enviar a cad si es pre resolucion (20)
+// si no es pre resolucion pero es el coordinador oculta el boton guardar
+// para poder editarse debe ser pre resolucionada (coordinar)
+
+// operador solo peud enviar a olimpo si la pre resolucion tiene metadata

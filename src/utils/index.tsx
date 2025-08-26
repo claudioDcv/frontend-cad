@@ -1,8 +1,11 @@
 import {
+  AllowedResolutionStatus,
+  allowedResolutionStatus,
   FIRST_DAY,
   FIVE_YEARS_AGO,
   LAST_DAY_OF_PREVIOUS_MONTH,
   materialMap,
+  validRoles,
 } from '../constants';
 import { MaterialType } from '../components/molecules/material-type';
 import { Material, Size } from '../components/molecules/material-type/types';
@@ -10,8 +13,9 @@ import { Option } from '@/entities/Option.entity';
 import { Inventory } from '@/entities/Inventory.entity';
 import { DEBUG } from '@/conf/envs';
 import { InventoryType } from '@/entities/InventoryType.entity';
+import { Resolution } from '@/entities/Resolution.entity';
 
-export const toDay = () => Date.now() ? new Date(Date.now()) : new Date();
+export const toDay = () => (Date.now() ? new Date(Date.now()) : new Date());
 
 export const defaultEndDate = new Date(
   toDay().getFullYear(),
@@ -86,8 +90,11 @@ export const formatDateHour = (dateInput?: Date | string | number) => {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
-export function formatToDDMMYYYY(externalDateInput: string | undefined | unknown): string {
-  const dateInput = typeof externalDateInput === 'string' ? externalDateInput : undefined;
+export function formatToDDMMYYYY(
+  externalDateInput: string | undefined | unknown
+): string {
+  const dateInput =
+    typeof externalDateInput === 'string' ? externalDateInput : undefined;
   if (!dateInput) return '';
   const date = new Date(dateInput);
   if (isNaN(date.getTime())) return '';
@@ -97,8 +104,11 @@ export function formatToDDMMYYYY(externalDateInput: string | undefined | unknown
   return `${day}/${month}/${year}`;
 }
 
-export function formatToFullDateHour(externalDateInput: string | undefined | unknown): string {
-  const dateInput = typeof externalDateInput === 'string' ? externalDateInput : undefined;
+export function formatToFullDateHour(
+  externalDateInput: string | undefined | unknown
+): string {
+  const dateInput =
+    typeof externalDateInput === 'string' ? externalDateInput : undefined;
   if (!dateInput) return '';
   const date = new Date(dateInput);
   if (isNaN(date.getTime())) return '';
@@ -110,15 +120,25 @@ export function formatToFullDateHour(externalDateInput: string | undefined | unk
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
-export function formatNumberWithGr(externalValue: number | null | string | unknown) {
-  const value = typeof externalValue === 'string' ? parseFloat(externalValue) : externalValue;
+export function formatNumberWithGr(
+  externalValue: number | null | string | unknown
+) {
+  const value =
+    typeof externalValue === 'string'
+      ? parseFloat(externalValue)
+      : externalValue;
   if (typeof value !== 'number' || isNaN(value)) return '';
   const formattedNumber = value.toLocaleString('es-ES');
   return `${formattedNumber} gr`;
 }
 
-export const formatCurrency = (externalValue: number | null | string | unknown) => {
-  const value = typeof externalValue === 'string' ? parseFloat(externalValue) : externalValue;
+export const formatCurrency = (
+  externalValue: number | null | string | unknown
+) => {
+  const value =
+    typeof externalValue === 'string'
+      ? parseFloat(externalValue)
+      : externalValue;
   if (typeof value !== 'number' || isNaN(value)) return '';
   return new Intl.NumberFormat('es-CL', {
     style: 'currency',
@@ -165,8 +185,8 @@ export const getStatusLabel = (
   externalId: string | number | unknown,
   options: Option[] = []
 ): string => {
-  const id = typeof externalId === 'string' ? parseInt(externalId, 10) : `${externalId
-    }`;
+  const id =
+    typeof externalId === 'string' ? parseInt(externalId, 10) : `${externalId}`;
   const idStr = id.toString();
   const found = options.find((opt) => opt.value === idStr);
   return found?.label ?? idStr;
@@ -219,15 +239,18 @@ export function sortCustom<T>(
   });
 }
 
-export const filterInventoryType = (data: InventoryType[], inventory: string[]) => {
+export const filterInventoryType = (
+  data: InventoryType[],
+  inventory: string[]
+) => {
   return data.filter((item) => inventory.includes(item.label));
 };
 /**
  * Toma todo el enventario para distribucion
  * de inventario y retorna un set en especifico
- * @param data 
- * @param inventory 
- * @returns 
+ * @param data
+ * @param inventory
+ * @returns
  */
 export const filterByInventory = (data: Inventory[], inventory: string[]) => {
   return data.filter((item) => inventory.includes(item.inventoryType.label));
@@ -236,7 +259,7 @@ export const filterByInventory = (data: Inventory[], inventory: string[]) => {
 /**
  * Esta funcion calcula la suma total de cantidad y peso de un inventario.
  * @param newData
- * @returns 
+ * @returns
  */
 export const outputInventorySum = (newData: Inventory[]) => {
   const totalQuantity = preciseSum(newData.map((item) => item.quantity));
@@ -255,12 +278,12 @@ export enum LogType {
 export const typeLog = (type: LogType = LogType.INFO, ...args: unknown[]) => {
   let message = args.join(' ');
   if (type === LogType.FETCH && args[0] && args[1]) {
-    const url = (args[0] as URL);
+    const url = args[0] as URL;
     const method = args[1] as string;
     message = `${method} ${url.pathname}${url.search ? url.search : ''}`;
   }
   log(`[${type}]`, message);
-}
+};
 
 /**
  * Función para registrar mensajes en la consola y en un div específico.
@@ -282,10 +305,39 @@ export const log = (...args: unknown[]) => {
     console.log(...args);
     if (logDiv) {
       deleteOldLogs();
-      const message = args.map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg))).join(' ');
+      const message = args
+        .map((arg) =>
+          typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+        )
+        .join(' ');
       const logEntry = document.createElement('div');
-      logEntry.textContent = `[${timestamp}] ${message.substring(0, maxMessageLength)}`; // Limitar a 100 caracteres
+      logEntry.textContent = `[${timestamp}] ${message.substring(
+        0,
+        maxMessageLength
+      )}`; // Limitar a 100 caracteres
       logDiv.appendChild(logEntry);
     }
   }
+};
+
+export const getAllowedResolutionStatus = (data: Option[]): Option[] =>
+  data.filter((item) => allowedResolutionStatus.includes(Number(item.value)));
+
+export const getIsEditable = (
+  resolution: Resolution,
+  access: (roles: (string | number)[]) => boolean
+) => {
+  if (
+    access([validRoles.cordinator]) &&
+    resolution.statusId === AllowedResolutionStatus.PRE_RESOLVED
+  ) {
+    return true;
+  }
+  if (
+    access([validRoles.cordinator]) &&
+    resolution.statusId !== AllowedResolutionStatus.PRE_RESOLVED
+  ) {
+    return false;
+  }
+  return true;
 };
