@@ -1,10 +1,5 @@
 import { useEffect } from 'react';
-import {
-  FetchStatus,
-  LOCATION_ACTIVE,
-  STATUS_RESOLUTION,
-  validRoles,
-} from '@/constants';
+import { FetchStatus, LOCATION_ACTIVE, validRoles } from '@/constants';
 import { defaultResolutionsFormValues } from '../../../utils';
 import {
   useGetAllInvestments,
@@ -32,9 +27,6 @@ const useServices = () => {
         ...defaultResolutionsFormValues(),
         hasMetadata: isOperator || undefined,
       });
-    }
-    if (getAllStatus.status === FetchStatus.IDLE) {
-      getAllStatus.call({ tableId: STATUS_RESOLUTION });
     }
     if (getAllMaterialType.status === FetchStatus.IDLE) {
       getAllMaterialType.call();

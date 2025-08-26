@@ -58,12 +58,10 @@ const Resolutions = () => {
   const services = useServices();
 
   const materialTypeOptions = addOptionAll(services.getAllMaterialType.data);
-  const statusOptions = addOptionAll(services.getAllStatus.data);
   const investmentOptions = addOptionAll(services.getAllInvestments.data);
   const locationOptions = addOptionAll(services.getAllLocations.data);
 
   const isMaterialTypeDisabled = isEmpty(services.getAllMaterialType.data);
-  const isStatusDisabled = isEmpty(services.getAllStatus.data);
   const isInvestmentDisabled = isEmpty(services.getAllInvestments.data);
   const isLocationDisabled = isEmpty(services.getAllLocations.data);
 
@@ -92,13 +90,6 @@ const Resolutions = () => {
     setRange([defaultStartDate, toDay()]);
     services.getAllResolutions.call(initial);
   };
-
-  const handleChangeStatus =
-    (field: ControllerRenderProps<ResolutionFormModel>) => (value: Option) => {
-      field.onChange(value);
-      const newFilters = { ...getValues(), status: value, page: FIRST_PAGE };
-      services.getAllResolutions.call(newFilters);
-    };
 
   const handleChangeMaterialType =
     (field: ControllerRenderProps<ResolutionFormModel>) => (value: Option) => {
@@ -213,15 +204,6 @@ const Resolutions = () => {
               control={control}
             />
             <DropdownController
-              onChange={handleChangeStatus}
-              disabled={isStatusDisabled}
-              options={statusOptions}
-              label="common.status"
-              name="status"
-              control={control}
-              sx={{ width: '70%' }}
-            />
-            <DropdownController
               onChange={handleChangeInvestment}
               disabled={isInvestmentDisabled}
               options={investmentOptions}
@@ -325,10 +307,3 @@ const Resolutions = () => {
   );
 };
 export default Resolutions;
-
-
-// el coordinador solo puede enviar a cad si es pre resolucion (20)
-// si no es pre resolucion pero es el coordinador oculta el boton guardar
-// para poder editarse debe ser pre resolucionada (coordinar)
-
-// operador solo peud enviar a olimpo si la pre resolucion tiene metadata

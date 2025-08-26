@@ -14,7 +14,7 @@ const client = async (props: ResolutionFormModel) => {
     investmentId: clearProp(props.investment.value),
     locationId: clearProp(props.location.value),
     categoryId: clearProp(props.categoryId.value),
-    statusId: clearProp(props.status.value),
+    statusId: AllowedResolutionStatus.PRE_RESOLVED.toString(),
     startDate: clearProp(props?.range?.[0]?.toISOString()),
     endDate: clearProp(props?.range?.[1]?.toISOString()),
     size: 15,
@@ -23,14 +23,9 @@ const client = async (props: ResolutionFormModel) => {
   if (typeof props.hasMetadata !== 'undefined') {
     params.hasMetadata = props.hasMetadata;
   }
-  
-  // Si el statusId es all o no existe, entonces se agregan los estados permitidos
+
   const clearParams = clearAllProps(params);
   const query = new URLSearchParams(clearParams);
-  if (!clearParams.statusId) {
-    query.append('statusId', AllowedResolutionStatus.CLOSED.toString());
-    query.append('statusId', AllowedResolutionStatus.PRE_RESOLVED.toString());
-  }
 
   return getFetch<Paginated<Resolution>>(
     `resolutions?${query.toString()}`,
