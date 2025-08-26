@@ -1,4 +1,4 @@
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from './icons/SendIcon';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';

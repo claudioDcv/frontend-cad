@@ -28,6 +28,21 @@ const theme = createTheme({
             primary: '#000000ff',
             secondary: '#555555ff',
         },
+        success: {
+            main: '#6bb96eff',
+            light: '#81c784',
+            dark: '#388e3c',
+        },
+        error: {
+            main: '#d07670ff',
+            light: '#e57373',
+            dark: '#d32f2f',
+        },
+        info: {
+            main: '#69abe1ff',
+            light: '#64b5f6',
+            dark: '#1976d2',
+        },
     },
 });
 

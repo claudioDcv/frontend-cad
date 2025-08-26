@@ -245,7 +245,7 @@ const Resolutions = () => {
             {
               id: 'statusName',
               label: t('resolution.status'),
-              render: ({ statusId, stateName }) => <DocumentStatus statusId={statusId} statusName={stateName} />,
+              render: ({ statusId, stateName, metadata }) => <DocumentStatus metadata={metadata} statusId={statusId} statusName={stateName} />,
             },
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
             { id: 'barcode', label: t('resolution.barcode') },
