@@ -1,22 +1,21 @@
 import { renderHook } from '@testing-library/react';
 import { describe, test, expect, vi, type Mock } from 'vitest';
-import useGetContractJewels from './index';
-import client from './client';
+import useGetContract from './index';
 import useAsyncCall from '@/hooks/useAsyncCall';
 
 vi.mock('@/hooks/useAsyncCall');
 
-describe('useGetContractJewels', () => {
+describe('useGetContract', () => {
   test('should call useAsyncCall with correct args', () => {
-    const mockReturn = { data: [], loading: false, error: null };
+    const mockReturn = { data: null, loading: false, error: null };
 
     (useAsyncCall as Mock).mockReturnValue(mockReturn);
 
-    const { result } = renderHook(() => useGetContractJewels());
+    const { result } = renderHook(() => useGetContract());
 
     expect(useAsyncCall).toHaveBeenCalledWith({
-      client,
-      initial: [],
+      client: expect.any(Function),
+      initial: null,
     });
     expect(result.current).toBe(mockReturn);
   });

@@ -1,47 +1,11 @@
-import { useCallback, useState } from 'react';
-import { FetchStatus } from '@/constants';
 import { Jewel } from '@/entities/Jewel.entity';
 import client from './client';
+import useAsyncCall from '@/hooks/useAsyncCall';
 
-const useGetContractJewels = () => {
-  const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
-  const [data, setData] = useState<Jewel[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  const reset = useCallback(() => {
-    setStatus(FetchStatus.IDLE);
-    setData([]);
-    setError(null);
-  }, []);
-
-  const call = useCallback(
-    async (contractId: number) => {
-      if (status === FetchStatus.ERROR) {
-        return;
-      }
-
-      if (status === FetchStatus.LOADING) {
-        setStatus(FetchStatus.SUCCESS);
-        setError(null);
-        return;
-      }
-
-      setStatus(FetchStatus.LOADING);
-
-      try {
-        const result = await client(contractId);
-        setData(result);
-        setStatus(FetchStatus.SUCCESS);
-      } catch (err) {
-        const messageKey = (err as Error)?.message ?? 'error.genericHttpError';
-        setError(messageKey);
-        setStatus(FetchStatus.ERROR);
-      }
-    },
-    [status]
-  );
-
-  return { status, data, error, call, reset };
-};
+const useGetContractJewels = () =>
+  useAsyncCall<number, Jewel[]>({
+    client,
+    initial: [],
+  });
 
 export default useGetContractJewels;
