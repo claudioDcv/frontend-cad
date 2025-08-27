@@ -9,6 +9,7 @@ import IIcon from './IIcon';
 import ExpenditureMovement from './ExpenditureMovement';
 import IncomeMovement from './IncomeMovement';
 import Movement from './Movement';
+import CIcon from './CIcon';
 
 const icons = [
   { name: 'BoxIcon', component: BoxIcon },
@@ -20,6 +21,7 @@ const icons = [
   { name: 'Movement', component: Movement },
   { name: 'Note', component: Note },
   { name: 'Receivable', component: Receivable },
+  { name: 'CIcon', component: CIcon },
 ];
 
 describe('Icon components', () => {

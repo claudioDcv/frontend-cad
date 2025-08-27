@@ -1,28 +1,20 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { FetchStatus } from '@/constants';
+import useGetAllMaterialTypes from './index';
 import * as clientModule from './client';
-import useGetAllMaterialTypes from '.';
-import { remap } from './utils';
 import { Option } from '@/entities/Option.entity';
-import { MaterialType } from '@/entities/MaterialType.entity';
-
-vi.mock('@/utils', () => ({
-  toDay: () => new Date('2025-07-18T00:00:00Z'),
-}));
 
 describe('useGetAllMaterialTypes', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
-  test('returns data and SUCCESS when API call succeeds', async () => {
+  test('returns data and SUCCESS when client resolves', async () => {
     const mockData: Option[] = [
-      {
-        label: 'Category Name',
-        value: '1',
-      },
+      { label: 'GOLD', value: '1' },
+      { label: 'SILVER', value: '2' },
     ];
+
     vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useGetAllMaterialTypes());
@@ -31,24 +23,14 @@ describe('useGetAllMaterialTypes', () => {
       await result.current.call();
     });
 
-    const data: MaterialType[] = [
-      {
-        categoryId: 1,
-        categoryCode: '',
-        categoryName: 'Category Name',
-        measurementUnit: '',
-        minimumProfitMargin: 0
-      },
-    ];
-
-    expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(remap(data));
-    expect(result.current.error).toBe(null);
+    expect(result.current.status).toBe('success');
+    expect(result.current.data).toEqual(mockData);
+    expect(result.current.error).toBeNull();
   });
 
-  test('returns error and ERROR status when API call fails', async () => {
-    const mockError = new Error('API call failed');
-    vi.spyOn(clientModule, 'default').mockRejectedValue(mockError);
+  test('sets ERROR status when client rejects', async () => {
+    const error = new Error('API failed');
+    vi.spyOn(clientModule, 'default').mockRejectedValue(error);
 
     const { result } = renderHook(() => useGetAllMaterialTypes());
 
@@ -56,16 +38,16 @@ describe('useGetAllMaterialTypes', () => {
       await result.current.call();
     });
 
-    expect(result.current.status).toBe(FetchStatus.ERROR);
+    expect(result.current.status).toBe('error');
     expect(result.current.data).toEqual([]);
-    expect(result.current.error).toBe('API call failed');
+    expect(result.current.error).toBe('API failed');
   });
 
   test('has IDLE status initially', () => {
     const { result } = renderHook(() => useGetAllMaterialTypes());
 
-    expect(result.current.status).toBe(FetchStatus.IDLE);
+    expect(result.current.status).toBe('idle');
     expect(result.current.data).toEqual([]);
-    expect(result.current.error).toBe(null);
+    expect(result.current.error).toBeNull();
   });
 });

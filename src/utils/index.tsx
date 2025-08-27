@@ -1,4 +1,5 @@
 import {
+  allowedMaterialType,
   AllowedResolutionStatus,
   allowedResolutionStatus,
   FIRST_DAY,
@@ -330,6 +331,9 @@ export const log = (...args: unknown[]) => {
 
 export const getAllowedResolutionStatus = (data: Option[]): Option[] =>
   data.filter((item) => allowedResolutionStatus.includes(Number(item.value)));
+
+export const getAllowedMaterialType = (data: Option[]): Option[] =>
+  data.filter((item) => allowedMaterialType.includes(Number(item.value)));
 
 export const getIsEditable = (
   resolution: Resolution,

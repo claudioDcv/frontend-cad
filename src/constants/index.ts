@@ -130,3 +130,16 @@ export const allowedResolutionStatus = [
   AllowedResolutionStatus.PRE_RESOLVED,
   AllowedResolutionStatus.CLOSED,
 ];
+
+// Materiales que se visualizaran
+export enum AllowedMaterialType {
+  GOLD = 1,
+  SILVER = 2,
+  EXCLUSIVE_BRAND = 4,
+}
+
+export const allowedMaterialType = [
+  AllowedMaterialType.GOLD,
+  AllowedMaterialType.SILVER,
+  AllowedMaterialType.EXCLUSIVE_BRAND,
+];

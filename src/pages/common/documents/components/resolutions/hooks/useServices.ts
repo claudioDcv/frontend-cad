@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
-import { FetchStatus, LOCATION_ACTIVE, validRoles } from '@/constants';
+import {
+  FetchStatus,
+  LOCATION_ACTIVE,
+  STATUS_RESOLUTION,
+  validRoles,
+} from '@/constants';
 import { defaultResolutionsFormValues } from '../../../utils';
 import {
   useGetAllInvestments,
@@ -9,7 +14,7 @@ import {
   useGetAllStatus,
 } from '@/clients';
 import useAccess from '@/components/atoms/access/useAccess';
-import { getAllowedResolutionStatus } from '@/utils';
+import { getAllowedMaterialType, getAllowedResolutionStatus } from '@/utils';
 
 const useServices = () => {
   const getAllResolutions = useGetAllResolutions();
@@ -27,6 +32,9 @@ const useServices = () => {
         ...defaultResolutionsFormValues(),
         hasMetadata: isOperator || undefined,
       });
+    }
+    if (getAllStatus.status === FetchStatus.IDLE) {
+      getAllStatus.call({ tableId: STATUS_RESOLUTION });
     }
     if (getAllMaterialType.status === FetchStatus.IDLE) {
       getAllMaterialType.call();
@@ -47,8 +55,12 @@ const useServices = () => {
     getAllStatus,
     isOperator,
   ]);
+
   return {
-    getAllMaterialType,
+    getAllMaterialType: {
+      ...getAllMaterialType,
+      data: getAllowedMaterialType(getAllMaterialType.data),
+    },
     getAllResolutions,
     getAllStatus: {
       ...getAllStatus,

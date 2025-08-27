@@ -7,14 +7,14 @@ describe('remap function for MaterialType', () => {
     const materials: MaterialType[] = [
       {
         categoryId: 1,
-        categoryName: 'Metal',
+        categoryName: 'Gold',
         categoryCode: '',
         measurementUnit: '',
         minimumProfitMargin: 0,
       },
       {
         categoryId: 2,
-        categoryName: 'Plastic',
+        categoryName: 'Silver',
         categoryCode: '',
         measurementUnit: '',
         minimumProfitMargin: 0,
@@ -22,8 +22,8 @@ describe('remap function for MaterialType', () => {
     ];
 
     const expected = [
-      { value: '1', label: 'Metal' },
-      { value: '2', label: 'Plastic' },
+      { value: '1', label: 'Gold' },
+      { value: '2', label: 'Silver' },
     ];
 
     expect(remap(materials)).toEqual(expected);

@@ -58,10 +58,12 @@ const Resolutions = () => {
   const services = useServices();
 
   const materialTypeOptions = addOptionAll(services.getAllMaterialType.data);
+  const statusOptions = addOptionAll(services.getAllStatus.data);
   const investmentOptions = addOptionAll(services.getAllInvestments.data);
   const locationOptions = addOptionAll(services.getAllLocations.data);
 
   const isMaterialTypeDisabled = isEmpty(services.getAllMaterialType.data);
+  const isStatusDisabled = isEmpty(services.getAllStatus.data);
   const isInvestmentDisabled = isEmpty(services.getAllInvestments.data);
   const isLocationDisabled = isEmpty(services.getAllLocations.data);
 
@@ -99,6 +101,13 @@ const Resolutions = () => {
         categoryId: value,
         page: FIRST_PAGE,
       };
+      services.getAllResolutions.call(newFilters);
+    };
+
+  const handleChangeStatus =
+    (field: ControllerRenderProps<ResolutionFormModel>) => (value: Option) => {
+      field.onChange(value);
+      const newFilters = { ...getValues(), status: value, page: FIRST_PAGE };
       services.getAllResolutions.call(newFilters);
     };
 
@@ -204,6 +213,15 @@ const Resolutions = () => {
               control={control}
             />
             <DropdownController
+              onChange={handleChangeStatus}
+              disabled={isStatusDisabled}
+              options={statusOptions}
+              label="common.status"
+              name="status"
+              control={control}
+              sx={{ width: '70%' }}
+            />
+            <DropdownController
               onChange={handleChangeInvestment}
               disabled={isInvestmentDisabled}
               options={investmentOptions}
@@ -231,7 +249,13 @@ const Resolutions = () => {
             {
               id: 'statusName',
               label: t('resolution.status'),
-              render: ({ statusId, stateName, metadata }) => <DocumentStatus metadata={metadata} statusId={statusId} statusName={stateName} />,
+              render: ({ statusId, stateName, metadata }) => (
+                <DocumentStatus
+                  metadata={metadata}
+                  statusId={statusId}
+                  statusName={stateName}
+                />
+              ),
             },
             { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
             { id: 'barcode', label: t('resolution.barcode') },

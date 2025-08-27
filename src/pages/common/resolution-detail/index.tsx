@@ -95,8 +95,6 @@ const ResolutionDetail = () => {
         statusFilter === emptyOption.value ||
         contract.statusId === Number(statusFilter)
     );
-    // TODO: Aplicar filtro de revisión
-    // console.log('Filtros:', { filteredByStatus, searchTerm, statusFilter, showOnlyNotReviewed });
     // 0 all, 1 not reviewed, 2 reviewed
     return filteredByStatus.filter((contract) => {
       if (showOnlyNotReviewed === 0) return true; // All

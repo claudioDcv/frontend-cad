@@ -5,7 +5,7 @@ import { getFetch } from '../customFetch';
 import { Paginated } from '../types';
 import { Resolution } from '@/entities/Resolution.entity';
 import { ResolutionFormModel } from '@/pages/common/documents/types';
-import { AllowedResolutionStatus } from '@/constants';
+import { AllowedMaterialType, AllowedResolutionStatus } from '@/constants';
 
 const client = async (props: ResolutionFormModel) => {
   const params: Props = {
@@ -14,7 +14,7 @@ const client = async (props: ResolutionFormModel) => {
     investmentId: clearProp(props.investment.value),
     locationId: clearProp(props.location.value),
     categoryId: clearProp(props.categoryId.value),
-    statusId: AllowedResolutionStatus.PRE_RESOLVED.toString(),
+    statusId: clearProp(props.status.value),
     startDate: clearProp(props?.range?.[0]?.toISOString()),
     endDate: clearProp(props?.range?.[1]?.toISOString()),
     size: 15,
@@ -26,6 +26,17 @@ const client = async (props: ResolutionFormModel) => {
 
   const clearParams = clearAllProps(params);
   const query = new URLSearchParams(clearParams);
+
+  if (!clearParams.categoryId) {
+    query.append('categoryId', AllowedMaterialType.GOLD.toString());
+    query.append('categoryId', AllowedMaterialType.SILVER.toString());
+    query.append('categoryId', AllowedMaterialType.EXCLUSIVE_BRAND.toString());
+  }
+
+  if (!clearParams.statusId) {
+    query.append('statusId', AllowedResolutionStatus.CLOSED.toString());
+    query.append('statusId', AllowedResolutionStatus.PRE_RESOLVED.toString());
+  }
 
   return getFetch<Paginated<Resolution>>(
     `resolutions?${query.toString()}`,
