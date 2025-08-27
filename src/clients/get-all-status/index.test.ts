@@ -1,56 +1,42 @@
-import { renderHook, act } from '@testing-library/react';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { FetchStatus } from '@/constants';
-import * as clientModule from './client';
+import { describe, test, expect, vi, type Mock } from 'vitest';
+import { renderHook } from '@testing-library/react';
+import useGetAllStatus from './index';
+import useAsyncCall from '@/hooks/useAsyncCall';
+import client from './client';
 import { remap } from './utils';
-import useGetAllStatus from '.';
+import type { Option } from '@/entities/Option.entity';
+import type { Props } from './types';
 
-vi.mock('@/utils', () => ({
-  toDay: () => new Date('2025-07-18T00:00:00Z'),
+vi.mock('@/hooks/useAsyncCall');
+vi.mock('./client');
+vi.mock('./utils', () => ({
+  remap: vi.fn((x) => x),
 }));
 
 describe('useGetAllStatus', () => {
-  beforeEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  test('returns data and SUCCESS when API call succeeds', async () => {
-    const mockData = [
-      { id: 5, name: 'Accepted', statusName: 'Accepted', statusId: 1 },
-    ];
-    vi.spyOn(clientModule, 'default').mockResolvedValue(mockData);
+  test('should call useAsyncCall with correct args', () => {
+    const mockReturn = { data: [], loading: false, error: null };
+    (useAsyncCall as Mock).mockReturnValue(mockReturn);
 
     const { result } = renderHook(() => useGetAllStatus());
 
-    await act(async () => {
-      await result.current.call({ tableId: 14 });
+    expect(useAsyncCall).toHaveBeenCalledWith({
+      client: expect.any(Function),
+      initial: [],
     });
-
-    expect(result.current.status).toBe(FetchStatus.SUCCESS);
-    expect(result.current.data).toEqual(remap(mockData));
-    expect(result.current.error).toBe(null);
+    expect(result.current).toBe(mockReturn);
   });
 
-  test('returns error and ERROR status when API call fails', async () => {
-    const mockError = new Error('API call failed');
-    vi.spyOn(clientModule, 'default').mockRejectedValue(mockError);
+  test('client wrapper should call client and remap', async () => {
+    const props: Props = { tableId: 14 };
+    const mockData: Option[] = [{ value: '1', label: 'Accepted' }];
+    (client as Mock).mockResolvedValue(mockData);
 
-    const { result } = renderHook(() => useGetAllStatus());
+    const asyncClient = (useAsyncCall as Mock).mock.calls[0][0].client;
+    const result = await asyncClient(props);
 
-    await act(async () => {
-      await result.current.call({ tableId: 14 });
-    });
-
-    expect(result.current.status).toBe(FetchStatus.ERROR);
-    expect(result.current.data).toEqual([]);
-    expect(result.current.error).toBe('API call failed');
-  });
-
-  test('has IDLE status initially', () => {
-    const { result } = renderHook(() => useGetAllStatus());
-
-    expect(result.current.status).toBe(FetchStatus.IDLE);
-    expect(result.current.data).toEqual([]);
-    expect(result.current.error).toBe(null);
+    expect(client).toHaveBeenCalledWith(props);
+    expect(remap).toHaveBeenCalledWith(mockData);
+    expect(result).toEqual(mockData);
   });
 });

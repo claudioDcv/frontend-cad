@@ -2,8 +2,9 @@ import client from './client';
 import useFetch from '@/hooks/useFetch';
 import { initialPaginatedData } from '../utils';
 
-
-const useGetAllNotifications = ({ isReinvocable = false }: { isReinvocable?: boolean } = {}) => {
+const useGetAllNotifications = ({
+  isReinvocable = false,
+}: { isReinvocable?: boolean } = {}) => {
   const { status, data, error, call } = useFetch({
     client,
     initialData: initialPaginatedData,
@@ -12,7 +13,7 @@ const useGetAllNotifications = ({ isReinvocable = false }: { isReinvocable?: boo
 
   return {
     status,
-    data: (data || []) as typeof initialPaginatedData,
+    data: data as typeof initialPaginatedData,
     error,
     call,
   };
