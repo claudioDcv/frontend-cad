@@ -53,7 +53,6 @@
     "document": {
       "title": "Zonal - Detalle del Documento",
       "contract": "Ver Detalle del Contrato",
-      "contractTitle": "Detalle del Contrato",
       "contractCheckbox": "Contrato",
       "sendPr": "Enviar PR a CAD",
       "sendPl": "Enviar PL a CAD",

@@ -1,4 +1,5 @@
 import { icons } from './components/molecules/icon/icons';
+import theme from './conf/theme';
 
 const GoldLight = 'hsl(45.1deg 100% 70%)';
 const GoldDark = 'hsl(44.71deg 41.46% 24.12%)';
@@ -34,6 +35,12 @@ const SilverAbbr = 'AG';
 const CollectedAbbr = 'VI';
 const ExclusiveBrandAbbr = 'RE';
 
+// Estilo por modificaciones
+export const smallStyle = {
+  fontSize: '0.75rem',
+  color: theme.palette.text.secondary,
+};
+
 interface IIconTemplate {
   [key: string]: {
     name: keyof typeof icons;
@@ -44,7 +51,7 @@ interface IIconTemplate {
 
 const IconTemplate: IIconTemplate = {
   Deleted: {
-    name: 'delete', 
+    name: 'delete',
     description: 'Eliminado',
     color: Error,
   },

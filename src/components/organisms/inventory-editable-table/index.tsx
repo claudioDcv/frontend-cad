@@ -10,6 +10,9 @@ import Footer from './components/footer';
 import styles from './index.module.css';
 import theme from '@/conf/theme';
 
+// to-do
+// traducir todo
+
 const InventoryEditableTable = (props: EditableTableProps) => {
   const [initialized, setInitialized] = useState(false);
 

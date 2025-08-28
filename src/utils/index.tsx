@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material';
 import {
   allowedMaterialType,
   AllowedResolutionStatus,
@@ -8,13 +9,14 @@ import {
   materialMap,
   validRoles,
 } from '../constants';
-import { MaterialType } from '../components/molecules/material-type';
-import { Material, Size } from '../components/molecules/material-type/types';
+import { DEBUG } from '@/conf/envs';
+import { smallStyle } from '@/tokens';
 import { Option } from '@/entities/Option.entity';
 import { Inventory } from '@/entities/Inventory.entity';
-import { DEBUG } from '@/conf/envs';
 import { InventoryType } from '@/entities/InventoryType.entity';
 import { Resolution } from '@/entities/Resolution.entity';
+import { MaterialType } from '../components/molecules/material-type';
+import { Material, Size } from '../components/molecules/material-type/types';
 
 export const toDay = () => (Date.now() ? new Date(Date.now()) : new Date());
 
@@ -353,3 +355,29 @@ export const getIsEditable = (
   }
   return true;
 };
+
+export function renderAveragePrice(
+  averagePrice: number,
+  contractAveragePurchaseValue?: number,
+  tooltipTitle?: string
+) {
+  if (contractAveragePurchaseValue) {
+    if (averagePrice !== contractAveragePurchaseValue) {
+      return (
+        <Tooltip title={tooltipTitle}>
+          <div>
+            <strong>{formatCurrency(averagePrice)}</strong>{' '}
+            <small style={smallStyle}>
+              ({formatCurrency(contractAveragePurchaseValue)})
+            </small>
+          </div>
+        </Tooltip>
+      );
+    }
+    return formatCurrency(contractAveragePurchaseValue);
+  }
+  if (averagePrice) {
+    return formatCurrency(averagePrice);
+  }
+  return null;
+}
