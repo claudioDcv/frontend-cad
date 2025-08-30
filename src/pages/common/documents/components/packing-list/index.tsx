@@ -140,14 +140,14 @@ const PackingList = () => {
 
   const handleDocNumberChange =
     (field: ControllerRenderProps<PackingListFormModel>) =>
-      (event: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = event.target.value;
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = event.target.value;
 
-        if (isOnlyNumbersOrEmpty(rawValue)) {
-          field.onChange(rawValue);
-          debouncedSearchRef.current(rawValue);
-        }
-      };
+      if (isOnlyNumbersOrEmpty(rawValue)) {
+        field.onChange(rawValue);
+        debouncedSearchRef.current(rawValue);
+      }
+    };
 
   const handleChangePage = (_p: unknown, page: number) => {
     const newFilters = { ...getValues(), page };
@@ -222,7 +222,9 @@ const PackingList = () => {
             {
               id: 'statusName',
               label: t('packinglist.statusName'),
-              render: ({ statusId, statusName }) => <DocumentStatus statusId={statusId} statusName={statusName} />,
+              render: ({ statusId, statusName }) => (
+                <DocumentStatus statusId={statusId} statusName={statusName} />
+              ),
             },
             { id: 'packinglistId', label: t('packinglist.packinglistId') },
             { id: 'barcode', label: t('packinglist.barcode') },

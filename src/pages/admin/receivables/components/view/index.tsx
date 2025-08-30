@@ -49,6 +49,7 @@ const ViewContent = ({
       administratorNote: message,
       status: true,
     });
+    onClose();
   };
 
   const handleReject = () => {
@@ -57,6 +58,7 @@ const ViewContent = ({
       administratorNote: message,
       status: false,
     });
+    onClose();
   };
 
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {

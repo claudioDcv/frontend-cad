@@ -113,6 +113,16 @@ const ReceivablesOperator = ({
             { id: 'contractId', label: 'Contrato' },
             { id: 'quantity', label: 'Cantidad' },
             { id: 'weight', label: 'Peso' },
+            {
+              id: 'status',
+              label: t('accountsReceivable.status'),
+              render: (row) =>
+                row.status === true
+                  ? t('accountsReceivable.receivableStatus.true')
+                  : row.status === false
+                  ? t('accountsReceivable.receivableStatus.false')
+                  : t('accountsReceivable.receivableStatus.null'),
+            },
             { id: 'createdByName', label: 'Creado por' },
             { id: 'reviewedByName', label: 'Revisado por' },
             {

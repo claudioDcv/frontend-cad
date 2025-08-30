@@ -1,0 +1,23 @@
+export type PackingListContract = {
+  originLocationName: string;
+  destinationName: string;
+  issuer: string;
+  manager: string;
+  creationDate: string;
+  categoryName: string;
+  totalGrams: number;
+  totalQuantity: number;
+  dispatchNumber: number;
+  documentTypeName: string;
+  barcode: string;
+  rowNumber: number;
+  statusId: number;
+  itemCode: string;
+  shortDescription: string;
+  itemUnitWeight: number;
+  itemUnitPrice: number;
+  itemAverageCostPerGram: number;
+  itemUnitCost: number;
+  itemQuantity: number;
+  itemTotalWeight: number;
+};

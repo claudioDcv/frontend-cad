@@ -6,8 +6,6 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  FormControlLabel,
-  Switch,
   ButtonGroup,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
@@ -18,6 +16,7 @@ import {
   Table,
   ModalConfirm,
   DisplayData,
+  TripleToggleSwitch,
 } from '@/components';
 import { emptyOption, SEARCH_DELAY } from '@/constants';
 import {
@@ -27,8 +26,11 @@ import {
   isOnlyNumbersOrEmpty,
 } from '@/utils';
 import { Option } from '@/entities/Option.entity';
+import useServices from './hooks/useServices';
+import { useParams } from 'wouter';
+import { useTranslation } from 'react-i18next';
 
-const mockResolution = {
+const mockPackingList = {
   resolutionNumber: 'PK-001',
   dispatchGuide: 'G-123456',
   contractCount: 3,
@@ -41,25 +43,6 @@ const mockResolution = {
   closeDate: '2024-07-01',
 };
 
-const mockContracts = [
-  {
-    contractNumber: '0001',
-    securityBagCode: 'BG01',
-    jewelQuantity: 10,
-    totalContractValue: 500000,
-    statusId: 1,
-    metadata: { reviewed: false },
-  },
-  {
-    contractNumber: '0002',
-    securityBagCode: 'BG02',
-    jewelQuantity: 5,
-    totalContractValue: 250000,
-    statusId: 2,
-    metadata: { reviewed: true },
-  },
-];
-
 const mockStatusOptions = [
   { label: 'Todos', value: '' },
   { label: 'Pendiente', value: '1' },
@@ -67,16 +50,21 @@ const mockStatusOptions = [
 ];
 
 const PackingListDetail = () => {
+  const { id: packingListId } = useParams<{ id: string }>();
+  const { t } = useTranslation();
+
   const { control, setValue } = useForm({
     defaultValues: {
-      contractNumber: '',
+      itemCode: '',
       status: emptyOption,
     },
   });
 
+  const services = useServices(packingListId);
+
   const [statusFilter, setStatusFilter] = useState(emptyOption.value);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showOnlyNotReviewed, setShowOnlyNotReviewed] = useState(false);
+  const [showOnlyNotReviewed, setShowOnlyNotReviewed] = useState<0 | 1 | 2>(0);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [successConfirmNotification, setSuccessConfirmNotification] =
     useState(false);
@@ -85,12 +73,33 @@ const PackingListDetail = () => {
     debounce((value: string) => setSearchTerm(value), SEARCH_DELAY)
   );
 
-  const filteredContracts = mockContracts
-    .filter((c) => c.contractNumber.includes(searchTerm))
-    .filter((c) => statusFilter === '' || String(c.statusId) === statusFilter)
-    .filter((c) => (showOnlyNotReviewed ? !c.metadata.reviewed : true));
+  const getFilteredContracts = () => {
+    const model = services.getPackingListContracts.data;
 
-  const isAllReviewed = mockContracts.every((c) => c.metadata.reviewed);
+    if (!model) {
+      return [];
+    }
+
+    // Aplicar filtro de búsqueda usando `itemCode`
+    const filtered = model.filter((contract) =>
+      contract.itemCode?.toString().includes(searchTerm)
+    );
+
+    // Aplicar filtro de estado
+    const filteredByStatus = filtered.filter(
+      (contract) =>
+        statusFilter === emptyOption.value ||
+        contract.statusId === Number(statusFilter)
+    );
+
+    // La lógica de `metadata` sigue comentada como pediste
+    return filteredByStatus;
+  };
+
+  const isAllContractReviewed =
+    services.getPackingListContracts.data?.length > 0 &&
+    // services.getPackingListContracts.data.every((c) => c.metadata?.reviewed);
+    true; // Temporalmente en `true`
 
   const handleChangeStatus =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -99,16 +108,27 @@ const PackingListDetail = () => {
       setStatusFilter(option.value);
     };
 
+  const handleDocNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const rawValue = event.target.value;
+
+    if (isOnlyNumbersOrEmpty(rawValue)) {
+      setValue('itemCode', rawValue);
+      debouncedSearchRef.current(rawValue);
+    }
+  };
+
   return (
     <div>
       <Card variant="outlined" sx={{ backgroundColor: '#f5f5f5' }}>
         <CardHeader
-          title={`Packing List: ${mockResolution.resolutionNumber}`}
+          title={`Packing List: ${mockPackingList.resolutionNumber}`}
           action={
             <ButtonGroup>
               <Button
                 variant="contained"
-                disabled={!isAllReviewed}
+                disabled={!isAllContractReviewed}
                 onClick={() => setOpenConfirm(true)}
               >
                 Enviar
@@ -121,27 +141,30 @@ const PackingListDetail = () => {
           <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
             <DisplayData
               label="Guía Despacho"
-              value={mockResolution.dispatchGuide}
+              value={mockPackingList.dispatchGuide}
             />
             <DisplayData
               label="N° Contratos"
-              value={mockResolution.contractCount}
+              value={mockPackingList.contractCount}
             />
-            <DisplayData label="Tipo" value={mockResolution.categoryName} />
-            <DisplayData label="Bolsa" value={mockResolution.securityBag} />
-            <DisplayData label="Sucursal" value={mockResolution.locationName} />
+            <DisplayData label="Tipo" value={mockPackingList.categoryName} />
+            <DisplayData label="Bolsa" value={mockPackingList.securityBag} />
+            <DisplayData
+              label="Sucursal"
+              value={mockPackingList.locationName}
+            />
             <DisplayData
               label="Dirección"
-              value={mockResolution.locationAddress}
+              value={mockPackingList.locationAddress}
             />
             <DisplayData
               label="Inversión"
-              value={mockResolution.investmentName}
+              value={mockPackingList.investmentName}
             />
-            <DisplayData label="RUT" value={mockResolution.investmentRut} />
+            <DisplayData label="RUT" value={mockPackingList.investmentRut} />
             <DisplayData
               label="Fecha Cierre"
-              value={formatToDDMMYYYY(mockResolution.closeDate)}
+              value={formatToDDMMYYYY(mockPackingList.closeDate)}
             />
           </Box>
         </CardContent>
@@ -150,19 +173,15 @@ const PackingListDetail = () => {
       <form>
         <Box mt={2} mb={2} display="flex" gap={2} alignItems="center">
           <Controller
-            name="contractNumber"
+            name="itemCode"
             control={control}
             render={({ field }) => (
               <Input
-                label="N° Documento"
+                // Etiqueta del buscador, ahora indica que se busca por Código de Ítem
+                label="Código Ítem"
                 value={field.value}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (isOnlyNumbersOrEmpty(val)) {
-                    setValue('contractNumber', val);
-                    debouncedSearchRef.current(val);
-                  }
-                }}
+                onChange={handleDocNumberChange}
+                sx={{ maxWidth: 250 }}
               />
             )}
           />
@@ -176,26 +195,26 @@ const PackingListDetail = () => {
             disabled={false}
           />
 
-          <FormControlLabel
-            control={
-              <Switch
-                checked={showOnlyNotReviewed}
-                onChange={(e) => setShowOnlyNotReviewed(e.target.checked)}
-              />
-            }
-            label="Solo no revisados"
+          <TripleToggleSwitch
+            value={showOnlyNotReviewed}
+            options={[
+              { value: 0, label: t('common.all') },
+              { value: 1, label: t('common.notReviewed') },
+              { value: 2, label: t('common.reviewedPlural') },
+            ]}
+            onChange={(value) => setShowOnlyNotReviewed(value as 0 | 1 | 2)}
           />
         </Box>
 
         <Table
-          rows={filteredContracts}
           columns={[
-            { id: 'contractNumber', label: 'N° Contrato' },
-            { id: 'securityBagCode', label: 'Código Bolsa' },
-            { id: 'jewelQuantity', label: 'Joyas' },
+            { id: 'itemCode', label: 'Código Ítem' },
+            { id: 'shortDescription', label: 'Descripción' },
+            { id: 'itemQuantity', label: 'Cantidad' },
+            { id: 'itemTotalWeight', label: 'Peso Total' },
             {
-              id: 'totalContractValue',
-              label: 'Valor Total',
+              id: 'itemUnitCost',
+              label: 'Costo Unitario',
               field: (f) => formatCurrency(f as number),
             },
             {
@@ -206,7 +225,9 @@ const PackingListDetail = () => {
                   ?.label || '-',
             },
           ]}
-          messageVoidData="No hay contratos"
+          rows={getFilteredContracts()}
+          messageVoidData={t('common.noData')}
+          size="small"
         />
       </form>
 
