@@ -1,6 +1,5 @@
 export interface UpdateReceivable {
-    id: number;
-    administratorNote?: string;
-    averagePrice?: number;
-    status?: boolean;
+  id: number;
+  administratorNote?: string;
+  status?: boolean;
 }

@@ -5,7 +5,7 @@ import { ResolutionSendResponse } from '@/entities/ResolutionSendResonse.entity'
 
 /**
  * Este servicio se utiliza para que el operador envie la resolución a Olimpo y al Admin.
- * @returns 
+ * @returns
  */
 const usePatchSendResolution = () => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE);
@@ -16,7 +16,7 @@ const usePatchSendResolution = () => {
     async (data: Props) => {
       if (status === FetchStatus.ERROR) {
         return;
-      } 
+      }
 
       if (status === FetchStatus.LOADING) {
         setStatus(FetchStatus.SUCCESS);
@@ -47,7 +47,6 @@ const usePatchSendResolution = () => {
     setData(undefined);
     setError(null);
   }, []);
-
 
   return { status, data, error, call, reset };
 };

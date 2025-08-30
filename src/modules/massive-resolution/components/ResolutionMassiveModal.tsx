@@ -12,7 +12,6 @@ import { usePatchSendResolution } from '@/clients';
 export interface ResolutionMassiveModalProps {
   resolution: Resolution | null;
   onClose: () => void;
-
 }
 
 const ResolutionMassiveModal = ({
@@ -45,7 +44,10 @@ const ResolutionMassiveModal = ({
   };
 
   useEffect(() => {
-    if (patchResolutionInventory.status === FetchStatus.SUCCESS && !inventoryProcessed) {
+    if (
+      patchResolutionInventory.status === FetchStatus.SUCCESS &&
+      !inventoryProcessed
+    ) {
       setInventoryProcessed(true);
       alertContext.addAlert({
         type: AlertType.SUCCESS,
@@ -60,7 +62,10 @@ const ResolutionMassiveModal = ({
         },
       });
     }
-    if (patchResolutionInventory.status === FetchStatus.ERROR && !inventoryProcessed) {
+    if (
+      patchResolutionInventory.status === FetchStatus.ERROR &&
+      !inventoryProcessed
+    ) {
       setInventoryProcessed(true);
       alertContext.addAlert({
         type: AlertType.ERROR,
@@ -69,7 +74,14 @@ const ResolutionMassiveModal = ({
         dismissible: true,
       });
     }
-  }, [alertContext, onClose, patchResolutionInventory.status, resolution, t, inventoryProcessed]);
+  }, [
+    alertContext,
+    onClose,
+    patchResolutionInventory.status,
+    resolution,
+    t,
+    inventoryProcessed,
+  ]);
 
   // Resolve
   useEffect(() => {
@@ -97,7 +109,14 @@ const ResolutionMassiveModal = ({
         dismissible: true,
       });
     }
-  }, [alertContext, onClose, patchSendResolution.status, resolution, t, sendProcessed]);
+  }, [
+    alertContext,
+    onClose,
+    patchSendResolution.status,
+    resolution,
+    t,
+    sendProcessed,
+  ]);
 
   const handleSuccess = (inventories: Inventory[]) => {
     setInventoryProcessed(false); // Reset flag before new operation
@@ -116,11 +135,11 @@ const ResolutionMassiveModal = ({
       resolutionId: resolution.resolutionId,
       inventories: data,
     });
-  }
+  };
   if (!resolution) return null;
 
   return (
-    <> 
+    <>
       <ModalConfirm
         open={showConfirm}
         onClose={handleOnClose}
