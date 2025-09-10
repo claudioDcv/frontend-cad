@@ -91,11 +91,6 @@ describe('Utils functions', () => {
     expect(utils.preciseSum([])).toBe(0);
   });
 
-  test('pluralize returns correct string', () => {
-    expect(utils.pluralize(1, 'item', 'items')).toBe('1 item');
-    expect(utils.pluralize(2, 'item', 'items')).toBe('2 items');
-  });
-
   test('sortCustom sorts array correctly', () => {
     const items = [{ id: 'b' }, { id: 'a' }, { id: 'c' }];
     const order = ['a', 'b', 'c'];

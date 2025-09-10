@@ -17,36 +17,24 @@ const Index = () => {
         <Stack spacing={2} mt={3}>
           <ResolutionReset />
           <Link href={routes.operator.documents.link}>
-            <Button
-              variant="outlined"
-              fullWidth
-            >
+            <Button variant="outlined" fullWidth>
               Operador
             </Button>
           </Link>
 
           <Link href={routes.cordinator.documents.link}>
-            <Button
-              variant="outlined"
-              fullWidth
-            >
+            <Button variant="outlined" fullWidth>
               Cordinador
             </Button>
           </Link>
 
           <Link href={routes.admin.receivable.link}>
-            <Button
-              variant="outlined"
-              fullWidth
-            >
+            <Button variant="outlined" fullWidth>
               Administrador
             </Button>
           </Link>
-          <Link href={routes.admin.preInventory.link}>
-            <Button
-              variant="outlined"
-              fullWidth
-            >
+          <Link href={routes.admin.dashboard.link}>
+            <Button variant="outlined" fullWidth>
               Administrador Pre Inventario
             </Button>
           </Link>

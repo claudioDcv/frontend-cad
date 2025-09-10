@@ -6,8 +6,9 @@ import {
   useGetResolutionContracts,
   usePatchResolutionResolve,
 } from '@/clients';
+import { getAllowedContractStatus } from '@/utils';
 
-const useServices = (resolutionId?: string) => {
+const useServices = (resolutionId: string) => {
   const getAllStatus = useGetAllStatus();
   const getResolution = useGetResolution();
   const getResolutionContracts = useGetResolutionContracts();
@@ -31,7 +32,10 @@ const useServices = (resolutionId?: string) => {
   }, [resolutionId, getResolution, getResolutionContracts]);
 
   return {
-    getAllStatus,
+    getAllStatus: {
+      ...getAllStatus,
+      data: getAllowedContractStatus(getAllStatus.data),
+    },
     getResolution,
     getResolutionContracts,
     patchResolutionResolve,

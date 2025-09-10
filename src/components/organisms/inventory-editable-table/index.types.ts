@@ -2,7 +2,7 @@ import { Inventory } from '@/entities/Inventory.entity';
 import { InventoryResolution } from '@/entities/InventoryResolution.entity';
 import { InventoryItem } from '@/entities/Send.entity';
 
-interface Total {
+export interface Total {
   quantity: number;
   weight: number;
 }

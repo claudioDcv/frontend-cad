@@ -1,25 +1,37 @@
 import { useEffect, useState } from 'react';
 import { Inventory, InventoryValue } from '@/entities/Inventory.entity';
 import { allowedInventories, inventoryCategories } from '@/constants';
-import { filterByInventory, outputInventorySum, pluralize } from '@/utils';
+import {
+  filterByInventory,
+  outputInventorySum,
+  verboseGram,
+  verboseUnit,
+} from '@/utils';
 import { useInitialData } from '@/contexts/initial-data/useInitialData';
-import { EditableTableProps } from './index.types';
 import TableBody from './components/table-body';
-import { handleInventoryChange, initializeData, updateResolutionInventory } from './index.utils';
+import {
+  handleInventoryChange,
+  initializeData,
+  updateResolutionInventory,
+} from './index.utils';
+import { useTranslation } from 'react-i18next';
 import Footer from './components/footer';
 import styles from './index.module.css';
 import theme from '@/conf/theme';
-
-// to-do
-// traducir todo
+import { EditableTableProps } from './index.types';
 
 const InventoryEditableTable = (props: EditableTableProps) => {
+  const { t } = useTranslation();
   const [initialized, setInitialized] = useState(false);
 
   const initialDataCtx = useInitialData();
 
   useEffect(() => {
-    const initializedData = initializeData(props.data, initialDataCtx.inventoryTypes, allowedInventories);
+    const initializedData = initializeData(
+      props.data,
+      initialDataCtx.inventoryTypes,
+      allowedInventories
+    );
     props.setData(initializedData);
   }, [props.data, initialDataCtx.inventoryTypes, props]);
 
@@ -30,7 +42,10 @@ const InventoryEditableTable = (props: EditableTableProps) => {
       !initialized
     ) {
       setInitialized(true);
-      const res = updateResolutionInventory(props.data, props.resolutionInventory);
+      const res = updateResolutionInventory(
+        props.data,
+        props.resolutionInventory
+      );
 
       props.setData(res);
     }
@@ -41,11 +56,19 @@ const InventoryEditableTable = (props: EditableTableProps) => {
     key: InventoryValue,
     value: string
   ): void => {
-    const newData = handleInventoryChange(props.data, inventoryType, key, value, props.onChange);
+    const newData = handleInventoryChange(
+      props.data,
+      inventoryType,
+      key,
+      value,
+      props.onChange
+    );
     props.setData(newData);
   };
 
-  const outputRefaction = outputInventorySum(filterByInventory(props.data, inventoryCategories.refaction));
+  const outputRefaction = outputInventorySum(
+    filterByInventory(props.data, inventoryCategories.refaction)
+  );
 
   const thStyle = {
     backgroundColor: theme.palette.background.default,
@@ -55,9 +78,9 @@ const InventoryEditableTable = (props: EditableTableProps) => {
   return (
     <>
       <div className={styles.caption}>
-        <span>Inventario editable</span>
+        <span>{t('inventoryEditableTable.caption')}</span>
         <span className={styles.captionMessage}>
-          Para editar un número haz click sobre él
+          {t('inventoryEditableTable.captionMessage')}
         </span>
       </div>
       <div className={styles.container}>
@@ -65,26 +88,30 @@ const InventoryEditableTable = (props: EditableTableProps) => {
           <thead className={styles.thead}>
             <tr>
               <th style={thStyle}>
-                <div>Inventario</div>
+                <div>{t('inventoryEditableTable.headers.inventory')}</div>
               </th>
               <th style={thStyle}>
-                <div>Cantidad</div>
+                <div>{t('inventoryEditableTable.headers.quantity')}</div>
               </th>
               <th style={thStyle}>
-                <div>Peso Neto (gr)</div>
+                <div>{t('inventoryEditableTable.headers.weight')}</div>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr className={styles.categoryRow}>
               <td>
-                <div>Refacción</div>
+                <div>{t('inventoryEditableTable.categories.refaction')}</div>
               </td>
               <td>
-                <div className={styles.headerValue}>{pluralize(outputRefaction.quantity, 'und', 'unds')}</div>
+                <div className={styles.headerValue}>
+                  {verboseUnit(outputRefaction.quantity)}
+                </div>
               </td>
               <td>
-                <div className={styles.headerValue}>{pluralize(outputRefaction.weight, 'gr', 'grs')}</div>
+                <div className={styles.headerValue}>
+                  {verboseGram(outputRefaction.weight)}
+                </div>
               </td>
             </tr>
           </tbody>

@@ -223,7 +223,10 @@
     "notifications": "Notificaciones",
     "packingList": "Packing List",
     "adminReceivables": "Cuentas por Cobrar",
-    "adminPreInventory": "Pre Inventario"
+    "adminPreInventory": "Pre Inventario",
+    "adminPostInventory": "Post Inventario",
+    "adminPostMovement": "Post Movimiento",
+    "adminDashboard": "Dashboard"
   },
   "error": {
     "404Error": "Error 404 - Página no encontrada",
@@ -250,12 +253,12 @@
     "postResolutionSendParse": "Error al interpretar la respuesta del servidor al enviar la resolución.",
     "patchResolveResolutionFetch": "Error al enviar la resolución. Por favor, inténtalo de nuevo más tarde.",
     "patchResolveResolutionParse": "Error al interpretar la respuesta del servidor al resolver la resolución.",
-    "error.getAllInventoryTypesFetch": "Error al obtener los tipos de inventario. Por favor, inténtalo de nuevo más tarde.",
-    "error.getAllInventoryTypesParse": "Error al interpretar la respuesta del servidor al obtener los tipos de inventario.",
+    "getAllInventoryTypesFetch": "Error al obtener los tipos de inventario. Por favor, inténtalo de nuevo más tarde.",
+    "getAllInventoryTypesParse": "Error al interpretar la respuesta del servidor al obtener los tipos de inventario.",
     "getUnviewedNotificationsFetch": "Error al obtener las notificaciones no vistas. Por favor, inténtalo de nuevo más tarde.",
     "getUnviewedNotificationsParse": "Error al interpretar los datos de notificaciones del servidor.",
-    "error.getAllNotificationsFetch": "Error al obtener la lista de notificaciones. Por favor, inténtalo de nuevo más tarde.",
-    "error.getAllNotificationsParse": "Error al interpretar los datos de notificaciones del servidor.",
+    "getAllNotificationsFetch": "Error al obtener la lista de notificaciones. Por favor, inténtalo de nuevo más tarde.",
+    "getAllNotificationsParse": "Error al interpretar los datos de notificaciones del servidor.",
     "getResolutionInventoryFetch": "Error al actualizar la el inventario de la resolucion. Por favor, inténtalo de nuevo más tarde.",
     "getResolutionInventoryParse": "Error al interpretar los datos del inventario de la resolucion revisado del servidor.",
     "jsonError": "Error al procesar la respuesta del servidor."
@@ -385,7 +388,30 @@
   },
   "adminPreInventory": {
     "title": "Pre Inventario",
+    "investmentTitle": "Inversiones",
     "gramsChartTitle": "📊 Gramos por Inversión",
     "salesChartTitle": "📈 Ventas por Inversión"
+  },
+  "adminPostInventory": {
+    "title": "Post Inventario",
+    "unitsChartTitle": "Unidades por Inversión",
+    "valueChartTitle": "Valor de la Mercancía por Inversión"
+  },
+  "adminPostMovement": {
+    "title": "Movimientos de Inventario",
+    "outboundChartTitle": "Movimientos de Salida",
+    "inboundChartTitle": "Movimientos de Entrada"
+  },
+  "inventoryEditableTable": {
+    "caption": "Inventario editable",
+    "captionMessage": "Para editar un número haz click sobre él",
+    "headers": {
+      "inventory": "Inventario",
+      "quantity": "Cantidad",
+      "weight": "Peso Neto (gr)"
+    },
+    "categories": {
+      "refaction": "Refacción"
+    }
   }
 }

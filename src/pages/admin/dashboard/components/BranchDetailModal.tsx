@@ -1,9 +1,43 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ModalConfirm, Notification } from '@/components';
-import ModalInput from '@/components/organisms/modal-input';
-import { formatDateHour, toDay } from '@/utils';
+import ModalBranchDetail from '@/components/organisms/modal-branch-detail';
+import { useEffect, useState } from 'react';
+//import { useTranslation } from 'react-i18next';
 
+interface BranchDetailModalProps {
+  id: number | null;
+  onClose: () => void;
+}
+
+const BranchDetailModal = ({ id, onClose }: BranchDetailModalProps) => {
+  //const { t } = useTranslation();
+
+  const [_openConfirm, setOpenConfirm] = useState(false);
+
+  useEffect(() => {
+    if (id !== null) setOpenConfirm(true);
+  }, [id]);
+
+  /*
+  const handleConfirm = () => {
+    console.log('Ver detalles de la sucursal:', id);
+    setOpenConfirm(false);
+    onClose();
+  };
+  */
+
+  const handleCancel = () => {
+    setOpenConfirm(false);
+    onClose();
+  };
+
+  return (
+    <ModalBranchDetail
+      onClose={handleCancel} />
+  );
+};
+
+export default BranchDetailModal;
+
+/*
 interface ResolutionSendTruckModalProps {
   id: number | null;
   onClose: () => void;
@@ -102,3 +136,5 @@ const ResolutionSendTruckModal = ({
 };
 
 export default ResolutionSendTruckModal;
+
+*/

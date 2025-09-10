@@ -17,8 +17,8 @@ export const customFetch = Object.assign(
         endpoint: string,
         options: FetchOptions = {},
         errorMessages: { responseError: string; defaultError: string } = {
-            responseError: 'errors.responseError',
-            defaultError: 'errors.defaultError',
+            responseError: 'error.responseError',
+            defaultError: 'error.defaultError',
         }
     ): Promise<T> => {
         const { query, headers, ...restOptions } = options;
@@ -47,7 +47,7 @@ export const customFetch = Object.assign(
 
         // Manejo de errores
         if (!response.ok) {
-            const errorData = await response.json().catch(() => null);
+            const errorData = await response.json();
             throw {
                 status: response.status,
                 statusText: response.statusText,
@@ -71,8 +71,9 @@ export const customFetch = Object.assign(
             endpoint: string,
             options: FetchOptions = {},
             errorMessages: { responseError: string; defaultError: string } = {
-                responseError: 'errors.responseError',
-                defaultError: 'errors.defaultError',
+                // TODO: Traducir
+                responseError: 'error.responseError',
+                defaultError: 'error.defaultError',
             }
         ): Promise<T> => {
             return customFetch<T>(endpoint, { ...options, method: 'GET' }, errorMessages);

@@ -1,5 +1,5 @@
 import { Card, Box, Typography } from '@mui/material';
-import { formatCurrency, formatNumberWithGr } from '../../../utils';
+import { formatCurrency, verboseGram } from '../../../utils';
 import { DisplayData } from '../..';
 import { Contract } from '@/entities/Contract.entity';
 import { useTranslation } from 'react-i18next';
@@ -51,7 +51,7 @@ const ContractSummaryCard: React.FC<ContractSummaryCardProps> = ({
         <Box>
           <DisplayData
             label={lang.weight}
-            value={formatNumberWithGr(contract.totalWeight)}
+            value={verboseGram(contract.totalWeight)}
           />
           <DisplayData
             label={lang.totalContractValue}

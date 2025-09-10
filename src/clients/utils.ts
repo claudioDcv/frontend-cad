@@ -84,16 +84,7 @@ export const pageableToPaginated = <T>(data: PageResponse<T>): Paginated<T> => {
   };
 };
 
-// to-do:
-// precio promedio a las cuenta por cobrar puedea dministrador y operador, 
-// hacer mismo campo del modal, agregar input con misma funcionalidad
-// valor editable igual cuenta por cobrar, misma logica en el input
-
-// material, 
-
 // aceptar o recharazar, la respuesta no hay que llamar de nuevo al servicio, sino cambiar el valor de la tabla
 // si pongo aceptar donde dice pendiente poner estado aprobado/rechazado
 // se llama la data se guarda en variable de estado, se busca por id y se cambia el valor de estado
 // agregar las traducciones
-
-// 

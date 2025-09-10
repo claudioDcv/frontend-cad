@@ -13,9 +13,7 @@ export const columns: Column<Jewel>[] = [
   {
     id: 'description',
     label: 'Descripción',
-    field: (d) => (
-      <Excerpt text={(d as string) || ''} maxLength={50} />
-    ),
+    field: (d) => <Excerpt text={(d as string) || ''} maxLength={50} />,
   },
   {
     id: 'family',

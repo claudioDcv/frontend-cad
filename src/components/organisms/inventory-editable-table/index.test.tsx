@@ -28,7 +28,6 @@ vi.mock('./index.utils', () => ({
 vi.mock('@/utils', () => ({
   filterByInventory: vi.fn(),
   outputInventorySum: vi.fn(() => ({ quantity: 0, weight: 0 })),
-  pluralize: vi.fn((value, singular) => `${value} ${singular}`),
 }));
 
 vi.mock('@/constants', () => ({

@@ -1,12 +1,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import AlertCard from './index';
-import { initialState18N } from './index.types';
-
-interface I18N {
-  title: string;
-  text: string;
-}
+import { I18N, initialState18N } from './index.type';
 
 const mockI18n: Partial<I18N> = {
   title: 'Success title',

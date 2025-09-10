@@ -1,18 +1,50 @@
+import { MaterialType } from '@/components/molecules/material-type';
+import ModalHeader from '@/components/molecules/modal-header';
 import { Dialog, DialogContent, Divider } from '@mui/material';
-import { useEffect } from 'react';
-import ContractNote from '@/components/organisms/contract-note';
-import { Material } from '@/components/molecules/material-type/types';
-import { FetchStatus } from '@/constants';
-import useGetContractJewels from '@/clients/get-contract-jewels';
-import usePatchReviewedContract from '@/clients/patch-reviewed-contract';
-import { Contract, ContractMetadata } from '@/entities/Contract.entity';
-import { Jewel } from '@/entities/Jewel.entity';
-import { MaterialType } from '../../molecules/material-type';
-import ModalHeader from '../../molecules/modal-header';
-import Table from '../../organisms/table';
-import ContractSummaryCard from '../contract-summary-card';
-import { columns } from './index.utils';
 
+interface I18N {
+  label: string;
+  checkboxLabel: string;
+  success: string;
+  cancel: string;
+}
+
+const initialStateI18n: I18N = {
+  label: 'Label',
+  checkboxLabel: 'Check Label',
+  success: 'Success',
+  cancel: 'Cancel',
+};
+interface ModalBranchDetailProps {
+  onClose: () => void;
+  i18n?: Partial<I18N>;
+}
+
+const ModalBranchDetail: React.FC<ModalBranchDetailProps> = ({
+  onClose,
+  i18n,
+}) => {
+  const lang = i18n ? { ...initialStateI18n, ...i18n } : initialStateI18n;
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  return (
+    <Dialog open={true} onClose={handleClose} maxWidth="md" fullWidth>
+      <ModalHeader onClose={handleClose}>
+        <MaterialType size="medium" material="Gold" label={lang.label} />
+      </ModalHeader>
+      <DialogContent>
+        <Divider sx={{ my: 2 }} />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default ModalBranchDetail;
+
+/*
 interface I18N {
   label: string;
   checkboxLabel: string;
@@ -123,3 +155,6 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
 };
 
 export default ModalContractDetail;
+
+
+*/

@@ -69,11 +69,13 @@ const useAsyncCall = <TRequest, TResponse>({
                 setStatus(FetchStatus.SUCCESS);
             } catch (err) {
                 const messageKey =
-                    (err as Error)?.message ?? 'error.genericHttpError';
+                // TODO: Si el error persiste, contacte al area TI
+                    (err as Error)?.message ?? 'error.genericHttpErrorMessage';
                 setError(messageKey);
                 setStatus(FetchStatus.ERROR);
                 alertContext.addAlert({
                     type: AlertType.ERROR,
+                    // TODO: tiene que decir error con el servidor
                     title: t('error.genericHttpError'),
                     message: t(messageKey),
                 });

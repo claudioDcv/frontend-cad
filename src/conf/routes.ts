@@ -80,9 +80,21 @@ const admin = {
     link: appendPrefix(`/${validRoles.admin}/receivables`),
     label: 'routes.adminReceivables',
   },
+  dashboard: {
+    link: appendPrefix(`/${validRoles.admin}/dashboard`),
+    label: 'routes.adminDashboard',
+  },
   preInventory: {
-    link: appendPrefix(`/${validRoles.admin}/pre-inventory`),
+    link: appendPrefix(`/${validRoles.admin}/dashboard/pre-inventory`),
     label: 'routes.adminPreInventory',
+  },
+  postInventory: {
+    link: appendPrefix(`/${validRoles.admin}/dashboard/post-inventory`),
+    label: 'routes.adminPostInventory',
+  },
+  postMovement: {
+    link: appendPrefix(`/${validRoles.admin}/dashboard/post-movement`),
+    label: 'routes.adminPostMovement',
   },
 };
 

@@ -19,7 +19,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   action,
   lastItemLink,
 }) => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
   return (
     <div className={styles.container}>

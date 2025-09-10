@@ -1,5 +1,12 @@
 import { Tooltip } from '@mui/material';
+import { MaterialType } from '../components/molecules/material-type';
+import { Material, Size } from '../components/molecules/material-type/types';
+import { Option } from '@/entities/Option.entity';
+import { Inventory } from '@/entities/Inventory.entity';
+import { InventoryType } from '@/entities/InventoryType.entity';
+import { Resolution } from '@/entities/Resolution.entity';
 import {
+  allowedContractStatus,
   allowedMaterialType,
   AllowedResolutionStatus,
   allowedResolutionStatus,
@@ -7,17 +14,22 @@ import {
   FIVE_YEARS_AGO,
   LAST_DAY_OF_PREVIOUS_MONTH,
   materialMap,
+  UNIT,
   validRoles,
 } from '../constants';
 import { DEBUG } from '@/conf/envs';
 import { smallStyle } from '@/tokens';
-import { Option } from '@/entities/Option.entity';
-import { Inventory } from '@/entities/Inventory.entity';
-import { InventoryType } from '@/entities/InventoryType.entity';
-import { Resolution } from '@/entities/Resolution.entity';
-import { MaterialType } from '../components/molecules/material-type';
-import { Material, Size } from '../components/molecules/material-type/types';
 
+// Tipos de datos o enums
+export enum LogType {
+  INFO = 'info',
+  WARN = 'warn',
+  ERROR = 'error',
+  FETCH = 'fetch',
+}
+
+// Funciones auxiliares o utilitarias (ordenadas por temática o alfabéticamente)
+// --- Funciones de Fecha ---
 export const toDay = () => (Date.now() ? new Date(Date.now()) : new Date());
 
 export const defaultEndDate = new Date(
@@ -31,40 +43,6 @@ export const defaultStartDate = new Date(
   toDay().getMonth(),
   FIRST_DAY
 );
-
-export const isOnlyNumbersOrEmpty = (value: string) => /^\d*$/.test(value);
-
-export function parseOptionalNumber(
-  value: string | undefined
-): number | undefined {
-  if (value === undefined) return undefined;
-  const parsed = Number(value);
-  return isNaN(parsed) ? undefined : parsed;
-}
-
-export const sleep = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
-
-export function debounce<A extends unknown[]>(
-  func: (...args: A) => void,
-  wait: number
-) {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
-  const debounced = (...args: A) => {
-    if (timeoutId) clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func(...args);
-    }, wait);
-  };
-  debounced.cancel = () => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
-    }
-  };
-  return debounced;
-}
 
 export const cleanDate = (date?: string | Date): string => {
   if (!date) return '';
@@ -123,6 +101,7 @@ export function formatToFullDateHour(
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
+// --- Funciones de Formato (moneda, números, etc.) ---
 export function formatNumberWithGr(
   externalValue: number | null | string | unknown
 ) {
@@ -149,6 +128,29 @@ export const formatCurrency = (
     minimumFractionDigits: 0,
   }).format(value);
 };
+
+export const verboseGram = (grams: number) => {
+  const suffix = grams === 1 ? UNIT.GRAM_SINGULAR : UNIT.GRAM_PLURAL;
+  return `${grams} ${suffix}`;
+};
+
+export const verboseUnit = (unit: number) => {
+  const suffix = unit === 1 ? UNIT.UNIT_SINGULAR : UNIT.UNIT_PLURAL;
+  return `${unit} ${suffix}`;
+};
+
+// --- Funciones de Lógica y Datos ---
+export function isOnlyNumbersOrEmpty(value: string) {
+  return /^\d*$/.test(value);
+}
+
+export function parseOptionalNumber(
+  value: string | undefined
+): number | undefined {
+  if (value === undefined) return undefined;
+  const parsed = Number(value);
+  return isNaN(parsed) ? undefined : parsed;
+}
 
 export function toOptional<T>(value: T | undefined | null): T | undefined {
   return value ?? undefined;
@@ -217,11 +219,6 @@ export function preciseSum(numbers: number[]): number {
   return Number(total) / Number(multiplier);
 }
 
-export const pluralize = (value: number, singular: string, plural: string) => {
-  const sufix = value === 1 ? singular : plural;
-  return `${value} ${sufix}`;
-};
-
 export function sortCustom<T>(
   items: T[],
   orderList: string[],
@@ -248,6 +245,7 @@ export const filterInventoryType = (
 ) => {
   return data.filter((item) => inventory.includes(item.label));
 };
+
 /**
  * Toma todo el enventario para distribucion
  * de inventario y retorna un set en especifico
@@ -271,71 +269,14 @@ export const outputInventorySum = (newData: Inventory[]) => {
   return { quantity: totalQuantity, weight: totalWeight };
 };
 
-export enum LogType {
-  INFO = 'info',
-  WARN = 'warn',
-  ERROR = 'error',
-  FETCH = 'fetch',
-}
-
-export const typeLog = (type: LogType = LogType.INFO, ...args: unknown[]) => {
-  let message = args.join(' ');
-  if (type === LogType.FETCH && args[0] && args[1]) {
-    const url = args[0] as URL;
-    const method = args[1] as string;
-    message = `${method} ${url.pathname}${url.search ? url.search : ''}`;
-  }
-  log(`[${type}]`, message);
-};
-
-/**
- * Función para registrar mensajes en la consola y en un div específico.
- */
-const maxMessageLength = 100; // Limitar a 100 caracteres
-const maxLines = 5; // Limitar a 5 líneas
-const logDiv = document.getElementById('__LOG__');
-const deleteOldLogs = () => {
-  if (logDiv) {
-    const logEntries = logDiv.getElementsByTagName('div');
-    while (logEntries.length > maxLines) {
-      logDiv.removeChild(logEntries[0]);
-    }
-  }
-};
-export const log = (...args: unknown[]) => {
-  const timestamp = new Date().toISOString();
-  if (DEBUG) {
-    console.log(...args);
-    if (logDiv) {
-      deleteOldLogs();
-      const message = args
-        .map((arg) =>
-          typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
-        )
-        .join(' ');
-      const logEntry = document.createElement('div');
-      logEntry.textContent = `[${timestamp}] ${message.substring(
-        0,
-        maxMessageLength
-      )}`; // Limitar a 100 caracteres
-      logDiv.appendChild(logEntry);
-    }
-  } else {
-    // delete node logDiv
-    if (logDiv) {
-      const parent = logDiv.parentNode;
-      if (parent) {
-        parent.removeChild(logDiv);
-      }
-    }
-  }
-};
-
 export const getAllowedResolutionStatus = (data: Option[]): Option[] =>
   data.filter((item) => allowedResolutionStatus.includes(Number(item.value)));
 
 export const getAllowedMaterialType = (data: Option[]): Option[] =>
   data.filter((item) => allowedMaterialType.includes(Number(item.value)));
+
+export const getAllowedContractStatus = (data: Option[]): Option[] =>
+  data.filter((item) => allowedContractStatus.includes(Number(item.value)));
 
 export const getIsEditable = (
   resolution: Resolution,
@@ -381,3 +322,82 @@ export function renderAveragePrice(
   }
   return null;
 }
+
+// --- Funciones de Lógica de UI/React ---
+export function debounce<A extends unknown[]>(
+  func: (...args: A) => void,
+  wait: number
+) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  const debounced = (...args: A) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
+  debounced.cancel = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+  };
+  return debounced;
+}
+
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+// --- Funciones de Log (agrupadas al final por ser una preocupación secundaria) ---
+/**
+ * Función para registrar mensajes en la consola y en un div específico.
+ */
+const maxMessageLength = 100; // Limitar a 100 caracteres
+const maxLines = 5; // Limitar a 5 líneas
+const logDiv = document.getElementById('__LOG__');
+const deleteOldLogs = () => {
+  if (logDiv) {
+    const logEntries = logDiv.getElementsByTagName('div');
+    while (logEntries.length > maxLines) {
+      logDiv.removeChild(logEntries[0]);
+    }
+  }
+};
+export const log = (...args: unknown[]) => {
+  const timestamp = new Date().toISOString();
+  if (DEBUG) {
+    console.log(...args);
+    if (logDiv) {
+      deleteOldLogs();
+      const message = args
+        .map((arg) =>
+          typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+        )
+        .join(' ');
+      const logEntry = document.createElement('div');
+      logEntry.textContent = `[${timestamp}] ${message.substring(
+        0,
+        maxMessageLength
+      )}`; // Limitar a 100 caracteres
+      logDiv.appendChild(logEntry);
+    }
+  } else {
+    // delete node logDiv
+    if (logDiv) {
+      const parent = logDiv.parentNode;
+      if (parent) {
+        parent.removeChild(logDiv);
+      }
+    }
+  }
+};
+
+export const typeLog = (type: LogType = LogType.INFO, ...args: unknown[]) => {
+  let message = args.join(' ');
+  if (type === LogType.FETCH && args[0] && args[1]) {
+    const url = args[0] as URL;
+    const method = args[1] as string;
+    message = `${method} ${url.pathname}${url.search ? url.search : ''}`;
+  }
+  log(`[${type}]`, message);
+};

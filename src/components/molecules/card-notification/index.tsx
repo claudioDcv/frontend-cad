@@ -1,4 +1,3 @@
-import theme from '@/conf/theme';
 import { Notification } from '@/entities/Notification.entity';
 import { formatDateHour } from '@/utils';
 import {
@@ -10,6 +9,9 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
+import { cardContainer, headerBox, footerBox } from './index.styles';
+
+// TODO: i18n agregar
 
 interface CardNotificationProps {
   data: Notification;
@@ -17,17 +19,9 @@ interface CardNotificationProps {
 
 const CardNotification: React.FC<CardNotificationProps> = ({ data }) => {
   return (
-    <Card variant="outlined" sx={{ mx: 1, mt: 1, backgroundColor: theme.palette.grey[100] }}>
+    <Card variant="outlined" sx={cardContainer}>
       <CardActions>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignContent: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
+        <Box sx={headerBox}>
           <Typography variant="button">{data.type}</Typography>
           <Chip label={formatDateHour(data.timestamp)} size="small" />
         </Box>
@@ -40,15 +34,7 @@ const CardNotification: React.FC<CardNotificationProps> = ({ data }) => {
       </CardContent>
       <Divider />
       <CardActions>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignContent: 'space-around',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
+        <Box sx={footerBox}>
           <Typography variant="caption">por: {data.userName}</Typography>
           <Typography variant="caption">tipo: {data.entity}</Typography>
         </Box>

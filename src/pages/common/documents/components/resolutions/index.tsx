@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import {
   emptyOption,
@@ -12,8 +12,6 @@ import {
 import {
   debounce,
   defaultStartDate,
-  formatToDDMMYYYY,
-  getMaterialType,
   isOnlyNumbersOrEmpty,
   toDay,
 } from '@/utils';
@@ -23,12 +21,7 @@ import {
   DropdownController,
   MonthRangePicker,
   Pagination,
-  Table,
   Input,
-  Access,
-  IconList,
-  ResolutionDetailButton,
-  DocumentStatus,
 } from '@components/index';
 import useServices from './hooks/useServices';
 import {
@@ -38,16 +31,15 @@ import {
 } from '../../utils';
 import { Resolution } from '@/entities/Resolution.entity';
 import { ResolutionFormModel } from '../../types';
-import { ResolutionSendTruckModal } from './components';
-import { useReceivablesContext } from '@/modules/receivables/context/useReceivablesContext';
 import { useMassiveResolutionContext } from '@/modules/massive-resolution/context/useMassiveResolutionContext';
 import useAccess from '@/components/atoms/access/useAccess';
+import ResolutionSendTruckModal from './components/ResolutionSendTruckModal';
+import ResolutionTable from './components/ResolutionTable';
 
 const Resolutions = () => {
   const access = useAccess();
   const { t } = useTranslation();
   const massiveResolutionContext = useMassiveResolutionContext();
-  const receivablesContext = useReceivablesContext();
   const [hasMetadata, setHasMetadata] = useState(true);
 
   const { control, reset, getValues, setValue } = useForm<ResolutionFormModel>({
@@ -244,79 +236,10 @@ const Resolutions = () => {
             />
           </Box>
         </form>
-        <Table
-          columns={[
-            {
-              id: 'statusName',
-              label: t('resolution.status'),
-              render: ({ statusId, stateName, metadata }) => (
-                <DocumentStatus
-                  metadata={metadata}
-                  statusId={statusId}
-                  statusName={stateName}
-                />
-              ),
-            },
-            { id: 'resolutionNumber', label: t('resolution.resolutionNumber') },
-            { id: 'barcode', label: t('resolution.barcode') },
-            { id: 'dispatchGuide', label: t('resolution.dispatchGuide') },
-            { id: 'investmentName', label: t('common.investment') },
-            { id: 'locationName', label: t('resolution.location') },
-            {
-              id: 'closeDate',
-              label: t('resolution.closeDate'),
-              render: ({ closeDate }) => formatToDDMMYYYY(closeDate),
-            },
-            { id: 'contractCount', label: t('resolution.contractCount') },
-            {
-              id: 'categoryName',
-              label: t('common.category'),
-              render: ({ categoryName, categoryId }) =>
-                getMaterialType(categoryName, String(categoryId), 'tooltip'),
-            },
-            {
-              id: 'actions',
-              label: t('common.actions'),
-              render: (resolution) => (
-                <Box display="flex" gap={1}>
-                  <ResolutionDetailButton
-                    id={String(resolution.resolutionId)}
-                    label={t('common.view')}
-                  />
-                  <Access roles={[validRoles.operator]}>
-                    <Tooltip title={t('common.massUpload')}>
-                      <IconButton onClick={handleMassiveResolution(resolution)}>
-                        <IconList name="box" />
-                      </IconButton>
-                    </Tooltip>
-                  </Access>
-                  <Tooltip title={t('common.sendTruck')}>
-                    <IconButton
-                      onClick={handleSendTruckId(resolution.resolutionId)}
-                    >
-                      <IconList name="truckDoc" />
-                    </IconButton>
-                  </Tooltip>
-                  <Access roles={[validRoles.operator]}>
-                    <Tooltip title={t('accountsReceivable.tooltipOpen')}>
-                      <IconButton
-                        onClick={() =>
-                          receivablesContext.setResolutionId(
-                            resolution.resolutionId
-                          )
-                        }
-                      >
-                        <IconList name="receivables" />
-                      </IconButton>
-                    </Tooltip>
-                  </Access>
-                </Box>
-              ),
-            },
-          ]}
-          rows={resolutions}
-          messageVoidData={t('common.noData')}
-          size="small"
+        <ResolutionTable
+          resolutions={resolutions}
+          onMassiveResolution={handleMassiveResolution}
+          onSendTruckId={handleSendTruckId}
         />
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination

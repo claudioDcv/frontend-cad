@@ -45,9 +45,20 @@ const breadcrumbs = {
     routes.common.index,
     routes.admin.receivable,
   ],
-  [`/${validRoles.admin}/pre-inventory`]: [
+  [`/${validRoles.admin}/dashboard/pre-inventory`]: [
     routes.common.index,
+    routes.admin.dashboard,
     routes.admin.preInventory,
+  ],
+  [`/${validRoles.admin}/dashboard/post-inventory`]: [
+    routes.common.index,
+    routes.admin.dashboard,
+    routes.admin.postInventory,
+  ],
+  [`/${validRoles.admin}/dashboard/post-movement`]: [
+    routes.common.index,
+    routes.admin.dashboard,
+    routes.admin.postMovement,
   ],
 };
 

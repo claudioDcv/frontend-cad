@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Switch, useLocation } from 'wouter';
+import { Redirect, Route, Switch, useLocation } from 'wouter';
 import routes from './conf/routes';
 import NotFound from './pages/common/not-found';
 import Notifications from './pages/common/notifications';
@@ -9,7 +9,7 @@ import Documents from './pages/common/documents';
 import ResolutionDetail from './pages/common/resolution-detail';
 import PackingListDetail from './pages/common/packinglist-detail';
 import ReceivablesAdmin from './pages/admin/receivables';
-import PreInventoryPage from './pages/admin/pre-inventory';
+import Dashboard from './pages/admin/dashboard';
 
 const Router = (props: { hostUrl: string }) => {
   const [location, setLocation] = useLocation();
@@ -65,16 +65,17 @@ const Router = (props: { hostUrl: string }) => {
           path={routes.cordinator.notifications.link}
           component={Notifications}
         />
-
         <Route
           path={routes.admin.receivable.link}
           component={ReceivablesAdmin}
         />
-
-        <Route
-          path={routes.admin.preInventory.link}
-          component={PreInventoryPage}
-        />
+        {/* Dashboard Admin */}
+        <Route path={routes.admin.dashboard.link + '/:page*'}>
+          <Dashboard />
+        </Route>
+        <Route path={routes.admin.dashboard.link}>
+          <Redirect to={routes.admin.preInventory.link} />
+        </Route>
 
         <Route component={NotFound} />
       </Switch>

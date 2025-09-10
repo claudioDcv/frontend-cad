@@ -56,7 +56,7 @@ const ReceivablesAdmin = () => {
       await update.call(data);
       alertContext.addAlert({
         type: AlertType.SUCCESS,
-        title: 'Cuenta por Cobrar Aceptada',
+        title: t('accountsReceivable.receivableStatus.true'),
       });
     } catch (error) {
       console.error(error);
@@ -70,7 +70,7 @@ const ReceivablesAdmin = () => {
       await update.call(data);
       alertContext.addAlert({
         type: AlertType.SUCCESS,
-        title: 'Cuenta por Cobrar Rechazada',
+        title: t('accountsReceivable.receivableStatus.false'),
       });
     } catch (error) {
       console.error(error);
@@ -83,34 +83,37 @@ const ReceivablesAdmin = () => {
     <div>
       <Box mt={2}>
         <Table
-          messageVoidData="No hay cuentas por cobrar"
+          messageVoidData={t('accountsReceivable.noData')}
           rows={receivables.data.content}
           columns={[
             {
               id: 'status',
-              label: 'Estado',
+              label: t('accountsReceivable.status'),
               render: (row) => <StatusChip status={row.status} />,
             },
-            { id: 'contractId', label: 'Contrato' },
-            { id: 'quantity', label: 'Cantidad' },
-            { id: 'weight', label: 'Peso' },
-            { id: 'createdByName', label: 'Creado por' },
+            { id: 'contractId', label: t('accountsReceivable.contractId') },
+            { id: 'quantity', label: t('accountsReceivable.quantity') },
+            { id: 'weight', label: t('accountsReceivable.weight') },
+            {
+              id: 'createdByName',
+              label: t('accountsReceivable.createdByName'),
+            },
             {
               id: 'reviewedByName',
-              label: 'Revisado por',
+              label: t('accountsReceivable.reviewedByName'),
               render: (row) => row.reviewedByName || '-',
             },
             {
               id: 'typeName',
-              label: 'Tipo',
+              label: t('accountsReceivable.typeName'),
               render: (row) => t(`inventoryType.${row.typeName}`),
             },
             {
               id: 'id',
-              label: 'Ver',
+              label: t('accountsReceivable.viewReceivable'),
               render: (row) => (
                 <IconButton
-                  aria-label={t('common.view')}
+                  aria-label={t('accountsReceivable.viewReceivable')}
                   onClick={() => setReceivable(row)}
                 >
                   <IconList name="visualize" />
@@ -120,6 +123,7 @@ const ReceivablesAdmin = () => {
           ]}
           loading={receivables.status === FetchStatus.LOADING}
         />
+
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Pagination {...receivables.data.meta} onChange={handleChangePage} />
         </Box>

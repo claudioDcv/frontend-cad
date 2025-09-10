@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Dialog, DialogContent, Box, Divider, LinearProgress, AppBar, Typography } from '@mui/material';
+import {
+  Dialog,
+  DialogContent,
+  Box,
+  Divider,
+  LinearProgress,
+  AppBar,
+  Typography,
+} from '@mui/material';
 import { DisplayData, InventoryEditableTable, IconList } from '@/components';
 import { ModalMassUploadProps } from './index.types';
 import ModalHeader from '@/components/molecules/modal-header';
@@ -7,7 +15,7 @@ import styles from './index.module.css';
 import ActionsResolution from './components/actions-resolution';
 import { useTranslation } from 'react-i18next';
 import useServices from './hooks/useServices';
-import { formatCurrency, formatToDDMMYYYY, pluralize } from '@/utils';
+import { formatCurrency, formatToDDMMYYYY, verboseGram } from '@/utils';
 import { Inventory } from '@/entities/Inventory.entity';
 import { FetchStatus } from '@/constants';
 
@@ -69,7 +77,8 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
     onSendOutput(data);
   };
 
-  const inventoriesSuccess = services.getResolutionInventory.status === FetchStatus.SUCCESS;
+  const inventoriesSuccess =
+    services.getResolutionInventory.status === FetchStatus.SUCCESS;
   const inventories = services.getResolutionInventory.data || [];
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth>
@@ -90,7 +99,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
             <Box>
               <DisplayData
                 label={t('modalMassUpload.totalWeight')}
-                value={pluralize(services.getResolution.data.totalWeight, 'gr', 'grs')}
+                value={verboseGram(services.getResolution.data.totalWeight)}
               />
               <DisplayData
                 label={t('modalMassUpload.salePrice')}
@@ -131,13 +140,17 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
             </Box>
           </Box>
           <Box flex={2}>
-            {inventoriesSuccess ? <InventoryEditableTable
-              data={data}
-              setData={setData}
-              total={expectedTotal}
-              resolutionInventory={inventories}
-              onChange={handleTotalsChange}
-            /> : <LinearProgress />}
+            {inventoriesSuccess ? (
+              <InventoryEditableTable
+                data={data}
+                setData={setData}
+                total={expectedTotal}
+                resolutionInventory={inventories}
+                onChange={handleTotalsChange}
+              />
+            ) : (
+              <LinearProgress />
+            )}
           </Box>
         </Box>
       </DialogContent>

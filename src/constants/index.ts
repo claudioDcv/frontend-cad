@@ -1,5 +1,34 @@
 import { Material } from '@/components/molecules/material-type/types';
 
+// Enums
+export enum FetchStatus {
+  IDLE = 'idle',
+  LOADING = 'loading',
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+
+export enum AllowedResolutionStatus {
+  PRE_RESOLVED = 20,
+  CLOSED = 26,
+}
+
+export enum AllowedMaterialType {
+  GOLD = 1,
+  SILVER = 2,
+  EXCLUSIVE_BRAND = 4,
+}
+
+export enum AllowedContractStatus {
+  RESOLVED = 11,
+  RECOVERED = 9,
+  EXPIRED = 8,
+  CURRENT = 7,
+  ANNULLED = 12,
+  PRE_RESOLVED = 20,
+}
+
+// Mapeos de datos y configuraciones
 export const statusToKeyMap: Record<
   number,
   {
@@ -15,8 +44,11 @@ export const statusToKeyMap: Record<
       | 'warning';
   }
 > = {
+  2: { icon: 'default', label: 'Default', color: 'default' },
+  11: { icon: 'resolved', label: 'Resolved', color: 'info' },
   13: { icon: 'reserved', label: 'Reserved', color: 'default' },
   19: { icon: 'accepted-payment', label: 'AcceptedPayment', color: 'default' },
+  20: { icon: 'pre-resolved', label: 'PreResolved', color: 'info' },
   22: { icon: 'deleted', label: 'Deleted', color: 'error' },
   26: { icon: 'closed', label: 'Closed', color: 'success' },
   29: { icon: 'accepted', label: 'Accepted', color: 'default' },
@@ -40,43 +72,7 @@ export const statusToKeyMap: Record<
   90: { icon: 'income', label: 'Income', color: 'default' },
   91: { icon: 'rejected', label: 'RejectedPayment', color: 'error' },
   92: { icon: 'not-pending', label: 'NotPendingPayment', color: 'warning' },
-  20: { icon: 'pre-resolved', label: 'PreResolved', color: 'info' },
-  11: { icon: 'resolved', label: 'Resolved', color: 'info' },
-  /* Estados no conocidos */
-  2: { icon: 'default', label: 'Default', color: 'default' },
 };
-
-export enum FetchStatus {
-  IDLE = 'idle',
-  LOADING = 'loading',
-  SUCCESS = 'success',
-  ERROR = 'error',
-}
-
-export const STATUS_RESOLUTION = 14;
-export const STATUS_CONTRACTS = 2;
-export const STATUS_PACKING_LIST = 32;
-
-export const STATUS_PRE_RESOLUTION = 20;
-
-export const TAB_RESOLUTIONS = 0;
-export const TAB_PACKING_LIST = 1;
-
-export const FIRST_PAGE_INDEX = 0;
-export const FIRST_PAGE = 1;
-export const ITEMS_PER_PAGE = 20;
-
-export const FIVE_YEARS_AGO = 5;
-export const FIRST_DAY = 1;
-export const LAST_DAY_OF_PREVIOUS_MONTH = 0;
-
-export const LOCATION_ACTIVE = true;
-export const LOCATION_INACTIVE = false;
-
-export const SEARCH_DELAY = 300;
-
-export const emptyOption = { value: 'all', label: 'TODOS' };
-export const emptyTotal = { quantity: 0, weight: 0 };
 
 export const materialMap: Record<string, Material> = {
   '1': 'Gold',
@@ -93,11 +89,28 @@ export const validRoles = {
   cordinator: 'cordinator-role',
 };
 
-export const commonNotificationTypes = ['resolution_notification'];
+// Constantes de estados, tipos y categorías
+export const allowedResolutionStatus = [
+  AllowedResolutionStatus.PRE_RESOLVED,
+  AllowedResolutionStatus.CLOSED,
+];
 
-/* DISTRIBUCION DE INVENTARIOS */
+export const allowedMaterialType = [
+  AllowedMaterialType.GOLD,
+  AllowedMaterialType.SILVER,
+  AllowedMaterialType.EXCLUSIVE_BRAND,
+];
+
+export const allowedContractStatus = [
+  AllowedContractStatus.RESOLVED,
+  AllowedContractStatus.RECOVERED,
+  AllowedContractStatus.EXPIRED,
+  AllowedContractStatus.CURRENT,
+  AllowedContractStatus.ANNULLED,
+  AllowedContractStatus.PRE_RESOLVED,
+];
+
 const refactionInventories = ['anillo', 'aro', 'colgante', 'cadena', 'pulcera'];
-
 const commonInventories = [
   'joyaespecial',
   'moneda',
@@ -105,7 +118,6 @@ const commonInventories = [
   'relojneto',
   'scrap',
 ];
-
 const badInventories = ['materialfalso', 'materialfaltante', 'materialbajaley'];
 
 export const inventoryCategories = {
@@ -120,26 +132,36 @@ export const allowedInventories = [
   ...inventoryCategories.bad,
 ];
 
-// Estados que se visualizaran
-export enum AllowedResolutionStatus {
-  PRE_RESOLVED = 20,
-  CLOSED = 26,
-}
+export const commonNotificationTypes = ['resolution_notification'];
 
-export const allowedResolutionStatus = [
-  AllowedResolutionStatus.PRE_RESOLVED,
-  AllowedResolutionStatus.CLOSED,
-];
+// Constantes de valores numéricos
+export const STATUS_RESOLUTION = 14;
+export const STATUS_CONTRACTS = 2;
+export const STATUS_PACKING_LIST = 32;
+export const STATUS_PRE_RESOLUTION = 20;
 
-// Materiales que se visualizaran
-export enum AllowedMaterialType {
-  GOLD = 1,
-  SILVER = 2,
-  EXCLUSIVE_BRAND = 4,
-}
+export const TAB_RESOLUTIONS = 0;
+export const TAB_PACKING_LIST = 1;
 
-export const allowedMaterialType = [
-  AllowedMaterialType.GOLD,
-  AllowedMaterialType.SILVER,
-  AllowedMaterialType.EXCLUSIVE_BRAND,
-];
+export const FIRST_PAGE_INDEX = 0;
+export const FIRST_PAGE = 1;
+export const ITEMS_PER_PAGE = 20;
+export const FIVE_YEARS_AGO = 5;
+export const FIRST_DAY = 1;
+export const LAST_DAY_OF_PREVIOUS_MONTH = 0;
+
+export const LOCATION_ACTIVE = true;
+export const LOCATION_INACTIVE = false;
+
+export const SEARCH_DELAY = 300;
+
+// Constantes de texto
+export const emptyOption = { value: 'all', label: 'TODOS' };
+export const emptyTotal = { quantity: 0, weight: 0 };
+
+export const UNIT = {
+  GRAM_SINGULAR: 'gr',
+  GRAM_PLURAL: 'grs',
+  UNIT_SINGULAR: 'und',
+  UNIT_PLURAL: 'unds',
+};

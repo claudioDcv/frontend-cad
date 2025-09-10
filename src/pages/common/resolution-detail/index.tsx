@@ -80,7 +80,9 @@ const ResolutionDetail = () => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const services = useServices(resolutionId);
+  
   const statusOptions = addOptionAll(services.getAllStatus.data);
+
   const isStatusDisabled = isEmpty(services.getAllStatus.data);
 
   const getFilteredContracts = () => {
@@ -356,6 +358,24 @@ const ResolutionDetail = () => {
             ]}
             onChange={(value) => setShowOnlyNotReviewed(value as 0 | 1 | 2)}
           />
+          {/*
+          <p>
+            Contratos pendientes
+            <meter
+              min={0}
+              max={services.getResolutionContracts.data.length}
+              value={
+                services.getResolutionContracts.data.filter((e) => e.metadata)
+                  .length
+              }
+            >
+              {
+                services.getResolutionContracts.data.filter((e) => e.metadata)
+                  .length
+              }
+            </meter>
+          </p>
+          */}
         </Box>
         <Table
           columns={[

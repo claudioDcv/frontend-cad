@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { allowedInventories } from '@/constants';
-import type { InventoryTypeResponse } from './types';
 import type { InventoryType } from '@/entities/InventoryType.entity';
+import { InventoryTypeResponse } from './types';
 import { remap } from './utils';
 
 describe('remap', () => {
