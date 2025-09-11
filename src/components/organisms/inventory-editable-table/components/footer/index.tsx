@@ -1,4 +1,5 @@
 import { Inventory } from '@/entities/Inventory.entity';
+import { useTranslation } from 'react-i18next';
 import { outputInventorySum, verboseGram, verboseUnit } from '@/utils';
 import { EditableTableProps } from '../../index.types';
 import styles from './index.module.css';
@@ -9,12 +10,17 @@ interface FooterProps {
 }
 
 const Footer = ({ data, props }: FooterProps) => {
+  const { t } = useTranslation();
+
   const totals = outputInventorySum(data);
+
   return (
     <tfoot>
       <tr>
         <td>
-          <div className={styles.caption}>Totales</div>
+          <div className={styles.caption}>
+            {t('inventoryEditableTable.footer.totals')}
+          </div>
         </td>
         <td
           className={

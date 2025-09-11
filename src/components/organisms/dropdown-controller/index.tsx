@@ -1,7 +1,21 @@
-import { Controller } from 'react-hook-form';
+import { Control, Controller, ControllerRenderProps } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { SxProps, Theme } from '@mui/material';
+import { Option } from '@/entities/Option.entity';
+import tsStyles from './index.styles';
 import Dropdown from '../../molecules/dropdown';
-import { DropdownControllerProps } from './index.types';
+
+export interface DropdownControllerProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange: (field: ControllerRenderProps<any, any>) => (opt: Option) => void;
+  options: Option[];
+  disabled: boolean;
+  name: string;
+  label: string;
+  sx?: SxProps<Theme>;
+}
 
 const DropdownController = (props: DropdownControllerProps) => {
   const { t } = useTranslation();
@@ -17,7 +31,7 @@ const DropdownController = (props: DropdownControllerProps) => {
           options={props.options}
           label={t(props.label)}
           disabled={props.disabled}
-          sx={{ maxWidth: 250, ...props.sx }}
+          sx={tsStyles.getDropdownStyles(props.sx)}
         />
       )}
     />

@@ -10,7 +10,7 @@ interface BranchDetailModalProps {
 const BranchDetailModal = ({ id, onClose }: BranchDetailModalProps) => {
   //const { t } = useTranslation();
 
-  const [_openConfirm, setOpenConfirm] = useState(false);
+  const [, setOpenConfirm] = useState(false);
 
   useEffect(() => {
     if (id !== null) setOpenConfirm(true);

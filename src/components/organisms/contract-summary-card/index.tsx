@@ -3,6 +3,7 @@ import { formatCurrency, verboseGram } from '../../../utils';
 import { DisplayData } from '../..';
 import { Contract } from '@/entities/Contract.entity';
 import { useTranslation } from 'react-i18next';
+import tsStyles from './index.styles';
 import theme from '@/conf/theme';
 
 interface ContractSummaryCardProps {
@@ -27,11 +28,8 @@ const ContractSummaryCard: React.FC<ContractSummaryCardProps> = ({
     averagePurchaseValue: t('contract.averagePurchaseValue'),
   };
   return (
-    <Card
-      variant="outlined"
-      sx={{ backgroundColor: theme.palette.background.paper }}
-    >
-      <Box px={2} pt={1}>
+    <Card variant="outlined" sx={tsStyles.cardStyles}>
+      <Box sx={tsStyles.titleBoxStyles}>
         <Typography
           variant="h6"
           component="h2"
@@ -41,13 +39,7 @@ const ContractSummaryCard: React.FC<ContractSummaryCardProps> = ({
           {t('contract.summaryTitle')}
         </Typography>
       </Box>
-      <Box
-        px={2}
-        pb={2}
-        display="grid"
-        gridTemplateColumns={hiddenClient ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'}
-        gap={2}
-      >
+      <Box sx={tsStyles.gridBoxStyles(hiddenClient ?? false)}>
         <Box>
           <DisplayData
             label={lang.weight}

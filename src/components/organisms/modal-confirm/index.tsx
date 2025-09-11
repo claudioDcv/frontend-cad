@@ -2,7 +2,29 @@ import { useState } from 'react';
 import { Box, Dialog, DialogContent, DialogContentText } from '@mui/material';
 import ModalHeader from '../../molecules/modal-header';
 import ModalActions from '../../molecules/modal-actions';
-import { initialStateI18n, ModalConfirmProps } from './index.types';
+import tsStyles from './index.styles';
+
+interface I18N {
+  title: string;
+  text: string;
+  success: string;
+  cancel: string;
+}
+
+const initialStateI18n: I18N = {
+  title: 'Modal input',
+  text: 'Label',
+  success: 'Éxito',
+  cancel: 'Cancelar',
+};
+
+interface ModalConfirmProps {
+  open: boolean;
+  onClose: () => void;
+  onSuccess: () => void | Promise<void>;
+  i18n?: Partial<I18N>;
+  children?: React.ReactNode;
+}
 
 const ModalConfirm: React.FC<ModalConfirmProps> = ({
   open,
@@ -29,7 +51,7 @@ const ModalConfirm: React.FC<ModalConfirmProps> = ({
       <ModalHeader onClose={onClose}>{lang.title}</ModalHeader>
       <DialogContent>
         <DialogContentText>{lang.text}</DialogContentText>
-        {children && <Box mt={2}>{children}</Box>}
+        {children && <Box sx={tsStyles.childrenBoxStyles}>{children}</Box>}
       </DialogContent>
       <ModalActions
         i18n={lang}

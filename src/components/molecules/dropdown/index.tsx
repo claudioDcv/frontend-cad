@@ -5,6 +5,7 @@ import {
   MenuItem,
   SelectChangeEvent,
   SxProps,
+  Theme,
 } from '@mui/material';
 import { useId } from 'react';
 import { Option } from '@/entities/Option.entity';
@@ -16,7 +17,7 @@ export interface DropdownProps {
   label: string;
   required?: boolean;
   disabled?: boolean;
-  sx?: SxProps;
+  sx?: SxProps | SxProps<Theme>;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({

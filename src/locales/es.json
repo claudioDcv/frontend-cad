@@ -412,6 +412,9 @@
     },
     "categories": {
       "refaction": "Refacción"
+    },
+    "footer": {
+      "totals": "Totales"
     }
   }
 }
