@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import tsStyles from './index.styles';
 
 interface DisplayDataProps {
   value: string | number | undefined | null | React.ReactNode;
@@ -6,9 +7,13 @@ interface DisplayDataProps {
   voidValue?: string;
 }
 
-const DisplayData: React.FC<DisplayDataProps> = ({ label, value, voidValue = 'N/A' }) => {
+const DisplayData: React.FC<DisplayDataProps> = ({
+  label,
+  value,
+  voidValue = 'N/A',
+}) => {
   return (
-    <Box sx={{ flexDirection: 'row', display: 'flex', gap: 1 }}>
+    <Box sx={tsStyles.displayDataContainer}>
       <Typography variant="body2" component="span">
         {label}:
       </Typography>

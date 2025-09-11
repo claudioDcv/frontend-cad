@@ -1,7 +1,22 @@
 import CadIcon from '@/components/atoms/cad-icon';
 import { statusToKeyMap } from '@/constants';
 import { Chip, Tooltip } from '@mui/material';
-import { DocumentStatusProps, initialState18N } from './index.types';
+import { ResolutionMetadata } from '@/entities/Resolution.entity';
+
+interface I18N {
+  sent: string;
+}
+
+const initialState18N: I18N = {
+  sent: 'Enviado a CAD',
+};
+
+interface DocumentStatusProps {
+  i18n?: Partial<I18N>;
+  statusId: number;
+  statusName?: string;
+  metadata?: ResolutionMetadata | null;
+}
 
 const DocumentStatus: React.FC<DocumentStatusProps> = ({
   i18n,

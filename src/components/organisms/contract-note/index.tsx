@@ -2,11 +2,35 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, DialogActions, TextField } from '@mui/material';
 import { ContractMetadata } from '@/entities/Contract.entity';
-import { orFalseBoolean, orVoidString } from '@/utils';
-import { ContractNoteProps, initialState } from './index.types';
+import { orFalseBoolean, orVoidString, toDay } from '@/utils';
 import { Access, Checkbox, ModalActions } from '@/components';
 import { validRoles } from '@/constants';
 import useAccess from '@/components/atoms/access/useAccess';
+import tsStyles from './index.styles';
+
+export interface ContractNoteProps {
+  metadata?: ContractMetadata | null;
+  onSuccess: (contract: ContractMetadata) => void;
+  onClose: () => void;
+  loading: boolean;
+  editable?: boolean;
+}
+
+const getCreatedAt = (): string => {
+  return toDay().toString();
+};
+
+const initialState = (): ContractMetadata => ({
+  contractId: 0,
+  note: null,
+  reviewed: false,
+  reviewedBy: null,
+  reviewedAt: null,
+  confirmedBy: null,
+  confirmedAt: null,
+  createdAt: getCreatedAt(),
+  updatedAt: null,
+});
 
 const ContractNote: React.FC<ContractNoteProps> = ({
   metadata: initialContract,
@@ -57,13 +81,7 @@ const ContractNote: React.FC<ContractNoteProps> = ({
 
   return (
     <DialogActions>
-      <Box
-        sx={{ p: 2 }}
-        display="flex"
-        flexDirection="column"
-        gap={2}
-        justifyContent="flex-end"
-      >
+      <Box sx={tsStyles.containerStyles}>
         <TextField
           label={t('common.note')}
           value={metadata.note}
@@ -76,12 +94,7 @@ const ContractNote: React.FC<ContractNoteProps> = ({
           }}
         />
         <Access roles={[validRoles.cordinator]}>
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            alignItems="center"
-            gap={1}
-          >
+          <Box sx={tsStyles.actionsBoxStyles}>
             <Checkbox
               onChange={handleChangeReviewed}
               label={t('common.reviewed')}

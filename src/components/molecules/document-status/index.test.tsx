@@ -21,14 +21,14 @@ const sampleMetadata: ResolutionMetadata = {
 };
 
 describe('DocumentStatus', () => {
-  test('renderiza Chip con el statusName', () => {
+  test('renders Chip with the statusName', () => {
     const statusId = 1;
     render(<DocumentStatus statusId={statusId} statusName="Pendiente" />);
     const chip = screen.getByText('Pendiente');
     expect(chip).toBeInTheDocument();
   });
 
-  test('renderiza CadIcon si hay metadata', () => {
+  test('renders CadIcon if metadata is present', () => {
     const statusId = 1;
     const color = statusToKeyMap[statusId]?.color;
     render(
@@ -43,7 +43,7 @@ describe('DocumentStatus', () => {
     expect(cadIcon).toHaveTextContent(color || '');
   });
 
-  test('tooltip muestra texto i18n si hay metadata', () => {
+  test('tooltip shows i18n text if metadata is present', () => {
     const statusId = 1;
     render(
       <DocumentStatus
@@ -57,7 +57,7 @@ describe('DocumentStatus', () => {
     expect(chip).toBeInTheDocument();
   });
 
-  test('tooltip muestra statusName si no hay metadata', () => {
+  test('tooltip shows statusName if no metadata is present', () => {
     render(<DocumentStatus statusId={1} statusName="Pendiente" />);
     expect(screen.getByText('Pendiente')).toBeInTheDocument();
   });

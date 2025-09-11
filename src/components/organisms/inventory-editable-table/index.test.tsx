@@ -14,20 +14,17 @@ import { EditableTableProps } from './index.types';
 import { InventoryType } from '@/entities/InventoryType.entity';
 import { InventoryResolution } from '@/entities/InventoryResolution.entity';
 
-// Mocks de utilidades y hooks
-vi.mock('@/contexts/initial-data/useInitialData', () => ({
-  useInitialData: vi.fn(),
-}));
-
-vi.mock('./index.utils', () => ({
-  initializeData: vi.fn(),
-  updateResolutionInventory: vi.fn(),
-  handleInventoryChange: vi.fn(),
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
 }));
 
 vi.mock('@/utils', () => ({
   filterByInventory: vi.fn(),
   outputInventorySum: vi.fn(() => ({ quantity: 0, weight: 0 })),
+  verboseUnit: (val: number) => `${val}`, // mocked function
+  verboseGram: (val: number) => `${val} g`, // mocked function
 }));
 
 vi.mock('@/constants', () => ({
@@ -37,6 +34,16 @@ vi.mock('@/constants', () => ({
     common: 'common',
     bad: 'bad',
   },
+}));
+
+vi.mock('@/contexts/initial-data/useInitialData', () => ({
+  useInitialData: vi.fn(),
+}));
+
+vi.mock('./index.utils', () => ({
+  initializeData: vi.fn(),
+  updateResolutionInventory: vi.fn(),
+  handleInventoryChange: vi.fn(),
 }));
 
 vi.mock('./components/table-body', () => ({
@@ -106,7 +113,6 @@ describe('InventoryEditableTable', () => {
     (updateResolutionInventory as Mock).mockReturnValue([]);
     (handleInventoryChange as Mock).mockReturnValue([]);
 
-    // Configurar el mock de filterByInventory para cada prueba
     (filterByInventory as Mock).mockImplementation((data, category) => {
       const inventoryTypesByCategory = mockInventoryTypes
         .filter((type) => type.inventoryCategory === category)
@@ -120,13 +126,21 @@ describe('InventoryEditableTable', () => {
   test('should render the table and initial content', () => {
     render(<InventoryEditableTable {...mockProps} />);
 
-    expect(screen.getByText('Inventario editable')).toBeInTheDocument();
     expect(
-      screen.getByText('Para editar un número haz click sobre él')
+      screen.getByText('inventoryEditableTable.caption')
     ).toBeInTheDocument();
-    expect(screen.getByText('Inventario')).toBeInTheDocument();
-    expect(screen.getByText('Cantidad')).toBeInTheDocument();
-    expect(screen.getByText('Peso Neto (gr)')).toBeInTheDocument();
+    expect(
+      screen.getByText('inventoryEditableTable.captionMessage')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('inventoryEditableTable.headers.inventory')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('inventoryEditableTable.headers.quantity')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('inventoryEditableTable.headers.weight')
+    ).toBeInTheDocument();
   });
 
   test('should call initializeData and setData on first render', () => {
@@ -149,7 +163,7 @@ describe('InventoryEditableTable', () => {
     expect(mockSetData).toHaveBeenCalledWith(mockInitializedData);
   });
 
-  test('should call updateResolutionInventory when resolutionInventory is available', async () => {
+  test('should call updateResolutionInventory when resolutionInventory is available', () => {
     const mockResData: Inventory[] = [
       {
         inventoryType: 'type1' as unknown as InventoryType,
@@ -194,7 +208,7 @@ describe('InventoryEditableTable', () => {
     expect(mockSetData).toHaveBeenCalledWith(mockResData);
   });
 
-  test('should not call updateResolutionInventory on subsequent renders after initialization', async () => {
+  test('should not call updateResolutionInventory on subsequent renders after initialization', () => {
     const initialData: Inventory[] = [
       {
         inventoryType: 'type1' as unknown as InventoryType,
@@ -242,16 +256,6 @@ describe('InventoryEditableTable', () => {
         inventoryType: 'refaction' as unknown as InventoryType,
         quantity: 10,
         weight: 100,
-      },
-      {
-        inventoryType: 'common' as unknown as InventoryType,
-        quantity: 5,
-        weight: 50,
-      },
-      {
-        inventoryType: 'bad' as unknown as InventoryType,
-        quantity: 2,
-        weight: 20,
       },
     ];
     const mockNewData: Inventory[] = [

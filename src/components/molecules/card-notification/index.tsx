@@ -9,7 +9,7 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { cardContainer, headerBox, footerBox } from './index.styles';
+import tsStyles from './index.styles';
 
 // TODO: i18n agregar
 
@@ -19,9 +19,9 @@ interface CardNotificationProps {
 
 const CardNotification: React.FC<CardNotificationProps> = ({ data }) => {
   return (
-    <Card variant="outlined" sx={cardContainer}>
+    <Card variant="outlined" sx={tsStyles.cardContainer}>
       <CardActions>
-        <Box sx={headerBox}>
+        <Box sx={tsStyles.headerBox}>
           <Typography variant="button">{data.type}</Typography>
           <Chip label={formatDateHour(data.timestamp)} size="small" />
         </Box>
@@ -34,7 +34,7 @@ const CardNotification: React.FC<CardNotificationProps> = ({ data }) => {
       </CardContent>
       <Divider />
       <CardActions>
-        <Box sx={footerBox}>
+        <Box sx={tsStyles.footerBox}>
           <Typography variant="caption">por: {data.userName}</Typography>
           <Typography variant="caption">tipo: {data.entity}</Typography>
         </Box>

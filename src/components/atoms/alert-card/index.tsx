@@ -1,5 +1,14 @@
 import { Alert, AlertColor, AlertTitle, Box, Collapse } from '@mui/material';
-import { I18N, initialState18N } from './index.type';
+
+interface I18N {
+  title: string;
+  text: string;
+}
+
+const initialState18N: I18N = {
+  title: 'Title',
+  text: 'Text',
+};
 
 interface AlertCardProps {
   i18n?: Partial<I18N>;
