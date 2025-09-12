@@ -35,6 +35,7 @@ import { useMassiveResolutionContext } from '@/modules/massive-resolution/contex
 import useAccess from '@/components/atoms/access/useAccess';
 import ResolutionSendTruckModal from './components/ResolutionSendTruckModal';
 import ResolutionTable from './components/ResolutionTable';
+import tsStyles from './index.styles';
 
 const Resolutions = () => {
   const access = useAccess();
@@ -177,14 +178,7 @@ const Resolutions = () => {
     <div>
       <Box>
         <form>
-          <Box
-            mb={2}
-            mt={2}
-            flexWrap="nowrap"
-            display="flex"
-            alignItems="center"
-            gap={2}
-          >
+          <Box sx={tsStyles.filterContainer}>
             <Controller
               name="resolutionNumber"
               control={control}
@@ -211,7 +205,7 @@ const Resolutions = () => {
               label="common.status"
               name="status"
               control={control}
-              sx={{ width: '70%' }}
+              sx={tsStyles.dropdownStatus}
             />
             <DropdownController
               onChange={handleChangeInvestment}
@@ -241,7 +235,7 @@ const Resolutions = () => {
           onMassiveResolution={handleMassiveResolution}
           onSendTruckId={handleSendTruckId}
         />
-        <Box display="flex" justifyContent="flex-end" mt={2}>
+        <Box sx={tsStyles.paginationBox}>
           <Pagination
             count={meta.count}
             page={meta.page}

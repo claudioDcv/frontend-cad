@@ -1,27 +1,26 @@
-import { useGetReceivables } from '@/clients';
+import { useEffect, useState } from 'react';
+import { Box, IconButton } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { ReceivableProps } from '@/clients/get-receivables/client';
+import useGetReceivables from '@/clients/get-receivables';
+import usePatchUpdateReceivable from '@/clients/patch-update-receivable';
+import { FetchStatus } from '@/constants';
+import { Receivable } from '@/entities/Receivable.entity';
+import { AlertType } from '@/contexts/alert/types';
+import { useAlertContext } from '@/contexts/alert/useAlertContext';
 import { IconList } from '@/components';
 import Pagination from '@/components/molecules/pagination';
 import Table from '@/components/organisms/table';
-import { FetchStatus } from '@/constants';
-import { Box, Chip, IconButton } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import View from './components/view';
-import { Receivable } from '@/entities/Receivable.entity';
-import usePatchUpdateReceivable from '@/clients/patch-update-receivable';
-import { useAlertContext } from '@/contexts/alert/useAlertContext';
-import { AlertType } from '@/contexts/alert/types';
+import tsStyles, { StyledStatusChip } from './index.styles';
 
 const StatusChip = ({ status }: { status: boolean | null }) => {
   const { t } = useTranslation();
   return (
-    <Chip
+    <StyledStatusChip
       size="small"
       label={t(`accountsReceivable.receivableStatus.${status}`)}
-      color={
-        status === true ? 'success' : status === false ? 'error' : 'default'
-      }
+      status={status}
     />
   );
 };
@@ -65,6 +64,10 @@ const ReceivablesAdmin = () => {
     }
   };
 
+  const handleClose = () => {
+    setReceivable(null);
+  };
+
   const handleReject = async (data: Receivable) => {
     try {
       await update.call(data);
@@ -81,7 +84,7 @@ const ReceivablesAdmin = () => {
 
   return (
     <div>
-      <Box mt={2}>
+      <Box sx={tsStyles.tableContainer}>
         <Table
           messageVoidData={t('accountsReceivable.noData')}
           rows={receivables.data.content}
@@ -124,13 +127,13 @@ const ReceivablesAdmin = () => {
           loading={receivables.status === FetchStatus.LOADING}
         />
 
-        <Box display="flex" justifyContent="flex-end" mt={2}>
+        <Box sx={tsStyles.paginationBox}>
           <Pagination {...receivables.data.meta} onChange={handleChangePage} />
         </Box>
       </Box>
       <View
         receivable={receivable}
-        onClose={() => setReceivable(null)}
+        onClose={handleClose}
         onAccept={handleAccept}
         onReject={handleReject}
       />

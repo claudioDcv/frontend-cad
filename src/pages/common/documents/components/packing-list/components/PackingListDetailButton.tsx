@@ -4,7 +4,12 @@ import { Link } from 'wouter';
 import routes from '@/conf/routes';
 import useAccess from '@/components/atoms/access/useAccess';
 import { validRoles } from '@/constants';
-import { ButtonPackingListProps } from './types';
+
+export interface ButtonPackingListProps {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}
 
 const PackingListDetailButton = ({
   id,

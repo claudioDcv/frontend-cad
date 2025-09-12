@@ -4,6 +4,7 @@ import {
   OutlinedInput,
   InputAdornment,
   SxProps,
+  Theme,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useId } from 'react';
@@ -20,7 +21,7 @@ interface InputProps {
   required?: boolean;
   size?: 'small' | 'medium';
   marginTop?: boolean;
-  sx?: SxProps;
+  sx?: SxProps | SxProps<Theme>;
 }
 
 const Input: React.FC<InputProps> = ({

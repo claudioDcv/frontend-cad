@@ -32,8 +32,8 @@ import { Option } from '@/entities/Option.entity';
 import { useParams } from 'wouter';
 import { Contract } from '@/entities/Contract.entity';
 import useServices from './hooks/useServices';
-import ContractDetailButton from './components/ContractDetailButton';
-import getContractStatusIcons from './components/ContracStatustIcon';
+import ContractDetailButton from './components/contract-detail-button';
+import getContractStatusIcons from './components/contract-status-icon';
 import { Key as IconKey } from '@mui/icons-material';
 import {
   DisplayData,
@@ -51,6 +51,7 @@ import Access from '@/components/atoms/access';
 import { useReceivablesContext } from '@/modules/receivables/context/useReceivablesContext';
 import { useMassiveResolutionContext } from '@/modules/massive-resolution/context/useMassiveResolutionContext';
 import useAccess from '@/components/atoms/access/useAccess';
+import tsStyles from './index.styles';
 
 const ResolutionDetail = () => {
   const { id: resolutionId } = useParams<{ id: string }>();
@@ -80,7 +81,7 @@ const ResolutionDetail = () => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const services = useServices(resolutionId);
-  
+
   const statusOptions = addOptionAll(services.getAllStatus.data);
 
   const isStatusDisabled = isEmpty(services.getAllStatus.data);
@@ -188,7 +189,7 @@ const ResolutionDetail = () => {
 
   return (
     <div>
-      <Card variant="outlined" sx={{ backgroundColor: '#f5f5f5' }}>
+      <Card variant="outlined" sx={tsStyles.card}>
         <CardHeader
           title={getMaterialType(
             t('common.resolution', { id: resolutionId }),
@@ -259,12 +260,7 @@ const ResolutionDetail = () => {
         />
         <Divider />
         <CardContent>
-          <Box
-            p={2}
-            display="grid"
-            gridTemplateColumns="repeat(3, 1fr)"
-            gap={2}
-          >
+          <Box sx={tsStyles.cardContentBox}>
             <Box>
               <DisplayData
                 label={t('common.code')}
@@ -321,14 +317,7 @@ const ResolutionDetail = () => {
         </CardContent>
       </Card>
       <form>
-        <Box
-          mb={2}
-          mt={2}
-          flexWrap="nowrap"
-          display="flex"
-          alignItems="center"
-          gap={2}
-        >
+        <Box sx={tsStyles.filterBox}>
           <Controller
             name="contractNumber"
             control={control}
@@ -337,7 +326,7 @@ const ResolutionDetail = () => {
                 label={t('common.numDoc')}
                 value={field.value}
                 onChange={handleDocNumberChange}
-                sx={{ maxWidth: 250 }}
+                sx={tsStyles.input}
               />
             )}
           />

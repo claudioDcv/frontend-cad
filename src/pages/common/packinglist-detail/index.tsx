@@ -29,6 +29,7 @@ import { Option } from '@/entities/Option.entity';
 import useServices from './hooks/useServices';
 import { useParams } from 'wouter';
 import { useTranslation } from 'react-i18next';
+import tsStyles from './index.styles';
 
 const mockPackingList = {
   resolutionNumber: 'PK-001',
@@ -121,7 +122,7 @@ const PackingListDetail = () => {
 
   return (
     <div>
-      <Card variant="outlined" sx={{ backgroundColor: '#f5f5f5' }}>
+      <Card variant="outlined" sx={tsStyles.card}>
         <CardHeader
           title={`Packing List: ${mockPackingList.resolutionNumber}`}
           action={
@@ -138,7 +139,7 @@ const PackingListDetail = () => {
         />
         <Divider />
         <CardContent>
-          <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+          <Box sx={tsStyles.cardContentGrid}>
             <DisplayData
               label="Guía Despacho"
               value={mockPackingList.dispatchGuide}
@@ -171,7 +172,7 @@ const PackingListDetail = () => {
       </Card>
 
       <form>
-        <Box mt={2} mb={2} display="flex" gap={2} alignItems="center">
+        <Box sx={tsStyles.formBox}>
           <Controller
             name="itemCode"
             control={control}
@@ -181,7 +182,7 @@ const PackingListDetail = () => {
                 label="Código Ítem"
                 value={field.value}
                 onChange={handleDocNumberChange}
-                sx={{ maxWidth: 250 }}
+                sx={tsStyles.input}
               />
             )}
           />

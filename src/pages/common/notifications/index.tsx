@@ -1,20 +1,35 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Table, ReviewStatus, Confirm, TripleToggleSwitch, ResolutionDetailButton } from '@/components';
+import {
+  Table,
+  ReviewStatus,
+  Confirm,
+  TripleToggleSwitch,
+  ResolutionDetailButton,
+} from '@/components';
 import useServices from './hooks/userServices';
 import { Notification } from '@/entities/Notification.entity';
 import { formatToFullDateHour } from '@/utils';
 import { useToggleState } from '@/hooks/useToggleState';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, Pagination } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Pagination,
+} from '@mui/material';
 import { FetchStatus } from '@/constants';
 import ModalHeader from '@/components/molecules/modal-header';
+import tsStyles from './index.styles';
 
 const Notifications = () => {
   const { t } = useTranslation();
   const toggle = useToggleState();
   const [filters, setFilters] = useState<{
-    page: number,
-    viewed: boolean | undefined,
+    page: number;
+    viewed: boolean | undefined;
   }>({
     page: 1,
     viewed: undefined,
@@ -23,7 +38,11 @@ const Notifications = () => {
   const [notification, setNotification] = useState<Notification | null>(null);
   const {
     getAllNotifications: { data, call },
-    pathViewedNotification: { call: pathViewedCall, status: pathViewedStatus, clearData: clearPathViewedData },
+    pathViewedNotification: {
+      call: pathViewedCall,
+      status: pathViewedStatus,
+      clearData: clearPathViewedData,
+    },
   } = useServices({
     allNotifications: true,
   });
@@ -36,12 +55,14 @@ const Notifications = () => {
 
   useEffect(() => {
     if (pathViewedStatus === FetchStatus.SUCCESS) {
-      setNotifications((prev) => prev.map((n) => {
-        if (n.id === notification?.id) {
-          return { ...n, viewed: true };
-        }
-        return n;
-      }));
+      setNotifications((prev) =>
+        prev.map((n) => {
+          if (n.id === notification?.id) {
+            return { ...n, viewed: true };
+          }
+          return n;
+        })
+      );
       toggle.close();
       clearPathViewedData();
     }
@@ -92,7 +113,12 @@ const Notifications = () => {
             id={String(row.entityId)}
             label={t('common.view')}
           />
-          <ReviewStatus value={row.viewed} onView={() => handleNotificationClick(row)} /></div>),
+          <ReviewStatus
+            value={row.viewed}
+            onView={() => handleNotificationClick(row)}
+          />
+        </div>
+      ),
     },
   ];
 
@@ -104,7 +130,7 @@ const Notifications = () => {
 
   return (
     <div>
-      <Box display="flex" alignItems="center" mb={2}>
+      <Box sx={tsStyles.filterBox}>
         <TripleToggleSwitch
           value={filters.viewed}
           options={viewedOptions}
@@ -112,14 +138,14 @@ const Notifications = () => {
         />
       </Box>
       <Table columns={columns} rows={notifications} size="small" />
-      <Box display="flex" justifyContent="flex-end" mt={2}>
-        <Pagination
-          {...data.meta}
-          onChange={handleChangePage}
-        />
+      <Box sx={tsStyles.paginationBox}>
+        <Pagination {...data.meta} onChange={handleChangePage} />
       </Box>
       <Dialog open={toggle.isOpen} onClose={toggle.close}>
-        <ModalHeader onClose={toggle.close} title="Detalles de la notificación" />
+        <ModalHeader
+          onClose={toggle.close}
+          title="Detalles de la notificación"
+        />
         <DialogContent>
           <DialogContentText>
             {notification ? notification.message : ''}
@@ -133,7 +159,8 @@ const Notifications = () => {
                 size="small"
                 color="secondary"
                 onClick={() => open(notification)}
-              >Marcar como leído
+              >
+                Marcar como leído
               </Button>
             )}
           </Confirm>

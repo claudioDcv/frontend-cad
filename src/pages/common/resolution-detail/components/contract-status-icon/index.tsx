@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import { Contract } from '@/entities/Contract.entity';
 import Token from '@/tokens';
 import { IconList } from '@/components';
+import tsStyles from './index.styles';
 
 const getContractStatusIcons = (contract: Contract) => {
   const reviewed = contract.metadata?.reviewed;
@@ -16,7 +17,7 @@ const getContractStatusIcons = (contract: Contract) => {
     : Token.IconTemplate.ContractWithoutNotes;
 
   return (
-    <Box display="flex" alignItems="center" gap={1}>
+    <Box sx={tsStyles.contractStatusIconsContainer}>
       <IconList
         name={statusIcon.name}
         description={statusIcon.description}

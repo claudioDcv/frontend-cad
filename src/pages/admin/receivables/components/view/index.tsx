@@ -1,8 +1,5 @@
-import useGetContract from '@/clients/get-contract';
-import { ContractSummaryCard, ReceivableSummaryCard } from '@/components';
-import ModalHeader from '@/components/molecules/modal-header';
-import { FetchStatus } from '@/constants';
-import { Receivable } from '@/entities/Receivable.entity';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   Dialog,
@@ -11,8 +8,12 @@ import {
   LinearProgress,
   TextField,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import useGetContract from '@/clients/get-contract';
+import { ContractSummaryCard, ReceivableSummaryCard } from '@/components';
+import ModalHeader from '@/components/molecules/modal-header';
+import { FetchStatus } from '@/constants';
+import { Receivable } from '@/entities/Receivable.entity';
+import tsStyles from './index.styles';
 
 interface ViewContentProps {
   receivable: Receivable;
@@ -71,7 +72,7 @@ const ViewContent = ({
         title={t('accountsReceivable.viewReceivable')}
         onClose={onClose}
       />
-      <DialogContent sx={{ gap: 2, display: 'flex', flexDirection: 'column' }}>
+      <DialogContent sx={tsStyles.dialogContentStyles}>
         <ContractSummaryCard contract={getContract.data} />
         <ReceivableSummaryCard
           receivable={receivable}
@@ -84,7 +85,7 @@ const ViewContent = ({
           disabled={receivable.status !== null}
         />
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
+      <DialogActions sx={tsStyles.dialogActionsStyles}>
         <Button
           variant="outlined"
           color="error"
