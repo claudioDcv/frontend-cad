@@ -1,5 +1,5 @@
-import { Item } from '@/components/organisms/modal-inventory-delivery/index.types';
 import { AutocompleteRenderInputParams, TextField } from '@mui/material';
+import { Item } from '@/entities/Item.entity';
 
 export const handleAutocompleteChange = (
   event: React.SyntheticEvent<Element, Event>,
@@ -9,11 +9,13 @@ export const handleAutocompleteChange = (
   onChange(event, newValue);
 };
 
-export const renderInputHandler = (label: string) => (params: AutocompleteRenderInputParams) => (
-  <TextField {...params} label={label} />
-);
+export const renderInputHandler =
+  (label: string) => (params: AutocompleteRenderInputParams) =>
+    <TextField {...params} label={label} />;
 
-export const createItem = (value: string | number | Item | null | undefined): Item => {
+export const createItem = (
+  value: string | number | Item | null | undefined
+): Item => {
   if (value === null || value === undefined) {
     return { label: '', value: '' };
   }

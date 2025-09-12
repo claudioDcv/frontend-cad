@@ -1,12 +1,12 @@
-import { describe, expect, test, vi } from 'vitest';
 import { AutocompleteRenderInputParams } from '@mui/material';
+import { describe, expect, test, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import {
   createItem,
   handleAutocompleteChange,
   renderInputHandler,
 } from './index.utils';
-import { Item } from '@/components/organisms/modal-massupload/index.types';
+import { Item } from '@/entities/Item.entity';
 
 describe('handleAutocompleteChange', () => {
   test('should call onChange with new value', () => {

@@ -1,9 +1,31 @@
 import { Dialog, DialogContent } from '@mui/material';
 import Input from '../../molecules/input';
-import { initialStateI18n, ModalInputProps } from './index.type';
 import ModalHeader from '../../molecules/modal-header';
 import ModalActions from '../../molecules/modal-actions';
 import { useState } from 'react';
+
+interface I18N {
+  title: string;
+  label: string;
+  success: string;
+  cancel: string;
+}
+
+const initialStateI18n: I18N = {
+  title: 'Modal input',
+  label: 'Label',
+  success: 'Success',
+  cancel: 'Cancel',
+};
+
+interface ModalInputProps {
+  open: boolean;
+  value: string;
+  onClose: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSuccess: () => void;
+  i18n?: Partial<I18N>;
+}
 
 const ModalInput: React.FC<ModalInputProps> = ({
   open,

@@ -1,10 +1,24 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, DialogActions } from '@mui/material';
-import { ActionsResolutionProps } from './index.types';
 import { useTranslation } from 'react-i18next';
 import { ModalActions, ModalConfirm } from '@/components';
 import AlertCard from '@/components/atoms/alert-card';
 import { diffInitialState, getDiff } from './index.utils';
+import tsStyles from './index.styles';
+
+interface Total {
+  quantity: number;
+  weight: number;
+}
+
+interface ActionsResolutionProps {
+  expected: Total;
+  current: Total;
+  onClose: () => void;
+  onSuccess: () => void;
+  onSendOutput: () => void;
+  loading: boolean;
+}
 
 const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   onSendOutput,
@@ -35,7 +49,7 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
     onSuccess();
   };
 
-  const handleAlertClose = () => { };
+  const handleAlertClose = () => {};
 
   const getText = () => {
     const message = [];
@@ -64,8 +78,8 @@ const ActionsResolution: React.FC<ActionsResolutionProps> = ({
   return (
     <>
       <DialogActions>
-        <Box display="flex" justifyContent="end" width="100%">
-          <Box display="flex" gap={1}>
+        <Box sx={tsStyles.dialogActionsContainer}>
+          <Box sx={tsStyles.buttonGroup}>
             <ModalActions
               wrap={false}
               onSuccess={handleModalSuccess}

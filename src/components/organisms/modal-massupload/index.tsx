@@ -1,23 +1,33 @@
 import { useEffect, useState } from 'react';
 import {
+  AppBar,
+  Box,
   Dialog,
   DialogContent,
-  Box,
   Divider,
   LinearProgress,
-  AppBar,
   Typography,
 } from '@mui/material';
-import { DisplayData, InventoryEditableTable, IconList } from '@/components';
-import { ModalMassUploadProps } from './index.types';
-import ModalHeader from '@/components/molecules/modal-header';
-import styles from './index.module.css';
-import ActionsResolution from './components/actions-resolution';
 import { useTranslation } from 'react-i18next';
 import useServices from './hooks/useServices';
-import { formatCurrency, formatToDDMMYYYY, verboseGram } from '@/utils';
 import { Inventory } from '@/entities/Inventory.entity';
+import { Resolution } from '@/entities/Resolution.entity';
 import { FetchStatus } from '@/constants';
+import { formatCurrency, formatToDDMMYYYY, verboseGram } from '@/utils';
+import { DisplayData, InventoryEditableTable, IconList } from '@/components';
+import ModalHeader from '@/components/molecules/modal-header';
+import ActionsResolution from './components/actions-resolution';
+import styles from './index.module.css';
+import tsStyles from './index.styles';
+
+interface ModalMassUploadProps {
+  resolution: Resolution;
+  open: boolean;
+  onClose: () => void;
+  onSuccess: (data: Inventory[]) => void;
+  onSendOutput: (data: Inventory[]) => void;
+  loading: boolean;
+}
 
 const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   open,
@@ -82,9 +92,9 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
   const inventories = services.getResolutionInventory.data || [];
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth>
-      <AppBar position="static">
+      <AppBar sx={tsStyles.appBar} position="static">
         <ModalHeader onClose={onClose}>
-          <Box display="flex" alignItems="center" gap={1}>
+          <Box sx={tsStyles.headerBox}>
             <IconList name="box" />
             <Typography variant="h6">
               {`${t('modalMassUpload.documentNumber')} ${resolutionId}`}
@@ -93,9 +103,9 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
         </ModalHeader>
       </AppBar>
 
-      <DialogContent sx={{ overflowY: 'auto' }}>
-        <Box display="flex" gap={2}>
-          <Box className={styles.leftPanel} sx={{ position: 'sticky', top: 0 }}>
+      <DialogContent sx={tsStyles.dialogContent}>
+        <Box sx={tsStyles.mainContainer}>
+          <Box className={styles.leftPanel} sx={tsStyles.leftPanel}>
             <Box>
               <DisplayData
                 label={t('modalMassUpload.totalWeight')}
@@ -139,7 +149,7 @@ const ModalMassUpload: React.FC<ModalMassUploadProps> = ({
               />
             </Box>
           </Box>
-          <Box flex={2}>
+          <Box sx={tsStyles.rightPanel}>
             {inventoriesSuccess ? (
               <InventoryEditableTable
                 data={data}

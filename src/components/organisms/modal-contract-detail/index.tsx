@@ -1,17 +1,18 @@
-import { Dialog, DialogContent, Divider } from '@mui/material';
 import { useEffect } from 'react';
-import ContractNote from '@/components/organisms/contract-note';
-import { Material } from '@/components/molecules/material-type/types';
-import { FetchStatus } from '@/constants';
+import { Dialog, DialogContent, Divider } from '@mui/material';
 import useGetContractJewels from '@/clients/get-contract-jewels';
 import usePatchReviewedContract from '@/clients/patch-reviewed-contract';
+import { FetchStatus } from '@/constants';
 import { Contract, ContractMetadata } from '@/entities/Contract.entity';
 import { Jewel } from '@/entities/Jewel.entity';
+import { Material } from '@/components/molecules/material-type/types';
+import ContractNote from '@/components/organisms/contract-note';
 import { MaterialType } from '../../molecules/material-type';
 import ModalHeader from '../../molecules/modal-header';
 import Table from '../../organisms/table';
 import ContractSummaryCard from '../contract-summary-card';
 import { columns } from './index.utils';
+import tsStyles from './index.styles';
 
 interface I18N {
   label: string;
@@ -102,7 +103,7 @@ const ModalContractDetail: React.FC<ModalContractDetailProps> = ({
         {contract && (
           <>
             <ContractSummaryCard contract={contract} />
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={tsStyles.dividier} />
             <Table<Jewel>
               columns={columns}
               rows={getContractJewels.data}

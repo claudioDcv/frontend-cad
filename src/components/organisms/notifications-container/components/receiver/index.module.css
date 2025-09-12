@@ -1,0 +1,25 @@
+.receiverContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    margin-right: 8px;
+  }
+  
+  .statusIndicator {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+  }
+  
+  .connecting {
+    background-color: orange;
+  }
+  
+  .connected {
+    background-color: green;
+  }
+  
+  .disconnected {
+    background-color: red;
+  }

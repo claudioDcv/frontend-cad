@@ -6,8 +6,8 @@ import {
 } from '../../../utils';
 import { DisplayData } from '../..';
 import { useTranslation } from 'react-i18next';
-import theme from '@/conf/theme';
 import { Receivable } from '@/entities/Receivable.entity';
+import tsStyles from './index.styles';
 
 interface ReceivableSummaryCardProps {
   receivable: Receivable;
@@ -40,21 +40,13 @@ const ReceivableSummaryCard: React.FC<ReceivableSummaryCardProps> = ({
   };
 
   return (
-    <Card
-      variant="outlined"
-      sx={{ backgroundColor: theme.palette.background.paper }}
-    >
-      <Box p={2} gap={2}>
-        <Typography
-          variant="h6"
-          component="h2"
-          fontSize={theme.typography.h6.fontSize}
-          fontWeight="regular"
-        >
+    <Card variant="outlined" sx={tsStyles.card}>
+      <Box sx={tsStyles.mainBox}>
+        <Typography variant="h6" component="h2" sx={tsStyles.title}>
           {t('accountsReceivable.summaryTitle')}
         </Typography>
 
-        <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+        <Box sx={tsStyles.gridContainer}>
           <DisplayData
             label={lang.weight}
             value={formatNumberWithGr(receivable.weight)}
@@ -73,7 +65,7 @@ const ReceivableSummaryCard: React.FC<ReceivableSummaryCardProps> = ({
             )}
           />
         </Box>
-        <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+        <Box sx={tsStyles.gridContainer}>
           <DisplayData
             label={lang.createdByName}
             value={receivable.createdByName}
@@ -87,7 +79,7 @@ const ReceivableSummaryCard: React.FC<ReceivableSummaryCardProps> = ({
             value={formatDateHour(receivable.createdAt)}
           />
         </Box>
-        <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+        <Box sx={tsStyles.gridContainer}>
           <DisplayData
             label={lang.operatorNote}
             value={receivable.operatorNote}
