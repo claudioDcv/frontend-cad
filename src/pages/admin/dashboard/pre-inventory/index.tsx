@@ -116,40 +116,35 @@ const PreInventory = () => {
 
       {/* Gráficos */}
       <Grid container spacing={3} sx={styles.chartsGrid}>
-        <Grid {...styles.gridLarge}>
+        <Grid {...styles.gridSmall}>
           <Paper elevation={3} sx={styles.gramsPaper}>
-            <Typography variant="h5" gutterBottom>
-              {t('adminPreInventory.gramsChartTitle')}
+            <Typography variant="h6" gutterBottom>
+              {t('adminPreInventory.gramsChartTitle')}: {totalGrams}
             </Typography>
             <Divider sx={styles.divider} />
-            <Typography variant="h6">
-              <b>Total Grams</b>: {totalGrams}
-            </Typography>
             <PieChart
               data={allGramsData.map((inv) => ({
                 name: inv.name,
                 value: inv.grams,
               }))}
-              title="Total Grams"
+              title="Gramos Totales"
             />
           </Paper>
         </Grid>
-        <Grid {...styles.gridSmall}>
+        <Grid {...styles.gridLarge}>
           <Paper elevation={3} sx={styles.salesPaper}>
-            <Typography variant="h5" gutterBottom>
-              {t('adminPreInventory.salesChartTitle')}
+            <Typography variant="h6" gutterBottom>
+              {t('adminPreInventory.salesChartTitle')}: $
+              {totalSales.toLocaleString()}
             </Typography>
             <Divider sx={styles.divider} />
-            <Typography variant="h6">
-              <b>Total Sales</b>: ${totalSales.toLocaleString()}
-            </Typography>
             <SalesChart
               data={allSalesData.map((inv) => ({
                 name: inv.name,
                 value: inv.sales,
               }))}
-              title="Total Sales"
-              yLabel="Sales"
+              title="Ventas Totales"
+              yLabel="Ventas"
             />
           </Paper>
         </Grid>

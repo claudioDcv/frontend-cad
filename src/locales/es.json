@@ -389,8 +389,8 @@
   "adminPreInventory": {
     "title": "Pre Inventario",
     "investmentTitle": "Inversiones",
-    "gramsChartTitle": "📊 Gramos por Inversión",
-    "salesChartTitle": "📈 Ventas por Inversión"
+    "gramsChartTitle": "Porcentaje de Gramos por Inversion",
+    "salesChartTitle": "Total de Ventas por Inversión"
   },
   "adminPostInventory": {
     "title": "Post Inventario",
