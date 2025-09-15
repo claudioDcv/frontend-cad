@@ -59,7 +59,7 @@ const BarChart = ({ data, title, yLabel }: BarChartProps) => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: 400 }}>
+    <Box sx={{ width: '100%', height: 300 }}>
       <Bar data={chartData} options={options} />
     </Box>
   );

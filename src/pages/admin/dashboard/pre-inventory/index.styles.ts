@@ -51,6 +51,10 @@ const gridSmall = {
   },
 };
 
+const container: SxProps<Theme> = {
+  mb: 4,
+};
+
 export default {
   monthPickerGrid,
   paperContainer,
@@ -63,4 +67,5 @@ export default {
   gridFull,
   gridLarge,
   gridSmall,
+  container,
 };

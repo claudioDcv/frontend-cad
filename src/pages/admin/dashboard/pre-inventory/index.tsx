@@ -57,7 +57,7 @@ const PreInventory = () => {
   };
 
   return (
-    <Box>
+    <Box sx={styles.container}>
       <Grid container spacing={2} sx={styles.monthPickerGrid}>
         <Grid>
           <MonthRangePicker value={range} onChange={handleChangeRange} />
