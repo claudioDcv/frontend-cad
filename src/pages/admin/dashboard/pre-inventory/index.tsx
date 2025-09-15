@@ -1,30 +1,31 @@
 import { useState } from 'react';
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Divider,
   Paper,
   Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { MonthRangePicker, Table } from '@/components';
 import { useTranslation } from 'react-i18next';
+import { DistributionModal, MonthRangePicker, Table } from '@/components';
 import PieChart from '../components/charts/PieChart';
 import SalesChart from '../components/charts/BarChart';
+import BranchTable from '../components/branch-table';
+import BranchDetailModal from '../components/branch-detail-modal';
 import { defaultStartDate, toDay } from '@/utils';
-import mock from '../components/index.mock';
-import styles from './index.styles';
-import BranchTable from '../components/BranchTable';
-import BranchDetailModal from '../components/BranchDetailModal';
 import { addTotalsRow, TableRow } from './index.utils';
+import tsStyles from './index.styles';
+import mock from '../components/index.mock';
 
 const PreInventory = () => {
   const { t } = useTranslation();
 
+  const [openDistribution, setOpenDistribution] = useState(false);
   const [range, setRange] = useState<[Date, Date]>([defaultStartDate, toDay()]);
   const [selectedBranch, setSelectedBranch] = useState<TableRow | null>(null);
   const [investments] = useState(mock.investment);
@@ -56,44 +57,56 @@ const PreInventory = () => {
     setSelectedBranch(null);
   };
 
+  const handleOpenModal = () => {
+    setOpenDistribution(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenDistribution(false);
+  };
+
   return (
-    <Box sx={styles.container}>
-      <Grid container spacing={2} sx={styles.monthPickerGrid}>
+    <Box sx={tsStyles.container}>
+      <Grid container spacing={2} sx={tsStyles.monthPickerGrid}>
         <Grid>
           <MonthRangePicker value={range} onChange={handleChangeRange} />
         </Grid>
       </Grid>
 
-      {/* Tabla principal */}
-      <Grid container spacing={3} sx={{ mt: 3 }}>
-        <Grid {...styles.gridFull}>
-          <Paper elevation={3} sx={styles.paperContainer}>
+      <Grid container spacing={3} sx={tsStyles.chartsGrid}>
+        <Grid {...tsStyles.gridFull}>
+          <Paper elevation={3} sx={tsStyles.paperContainer}>
             <Typography variant="h5" gutterBottom>
               {t('adminPreInventory.investmentTitle')}
             </Typography>
-            <Divider sx={styles.divider} />
+            <Divider sx={tsStyles.divider} />
             <Table size="small" rows={tableRows} columns={tableColumns} />
           </Paper>
         </Grid>
       </Grid>
 
-      {/* Detalle por inversión */}
       {investments.map((investment) => (
         <Accordion
           key={investment.name}
           defaultExpanded
-          sx={styles.accordionMarginTop}
+          sx={tsStyles.accordionMarginTop}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls={`${investment.name}-content`}
             id={`${investment.name}-header`}
           >
-            <Box sx={styles.accordionSummaryBox}>
-              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            <Box sx={tsStyles.accordionSummaryBox}>
+              <Typography variant="h6" sx={tsStyles.accordionSummaryTitle}>
                 {investment.name}
               </Typography>
-              <Button variant="contained" component="span">
+              <Button
+                variant="contained"
+                component="span"
+                onClick={(event) => {
+                  event.stopPropagation();
+                }}
+              >
                 Descargar
               </Button>
             </Box>
@@ -101,7 +114,7 @@ const PreInventory = () => {
 
           <AccordionDetails>
             <Table size="small" rows={tableRows} columns={tableColumns} />
-            <Box mt={3}>
+            <Box sx={tsStyles.accordionDetailsBox}>
               <BranchTable
                 branchRows={addTotalsRow(
                   investment.branchDetails as TableRow[],
@@ -114,14 +127,13 @@ const PreInventory = () => {
         </Accordion>
       ))}
 
-      {/* Gráficos */}
-      <Grid container spacing={3} sx={styles.chartsGrid}>
-        <Grid {...styles.gridSmall}>
-          <Paper elevation={3} sx={styles.gramsPaper}>
+      <Grid container spacing={3} sx={tsStyles.chartsGrid}>
+        <Grid {...tsStyles.gridSmall}>
+          <Paper elevation={3} sx={tsStyles.paper}>
             <Typography variant="h6" gutterBottom>
               {t('adminPreInventory.gramsChartTitle')}: {totalGrams}
             </Typography>
-            <Divider sx={styles.divider} />
+            <Divider sx={tsStyles.divider} />
             <PieChart
               data={allGramsData.map((inv) => ({
                 name: inv.name,
@@ -131,13 +143,13 @@ const PreInventory = () => {
             />
           </Paper>
         </Grid>
-        <Grid {...styles.gridLarge}>
-          <Paper elevation={3} sx={styles.salesPaper}>
+        <Grid {...tsStyles.gridLarge}>
+          <Paper elevation={3} sx={tsStyles.paper}>
             <Typography variant="h6" gutterBottom>
               {t('adminPreInventory.salesChartTitle')}: $
               {totalSales.toLocaleString()}
             </Typography>
-            <Divider sx={styles.divider} />
+            <Divider sx={tsStyles.divider} />
             <SalesChart
               data={allSalesData.map((inv) => ({
                 name: inv.name,
@@ -148,6 +160,11 @@ const PreInventory = () => {
             />
           </Paper>
         </Grid>
+        <Grid>
+          <Button variant="contained" color="primary" onClick={handleOpenModal}>
+            Abrir Distribución
+          </Button>
+        </Grid>
       </Grid>
 
       {selectedBranch && (
@@ -156,6 +173,8 @@ const PreInventory = () => {
           onClose={handleCloseBranchModal}
         />
       )}
+
+      <DistributionModal open={openDistribution} onClose={handleCloseModal} />
     </Box>
   );
 };

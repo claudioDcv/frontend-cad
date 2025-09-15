@@ -416,5 +416,31 @@
     "footer": {
       "totals": "Totales"
     }
+  },
+  "modalDistribution": {
+    "table": {
+      "title": "Distribución",
+      "headers": {
+        "field": "Campo",
+        "value": "Valor"
+      },
+      "rows": {
+        "Inversión": "Inversión",
+        "Unidades": "Unidades",
+        "Peso": "Peso",
+        "Valor $": "Valor $"
+      }
+    },
+    "dropdownLabel": "Familia",
+    "input": {
+      "custody": "Custodia",
+      "dispatchGuide": "Guía de despacho"
+    },
+    "confirm": {
+      "title": "Confirmación",
+      "text": "¿Está seguro que desea enviar al inventario?",
+      "success": "Sí",
+      "cancel": "Cancelar"
+    }
   }
 }

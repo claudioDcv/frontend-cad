@@ -18,14 +18,7 @@ const accordionSummaryBox: SxProps<Theme> = {
 const chartsGrid: SxProps<Theme> = {
   mt: 3,
 };
-const gramsPaper: SxProps<Theme> = {
-  p: 2,
-  display: 'flex',
-  flexDirection: 'column',
-  flex: 1,
-  height: 360,
-};
-const salesPaper: SxProps<Theme> = {
+const paper: SxProps<Theme> = {
   p: 2,
   display: 'flex',
   flexDirection: 'column',
@@ -38,8 +31,13 @@ const divider: SxProps<Theme> = {
 const accordionMarginTop: SxProps<Theme> = {
   mt: 2,
 };
+const accordionDetailsBox: SxProps<Theme> = {
+  mt: 3,
+};
+const accordionSummaryTitle: SxProps<Theme> = {
+  flexGrow: 1,
+};
 
-// Propiedades de Grid
 const gridFull = { size: { xs: 12 } };
 const gridLarge = {
   size: { xs: 12, md: 8 },
@@ -60,12 +58,13 @@ export default {
   paperContainer,
   accordionSummaryBox,
   chartsGrid,
-  gramsPaper,
-  salesPaper,
+  paper,
   divider,
   accordionMarginTop,
   gridFull,
   gridLarge,
   gridSmall,
   container,
+  accordionDetailsBox,
+  accordionSummaryTitle,
 };
