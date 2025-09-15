@@ -15,7 +15,9 @@ export const distributionRows = [
   { id: 1, label: 'Inversión', value: '' },
   { id: 2, label: 'Unidades', value: '' },
   { id: 3, label: 'Peso', value: '' },
-  { id: 4, label: 'Valor $', value: '' },
+  { id: 4, label: 'Disponible', value: '' },
+  { id: 5, label: 'Restante', value: '' },
+  { id: 6, label: 'Valor $', value: '' },
 ];
 
 export const families: Option[] = [
